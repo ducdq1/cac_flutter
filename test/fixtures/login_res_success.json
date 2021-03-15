@@ -1,0 +1,28 @@
+{
+    "code": 200,
+    "message": "Đăng nhập thành công!",
+    "data": {
+        "accessToken": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJVbHFLamp0OUwxVWdhX1d3ZkFXeVdRT2VxUHJ3ajAyd3FJY1h5dFM1YUQ4In0.eyJqdGkiOiI2NWJiZmRkNi0zMTMzLTQ0MzEtYmJjOC0zOGNlMTk3MjYyYWEiLCJleHAiOjE2MDYzNjA2NDIsIm5iZiI6MCwiaWF0IjoxNjA1NDk2NjQyLCJpc3MiOiJodHRwczovL3Nzby52aWV0dGVsbWFwcy5jb20udm46ODA4MC9hdXRoL3JlYWxtcy9WVFMtU0NQIiwiYXVkIjoid3FtIiwic3ViIjoiYThlODdjNjktZmNkMy00NTQ2LTk2YzMtY2E2ZGUyZDI5MTA2IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoid3FtIiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiMDUwYmIzODEtYWUyOS00ZDkyLTgxOTktYjZjOTcyMmM2OWQzIiwiYWNyIjoiMSIsInJlc291cmNlX2FjY2VzcyI6eyJ3cW0iOnsicm9sZXMiOlsiMCJdfX0sInNjb3BlIjoicHJvZmlsZSB3cW0tYXVkaWVuY2UgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImRpc3RyaWN0SWQiOjExNTAyLCJyb2xlSWQiOjAsInByZWZlcnJlZF91c2VybmFtZSI6IjAzMjU2NjY2NjYiLCJ1c2VySWQiOjQwMywicHJvdmluY2VJZCI6MTE0NDksInN0YXRpb25JZCI6Mn0.HMonyISNEUckpNMPR5BdjQ7lILJ0jhTBPUVZO8yWhDox83RlltVz_GlLaTv2FdGh5J3LzBf1JuxIlbCSbSTAKzJ4R5GvH_F8h1A4o8jQ_-M-Ktejk8t8OXiZz5ds4Xs57jMlGJ2cCqbuWt_Ocqw3ZueVrOy_ZSMUJ8v6VblZsRnUDWMUwHeOOPu-C_BJ-kKYR7MfICdkrm15yd8FhuSUO4aq6QFVVH9FBi_egSAVrNNJxMaCrz_xNCiS5AZPp2c9qIY0J1yKG4SZ13QRnk9fnhZWPBwUqkpy84MI-Fm8awaOA6I4SX6qYmxdJJCZL_fY-Da2V2jHZp0MVzrxKzAhdQ",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkYWYwN2VhMC1mZWJiLTRmYzUtODJlYi1lYTY1MWViMzgzNjUifQ.eyJqdGkiOiIzOGMwN2U0ZS03MGEwLTRiNTktOGM0Yy0zYjFiZDhlM2I0OWUiLCJleHAiOjE2MDYzNjA2NDIsIm5iZiI6MCwiaWF0IjoxNjA1NDk2NjQyLCJpc3MiOiJodHRwczovL3Nzby52aWV0dGVsbWFwcy5jb20udm46ODA4MC9hdXRoL3JlYWxtcy9WVFMtU0NQIiwiYXVkIjoiaHR0cHM6Ly9zc28udmlldHRlbG1hcHMuY29tLnZuOjgwODAvYXV0aC9yZWFsbXMvVlRTLVNDUCIsInN1YiI6ImE4ZTg3YzY5LWZjZDMtNDU0Ni05NmMzLWNhNmRlMmQyOTEwNiIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJ3cW0iLCJhdXRoX3RpbWUiOjAsInNlc3Npb25fc3RhdGUiOiIwNTBiYjM4MS1hZTI5LTRkOTItODE5OS1iNmM5NzIyYzY5ZDMiLCJyZXNvdXJjZV9hY2Nlc3MiOnsid3FtIjp7InJvbGVzIjpbIjAiXX19LCJzY29wZSI6InByb2ZpbGUgd3FtLWF1ZGllbmNlIGVtYWlsIn0.8qaAjXfmRq4bhIewn5CwRkNEy3sX6Q51Z25fW7F9_jY",
+        "tokenType": "bearer",
+        "user": {
+            "countWarningNotRead": 0,
+            "username": "0325666666",
+            "fullname": "Nguyễn Thị Mai",
+            "identityNo": "03256666660",
+            "address": "Phòng702, Chung cư HAGL, 72 Hàm Nghi, Thạc Gián, Thanh Khê, Đà Nẵng",
+            "userId": 403,
+            "provinceId": 11449,
+            "districtId": 11502,
+            "wardId": 11509,
+            "stationId": 2,
+            "roleId": 0,
+            "phone": "0325666666",
+            "isActive": 1,
+            "isEnable": 1,
+            "isWarning": 1,
+            "isNew": 1,
+            "deviceId": "water002"
+        }
+    }
+}

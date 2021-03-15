@@ -1,0 +1,255 @@
+import 'package:citizen_app/core/network/network_info.dart';
+import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
+import 'package:citizen_app/features/paht/data/models/models.dart';
+import 'package:citizen_app/features/paht/domain/entities/comment_entity.dart';
+import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
+import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
+import 'package:meta/meta.dart';
+
+typedef Future<List<PahtModel>> _PublicOrPersonalChooser();
+typedef Future<List<StatusModel>> _StatusPublicOrStatusPersonalChooser();
+
+class PahtRepositoryImpl implements PahtRepository {
+  final PahtRemoteDataSource remoteDataSource;
+  final PahtLocalDataSource localDataSource;
+  final NetworkInfo networkInfo;
+
+  PahtRepositoryImpl({
+    @required this.remoteDataSource,
+    @required this.localDataSource,
+    @required this.networkInfo,
+  });
+
+  @override
+  Future<List<PahtModel>> getListPersonalPaht(
+      {String search,
+      String categoryIds,
+      String statusIds,
+      int limit,
+      int offset}) async {
+    return await _getListPaht(() {
+      return remoteDataSource.fetchListPersonalPaht(
+        search: search,
+        categogyIds: categoryIds,
+        statusIds: statusIds,
+        limit: limit,
+        offset: offset,
+      );
+    });
+  }
+
+  @override
+  Future<List<PahtModel>> getListPublicPaht(
+      {String search,
+      String categoryIds,
+      String statusIds,
+      int limit,
+      int offset}) async {
+    return await _getListPaht(() {
+      return remoteDataSource.fetchListPublicPaht(
+        search: search,
+        categogyIds: categoryIds,
+        statusIds: statusIds,
+        limit: limit,
+        offset: offset,
+      );
+    });
+  }
+
+  Future<List<PahtModel>> _getListPaht(
+    _PublicOrPersonalChooser getPublicOrPersonal,
+  ) async {
+    // if (await networkInfo.isConnected) {
+    //   print('network is connect');
+    //   try {
+    //     final remotePaht = await getPublicOrPersonal();
+    //     localDataSource.cachePaht(remotePaht);
+    //     return remotePaht;
+    //   } catch (error) {
+    //     print('network ');
+
+    //     throw Exception(error.message);
+    //   }
+    // } else {
+    //   print('network is not connect');
+    //   try {
+    //     final localPaht = await localDataSource.getLastPaht();
+    //     return localPaht;
+    //   } catch (error) {
+    //     print('network 2');
+
+    //     throw Exception(error.message);
+    //   }
+    // }
+
+    try {
+      final remotePaht = await getPublicOrPersonal();
+      localDataSource.cachePaht(remotePaht);
+      return remotePaht;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<CategoryModel>> getListCategoriesPaht() async {
+    try {
+      final remoteCategoriesPaht =
+          await remoteDataSource.fetchListCategoriesPaht();
+      localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
+      return remoteCategoriesPaht;
+    } catch (error) {
+      throw Exception(error);
+    }
+
+    // if (await networkInfo.isConnected) {
+    //   print('network is connect');
+    //   try {
+    //     final remoteCategoriesPaht =
+    //         await remoteDataSource.getListCategoriesPaht();
+    //     localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
+    //     return remoteCategoriesPaht;
+    //   } catch (error) {
+    //     print('network ');
+
+    //     throw Exception(error.message);
+    //   }
+    // } else {
+    //   print('network is not connect');
+    //   try {
+    //     final localPaht = await localDataSource.getLastCategoriesPaht();
+    //     return localPaht;
+    //   } catch (error) {
+    //     print('network 2');
+
+    //     throw Exception(error.message);
+    //   }
+    // }
+  }
+
+  @override
+  Future<List<StatusModel>> getListStatusPersonal() async {
+    return await _getListStatus(() {
+      return remoteDataSource.fetchListStatusPersonal();
+    });
+  }
+
+  @override
+  Future<List<StatusModel>> getListStatusPublic() async {
+    return await _getListStatus(() {
+      return remoteDataSource.fetchListStatusPublic();
+    });
+  }
+
+  Future<List<StatusModel>> _getListStatus(
+      _StatusPublicOrStatusPersonalChooser
+          statusPublicOrStatusPersonalChooser) async {
+    try {
+      final remoteStatusPaht = await statusPublicOrStatusPersonalChooser();
+      localDataSource.cacheStatusPaht(remoteStatusPaht);
+      return remoteStatusPaht;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  @override
+  Future<PahtModel> getDetailedPaht({String pahtId}) async {
+    try {
+      final remoteCategoriesPaht =
+          await remoteDataSource.fetchDetailedPaht(pahtId: pahtId);
+      // localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
+      return remoteCategoriesPaht;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  @override
+  Future<List<CommentEntity>> getCommentsDetailedPaht({String pahtId}) async {
+    try {
+      return await remoteDataSource.fetchComments(pahtId: pahtId);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<bool> createIssuePaht(IssueParams issueParams) async {
+    try {
+      final remoteCreateIssuePaht =
+          await remoteDataSource.createIssuePaht(issueParams);
+      // localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
+      return remoteCreateIssuePaht;
+    } catch (error) {
+      throw Exception(error);
+    }
+
+    // if (await networkInfo.isConnected) {
+    //   print('network is connect');
+    //   try {
+    //     final remoteCategoriesPaht =
+    //         await remoteDataSource.getListCategoriesPaht();
+    //     localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
+    //     return remoteCategoriesPaht;
+    //   } catch (error) {
+    //     print('network ');
+
+    //     throw Exception(error.message);
+    //   }
+    // } else {
+    //   print('network is not connect');
+    //   try {
+    //     final localPaht = await localDataSource.getLastCategoriesPaht();
+    //     return localPaht;
+    //   } catch (error) {
+    //     print('network 2');
+
+    //     throw Exception(error.message);
+    //   }
+    // }
+  }
+
+  @override
+  Future<bool> deletePaht({String id}) async {
+    try {
+      final result = await remoteDataSource.deletePaht(id: id);
+      return result;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  @override
+  Future<bool> updatePaht(UpdatedParams updatedParams) async {
+    try {
+      final result = await remoteDataSource.updatePaht(updatedParams);
+      return result;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  @override
+  Future<bool> createComment(Params commentParams) async {
+    try {
+      final remoteCreateIssuePaht =
+          await remoteDataSource.createComment(commentParams);
+      return remoteCreateIssuePaht;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  @override
+  Future<bool> replyComment(Params commentParams) async {
+    try {
+      final remoteCreateIssuePaht =
+          await remoteDataSource.replyComment(commentParams);
+      return remoteCreateIssuePaht;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+}

@@ -1,0 +1,6 @@
+{
+    "timestamp": "2020-11-16 03:36:33.875",
+    "status": 400,
+    "error": "BAD_REQUEST",
+    "message": "Giá trị đầu vào không hợp lệ!"
+}

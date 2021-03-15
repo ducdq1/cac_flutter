@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "115347221059",
+    "firebase_url": "https://ioc-alarm-default-rtdb.firebaseio.com",
+    "project_id": "ioc-alarm",
+    "storage_bucket": "ioc-alarm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115347221059:android:7e2c1b4d5d2c55a3bfc2f6",
+        "android_client_info": {
+          "package_name": "com.example.citizen_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115347221059-h06eacb26ubjnkgus0o7tme53lkbb8t8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdLfJnuPS9xPgJdV2yAfQ2kD6Og6Tcda4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115347221059-h06eacb26ubjnkgus0o7tme53lkbb8t8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "115347221059-gqieanm1uhj61i01tgkc1kgfb8ivvmru.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.viettel.demo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

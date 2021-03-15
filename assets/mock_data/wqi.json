@@ -1,0 +1,64 @@
+{
+    "parameterId": 1353,
+    "name": "WQI",
+    "infomation": "WQI để đánh giá chất lượng nước của điểm quan trắc",
+    "unit": null,
+    "icon": "/wqi.png",
+    "support": [
+        {
+            "supportId": 1354,
+            "minValue": 91,
+            "maxValue": 100,
+            "status": "Rất tốt",
+            "purpose": "Sử dụng tốt cho mục đích cấp nước sinh hoạt",
+            "icon": "assets/images/ic_wqi_rattot.png",
+            "color": "#26A0FF"
+          },
+      {
+        "supportId": 135,
+        "minValue": 76,
+        "maxValue": 90,
+        "status": "Tốt",
+        "purpose": "Sử dụng cho mục đích cấp nước sinh hoạt, nhưng cần có các biện pháp...",
+        "icon": "assets/images/ic_wqi_tot.png",
+        "color": "#00A651"
+      },
+      {
+        "supportId": 1355,
+        "minValue": 51,
+        "maxValue": 75,
+        "status": "Trung bình",
+        "purpose": "Sử dụng cho mục đích tưới tiêu và các mục đích tương đương khác",
+        "icon": "assets/images/ic_wqi_trungbinh.png",
+        "color": "#E2BD0F"
+      },
+      {
+        "supportId": 1356,
+        "minValue": 26,
+        "maxValue": 50,
+        "status": "Kém",
+        "purpose": "Sử dụng cho mục đích tưới tiêu và các mục đích tương đương khác",
+        "icon": "assets/images/ic_wqi_kem.png",
+        "color": "#A60000"
+      },
+      {
+        "supportId": 1357,
+        "minValue": 10,
+        "maxValue": 25,
+        "status": "Ô nhiễm nặng",
+        "purpose": "Nước ô nhiễm nặng, cần các biện pháp xử lý trong tương lai",
+        "icon": "assets/images/ic_wqi_onhiemnang.png",
+        "color": "#B85800"
+      },
+      {
+        "supportId": 1353,
+        "minValue": null,
+        "maxValue": 10,
+        "status": "Ô nhiễm rất nặng",
+        "purpose": "Nước ô nhiễm nặng, cần các biện pháp xử lý trong tương lai",
+        "icon": "assets/images/ic_wqi_onhiemratnang.png",
+        "color": "#6C0101"
+      }
+
+    ]
+  }
