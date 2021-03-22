@@ -1,13 +1,9 @@
-import 'package:citizen_app/app_localizations.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
-import 'package:citizen_app/features/paht/presentation/pages/location_issue_page.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
-
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LocationWidget extends StatefulWidget {
   final String address;
@@ -86,16 +82,16 @@ class _LocationWidgetState extends State<LocationWidget>
 
   @override
   onClick(String id) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => LocationIssuePage(
-          lattitude: double.tryParse(widget.lattitude),
-          longitude: double.tryParse(widget.longitude),
-          address: widget.name,
-        ),
-      ),
-    );
+    // await Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (_) => LocationIssuePage(
+    //       lattitude: double.tryParse(widget.lattitude),
+    //       longitude: double.tryParse(widget.longitude),
+    //       address: widget.name,
+    //     ),
+    //   ),
+    // );
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: PRIMARY_COLOR,

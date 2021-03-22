@@ -41,7 +41,7 @@ class AppBarHeadingWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(right: 25),
                 child: Text(
-                  trans(LABEL_POI_DETAIL),
+                  'Thông tin sản phẩm',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.openSans(
                     color: Colors.white,

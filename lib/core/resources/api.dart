@@ -11,6 +11,6 @@ const String baseSSOUrl = 'https://sso.viettelmaps.com.vn:8080/auth/realms/vts-m
 
 
 
-const String baseUrl = 'https://ioc.viettelmaps.com.vn:8080';
+const String baseUrl = 'http://117.2.164.156';
 //const String baseUrl = 'http://10.60.155.31:9605';
 // const String baseUrl = 'http://10.60.158.90:9002';

@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 
 import 'package:citizen_app/features/paht/data/models/models.dart';
+import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
+import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -21,10 +24,12 @@ class DetailedPahtBloc extends Bloc<DetailedPahtEvent, DetailedPahtState> {
   ) async* {
     if (event is DetailedPahtFetching) {
       try {
+        yield DetailedPahtLoading();
         await Future.delayed(Duration(milliseconds: 100));
-        PahtModel paht =
-            await getDetailedPaht(DetailedPahtParams(pahtId: event.pahtId));
-        yield DetailedPahtSuccess(paht: paht);
+        print('detail loading');
+        SearchProductModel paht =
+            await getDetailedPaht(SearchProductParam(productCode: event.pahtId));
+        yield DetailedPahtSuccess(paht: null,searchProductModel: paht);
       } catch (error) {
         print(error);
         yield DetailedPahtFailure(error: error.message);

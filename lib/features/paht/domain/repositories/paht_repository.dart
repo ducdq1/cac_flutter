@@ -1,6 +1,9 @@
+import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/comment_entity.dart';
 import 'package:citizen_app/features/paht/domain/entities/entities.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
+import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 
 abstract class PahtRepository {
   Future<List<PahtEntity>> getListPublicPaht(
@@ -18,7 +21,7 @@ abstract class PahtRepository {
   Future<List<CategoryEntity>> getListCategoriesPaht();
   Future<List<StatusEntity>> getListStatusPublic();
   Future<List<StatusEntity>> getListStatusPersonal();
-  Future<PahtEntity> getDetailedPaht({String pahtId});
+  Future<SearchProductModel> getDetailedPaht(SearchProductParam param);
   Future<List<CommentEntity>> getCommentsDetailedPaht({String pahtId});
   Future<bool> createIssuePaht(IssueParams issueParams);
   Future<bool> updatePaht(UpdatedParams updatedParams);

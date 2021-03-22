@@ -32,7 +32,7 @@ class _ListViewImageItemWidgetState extends State<ListViewImageItemWidget> {
           context,
           MaterialPageRoute(
             builder: (_) => MediaPresenterPage(
-              urls: widget.urls,
+              //urls: widget.urls,
               initialIndex: widget.urls.indexOf(widget.url),
             ),
           ),

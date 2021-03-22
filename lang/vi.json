@@ -34,7 +34,7 @@
   "title_followed_place_screen": "Yêu thích",
   "title_support_screen": "Hỗ trợ",
   "titile_filter_menu": "Chọn danh mục",
-  "text_placeholder_search_form": "Tên hoặc địa chỉ",
+  "text_placeholder_search_form": "Nhập tên hoặc địa chỉ",
   "label_login_phone": "Số điện thoại",
   "label_login_password": "Mật khẩu",
   "label_new_password": "Mật khẩu mới",
@@ -67,8 +67,8 @@
   "text_alert_feedback_success": "Gửi phản hồi thành công!\ncảm ơn bạn đã góp ý để chúng tôi ngày càng hoàn thiện hơn",
   "label_feedback_select_icon": "Hãy chia sẻ với chúng tôi về \ntrải nghiệm của bạn",
   "label_feedback_input": "Góp ý để chúng tôi \nngày càng hoàn thiện hơn",
-  "text_alert_confirm_logout": "Bạn có chắn muốn đăng xuất khỏi ứng dụng",
-  "error_validate_empty_address_paht": "Địa chỉ không được bỏ trống",
+  "text_alert_confirm_logout": "Bạn có chắc chắn muốn đăng xuất khỏi ứng dụng",
+  "error_validate_empty_address_paht": "Trường bắt buộc phải nhập thông tin",
   "error_validate_empty_media_paht": "Ảnh không được bỏ trống",
   "error_validate_empty_phone_login": "Số điện thoại không được để trống",
   "error_invalid_phone_login": "Số điện thoại không hợp lệ",
@@ -268,5 +268,6 @@
   "label_delete_poi_success": "Xóa địa điểm thành công!",
   "hello":"Xin chào,",
   "poi_detail":"Chi tiết địa điểm",
-  "loading_data": "Đang tải dữ liệu..."
+  "loading_data": "Đang tải dữ liệu...",
+  "session_expired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại"
 }

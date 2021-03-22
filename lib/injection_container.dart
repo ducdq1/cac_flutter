@@ -1,7 +1,6 @@
 import 'package:citizen_app/core/network/network_request.dart';
 import 'package:citizen_app/core/utils/utils.dart';
 import 'package:citizen_app/features/address_picker/dependency_injections_address_picker.dart';
-import 'package:citizen_app/features/digital_map/dependency_injection_digitalMap.dart';
 import 'package:citizen_app/features/home/dependency_injections_home.dart';
 import 'package:citizen_app/features/paht/dependency_injections_paht.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
@@ -43,7 +42,6 @@ Future<void> init() async {
   await dependencyInjectionsPaht(singleton);
   await dependencyInjectionsHome(singleton);
   await dependencyInjectionsAddressPicker(singleton);
-  await dependencyInjectionsDigitalMap(singleton);
 
   //! Features - Number Trivia
   // Bloc

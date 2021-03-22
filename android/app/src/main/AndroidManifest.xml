@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
     <application
         android:name=".Application"
-        android:label="Thu thập địa điểm"
+        android:label="Poi Collector"
         android:icon="@mipmap/ic_launcher">
 
         <provider

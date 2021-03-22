@@ -1,8 +1,8 @@
-import 'package:citizen_app/app_localizations.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/strings.dart';
+import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
+import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
-
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
@@ -11,8 +11,7 @@ import 'package:citizen_app/features/paht/presentation/widgets/widgets.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
-import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PahtSearch extends StatefulWidget {
   final int searchPahtType;
@@ -43,7 +42,13 @@ class _PahtSearchState extends State<PahtSearch>
             ? BlocProvider<PublicPahtBloc>(
                 create: (context) => singleton<PublicPahtBloc>()
                   ..add(ListPublicPahtFetchingEvent(offset: 1, limit: 10)),
-                child: BlocBuilder<PublicPahtBloc, PublicPahtState>(
+                child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
+                    listener: (context, state) {
+                      if (state is PublicPahtFailure) {
+                        // Fluttertoast.showToast(
+                        //     msg: state.error.toString()  );
+                      }
+                    },
                     builder: (context, state) {
                   return BaseLayoutWidget(
                       title: trans(TITLE_PAHT),
@@ -84,39 +89,25 @@ class _PahtSearchState extends State<PahtSearch>
                              // isSearchPage: true,
                             )
                           : state is PublicPahtFailure
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 80.0),
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          IMAGE_ASSETS_PATH + "icon_none.png",
-                                          height: 128,
-                                          width: 160,
-                                        ),
-                                        SizedBox(
-                                          height: 25,
-                                        ),
-                                        Container(
-                                          width: 142,
-                                          child: OutlineCustomButton(
-                                              label: trans(RETRY),
-                                              ctx: this,
-                                              id: 'primary_btn'),
-                                        ),
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                              ? NoNetworkFailureWidget(
+                              message: state.error.toString() == "UNAUTHORIZED" ? trans(MESSAGE_SESSION_EXPIRED) : state.error.toString(),
+                              onPressed: () {
+                              BlocProvider.of<PublicPahtBloc>(context).add(
+                              ListPublicPahtFetchingEvent(),
+                              );}
                                 )
                               : SkeletonPahtWidget());
                 }))
             : BlocProvider<PersonalPahtBloc>(
                 create: (context) => singleton<PersonalPahtBloc>()
                   ..add(ListPersonalPahtFetchingEvent(offset: 1, limit: 10 )),
-                child: BlocBuilder<PersonalPahtBloc, PersonalPahtState>(
+                child: BlocConsumer<PersonalPahtBloc, PersonalPahtState>(
+                    listener: (context, state) {
+                      if (state is PersonalPahtFailure) {
+                        Fluttertoast.showToast(
+                            msg: state.error.toString()  );
+                      }
+                    },
                     builder: (context, state) {
                   return BaseLayoutWidget(
                       title: trans(TITLE_PAHT),
@@ -165,33 +156,13 @@ class _PahtSearchState extends State<PahtSearch>
                               paddingBottom: 00,
                             )
                           : state is PersonalPahtFailure
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 80.0),
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          IMAGE_ASSETS_PATH + "icon_none.png",
-                                          height: 128,
-                                          width: 160,
-                                        ),
-                                        SizedBox(
-                                          height: 25,
-                                        ),
-                                        Container(
-                                          width: 142,
-                                          child: OutlineCustomButton(
-                                              label: trans(RETRY),
-                                              ctx: this,
-                                              id: 'primary_btn'),
-                                        ),
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
+                              ? NoNetworkFailureWidget(
+                              message: state.error.toString() == "UNAUTHORIZED" ? trans(MESSAGE_SESSION_EXPIRED) : state.error.toString(),
+                              onPressed: () {
+                                BlocProvider.of<PersonalPahtBloc>(context).add(
+                              ListPersonalPahtFetchingEvent(),
+                            );
+                      })
                               : SkeletonPahtWidget());
                 })));
   }

@@ -14,12 +14,15 @@ import 'package:flutter/services.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:share/share.dart';
 import 'package:citizen_app/features/paht/data/models/media_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:permission_handler/permission_handler.dart';
 
 const PADDING_CONTENT_HORIZONTAL = 16.0;
 const SIZE_ARROW_BACK_ICON = 24.0;
 
 class MediaPresenterPage extends StatefulWidget {
-  final List<PlaceImagesModel> urls;
+  final List<String> urls;
   final bool isPhoto;
   final int initialIndex;
 
@@ -39,13 +42,45 @@ class _MediaPresenterPageState extends State<MediaPresenterPage>
   }
 
   _saveImageToGallery() async {
-    var response = await Dio().get('${widget.urls[_currentIndex]}',
+    final PermissionHandler _permissionHandler = PermissionHandler();
+    var permissionStatus =
+        await _permissionHandler.checkPermissionStatus(PermissionGroup.storage);
+
+    switch (permissionStatus) {
+      case PermissionStatus.granted:
+        saveImage('${'$baseUrl' + widget.urls[_currentIndex]}');
+        break;
+      case PermissionStatus.denied:
+        await _permissionHandler
+            .requestPermissions([PermissionGroup.storage]);
+        var permissionStatus = await _permissionHandler
+            .checkPermissionStatus(PermissionGroup.storage);
+        switch (permissionStatus) {
+          case PermissionStatus.granted:
+            saveImage('${'$baseUrl' + widget.urls[_currentIndex]}');
+            break;
+        }
+
+        break;
+      case PermissionStatus.restricted:
+        await _permissionHandler.requestPermissions([PermissionGroup.storage]);
+        break;
+      case PermissionStatus.unknown:
+        // do something
+        break;
+      default:
+    }
+  }
+
+  void saveImage(String value) async{
+    var response = await Dio().get(value,
         options: Options(responseType: ResponseType.bytes));
     final result = await ImageGallerySaver.saveImage(
       Uint8List.fromList(response.data),
       quality: 80,
       name: DateTime.now().toUtc().toString(),
     );
+    Fluttertoast.showToast(msg: "Lưu file thành công ");
     print(result);
   }
 
@@ -125,7 +160,7 @@ class _MediaPresenterPageState extends State<MediaPresenterPage>
               child: TabBarView(
                 controller: _controller,
                 children: widget.urls
-                    .map((url) => ImageViewerWidget(url: url.imageUrl))
+                    .map((url) => ImageViewerWidget(url: '$baseUrl' + url))
                     .toList(),
               ),
             ),
@@ -160,7 +195,7 @@ class _MediaPresenterPageState extends State<MediaPresenterPage>
                       color: Colors.transparent,
                     ),
                     tabs: widget.urls
-                        .map((url) => PreviewImageWidget(url: url.imageUrl))
+                        .map((url) => PreviewImageWidget(url: '$baseUrl' + url))
                         .toList(),
                   ),
                 ),

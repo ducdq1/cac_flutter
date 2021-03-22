@@ -313,6 +313,8 @@ const LABEL_UPDATE_POI="title_update_report";
 const LABEL_POI_DETAIL="poi_detail";
 const LABEL_LOADING_DATA="loading_data";
 
+const MESSAGE_SESSION_EXPIRED="session_expired";
+
 //!ASSETS PATH
 const SVG_ASSETS_PATH = 'assets/svg/';
 const IMAGE_ASSETS_PATH = 'assets/images/';

@@ -1,17 +1,20 @@
 import 'package:citizen_app/core/usecases/usecase.dart';
+import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/entities.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
+import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-class GetDetailedPaht implements UseCase<PahtEntity, DetailedPahtParams> {
+class GetDetailedPaht implements UseCase<PahtEntity, SearchProductParam> {
   final PahtRepository repository;
 
   GetDetailedPaht(this.repository);
 
   @override
-  Future<PahtEntity> call(DetailedPahtParams params) async {
-    return await repository.getDetailedPaht(pahtId: params.pahtId);
+  Future<SearchProductModel> call(SearchProductParam params) async {
+    return await repository.getDetailedPaht(params);
   }
 }
 

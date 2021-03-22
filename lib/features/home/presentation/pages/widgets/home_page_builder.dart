@@ -1,24 +1,22 @@
 import 'dart:ui';
 
-import 'package:citizen_app/app_localizations.dart';
-import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
-import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
-import 'package:citizen_app/features/common/widgets/skeletons/menu_skeleton_widget.dart';
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widget.dart';
-import 'package:citizen_app/features/home/presentation/pages/widgets/citizens_menu_footer_widget.dart';
-import 'package:citizen_app/features/home/presentation/pages/widgets/citizens_menu_widget.dart';
+import 'package:citizen_app/features/home/presentation/pages/widgets/citizens_menu_item_widget.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 class HomePageBuilder extends StatefulWidget {
   final ScrollController scrollController;
   final StopScrollController stopScrollController;
+
   HomePageBuilder({Key key, this.scrollController, this.stopScrollController})
       : super(key: key);
 
@@ -48,55 +46,87 @@ class _HomePageBuilderState extends State<HomePageBuilder>
             ),
             child: BlocBuilder<HomePageBloc, HomePageState>(
               builder: (context, state) {
-                if (state is HomePageFailure) {
-                  Fluttertoast.showToast(
-                      msg: state.error.message.message.toString());
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 0.0),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 142,
-                            child: OutlineCustomButton(
-                                label: trans(RETRY),
-                                ctx: this,
-                                id: 'primary_btn'),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-                if (state is HomePageSuccess) {
-                  final menuServices = state.appModules.services
-                      .where((element) => element.serviceType != 'SOS')
-                      .where((element) => element.isActive == '1')
-                      .toList();
-                  final menuFooters = state.appModules.footers
-                      .where((element) => element.isActive == '1')
-                      .toList();
-                  return ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                return Padding(
+                  padding:
+                      const EdgeInsets.only(top: 100.0, left: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CitizensMenuWidget(menu: menuServices),
-                      //SizedBox(height: 10),
-                      Divider(
-                        color: Colors.black.withOpacity(0.0),
-                        thickness: 0.3,
-                        height: 0,
-                        indent: 16,
-                        endIndent: 16,
+                      CitizensMenuItemWidget(
+                        label: 'Quét mã',
+                        icon: '/icons/icon_scan_qr.png',
+                        needRedirect: '',
+                        onPress: () async {
+                          // Navigator.pushNamed(
+                          //     context, '/${widget.menu[i].serviceType}');
+
+                          final PermissionHandler _permissionHandler =
+                              PermissionHandler();
+                          var permissionStatus = await _permissionHandler
+                              .checkPermissionStatus(PermissionGroup.camera);
+
+                          switch (permissionStatus) {
+                            case PermissionStatus.granted:
+                              String cameraScanResult = await scanner.scan();
+                                 // 'TB002.K025C'; //await scanner.scan();
+
+                              print(cameraScanResult);
+                              if (cameraScanResult != null &&
+                                  cameraScanResult.isNotEmpty) {
+                                Navigator.pushNamed(
+                                    context, ROUTER_DETAILED_PAHT,
+                                    arguments: PahtDetailArgument(
+                                        productCode: cameraScanResult));
+                              }
+
+                              break;
+                            case PermissionStatus.denied:
+                              await _permissionHandler
+                                  .requestPermissions([PermissionGroup.camera]);
+                              var permissionStatus = await _permissionHandler
+                                  .checkPermissionStatus(
+                                      PermissionGroup.camera);
+
+                              switch (permissionStatus) {
+                                case PermissionStatus.granted:
+
+                                  String cameraScanResult =
+                                      'TB002.K025C'; //await scanner.scan();
+
+                                  print(cameraScanResult);
+                                  if (cameraScanResult != null &&
+                                      cameraScanResult.isNotEmpty) {
+                                    Navigator.pushNamed(
+                                        context, ROUTER_DETAILED_PAHT,
+                                        arguments: PahtDetailArgument(
+                                            productCode: cameraScanResult));
+                                  }
+                              }
+                              break;
+                            case PermissionStatus.restricted:
+                              await _permissionHandler
+                                  .requestPermissions([PermissionGroup.camera]);
+                              break;
+                            case PermissionStatus.unknown:
+                              // do something
+                              break;
+                            default:
+                          }
+                        },
                       ),
-                      CitizensMenuFooterWidget(menu: menuFooters),
+                      CitizensMenuItemWidget(
+                        label: 'Báo giá',
+                        icon: '/icons/icon_bao_gia.png',
+                        needRedirect: '',
+                        onPress: () {
+                          // Navigator.pushNamed(
+                          //     context, '/${widget.menu[i].serviceType}');
+                        },
+                      )
                     ],
-                  );
-                }
-                return Center(child: MenuSkeletonWidget());
+                  ),
+                );
               },
             ),
           ),

@@ -62,28 +62,28 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             children: [
               //_isAuthViettel ?
-                  SizedBox(),
-                  // : OptionItemWidget(
-                  //     icon: 'icon_update.png',
-                  //     label: trans(UPDATE_ACCOUNT),
-                  //     // route: ROUTER_UPDATE_PROFILE_PAGE,
-                  //     page: UpdateProfilePage(),
-                  //   ),
-              OptionItemWidget(
-                icon: 'icon_settings.png',
-                label: trans(TITLE_SETTING_SCREEN),
-                // route: ROUTER_SETTINGS_PAGE,
-                page: SettingsPage(),
-              ),
+              // SizedBox(),
+              // : OptionItemWidget(
+              //     icon: 'icon_update.png',
+              //     label: trans(UPDATE_ACCOUNT),
+              //     // route: ROUTER_UPDATE_PROFILE_PAGE,
+              //     page: UpdateProfilePage(),
+              //   ),
+              // OptionItemWidget(
+              //   icon: 'icon_settings.png',
+              //   label: trans(TITLE_SETTING_SCREEN),
+              //   // route: ROUTER_SETTINGS_PAGE,
+              //   page: SettingsPage(),
+              // ),
               // _isAuthViettel ?
 
               SizedBox(),
-                  // : OptionItemWidget(
-                  //     icon: 'icon_change_password.png',
-                  //     label: trans(TITLE_CHANGE_PASSWORD),
-                  //     // route: ROUTER_CHANGE_PASSWORD_PAGE,
-                  //     page: ChangePasswordPage(),
-                  //   ),
+              // : OptionItemWidget(
+              //     icon: 'icon_change_password.png',
+              //     label: trans(TITLE_CHANGE_PASSWORD),
+              //     // route: ROUTER_CHANGE_PASSWORD_PAGE,
+              //     page: ChangePasswordPage(),
+              //   ),
               OptionItemWidget(
                 icon: 'icon_info.png',
                 label: trans(INFORMATION),

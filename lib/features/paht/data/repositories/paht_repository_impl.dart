@@ -1,9 +1,12 @@
 import 'package:citizen_app/core/network/network_info.dart';
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
+import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/comment_entity.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
+import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:meta/meta.dart';
 
 typedef Future<List<PahtModel>> _PublicOrPersonalChooser();
@@ -154,10 +157,10 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<PahtModel> getDetailedPaht({String pahtId}) async {
+  Future<SearchProductModel> getDetailedPaht(SearchProductParam param) async {
     try {
       final remoteCategoriesPaht =
-          await remoteDataSource.fetchDetailedPaht(pahtId: pahtId);
+          await remoteDataSource.fetchDetailedPaht(param);
       // localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
       return remoteCategoriesPaht;
     } catch (error) {
@@ -182,7 +185,7 @@ class PahtRepositoryImpl implements PahtRepository {
       // localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
       return remoteCreateIssuePaht;
     } catch (error) {
-      throw Exception(error);
+      throw error;
     }
 
     // if (await networkInfo.isConnected) {

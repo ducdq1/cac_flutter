@@ -10,6 +10,7 @@ import 'package:citizen_app/features/common/utils.dart';
 import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom_widget.dart';
+import 'package:citizen_app/features/common/widgets/inputs/text_field_custom.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/paht/data/models/media_from_server.dart';
 import 'package:citizen_app/features/paht/data/models/media_picker_ios_model.dart';
@@ -17,7 +18,6 @@ import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.d
 import 'package:citizen_app/features/paht/domain/usecases/create_issue_paht.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/pages/location_picker_vtmaps_page.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/poi_type_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -181,13 +181,19 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
             }
 
             if (state is CreateIssueFailure) {
-              Navigator.of(context, rootNavigator: true).pop('dialog');
-              Fluttertoast.showToast(
-                  msg: state.error.message.toString() != null
-                      ? state.error.message.toString()
-                      : args == null
-                          ? trans(TEXT_CREATE_ISSUE_FAILED)
-                          : trans(TEXT_UPDATE_ISSUE_FAILED));
+              if (state.error !=null && state.error.message != null && state.error.message.toString() == "UNAUTHORIZED") {
+                Fluttertoast.showToast(msg: trans(MESSAGE_SESSION_EXPIRED));
+                 Navigator.of(context).pushNamedAndRemoveUntil(
+                    ROUTER_SIGNIN, (Route<dynamic> route) => false);
+              }else{
+                Navigator.of(context, rootNavigator: true).pop('dialog');
+                Fluttertoast.showToast(
+                    msg: state.error.message.toString() != null
+                        ? ( state.error.message.toString() == "Connection failed" ? trans(ERROR_CONNECTION_FAILED) : state.error.message.toString())
+                        : args == null
+                        ? trans(TEXT_CREATE_ISSUE_FAILED)
+                        : trans(TEXT_UPDATE_ISSUE_FAILED));
+              }
             }
           },
           builder: (context, state) {
@@ -322,16 +328,16 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       textFieldWidget: InkWell(
                         onTap: () async {
                           clearFocus();
-                          await Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => LocationPickerVTMaps(
-                                        chosenLocation: _chosenLocation,
-                                      ))).then((value) => setState(() {
-                                if (value != null) {
-                                  _chosenLocation = value;
-                                }
-                              }));
+                          // await Navigator.push(
+                          //     context,
+                              // CupertinoPageRoute(
+                              //     builder: (context) => LocationPickerVTMaps(
+                              //           chosenLocation: _chosenLocation,
+                              //         ))).then((value) => setState(() {
+                              //   if (value != null) {
+                              //     _chosenLocation = value;
+                              //   }
+                              // }));
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -537,7 +543,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       fontSize: FONT_MIDDLE,
                       textFieldWidget: InputValidateCustomWidget(
                         textInputType: TextInputType.text,
-                        limitLength: 255,
+                        limitLength: 500,
                         scrollPaddingForTop: true,
                         scrollPadding: 200,
                         isShowBorder: false,

@@ -6,11 +6,14 @@ String handleTime(String time) {
 
   String result = '';
   try {
-    if (time == null || time == '') return '9999-99-99 99:99:99';
+    if (time == null || time == '') return '';
     if (DateTime
         .now()
         .difference(DateTime.parse(time))
-        .inSeconds < 60) {
+        .inSeconds < 60 && DateTime
+        .now()
+        .difference(DateTime.parse(time))
+        .inSeconds >0) {
       result =
           DateTime
               .now()
@@ -22,7 +25,10 @@ String handleTime(String time) {
     } else if (DateTime
         .now()
         .difference(DateTime.parse(time))
-        .inMinutes < 60) {
+        .inMinutes < 60  && DateTime
+        .now()
+        .difference(DateTime.parse(time))
+        .inMinutes >0 ) {
       result =
           DateTime
               .now()
@@ -34,7 +40,10 @@ String handleTime(String time) {
     } else if (DateTime
         .now()
         .difference(DateTime.parse(time))
-        .inHours < 24) {
+        .inHours < 24 && DateTime
+        .now()
+        .difference(DateTime.parse(time))
+        .inHours >0 ) {
       result =
           DateTime
               .now()

@@ -8,7 +8,10 @@ import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/common/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/comment_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
+import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
+import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,21 +26,32 @@ abstract class PahtRemoteDataSource {
       String statusIds,
       int limit,
       int offset});
+
   Future<List<PahtModel>> fetchListPublicPaht(
       {String search,
       String categogyIds,
       String statusIds,
       int limit,
       int offset});
+
   Future<List<CategoryModel>> fetchListCategoriesPaht();
+
   Future<List<StatusModel>> fetchListStatusPersonal();
+
   Future<List<StatusModel>> fetchListStatusPublic();
-  Future<PahtModel> fetchDetailedPaht({String pahtId});
+
+  Future<SearchProductModel> fetchDetailedPaht(SearchProductParam param);
+
   Future<List<CommentModel>> fetchComments({String pahtId});
+
   Future<bool> createIssuePaht(IssueParams issueParams);
+
   Future<bool> updatePaht(UpdatedParams updatedParams);
+
   Future<bool> deletePaht({String id});
+
   Future<bool> createComment(Params commentParams);
+
   Future<bool> replyComment(Params commentParams);
 }
 
@@ -58,34 +72,39 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       var uri = Uri.parse('$vtmaps_baseUrl/place/v1/places');
       var request = http.MultipartRequest('POST', uri)
         ..fields['placeInfor'] = issueParams.toString()
-          ..fields['deletePlaceImageIds'] = issueParams.deletePlaceImageIds.join(",");//.toString();
+        ..fields['deletePlaceImageIds'] =
+            issueParams.deletePlaceImageIds.join(","); //.toString();
       request.headers['Content-Type'] = 'multipart/form-data';
       request.headers['Accept-Language'] = 'vi';
       request.headers['Authorization'] = 'Bearer $token';
-    print('$vtmaps_baseUrl/place/v1/places');
-  //print('parrams: '+issueParams.toString());
-      if(issueParams.files !=null) {
+      print('$vtmaps_baseUrl/place/v1/places');
+      //print('parrams: '+issueParams.toString());
+      if (issueParams.files != null) {
         for (int i = 0; i < issueParams.files.length; i++) {
-          if(issueParams.files[i].asset !=null) {
+          if (issueParams.files[i].asset != null) {
             var filePath = await FlutterAbsolutePath.getAbsolutePath(
                 issueParams.files[i].asset.identifier);
             // print(filePath);
-            request.files.add(await http.MultipartFile.fromPath(
-                'images', filePath));
+            request.files
+                .add(await http.MultipartFile.fromPath('images', filePath));
           }
         }
       }
       final response = await http.Response.fromStream(await request.send());
       final data = jsonDecode(response.body);
-     print('result: ' + response.statusCode.toString());
+      print('result: ' + response.statusCode.toString());
       if (response.statusCode == 200) {
+        if (data['statusCode'] == 1001 &&
+            data['message'] == "UNAUTHORIZED") {
+          throw Exception(data['message'].toString());
+        }
         return true;
       } else {
         throw Exception("Lỗi ${response.statusCode}: ${data['message']}");
       }
     } catch (error) {
       //print(error);
-      return handleException(error);
+      throw error;
     }
   }
 
@@ -103,16 +122,16 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       // var data = json.decode(response.body);
       // print(data);
 
-     // if (response.statusCode == 200) {
-     //    ResponseDataSuccessModel responseDataSuccess =
-     //        ResponseDataSuccessModel.fromJson(data);
-     //    final listStatus = responseDataSuccess.data;
-     //    List<StatusModel> result = listStatus.map((paht) {
-     //      return StatusModel.fromJson(paht);
-     //    }).toList();
+      // if (response.statusCode == 200) {
+      //    ResponseDataSuccessModel responseDataSuccess =
+      //        ResponseDataSuccessModel.fromJson(data);
+      //    final listStatus = responseDataSuccess.data;
+      //    List<StatusModel> result = listStatus.map((paht) {
+      //      return StatusModel.fromJson(paht);
+      //    }).toList();
       List<StatusModel> result = [];
-      result.add(StatusModel(name: trans(STATUS_APPROVED),id:1));
-      result.add(StatusModel(name: trans(STATUS_DENNY),id:2));
+      result.add(StatusModel(name: trans(STATUS_APPROVED), id: 1));
+      result.add(StatusModel(name: trans(STATUS_DENNY), id: 2));
       return result;
       // } else {
       //   throw Exception(data['message']);
@@ -126,7 +145,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   Future<List<CategoryModel>> fetchListCategoriesPaht() async {
     try {
       final response = await networkRequest.getRequest(
-        //  url: '$baseUrl/issue-report/categories/');
+          //  url: '$baseUrl/issue-report/categories/');
           url: '$vtmaps_baseUrl/place/v1/categories');
       print('$vtmaps_baseUrl/place/v1/categories');
 
@@ -136,8 +155,8 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
 
         final listCategories = data['categories'];
         List<CategoryModel> result = listCategories.map<CategoryModel>((item) {
-           return CategoryModel.fromJson(item);
-         }).toList();
+          return CategoryModel.fromJson(item);
+        }).toList();
 
         return result;
       } else {
@@ -173,26 +192,25 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<List<PahtModel>> fetchListPersonalPaht  (
+  Future<List<PahtModel>> fetchListPersonalPaht(
       {String search,
       String categogyIds,
       String statusIds,
       int limit,
       int offset}) async {
-    return  _fetchListPahtFromUrl('$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus$statusIds&search$search&action=2');
+    return _fetchListPahtFromUrl(
+        '$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus$statusIds&search$search&action=2');
   }
 
   @override
-  Future<List<PahtModel>> fetchListPublicPaht (
-          {String search,
-          String categogyIds,
-          String statusIds,
-          int limit,
-          int offset}) async {
-   return  _fetchListPahtFromUrl(
-        '$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset
-            .toString()}&size=${limit
-            .toString()}&categoryIds$categogyIds&approveStatus=0&search$search&action=2');
+  Future<List<PahtModel>> fetchListPublicPaht(
+      {String search,
+      String categogyIds,
+      String statusIds,
+      int limit,
+      int offset}) async {
+    return _fetchListPahtFromUrl(
+        '$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus=0&search$search&action=2');
   }
 
   Future<List<PahtModel>> _fetchListPahtFromUrl(String url) async {
@@ -205,40 +223,49 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       if (response.statusCode == 200) {
         // ResponseDataSuccessModel responseDataSuccess =
         //     ResponseDataSuccessModel.fromJson(data);
-        final data = responseJson['data'];
-        if(data != null ) {
-          final listPahts = data['listData'];
-          if(listPahts!=null) {
-            List<PahtModel> result = listPahts.map<PahtModel>((paht) {
-              //print('placeImages: '+paht['placeImages']);
-              return PahtModel.fromJson(paht);
-            }).toList();
-            return result;
+        if (responseJson['statusCode'] == 1001 &&
+            responseJson['message'] == "UNAUTHORIZED") {
+          throw Exception(responseJson['message']);
+        } else {
+          final data = responseJson['data'];
+          if (data != null) {
+            final listPahts = data['listData'];
+            if (listPahts != null) {
+              List<PahtModel> result = listPahts.map<PahtModel>((paht) {
+                //print('placeImages: '+paht['placeImages']);
+                return PahtModel.fromJson(paht);
+              }).toList();
+              return result;
+            }
           }
-          List<PahtModel> result=[];
+          List<PahtModel> result = [];
           return result;
-
         }
       } else {
         throw Exception(responseJson['message']);
       }
     } catch (error) {
-     // return handleException(error);
+      // return handleException(error);
       throw error;
     }
   }
 
   @override
-  Future<PahtModel> fetchDetailedPaht({String pahtId}) async {
+  Future<SearchProductModel> fetchDetailedPaht(SearchProductParam param) async {
     try {
-      final response = await networkRequest.getRequest(
-          url: '$baseUrl/issue-report/issues/$pahtId');
-
-      var data = json.decode(response.body);
+      final body = jsonEncode(param.toJson());
+      print(body);
+      String url = '$baseUrl/ketoan/rest/product/search';
+      final response = await networkRequest.postRequest(
+          url: '$baseUrl/ketoan/rest/product/search',
+      body: body);
+      print(url);
+      var data = json.decode(utf8.decode(response.bodyBytes));
       print(data);
+      ProductModel productModel = null;
 
       if (response.statusCode == 200) {
-        PahtModel result = PahtModel.fromJson(data['data']);
+        SearchProductModel result = SearchProductModel.fromJson(data);
         return result;
       } else {
         throw Exception(data['message']);
@@ -251,8 +278,9 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   @override
   Future<bool> deletePaht({String id}) async {
     try {
-      final response =
-          await networkRequest.postRequest(url: '$vtmaps_baseUrl/place/v1/places/delete-contribution?placeUpdateId=$id');
+      final response = await networkRequest.postRequest(
+          url:
+              '$vtmaps_baseUrl/place/v1/places/delete-contribution?placeUpdateId=$id');
       var data = json.decode(response.body);
       if (response.statusCode == 200) {
         Fluttertoast.showToast(

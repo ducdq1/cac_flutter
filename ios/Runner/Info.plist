@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Thu thập địa điểm</string>
+	<string>Poi Collector</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -72,6 +72,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>VTMapAccessToken</key>
-	<string>62cd4c9e0f2a0c2a31e9cdc7485b33a5</string>
+	<string>6ht5fdbc-1996-4f54-87gf-5664f304f3d2</string>
 </dict>
 </plist>

@@ -1,11 +1,11 @@
 {
-  "app_name": "Pois colection",
+  "app_name": "Poi collector",
   "title_hello": "Hi!",
   "title_login_screen": "Sign in",
   "title_report": "Report",
   "title_create_report": "Create poi",
   "title_update_report": "Update poi",
-  "title_paht": "Pois colection",
+  "title_paht": "Poi collector",
   "title_verification_request": "Submit the verification request",
   "title_update_verification_request": "Update the verification request",
   "title_news_verification": "Verify news",
@@ -268,5 +268,6 @@
   "label_delete_poi_success": "Successfully deleted poi!",
   "hello":"Hi,",
   "poi_detail":"Poi detail",
-  "loading_data": "Loading..."
+  "loading_data": "Loading...",
+  "session_expired": "The login session has expired. Please log in again"
 }

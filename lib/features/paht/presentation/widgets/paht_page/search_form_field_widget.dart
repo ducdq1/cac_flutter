@@ -1,6 +1,7 @@
 import 'package:citizen_app/app_localizations.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
@@ -67,7 +68,7 @@ class _SearchFormFieldWidgetState extends State<SearchFormFieldWidget> {
                   Icons.search,
                   color: Color.fromRGBO(255, 255, 255, 0.6),
                 ),
-                contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                contentPadding: EdgeInsets.fromLTRB(10, 0, 30, 0),
                 labelStyle: GoogleFonts.inter(
                     color: Color.fromRGBO(255, 255, 255, 0.6),
                     fontSize: FONT_EX_SMALL,

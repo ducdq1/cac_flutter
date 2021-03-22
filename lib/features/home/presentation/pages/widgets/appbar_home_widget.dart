@@ -78,7 +78,7 @@ class _AppBarHomeWidgetState extends State<AppBarHomeWidget> {
       elevation: 0,
       title: Text(
         // APP_NAME,
-        trans(APP_NAME),
+        'C.A.C',
         style: GoogleFonts.openSans(
           color: Colors.white,
           fontSize: FONT_HUGE,

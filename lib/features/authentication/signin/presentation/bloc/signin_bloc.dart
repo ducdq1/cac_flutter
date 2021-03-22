@@ -118,11 +118,9 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     } catch (e) {
       print(e);
       yield SignInFaildState(
-          message: e.message == "OTP is invalid"
-              ? trans(OTP_IS_INVALID)
-              : e.message == "Phone number is incorrect!"
-                  ? trans(MUST_VIETTEL_MOBILE)
-                  : e.message);
+          message: e.message == "Connection failed"
+              ? trans(ERROR_CONNECTION_FAILED)
+              :  e.message);
     }
   }
 }

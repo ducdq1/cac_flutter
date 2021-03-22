@@ -12,11 +12,12 @@ import 'package:citizen_app/features/authentication/signin/presentation/signin_p
 import 'package:citizen_app/features/authentication/signup/presentation/bloc/active_account_bloc.dart';
 import 'package:citizen_app/features/authentication/signup/presentation/bloc/signup_bloc.dart';
 import 'package:citizen_app/features/common/http_proxy.dart';
-import 'package:citizen_app/features/digital_map/presentation/pages/digital_map_page.dart';
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
+import 'package:citizen_app/features/paht/domain/usecases/get_detailed_paht.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
+import 'package:citizen_app/features/paht/presentation/bloc/detailed_paht_bloc/detailed_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/pages/business_hour_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
@@ -119,6 +120,11 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<HomePageBloc>(
             create: (BuildContext context) => singleton<HomePageBloc>()),
+        BlocProvider<DetailedPahtBloc>(
+          create: (BuildContext context) => singleton<DetailedPahtBloc>(),
+
+        ),
+
       ],
       child: MaterialApp(
         locale: _locale,
@@ -152,7 +158,7 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navKey,
         title: 'Thu thập địa điểm',
         initialRoute:
-            (token != null && !token.isEmpty) ? ROUTER_HOME : ROUTER_SIGNIN,
+            (token != null && !token.isEmpty) ? ROUTER_HOME : ROUTER_HOME ,// ROUTER_SIGNIN,
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),
           ROUTER_PAHT: (context) => Paht(),
@@ -165,7 +171,6 @@ class _MyAppState extends State<MyApp> {
               ),
           ROUTER_CREATE_PAHT: (context) => PahtCreateIssue(),
           ROUTER_DETAILED_PAHT: (context) => PahtDetailPage(),
-          ROUTER_DIGITAL_MAP: (context) => DigitalMapPage(),
           ROUTER_PROFILE_PAGE: (context) => ProfilePage(),
           ROUTER_UPDATE_PROFILE_PAGE: (context) => UpdateProfilePage(),
           ROUTER_SETTINGS_PAGE: (context) => SettingsPage(),

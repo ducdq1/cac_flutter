@@ -13,8 +13,8 @@ class DetailedPahtLoading extends DetailedPahtState {}
 
 class DetailedPahtSuccess extends DetailedPahtState {
   final PahtModel paht;
-
-  DetailedPahtSuccess({@required this.paht});
+  SearchProductModel searchProductModel;
+  DetailedPahtSuccess({@required this.paht,this.searchProductModel});
 }
 
 class DetailedPahtFailure extends DetailedPahtState {

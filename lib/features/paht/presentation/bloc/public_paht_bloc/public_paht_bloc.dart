@@ -85,19 +85,21 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       );
       return;
     }
+
     if (event is ListPublicPahtFetchedEvent) {
       if (event.error != null) {
         yield PublicPahtFailure(error: event.error);
         return;
       }
 
-      yield PublicPahtSuccess(
+       yield PublicPahtSuccess(
           paht: event.paht,
           offset: event.offset,
           hasReachedMax: event.paht.length < 10 ? true : false,
           error: event.error);
       return;
     }
+
     if (event is ListPublicPahtFetchingEvent) {
       if (currentState is PublicPahtFailure ||
           currentState is PublicPahtSuccess && (currentState.paht == null)) {
@@ -126,18 +128,23 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       }
 
       try {
-        if (currentState is PublicPahtFailure || currentState is PublicPahtInitial &&
-            !_hasReachedMax(currentState)) {
-          //await Future.delayed(Duration(milliseconds: 2000));
+        if (currentState is PublicPahtFailure ||
+            currentState is PublicPahtInitial &&
+                !_hasReachedMax(currentState)) {
+          print('delay.....');
+          await Future.delayed(Duration(milliseconds: 500));
+          print('loading.....');
           getListPublicPaht(PahtParams(
-              limit: 10,
-              offset: 1,
-              search: event.search != null ? '=${event.search}' : '=',
-              categoryIds: event.categoryIds == null ? '' : categories,
-              statusIds: event.statusIds == null ? '' : status)).then((value) {
-            add(ListPublicPahtFetchedEvent(offset: 1,paht: value));
+                  limit: 10,
+                  offset: 1,
+                  search: event.search != null ? '=${event.search}' : '=',
+                  categoryIds: event.categoryIds == null ? '' : categories,
+                  statusIds: event.statusIds == null ? '' : status))
+              .then((value) {
+            add(ListPublicPahtFetchedEvent(offset: 1, paht: value));
           }).catchError((err) {
-            add(ListPublicPahtFetchedEvent(offset: 1,paht: [],error: err.message));
+            add(ListPublicPahtFetchedEvent(
+                offset: 1, paht: [], error: err.message));
           });
         } else if (currentState is PublicPahtSuccess &&
             !_hasReachedMax(currentState)) {
@@ -188,10 +195,12 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           yield PublicPahtFailure(error: error.message);
       }
     }
+
     if (event is PublicPahtRefreshRequestedEvent) {
       if (event.type == 1) {
         yield PublicPahtLoading();
       }
+
       String categories = '=';
       String status = '=';
       if (event.categoryIds != null) {
@@ -224,6 +233,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
             paht: listPublicPaht,
             offset: 1,
             hasReachedMax: listPublicPaht.length < 10 ? true : false);
+
         yield PublicPahtSuccess(
             paht: listPublicPaht,
             offset: 1,

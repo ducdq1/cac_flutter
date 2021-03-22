@@ -85,7 +85,9 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
           offset: 1,
           search: event.search != null ? '=${event.search}' : '=',
           categoryIds: event.categoryIds == null ? '' : categories,
-          statusIds: event.statusIds == null ||  event.statusIds.isEmpty ? '=1,2' : status));
+          statusIds: event.statusIds == null || event.statusIds.isEmpty
+              ? '=1,2'
+              : status));
       yield PersonalPahtSuccess(
           paht: listPublicPaht,
           offset: 1,
@@ -93,8 +95,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
       return;
     }
 
-    if(event is ListPersonalPahtFetchedEvent){
-      if(event.error != null){
+    if (event is ListPersonalPahtFetchedEvent) {
+      if (event.error != null) {
         yield PersonalPahtFailure(error: event.error);
         return;
       }
@@ -108,7 +110,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
     }
 
     if (event is ListPersonalPahtFetchingEvent) {
-      if (currentState is PersonalPahtInitial || currentState is PersonalPahtFailure) {
+      if (currentState is PersonalPahtInitial ||
+          currentState is PersonalPahtFailure) {
         yield PersonalPahtLoading();
       }
 
@@ -135,32 +138,39 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
       }
 
       try {
-        if (currentState is PersonalPahtInitial &&
+        if (currentState is PersonalPahtFailure || currentState is PersonalPahtInitial &&
                 !_hasReachedMax(
                     currentState) //||state is PersonalPahtLoading && !_hasReachedMax(currentState)
             ) {
-          getListPersonalPaht(
-              PahtParams(
+          await Future.delayed(Duration(milliseconds: 500));
+
+          getListPersonalPaht(PahtParams(
                   limit: 10,
                   offset: 1,
                   search: event.search != null ? '=${event.search}' : '=',
-                  categoryIds: event.categoryIds == null || event.categoryIds.isEmpty ? '' : categories,
-                  statusIds: event.statusIds == null || event.statusIds.isEmpty ? '=1,2' : status)).then((value) {
-            add(ListPersonalPahtFetchedEvent(offset: 1,paht: value));
+                  categoryIds:
+                      event.categoryIds == null || event.categoryIds.isEmpty
+                          ? ''
+                          : categories,
+                  statusIds: event.statusIds == null || event.statusIds.isEmpty
+                      ? '=1,2'
+                      : status))
+              .then((value) {
+            add(ListPersonalPahtFetchedEvent(offset: 1, paht: value));
             return;
           }).catchError((error) {
-            add(ListPersonalPahtFetchedEvent(offset: 1,paht: [], error: error.message));
+            add(ListPersonalPahtFetchedEvent(
+                offset: 1, paht: [], error: error.message));
           });
-
         } else if (currentState is PersonalPahtSuccess &&
             !_hasReachedMax(currentState)) {
           int nextOffset = currentState.offset + 1;
           print('nextOffset ' + nextOffset.toString());
           // yield PersonalPahtLoadmore();
-          yield  PersonalPahtLoadmore(
-            paht: currentState.paht ,
+          yield PersonalPahtLoadmore(
+            paht: currentState.paht,
             offset: currentState.offset,
-            hasReachedMax:  false,
+            hasReachedMax: false,
           );
 
           List<PahtModel> listPersonalPaht = await getListPersonalPaht(
@@ -168,8 +178,13 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
                   limit: 10,
                   offset: nextOffset,
                   search: event.search != null ? '=${event.search}' : '=',
-                  categoryIds: event.categoryIds == null || event.categoryIds.isEmpty ? '' : categories,
-                  statusIds: event.statusIds == null  || event.statusIds.isEmpty  ?  '=1,2' : status));
+                  categoryIds:
+                      event.categoryIds == null || event.categoryIds.isEmpty
+                          ? ''
+                          : categories,
+                  statusIds: event.statusIds == null || event.statusIds.isEmpty
+                      ? '=1,2'
+                      : status));
 
           print(" yield PersonalPahtSuccess...");
 
@@ -187,11 +202,11 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
 
           return;
         } else {
-          if (currentState is PersonalPahtSuccess){
-            yield  PersonalPahtSuccess(
-              paht: currentState.paht ,
+          if (currentState is PersonalPahtSuccess) {
+            yield PersonalPahtSuccess(
+              paht: currentState.paht,
               offset: currentState.offset,
-              hasReachedMax:  true,
+              hasReachedMax: true,
             );
           }
           return;
@@ -242,8 +257,12 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
             limit: 10,
             offset: 1,
             search: event.search != null ? '=${event.search}' : '=',
-            categoryIds: event.categoryIds == null || event.categoryIds.isEmpty ? '' : categories,
-            statusIds: event.statusIds == null  || event.statusIds.isEmpty  ? '=1,2'  : status));
+            categoryIds: event.categoryIds == null || event.categoryIds.isEmpty
+                ? ''
+                : categories,
+            statusIds: event.statusIds == null || event.statusIds.isEmpty
+                ? '=1,2'
+                : status));
 
         yield PersonalPahtRefreshSuccess(
             paht: listPersonalPaht,

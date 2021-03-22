@@ -24,9 +24,9 @@ class AppModuleRemoteDataSourceImpl implements AppModuleRemoteDataSource {
 
         List<AppHeaderModel> headers = List<AppHeaderModel>(1) ;
         headers[0] = AppHeaderModel(id: 10,image: 'https://files.viettelmaps.vn/images/pois_collection_app/banner.png',name: 'xin chào, \nMít tờ lép 11 ',link: '',isActive: '1');
-        List<AppServiceModel> services  = List<AppServiceModel>(1) ;
-        services[0] = AppServiceModel(id: 1,name: trans(APP_NAME),isActive: '1',icon: '/icons/icon_menu_bds.png',serviceType: 'PAHT');
-
+        List<AppServiceModel> services  = List<AppServiceModel>(2) ;
+        services[0] = AppServiceModel(id: 1,name: 'Quét mã',isActive: '1',icon: '/icons/icon_menu_bds.png',serviceType: 'PAHT');
+        services[1] = AppServiceModel(id: 1,name: 'Báo giá',isActive: '1',icon: '/icons/icon_menu_bds.png',serviceType: 'PAHT');
         List<AppFooterModel> footers = List<AppFooterModel>(0) ;
 
         AppModuleModel result = AppModuleModel(headers: headers,services: services,footers: footers);

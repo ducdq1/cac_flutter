@@ -3,6 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SkeletonPahtWidget extends StatelessWidget {
+  final int itemCount;
+
+  const SkeletonPahtWidget({Key key, this.itemCount=7}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -57,7 +61,7 @@ class SkeletonPahtWidget extends StatelessWidget {
               ),
             );
           },
-          itemCount: 7,
+          itemCount: itemCount,
         ));
   }
 }

@@ -154,7 +154,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
   }
 
   _launchForgetPssURL() async {
-    const url = 'https://sso.viettelmaps.vn/auth/realms/vts-mientrung/login-actions/reset-credentials?client_id=vtmaps';
+    const url = 'https://sso.viettelmaps.com.vn:8080/auth/realms/vts-mientrung/login-actions/reset-credentials?client_id=vtmaps';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
