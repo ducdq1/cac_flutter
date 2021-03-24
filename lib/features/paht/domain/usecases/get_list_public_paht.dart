@@ -10,11 +10,6 @@ class GetListPublicPaht implements UseCase<PahtEntity, PahtParams> {
 
   @override
   Future<List<PahtEntity>> call(PahtParams params) async {
-    return await repository.getListPublicPaht(
-        search: params.search,
-        categoryIds: params.categoryIds,
-        statusIds: params.statusIds,
-        limit: params.limit,
-        offset: params.offset);
+    return await repository.getListPublicPaht(params);
   }
 }

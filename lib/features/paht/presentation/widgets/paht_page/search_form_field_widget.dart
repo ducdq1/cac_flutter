@@ -60,7 +60,7 @@ class _SearchFormFieldWidgetState extends State<SearchFormFieldWidget> {
                     color: Color.fromRGBO(255, 255, 255, 0.6),
                     fontSize: FONT_EX_SMALL,
                     fontWeight: FontWeight.w600),
-                hintText: trans(TEXT_PLACEHOLDER_SEARCH_FORM),
+                hintText: 'Nhập tên hoặc địa chỉ' ,
                 focusColor: Color.fromRGBO(0, 0, 0, 0.25),
                 filled: true,
                 fillColor: Color.fromRGBO(0, 0, 0, 0.25),

@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 class ImageEntity extends Equatable {
   int attachId;
   String path;
-
-  ImageEntity({this.attachId, this.path});
+  String name;
+  ImageEntity({this.attachId, this.path,this.name});
 
   @override
   // TODO: implement props

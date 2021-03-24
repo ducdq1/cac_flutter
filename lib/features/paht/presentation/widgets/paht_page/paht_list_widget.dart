@@ -24,6 +24,7 @@ class UpdatePahtArgument {
   final String hyperlink;
   final String phone;
   final List<BusinessHourEntity> BUSINESS_HOUR;
+  final PahtModel pahtModel;
 
   UpdatePahtArgument(
       {this.content,
@@ -35,7 +36,8 @@ class UpdatePahtArgument {
       this.poiType,
       this.hyperlink,
       this.phone,
-      this.BUSINESS_HOUR});
+      this.BUSINESS_HOUR,
+      this.pahtModel});
 }
 
 class PahtDetailArgument {
@@ -144,7 +146,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                       BlocProvider.of<PublicPahtBloc>(context)
                                           .add(
                                         DeleteButtonEvent(
-                                            id: widget.pahts[index].id
+                                            id: widget.pahts[index].quotationID
                                                 .toString()),
                                       );
                                       Navigator.pop(context);
@@ -153,37 +155,12 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                         BlocProvider.of<PublicPahtBloc>(context));
                               },
                               onEdit: () {
-                                List<MediaFromServer> listMedia = [];
-                                if (widget.pahts[index].placeImages != null &&
-                                    widget.pahts[index].placeImages.isNotEmpty) {
-                                  for (var item
-                                      in widget.pahts[index].placeImages) {
-                                    MediaFromServer photo = MediaFromServer(
-                                        id: item.id,
-                                        type: 'photo',
-                                        url: item.imageUrl,
-                                        relUrl: item.imageThumbUrl);
-                                    listMedia.add(photo);
-                                  }
-                                }
+
                                 Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
                                         arguments: UpdatePahtArgument(
-                                            content: widget.pahts[index].name,
-                                            address: widget.pahts[index].address,
-                                            latitude: widget.pahts[index].lat
-                                                .toString(),
-                                            longitude: widget.pahts[index].lng
-                                                .toString(),
-                                            listMedia: listMedia,
-                                            poiType:
-                                                widget.pahts[index].fromPoiType,
-                                            pahtId:
-                                                widget.pahts[index].id.toString(),
-                                            phone: widget.pahts[index].phone,
-                                            hyperlink:
-                                                widget.pahts[index].hyperlink,
-                                            BUSINESS_HOUR:
-                                                widget.pahts[index].businessHour))
+                                            content: widget.pahts[index].cusName,
+                                            address: widget.pahts[index].cusAddress
+                                        ))
                                     .then((value) {
                                   if (value != null) {
                                     BlocProvider.of<PublicPahtBloc>(context).add(
@@ -193,31 +170,16 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                 });
                               },
                               isPersonal: widget.isPersonal,
-                              commentCount: 0,
-                              updatedTime: widget.pahts[index].updatedDate != null
-                                  ? widget.pahts[index].updatedDate
-                                  : widget.pahts[index].createdDate,
-                              image: widget.pahts[index].placeImages == null ||
-                                      widget.pahts[index].placeImages.length == 0
-                                  ? null
-                                  : widget
-                                      .pahts[index].placeImages[0].imageThumbUrl,
-                              address: widget.pahts[index].address,
-                              name: widget.pahts[index].name,
-                              status: widget.pahts[index].approveStatus,
-                              fromCategory:
-                                  widget.pahts[index].fromCategory != null
-                                      ? widget.pahts[index].fromCategory.name
-                                      : '',
+                              pahtModel: widget.pahts[index] ,
                               onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  ROUTER_DETAILED_PAHT,
-                                  arguments: PahtDetailArgument(
-                                      poiDetail: widget.pahts[index],
-                                      id: widget.pahts[index].id.toString(),
-                                      title: widget.pahts[index].name),
-                                );
+                                // Navigator.pushNamed(
+                                //   context,
+                                //   ROUTER_DETAILED_PAHT,
+                                //   arguments: PahtDetailArgument(
+                                //       poiDetail: widget.pahts[index],
+                                //       id: widget.pahts[index].id.toString(),
+                                //       title: widget.pahts[index].name),
+                               // );
                               },
                             )),),);
                     },

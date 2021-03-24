@@ -1,9 +1,5 @@
-import 'package:citizen_app/features/paht/data/models/business_hour_model.dart';
 import 'package:citizen_app/features/paht/data/models/image_model.dart';
-import 'package:citizen_app/features/paht/data/models/place_images_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
-import 'package:citizen_app/features/paht/domain/entities/paht_entity.dart';
-import 'package:citizen_app/features/paht/data/models/from_category_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/product_entity.dart';
 
 class ProductModel extends ProductEntity {
@@ -22,8 +18,7 @@ class ProductModel extends ProductEntity {
       String price,
       int productType,
       String color,
-      List<ImageModel> imagesModel,
-      List<String> images,
+      List<ImageModel> images,
   TonKhoModel tonKhoModel}  )
       : super(
             productId: productId,
@@ -40,7 +35,6 @@ class ProductModel extends ProductEntity {
             price: price,
             productType: productType,
             color: color,
-            imagesEntity: imagesModel,
             images: images);
 
   factory ProductModel.fromJson(Map json) {
@@ -60,10 +54,9 @@ class ProductModel extends ProductEntity {
         price: json['price'],
         productType: json['productType'],
         color: json['color'],
-        imagesModel: json['imagesModel'],
         images: json['images'] == null ? [] :
-        json['images'].map<String>((item){
-          return item.toString();
-        }).toList()    );
+        json['images'].map<ImageModel>((item){
+          return ImageModel.fromJson(item);
+        }).toList() );
   }
 }

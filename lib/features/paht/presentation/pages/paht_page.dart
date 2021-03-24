@@ -77,7 +77,7 @@ class _PahtState extends State<Paht> {
       child: BlocBuilder<BottomNavigationBloc, BottomNavigationState>(
         builder: (BuildContext context, BottomNavigationState state) {
           return BaseLayoutWidget(
-            title: trans(TITLE_PAHT),
+            title: 'Danh sách Báo giá',
             centerTitle: true,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
@@ -178,32 +178,6 @@ class _PahtState extends State<Paht> {
               },
             ),
             actions: [
-              InkWell(
-                child: SvgPicture.asset(
-                  isFilter
-                      ? SVG_ASSETS_PATH + 'icon_filter_active.svg'
-                      : SVG_ASSETS_PATH + 'icon_filter.svg',
-                  width: SIZE_ICON_ACTIONS,
-                  height: SIZE_ICON_ACTIONS,
-                ),
-                onTap: () {
-                  setState(() {
-                    isFilter = !isFilter;
-                  });
-                  if (isFilter) {
-                    if (indexTab == 0) {
-                      BlocProvider.of<StatusPahtBloc>(context)
-                          .add(ListStatusPublicFetched());
-                    } else {
-                      BlocProvider.of<StatusPahtBloc>(context)
-                          .add(ListStatusPersonalFetched());
-                    }
-                  }
-                },
-              ),
-              SizedBox(
-                width: 10,
-              ),
               InkWell(
                 child: SvgPicture.asset(
                   SVG_ASSETS_PATH + 'icon_search.svg',

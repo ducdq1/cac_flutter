@@ -53,11 +53,11 @@ String getIcon(int statusId) {
 
 String getStatus(int statusId) {
   if (statusId == 1) {
-    return trans(STATUS_APPROVED);
+    return 'Đã báo giá';
   } else if ( statusId == 2) {
     return trans(STATUS_DENNY);
   }else{
-    return trans(PROCESSING);
+    return 'Chưa báo giá';
   }
 }
 

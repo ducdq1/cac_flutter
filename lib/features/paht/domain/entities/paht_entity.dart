@@ -5,69 +5,34 @@ import 'package:citizen_app/features/paht/data/models/from_category_model.dart';
 import 'package:equatable/equatable.dart';
 
 class PahtEntity extends Equatable {
-  int id;
-  String name;
-  double lat;
-  double lng;
-  int approveStatus;
-  int userId;
-  int poiId;
-  int fromPoiType;
-  int toPoiType;
-  String address;
-  String updatedDate;
-  String createdDate;
-  int action;
-  String type;
-  String phone;
-  String hyperlink;
-  List<BusinessHourEntity> businessHour;
-  List<PlaceImagesEntity> placeImages;
-  FromCategoryEntity fromCategory;
-  PahtEntity(
-      {this.id,
-      this.name,
-      this.lat,
-      this.lng,
-      this.approveStatus,
-      this.userId,
-      this.poiId,
-      this.fromPoiType,
-      this.toPoiType,
-      this.address,
-      this.updatedDate,
-      this.createdDate,
-      this.action,
-      this.type,
-      this.businessHour,
-      this.placeImages,
-        this.fromCategory,
-        this.phone,
-        this.hyperlink
-      });
+  int quotationID;
+  String quotationNumber;
+  String cusName;
+  String cusAddress;
+  String cusPhone;
+  String createUserCode;
+  int type;
+  int status;
+  int totalPrice;
+  String modifyDate;
 
-  @override
-  List<Object> get props => [
-    id,
-    name,
-    lat,
-    lng,
-    approveStatus,
-    userId,
-    poiId,
-    fromPoiType,
-    toPoiType,
-    address,
-    action,
-    type,
-    businessHour,
-    placeImages,
-    phone,
-    hyperlink,
-    fromCategory
-      ];
+  PahtEntity(
+      {this.quotationID,
+      this.quotationNumber,
+      this.cusName,
+      this.cusAddress,
+      this.cusPhone,
+      this.createUserCode,
+      this.status,
+      this.totalPrice,
+      this.type,
+      this.modifyDate});
 
   Map<String, dynamic> toJson() {
     return {};
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }

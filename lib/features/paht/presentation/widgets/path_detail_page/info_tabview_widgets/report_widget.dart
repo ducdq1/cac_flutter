@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/app_localizations.dart';
+import 'package:citizen_app/features/paht/data/models/image_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
+import 'package:citizen_app/features/paht/domain/entities/image_entity.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -172,7 +174,9 @@ class ReportWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 ///color: Color(0xffE6EFF3).withOpacity(0.6),
                 color: Color(0xfff1e3c0),
-               borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
               ),
               child: Row(
                 children: [
@@ -205,45 +209,8 @@ class ReportWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(4.0),
                         mainAxisSpacing: 4.0,
                         crossAxisSpacing: 4.0,
-                        children: productModel.images.map((String url) {
-                          return GridTile(
-                              child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            child:
-                                //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
-                                InkWell(
-                              onTap: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => MediaPresenterPage(
-                                      urls: productModel.images,
-                                      initialIndex:
-                                      productModel.images.indexOf(url),
-                                    ),
-                                  ),
-                                );
-                                SystemChrome.setSystemUIOverlayStyle(
-                                    SystemUiOverlayStyle.light);
-                                SystemChrome.setSystemUIOverlayStyle(
-                                  SystemUiOverlayStyle(
-                                      statusBarColor: PRIMARY_COLOR),
-                                );
-                              },
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: '$baseUrl' + url,
-                                placeholder: (context, url) =>
-                                    new CircularProgressIndicator(
-                                        strokeWidth: 2.0),
-                                height: 15,
-                                width: 15,
-                                errorWidget: (context, url, error) =>
-                                    new Icon(Icons.error),
-                              ),
-                            ),
-                          ));
-                        }).toList())
+                        children: _getTiles(productModel.images, context)
+    )
                     : Text("Không có hình ảnh",
                         style: GoogleFonts.inter(
                           fontSize: FONT_EX_MIDDLE,
@@ -255,4 +222,50 @@ class ReportWidget extends StatelessWidget {
       ),
     );
   }
+
+  List<Widget> _getTiles(List<ImageModel> imageModels, BuildContext context) {
+    final List<Widget> tiles = <Widget>[];
+    for (int i = 0; i < imageModels.length; i++) {
+      ImageModel imageModel = imageModels[i];
+      tiles.add(GridTile(
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child:
+            //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
+            InkWell(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        MediaPresenterPage(
+                          urls: productModel.images,
+                          initialIndex: i,
+                        ),
+                  ),
+                );
+                SystemChrome.setSystemUIOverlayStyle(
+                    SystemUiOverlayStyle.light);
+                SystemChrome.setSystemUIOverlayStyle(
+                  SystemUiOverlayStyle(
+                      statusBarColor: PRIMARY_COLOR),
+                );
+              },
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
+                placeholder: (context, url) =>
+                new CircularProgressIndicator(
+                    strokeWidth: 2.0),
+                height: 15,
+                width: 15,
+                errorWidget: (context, url, error) =>
+                new Icon(Icons.error),
+              ),
+            ),
+          )));
+    }
+    return tiles;
+  }
+
 }

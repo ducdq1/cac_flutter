@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:citizen_app/app_localizations.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
+import 'package:citizen_app/features/paht/data/models/image_model.dart';
 import 'package:citizen_app/features/paht/data/models/place_images_model.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/media_presenter_page/image_viewer_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/media_presenter_page/preview_image_widget.dart';
@@ -22,7 +23,7 @@ const PADDING_CONTENT_HORIZONTAL = 16.0;
 const SIZE_ARROW_BACK_ICON = 24.0;
 
 class MediaPresenterPage extends StatefulWidget {
-  final List<String> urls;
+  final List<ImageModel> urls;
   final bool isPhoto;
   final int initialIndex;
 
@@ -48,7 +49,7 @@ class _MediaPresenterPageState extends State<MediaPresenterPage>
 
     switch (permissionStatus) {
       case PermissionStatus.granted:
-        saveImage('${'$baseUrl' + widget.urls[_currentIndex]}');
+        saveImage('${'$baseUrl' + widget.urls[_currentIndex].path+widget.urls[_currentIndex].name}');
         break;
       case PermissionStatus.denied:
         await _permissionHandler
@@ -57,7 +58,7 @@ class _MediaPresenterPageState extends State<MediaPresenterPage>
             .checkPermissionStatus(PermissionGroup.storage);
         switch (permissionStatus) {
           case PermissionStatus.granted:
-            saveImage('${'$baseUrl' + widget.urls[_currentIndex]}');
+            saveImage('${'$baseUrl' + widget.urls[_currentIndex].path+widget.urls[_currentIndex].name}');
             break;
         }
 
@@ -160,7 +161,7 @@ class _MediaPresenterPageState extends State<MediaPresenterPage>
               child: TabBarView(
                 controller: _controller,
                 children: widget.urls
-                    .map((url) => ImageViewerWidget(url: '$baseUrl' + url))
+                    .map((url) => ImageViewerWidget(url: '$baseUrl' + url.path+ url.name))
                     .toList(),
               ),
             ),
@@ -195,7 +196,7 @@ class _MediaPresenterPageState extends State<MediaPresenterPage>
                       color: Colors.transparent,
                     ),
                     tabs: widget.urls
-                        .map((url) => PreviewImageWidget(url: '$baseUrl' + url))
+                        .map((url) => PreviewImageWidget(url: '$baseUrl' + url.path+url.name))
                         .toList(),
                   ),
                 ),

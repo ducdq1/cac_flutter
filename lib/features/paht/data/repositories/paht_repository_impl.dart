@@ -8,6 +8,12 @@ import 'package:citizen_app/features/paht/domain/repositories/repositories.dart'
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:meta/meta.dart';
+import 'package:bloc/bloc.dart';
+import 'package:citizen_app/features/paht/data/models/paht_model.dart';
+import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 typedef Future<List<PahtModel>> _PublicOrPersonalChooser();
 typedef Future<List<StatusModel>> _StatusPublicOrStatusPersonalChooser();
@@ -25,37 +31,17 @@ class PahtRepositoryImpl implements PahtRepository {
 
   @override
   Future<List<PahtModel>> getListPersonalPaht(
-      {String search,
-      String categoryIds,
-      String statusIds,
-      int limit,
-      int offset}) async {
+      PahtParams parram) async {
     return await _getListPaht(() {
-      return remoteDataSource.fetchListPersonalPaht(
-        search: search,
-        categogyIds: categoryIds,
-        statusIds: statusIds,
-        limit: limit,
-        offset: offset,
-      );
+      return remoteDataSource.fetchListPersonalPaht(parram);
     });
   }
 
   @override
   Future<List<PahtModel>> getListPublicPaht(
-      {String search,
-      String categoryIds,
-      String statusIds,
-      int limit,
-      int offset}) async {
+      PahtParams parram) async {
     return await _getListPaht(() {
-      return remoteDataSource.fetchListPublicPaht(
-        search: search,
-        categogyIds: categoryIds,
-        statusIds: statusIds,
-        limit: limit,
-        offset: offset,
-      );
+      return remoteDataSource.fetchListPublicPaht(parram);
     });
   }
 
@@ -254,5 +240,4 @@ class PahtRepositoryImpl implements PahtRepository {
       throw Exception(error);
     }
   }
-
 }

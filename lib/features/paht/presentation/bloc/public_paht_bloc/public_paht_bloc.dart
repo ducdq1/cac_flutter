@@ -37,52 +37,14 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
 
     if (event is SearchPublicButtonPressedEvent) {
       yield PublicPahtLoading();
-      String categories = '=';
-      String status = '=0';
 
       List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
           limit: 10,
-          offset: 1,
-          search: event.search != null ? '=${event.search}' : '=',
-          categoryIds: categories,
-          statusIds: status));
+          offset: 0,
+          status: 0,
+      search: event.search));
       yield PublicPahtSuccess(
-          paht: listPublicPaht, offset: 1, hasReachedMax: true);
-      return;
-    }
-    if (event is FilterPublicButtonPressedEvent) {
-      yield PublicPahtLoading();
-      String categories = '=';
-      String status = '=';
-      if (event.categoryIds != null) {
-        for (int i = 0; i < event.categoryIds.length; i++) {
-          if (i != 0) {
-            categories += ',' + event.categoryIds[i];
-          } else {
-            categories += event.categoryIds[i];
-          }
-        }
-      }
-      if (event.statusIds != null) {
-        for (int i = 0; i < event.statusIds.length; i++) {
-          if (i != 0) {
-            status += ',' + event.statusIds[i];
-          } else {
-            status += event.statusIds[i];
-          }
-        }
-      }
-      List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
-          limit: 10,
-          offset: 1,
-          search: event.search != null ? '=${event.search}' : '=',
-          categoryIds: event.categoryIds == null ? '' : categories,
-          statusIds: event.statusIds == null ? '' : status));
-      yield PublicPahtSuccess(
-        paht: listPublicPaht,
-        offset: 1,
-        hasReachedMax: true,
-      );
+          paht: listPublicPaht, offset: 0, hasReachedMax: true);
       return;
     }
 
@@ -106,27 +68,6 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         yield PublicPahtLoading();
       }
 
-      String categories = '=';
-      String status = '=';
-      if (event.categoryIds != null) {
-        for (int i = 0; i < event.categoryIds.length; i++) {
-          if (i != 0) {
-            categories += ',' + event.categoryIds[i];
-          } else {
-            categories += event.categoryIds[i];
-          }
-        }
-      }
-      if (event.statusIds != null) {
-        for (int i = 0; i < event.statusIds.length; i++) {
-          if (i != 0) {
-            status += ',' + event.statusIds[i];
-          } else {
-            status += event.statusIds[i];
-          }
-        }
-      }
-
       try {
         if (currentState is PublicPahtFailure ||
             currentState is PublicPahtInitial &&
@@ -136,15 +77,13 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           print('loading.....');
           getListPublicPaht(PahtParams(
                   limit: 10,
-                  offset: 1,
-                  search: event.search != null ? '=${event.search}' : '=',
-                  categoryIds: event.categoryIds == null ? '' : categories,
-                  statusIds: event.statusIds == null ? '' : status))
+                  offset: 0,
+                  status: 0))
               .then((value) {
-            add(ListPublicPahtFetchedEvent(offset: 1, paht: value));
+            add(ListPublicPahtFetchedEvent(offset: 0, paht: value));
           }).catchError((err) {
             add(ListPublicPahtFetchedEvent(
-                offset: 1, paht: [], error: err.message));
+                offset: 0, paht: [], error: err.message));
           });
         } else if (currentState is PublicPahtSuccess &&
             !_hasReachedMax(currentState)) {
@@ -152,9 +91,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
               limit: 10,
               offset: nextOffset,
-              search: event.search != null ? '=${event.search}' : '=',
-              categoryIds: event.categoryIds == null ? '' : categories,
-              statusIds: event.statusIds == null ? '' : status));
+              status : 0));
 
           yield listPublicPaht.isEmpty
               ? currentState.copyWith(
@@ -224,19 +161,17 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       try {
         List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
             limit: 10,
-            offset: 1,
-            search: event.search != null ? '=${event.search}' : '=',
-            categoryIds: event.categoryIds == null ? '' : categories,
-            statusIds: event.statusIds == null ? '' : status));
+            offset: 0,
+           status: 0));
 
         yield PublicPahtRefreshSuccess(
             paht: listPublicPaht,
-            offset: 1,
+            offset: 0,
             hasReachedMax: listPublicPaht.length < 10 ? true : false);
 
         yield PublicPahtSuccess(
             paht: listPublicPaht,
-            offset: 1,
+            offset: 0,
             hasReachedMax: listPublicPaht.length < 10 ? true : false);
         return;
       } catch (error) {
@@ -264,14 +199,12 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         await deletePaht(event.id);
         yield DeletePersonalPahtSuccess();
         List<PahtModel> results = await getListPublicPaht(PahtParams(
-            offset: 1,
+            offset: 0,
             limit: 10,
-            categoryIds: '',
-            search: '',
-            statusIds: '=0'));
+            status: 0));
 
         yield PublicPahtSuccess(
-            offset: 1,
+            offset: 0,
             paht: results,
             hasReachedMax: results.length < 10 ? true : false);
       } catch (error) {
@@ -285,12 +218,10 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         List<PahtModel> results = await getListPublicPaht(PahtParams(
             offset: 1,
             limit: 10,
-            categoryIds: '',
-            search: '',
-            statusIds: '=0'));
+           status: 0));
 
         yield PublicPahtSuccess(
-            offset: 1,
+            offset: 0,
             paht: results,
             hasReachedMax: results.length < 10 ? true : false);
       } catch (error) {

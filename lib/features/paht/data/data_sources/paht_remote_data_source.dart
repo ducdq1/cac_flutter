@@ -20,19 +20,9 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class PahtRemoteDataSource {
-  Future<List<PahtModel>> fetchListPersonalPaht(
-      {String search,
-      String categogyIds,
-      String statusIds,
-      int limit,
-      int offset});
+  Future<List<PahtModel>> fetchListPersonalPaht(PahtParams parram);
 
-  Future<List<PahtModel>> fetchListPublicPaht(
-      {String search,
-      String categogyIds,
-      String statusIds,
-      int limit,
-      int offset});
+  Future<List<PahtModel>> fetchListPublicPaht(PahtParams parram);
 
   Future<List<CategoryModel>> fetchListCategoriesPaht();
 
@@ -94,8 +84,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       final data = jsonDecode(response.body);
       print('result: ' + response.statusCode.toString());
       if (response.statusCode == 200) {
-        if (data['statusCode'] == 1001 &&
-            data['message'] == "UNAUTHORIZED") {
+        if (data['statusCode'] == 1001 && data['message'] == "UNAUTHORIZED") {
           throw Exception(data['message'].toString());
         }
         return true;
@@ -118,17 +107,6 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
 
   Future<List<StatusModel>> _fetchListStatusFromUrl(String url) async {
     try {
-      // final response = await networkRequest.getRequest(url: url);
-      // var data = json.decode(response.body);
-      // print(data);
-
-      // if (response.statusCode == 200) {
-      //    ResponseDataSuccessModel responseDataSuccess =
-      //        ResponseDataSuccessModel.fromJson(data);
-      //    final listStatus = responseDataSuccess.data;
-      //    List<StatusModel> result = listStatus.map((paht) {
-      //      return StatusModel.fromJson(paht);
-      //    }).toList();
       List<StatusModel> result = [];
       result.add(StatusModel(name: trans(STATUS_APPROVED), id: 1));
       result.add(StatusModel(name: trans(STATUS_DENNY), id: 2));
@@ -145,7 +123,6 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   Future<List<CategoryModel>> fetchListCategoriesPaht() async {
     try {
       final response = await networkRequest.getRequest(
-          //  url: '$baseUrl/issue-report/categories/');
           url: '$vtmaps_baseUrl/place/v1/categories');
       print('$vtmaps_baseUrl/place/v1/categories');
 
@@ -193,33 +170,30 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
 
   @override
   Future<List<PahtModel>> fetchListPersonalPaht(
-      {String search,
-      String categogyIds,
-      String statusIds,
-      int limit,
-      int offset}) async {
-    return _fetchListPahtFromUrl(
-        '$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus$statusIds&search$search&action=2');
+      PahtParams parram) async {
+    return _fetchListPahtFromUrl(parram
+        //'$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus$statusIds&search$search&action=2'
+        );
   }
 
   @override
   Future<List<PahtModel>> fetchListPublicPaht(
-      {String search,
-      String categogyIds,
-      String statusIds,
-      int limit,
-      int offset}) async {
-    return _fetchListPahtFromUrl(
-        '$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus=0&search$search&action=2');
+      PahtParams parram) async {
+    return _fetchListPahtFromUrl(parram
+        // '$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus=0&search$search&action=2');
+    );
   }
 
-  Future<List<PahtModel>> _fetchListPahtFromUrl(String url) async {
+  Future<List<PahtModel>> _fetchListPahtFromUrl(PahtParams param) async {
     try {
-      print(url);
-      final response = await networkRequest.getRequest(url: url);
+      final body = jsonEncode(param.toJson());
+      print(body);
+      String url = '$baseUrl/ketoan/rest/product/quotations';
+      final response = await networkRequest.postRequest(
+          url: 'http://117.2.164.156/ketoan/rest/product/quotations', body: body);
       print('--> success');
-      var responseJson = json.decode(response.body);
-      //print(responseJson);
+      var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      print(responseJson);
       if (response.statusCode == 200) {
         // ResponseDataSuccessModel responseDataSuccess =
         //     ResponseDataSuccessModel.fromJson(data);
@@ -227,16 +201,12 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
             responseJson['message'] == "UNAUTHORIZED") {
           throw Exception(responseJson['message']);
         } else {
-          final data = responseJson['data'];
+          final data = responseJson['listData'];
           if (data != null) {
-            final listPahts = data['listData'];
-            if (listPahts != null) {
-              List<PahtModel> result = listPahts.map<PahtModel>((paht) {
-                //print('placeImages: '+paht['placeImages']);
-                return PahtModel.fromJson(paht);
-              }).toList();
-              return result;
-            }
+            List<PahtModel> result = data.map<PahtModel>((paht) {
+              return PahtModel.fromJson(paht);
+            }).toList();
+            return result;
           }
           List<PahtModel> result = [];
           return result;
@@ -257,12 +227,10 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       print(body);
       String url = '$baseUrl/ketoan/rest/product/search';
       final response = await networkRequest.postRequest(
-          url: '$baseUrl/ketoan/rest/product/search',
-      body: body);
+          url: '$baseUrl/ketoan/rest/product/search', body: body);
       print(url);
       var data = json.decode(utf8.decode(response.bodyBytes));
       print(data);
-      ProductModel productModel = null;
 
       if (response.statusCode == 200) {
         SearchProductModel result = SearchProductModel.fromJson(data);

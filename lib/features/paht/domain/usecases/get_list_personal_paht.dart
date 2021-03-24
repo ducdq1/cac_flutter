@@ -11,29 +11,30 @@ class GetListPersonalPaht implements UseCase<PahtEntity, PahtParams> {
 
   @override
   Future<List<PahtEntity>> call(PahtParams params) async {
-    return await repository.getListPersonalPaht(
-        search: params.search,
-        categoryIds: params.categoryIds,
-        statusIds: params.statusIds,
-        limit: params.limit,
-        offset: params.offset);
+    return await repository.getListPersonalPaht(params);
   }
 }
 
 class PahtParams extends Equatable {
   final String search;
-  final String categoryIds;
-  final String statusIds;
+  final String userName;
   final int limit;
   final int offset;
+  final int status;
 
-  PahtParams(
-      {@required this.search,
-      @required this.categoryIds,
-      @required this.statusIds,
-      @required this.limit,
-      @required this.offset});
+  PahtParams({this.search,this.userName, this.limit, this.offset, this.status});
 
   @override
-  List<Object> get props => [search, categoryIds, statusIds];
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
+
+  Map<String, dynamic> toJson() {
+    return {
+      'search': search,
+      'userName': userName,
+      'limit': limit,
+      'offset': offset,
+      'status': status,
+    };
+  }
 }

@@ -14,7 +14,7 @@ class SearchProductModel {
 
   factory SearchProductModel.fromJson(Map json) {
     return SearchProductModel(
-     tonKhoModel: TonKhoModel.fromJson(json['tonKho']),
+     tonKhoModel: json['tonKho'] ==null ? TonKhoModel() : TonKhoModel.fromJson(json['tonKho']),
       lstProduct : json['lstProduct'] == null
           ? []
           : json['lstProduct'].map<ProductModel>((item) {

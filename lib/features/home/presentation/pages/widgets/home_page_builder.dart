@@ -68,9 +68,8 @@ class _HomePageBuilderState extends State<HomePageBuilder>
 
                           switch (permissionStatus) {
                             case PermissionStatus.granted:
-                              String cameraScanResult = await scanner.scan();
-                                 // 'TB002.K025C'; //await scanner.scan();
-
+                              String cameraScanResult  = await scanner.scan();
+                              //'G0349811';
                               print(cameraScanResult);
                               if (cameraScanResult != null &&
                                   cameraScanResult.isNotEmpty) {
@@ -91,8 +90,9 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                               switch (permissionStatus) {
                                 case PermissionStatus.granted:
 
-                                  String cameraScanResult =
-                                      'TB002.K025C'; //await scanner.scan();
+                                  String cameraScanResult = await scanner.scan();
+                                     // 'TB002.K025C';
+                                  // await scanner.scan();
 
                                   print(cameraScanResult);
                                   if (cameraScanResult != null &&
@@ -120,8 +120,8 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                         icon: '/icons/icon_bao_gia.png',
                         needRedirect: '',
                         onPress: () {
-                          // Navigator.pushNamed(
-                          //     context, '/${widget.menu[i].serviceType}');
+                          Navigator.pushNamed(
+                              context, ROUTER_PAHT);
                         },
                       )
                     ],
