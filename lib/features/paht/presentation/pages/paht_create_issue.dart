@@ -18,6 +18,7 @@ import 'package:citizen_app/features/paht/data/models/media_from_server.dart';
 import 'package:citizen_app/features/paht/data/models/media_picker_ios_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_issue_paht.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
@@ -26,6 +27,7 @@ import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_it
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/FrameLabelWidget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/poi_type_widget.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/quotation_detail_item_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -77,7 +79,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   PahtModel pahtModel;
   List<Asset> images = List<Asset>();
   String _error = 'No Error Dectected';
-  List<ProductModel> listProductModel = [];
+  List<QuotationDetailModel> listQuotationDetailModel = [];
   Map<String, dynamic> _chosenLocation = {
     'address': '',
     'latitude': null,
@@ -87,22 +89,22 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   UpdatePahtArgument args;
 
   initValue(args) async {
-    if (args != null) {
-      if (args.address != null) {
-        _chosenLocation['address'] = args.address;
-        _chosenLocation['latitude'] = args.latitude;
-        _chosenLocation['longitude'] = args.longitude;
-      }
+    if (args != null  && args.pahtModel != null) {
+      pahtModel = args.pahtModel;
 
-      if (args.content != null) {
+      if (pahtModel.cusName !=null) {
         _poiNameController.text = args.content;
       }
 
-      if (args.phone != null) {
-        _phoneNumberController.text = args.phone;
+      if (pahtModel.cusAddress != null) {
+        _addressController.text = pahtModel.cusAddress;
       }
 
-      pahtModel = args.pahtModel;
+      if (args.phone != null) {
+        _phoneNumberController.text = pahtModel.cusPhone;
+      }
+
+     //listQuotationDetailModel;
 
     }
   }
@@ -450,73 +452,69 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   }
 
   Widget listProductField() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Sản phẩm',
-                  style: GoogleFonts.inter(
-                      color: PRIMARY_TEXT_COLOR,
-                      fontSize: FONT_EX_LARGE,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 10,),
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Sản phẩm (' + listQuotationDetailModel.length.toString()+')',
+            style: GoogleFonts.inter(
+                color: Colors.green,
+                fontSize: FONT_EX_LARGE,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10,),
+          Container(
+            height: 2000,
+            width: MediaQuery.of(context).size.width,
+            child: ListView.builder(
+              //physics: NeverScrollableScrollPhysics() ,
+              padding: EdgeInsets.only(bottom: 10),
+              itemBuilder: (BuildContext context, int index) {
+                return  QuotationDetailItemWidget(
+                          onDelete: () {
+                            showDeleteConfirmDialog(
+                                context: context,
+                                onSubmit: () {
 
-                ListView.builder(
-                  padding: EdgeInsets.only(bottom: 10),
-                  itemBuilder: (BuildContext context, int index) {
-                    return  PAHTITemWidget(
-                              onDelete: () {
-                                showDeleteConfirmDialog(
-                                    context: context,
-                                    onSubmit: () {
+                                  Navigator.pop(context);
+                                },
+                             );
+                          },
+                          onEdit: () {
+                            Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
+                                arguments: UpdatePahtArgument(
+                                    content: pahtModel.cusName,
+                                    address: pahtModel.cusAddress
+                                ))
+                                .then((value) {
 
-                                      Navigator.pop(context);
-                                    },
-                                 );
-                              },
-                              onEdit: () {
-                                Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
-                                    arguments: UpdatePahtArgument(
-                                        content: pahtModel.cusName,
-                                        address: pahtModel.cusAddress
-                                    ))
-                                    .then((value) {
-
-                                });
-                              },
-                             // isPersonal: widget.isPersonal,
-                              pahtModel: pahtModel,
-                              onTap: () {
-                                // Navigator.pushNamed(
-                                //   context,
-                                //   ROUTER_DETAILED_PAHT,
-                                //   arguments: PahtDetailArgument(
-                                //       poiDetail: widget.pahts[index],
-                                //       id: widget.pahts[index].id.toString(),
-                                //       title: widget.pahts[index].name),
-                                // );
-                              },
-                            );
-                  },
-                  // itemCount: widget.hasReachedMax
-                  //     ? widget.pahts.length
-                  //     : widget.pahts.length + 1,
-                  itemCount: listProductModel.length,
-                  controller: scrollController,
-                )
+                            });
+                          },
+                          isPersonal: false,
+                          quotationDetailModel: QuotationDetailModel(productName: 'Sản phẩm ABC',productCode: 'CODE ABC', amount: 100),
+                          onTap: () {
+                            // Navigator.pushNamed(
+                            //   context,
+                            //   ROUTER_DETAILED_PAHT,
+                            //   arguments: PahtDetailArgument(
+                            //       poiDetail: widget.pahts[index],
+                            //       id: widget.pahts[index].id.toString(),
+                            //       title: widget.pahts[index].name),
+                            // );
+                          },
+                        );
+              },
+              // itemCount: widget.hasReachedMax
+              //     ? widget.pahts.length
+              //     : widget.pahts.length + 1,
+              itemCount: 5,//listProductModel.length,
+              controller: scrollController,
+            ),
+          )
 
 
-              ]),
-        ),
-      ],
-    );
+        ]);
   }
 
   Widget createIssueAction() {
