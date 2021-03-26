@@ -21,7 +21,7 @@ abstract class PahtRepository {
 
   Future<List<CommentEntity>> getCommentsDetailedPaht({String pahtId});
 
-  Future<bool> createIssuePaht(IssueParams issueParams);
+  Future<bool> createIssuePaht(QuotationParams issueParams);
 
   Future<bool> updatePaht(UpdatedParams updatedParams);
 

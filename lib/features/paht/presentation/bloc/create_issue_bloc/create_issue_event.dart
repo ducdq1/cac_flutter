@@ -10,8 +10,9 @@ abstract class CreateIssueEvent extends Equatable {
 class CreateIssueButtonPresseEvent extends CreateIssueEvent {
   final IssueParams params;
   final int type;
+  final QuotationParams quotationParams;
   CreateIssueButtonPresseEvent(
-      {this.params,this.type});
+      {this.params,this.type,this.quotationParams});
   @override
   String toString() =>
       'CreateIssueButtonPresseEvent:  $params';

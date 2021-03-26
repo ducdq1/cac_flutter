@@ -164,7 +164,7 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<bool> createIssuePaht(IssueParams issueParams) async {
+  Future<bool> createIssuePaht(QuotationParams issueParams) async {
     try {
       final remoteCreateIssuePaht =
           await remoteDataSource.createIssuePaht(issueParams);

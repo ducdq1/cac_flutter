@@ -2,13 +2,15 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
+import 'package:citizen_app/features/paht/data/models/paht_model.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
-
-import 'package:flutter/material.dart';
+import 'package:citizen_app/injection_container.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'personal_paht_event.dart';
-
 part 'personal_paht_state.dart';
 
 class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
@@ -38,7 +40,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
     PersonalPahtEvent event,
   ) async* {
     final currentState = state;
-
+    final prefs = singleton<SharedPreferences>();
+    final userName = prefs.get('token').toString();
     if (event is SearchPersonalButtonPressedEvent) {
       yield PersonalPahtLoading();
 
@@ -46,7 +49,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
           limit: 10,
           offset: 0,
           search: event.search,
-          status: 1));
+          status: 1,
+          userName: userName));
 
       yield PersonalPahtSuccess(
           paht: listPublicPaht,
@@ -61,7 +65,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
           limit: 10,
           offset: 0,
           search: event.search != null ? '=${event.search}' : '=',
-          status: 1
+          status: 1,
+          userName: userName
            ));
       yield PersonalPahtSuccess(
           paht: listPublicPaht,
@@ -101,9 +106,10 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
                   limit: 10,
                   offset: 0,
                   search: event.search != null ? '=${event.search}' : '=',
-                  status: 1))
+                  status: 1,
+              userName: userName))
               .then((value) {
-            add(ListPersonalPahtFetchedEvent(offset: 1, paht: value));
+            add(ListPersonalPahtFetchedEvent(offset: 0, paht: value));
             return;
           }).catchError((error) {
             add(ListPersonalPahtFetchedEvent(
@@ -125,7 +131,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
                   limit: 10,
                   offset: nextOffset,
                   search: event.search != null ? '=${event.search}' : '=',
-                  status: 1));
+                  status: 1,
+                  userName: userName));
 
           print(" yield PersonalPahtSuccess...");
 
@@ -178,7 +185,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
             limit: 10,
             offset: 0,
             search: event.search != null ? '=${event.search}' : '=',
-           status: 1));
+           status: 1,
+            userName: userName));
 
         yield PersonalPahtRefreshSuccess(
             paht: listPersonalPaht,
@@ -215,7 +223,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
             offset: 0,
             limit: 10,
             status: 1,
-            search: ''));
+            search: '',
+            userName: userName));
 
         yield PersonalPahtSuccess(
             paht: results, hasReachedMax: results.length < 10 ? true : false);

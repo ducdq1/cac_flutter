@@ -89,20 +89,16 @@ class PAHTITemWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0,left: 20),
                           child: Text(
-                            pahtModel.cusName == null || pahtModel.cusName == ''
-                                ? ''
-                                : pahtModel.cusName.length < 60
-                                    ? pahtModel.cusName.toUpperCase()
-                                    : pahtModel.cusName
-                                            .substring(0, 60)
-                                            .toUpperCase() +
-                                        '...',
+                            pahtModel.cusName == null  ? ''
+                                : pahtModel.cusName ,
                             style: GoogleFonts.inter(
                               fontSize: FONT_SMALL,
                               color: PRIMARY_TEXT_COLOR,
                               fontWeight: FontWeight.bold,
                             ),
                             softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Padding(
@@ -121,16 +117,14 @@ class PAHTITemWidget extends StatelessWidget {
                               Text(
                                   pahtModel.cusAddress == null
                                       ? ''
-                                      : pahtModel.cusAddress.length < 60
-                                          ? pahtModel.cusAddress
-                                          : pahtModel.cusAddress
-                                                  .substring(0, 60) +
-                                              '...',
+                                      : pahtModel.cusAddress ,
                                   style: GoogleFonts.inter(
                                       color: DESCRIPTION_COLOR,
                                       fontSize: FONT_MIDDLE,
                                       height: 1.5),
-                                  softWrap: true)
+                                  softWrap: true,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,)
                             ],
                           ),
                         ),

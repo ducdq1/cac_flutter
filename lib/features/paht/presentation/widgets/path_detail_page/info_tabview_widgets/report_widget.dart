@@ -204,7 +204,7 @@ class ReportWidget extends StatelessWidget {
                     ? GridView.count(
                         // shrinkWrap: true,
                         // physics: NeverScrollableScrollPhysics(),
-                        crossAxisCount: 4,
+                        crossAxisCount: 3,
                         childAspectRatio: 1.0,
                         padding: const EdgeInsets.all(4.0),
                         mainAxisSpacing: 4.0,

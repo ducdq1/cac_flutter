@@ -34,7 +34,7 @@ abstract class PahtRemoteDataSource {
 
   Future<List<CommentModel>> fetchComments({String pahtId});
 
-  Future<bool> createIssuePaht(IssueParams issueParams);
+  Future<bool> createIssuePaht(QuotationParams issueParams);
 
   Future<bool> updatePaht(UpdatedParams updatedParams);
 
@@ -56,33 +56,19 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       @required this.sharedPreferences});
 
   @override
-  Future<bool> createIssuePaht(IssueParams issueParams) async {
+  Future<bool> createIssuePaht(QuotationParams issueParams) async {
     try {
       final token = sharedPreferences.getString('token');
-      var uri = Uri.parse('$vtmaps_baseUrl/place/v1/places');
-      var request = http.MultipartRequest('POST', uri)
-        ..fields['placeInfor'] = issueParams.toString()
-        ..fields['deletePlaceImageIds'] =
-            issueParams.deletePlaceImageIds.join(","); //.toString();
-      request.headers['Content-Type'] = 'multipart/form-data';
-      request.headers['Accept-Language'] = 'vi';
-      request.headers['Authorization'] = 'Bearer $token';
-      print('$vtmaps_baseUrl/place/v1/places');
-      //print('parrams: '+issueParams.toString());
-      if (issueParams.files != null) {
-        for (int i = 0; i < issueParams.files.length; i++) {
-          if (issueParams.files[i].asset != null) {
-            var filePath = await FlutterAbsolutePath.getAbsolutePath(
-                issueParams.files[i].asset.identifier);
-            // print(filePath);
-            request.files
-                .add(await http.MultipartFile.fromPath('images', filePath));
-          }
-        }
-      }
-      final response = await http.Response.fromStream(await request.send());
+      final body = jsonEncode(issueParams.toJson());
+      print(body);
+      String url = '$baseUrl_api/quotation';
+      final response = await networkRequest.postRequest(
+          url: '$baseUrl_api/quotation', body: body);
+      print('--> success');
+      var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+
       final data = jsonDecode(response.body);
-      print('result: ' + response.statusCode.toString());
+      print('result: ' + responseJson.toString());
       if (response.statusCode == 200) {
         if (data['statusCode'] == 1001 && data['message'] == "UNAUTHORIZED") {
           throw Exception(data['message'].toString());
@@ -188,9 +174,9 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
     try {
       final body = jsonEncode(param.toJson());
       print(body);
-      String url = '$baseUrl/ketoan/rest/product/quotations';
+      String url = '$baseUrl_api/quotations';
       final response = await networkRequest.postRequest(
-          url: 'http://117.2.164.156/ketoan/rest/product/quotations', body: body);
+          url: '$baseUrl_api/quotations', body: body);
       print('--> success');
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print(responseJson);
@@ -225,9 +211,9 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
     try {
       final body = jsonEncode(param.toJson());
       print(body);
-      String url = '$baseUrl/ketoan/rest/product/search';
+      String url = '$baseUrl_api/search';
       final response = await networkRequest.postRequest(
-          url: '$baseUrl/ketoan/rest/product/search', body: body);
+          url: '$baseUrl_api/search', body: body);
       print(url);
       var data = json.decode(utf8.decode(response.bodyBytes));
       print(data);

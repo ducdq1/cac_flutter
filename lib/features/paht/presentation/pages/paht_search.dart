@@ -41,7 +41,7 @@ class _PahtSearchState extends State<PahtSearch>
         child: widget.searchPahtType == 0
             ? BlocProvider<PublicPahtBloc>(
                 create: (context) => singleton<PublicPahtBloc>()
-                  ..add(ListPublicPahtFetchingEvent(offset: 1, limit: 10)),
+                  ..add(ListPublicPahtFetchingEvent(offset: 0, limit: 10)),
                 child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                     listener: (context, state) {
                       if (state is PublicPahtFailure) {
@@ -100,7 +100,7 @@ class _PahtSearchState extends State<PahtSearch>
                 }))
             : BlocProvider<PersonalPahtBloc>(
                 create: (context) => singleton<PersonalPahtBloc>()
-                  ..add(ListPersonalPahtFetchingEvent(offset: 1, limit: 10 )),
+                  ..add(ListPersonalPahtFetchingEvent(offset: 0, limit: 10 )),
                 child: BlocConsumer<PersonalPahtBloc, PersonalPahtState>(
                     listener: (context, state) {
                       if (state is PersonalPahtFailure) {

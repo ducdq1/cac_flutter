@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:citizen_app/features/paht/data/models/paht_model.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
-
+import 'package:citizen_app/injection_container.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'public_paht_event.dart';
 part 'public_paht_state.dart';
@@ -13,6 +15,7 @@ part 'public_paht_state.dart';
 class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
   final GetListPublicPaht getListPublicPaht;
   final DeletePaht deletePaht;
+
   PublicPahtBloc({@required this.getListPublicPaht, @required this.deletePaht})
       : super(PublicPahtInitial());
   bool _hasReachedMax(PublicPahtState state) =>
@@ -34,7 +37,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
     PublicPahtEvent event,
   ) async* {
     final currentState = state;
-
+    final prefs = singleton<SharedPreferences>();
+    final userName = prefs.get('token').toString();
     if (event is SearchPublicButtonPressedEvent) {
       yield PublicPahtLoading();
 
@@ -42,6 +46,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           limit: 10,
           offset: 0,
           status: 0,
+        userName: userName,
       search: event.search));
       yield PublicPahtSuccess(
           paht: listPublicPaht, offset: 0, hasReachedMax: true);
@@ -78,7 +83,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           getListPublicPaht(PahtParams(
                   limit: 10,
                   offset: 0,
-                  status: 0))
+                  status: 0
+              ,userName: userName))
               .then((value) {
             add(ListPublicPahtFetchedEvent(offset: 0, paht: value));
           }).catchError((err) {
@@ -91,7 +97,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
               limit: 10,
               offset: nextOffset,
-              status : 0));
+              status : 0,
+              userName: userName));
 
           yield listPublicPaht.isEmpty
               ? currentState.copyWith(
@@ -138,31 +145,12 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         yield PublicPahtLoading();
       }
 
-      String categories = '=';
-      String status = '=';
-      if (event.categoryIds != null) {
-        for (int i = 0; i < event.categoryIds.length; i++) {
-          if (i != 0) {
-            categories += ',' + event.categoryIds[i];
-          } else {
-            categories += event.categoryIds[i];
-          }
-        }
-      }
-      if (event.statusIds != null) {
-        for (int i = 0; i < event.statusIds.length; i++) {
-          if (i != 0) {
-            status += ',' + event.statusIds[i];
-          } else {
-            status += event.statusIds[i];
-          }
-        }
-      }
       try {
         List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
             limit: 10,
             offset: 0,
-           status: 0));
+           status: 0,
+        userName: userName));
 
         yield PublicPahtRefreshSuccess(
             paht: listPublicPaht,
@@ -201,7 +189,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         List<PahtModel> results = await getListPublicPaht(PahtParams(
             offset: 0,
             limit: 10,
-            status: 0));
+            status: 0,
+            userName: userName));
 
         yield PublicPahtSuccess(
             offset: 0,
@@ -216,9 +205,10 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       try {
         yield DeletePersonalPahtSuccess();
         List<PahtModel> results = await getListPublicPaht(PahtParams(
-            offset: 1,
+            offset: 0,
             limit: 10,
-           status: 0));
+           status: 0,
+        userName: userName));
 
         yield PublicPahtSuccess(
             offset: 0,

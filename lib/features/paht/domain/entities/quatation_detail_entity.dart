@@ -13,7 +13,7 @@ class QuotationDetailEntity extends Equatable {
   String productCode;
   int price;
   int value;
-  int amount;
+  double amount;
   int attachId;
   ImageEntity image;
   String note;

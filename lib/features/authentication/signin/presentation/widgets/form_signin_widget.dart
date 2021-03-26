@@ -85,11 +85,10 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                     context: context,
                     nextFocusNode: _passFocusNode),
                 validates: [
-                  EmailValidate(),
                   EmptyValidate(),
                 ],
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 8),
               InputValidateWidget(
                 label: trans(LABEL_LOGIN_PASSWORD),
                 focusNode: _passFocusNode,
@@ -101,21 +100,6 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                   EmptyValidate(),
                   //PasswordValidate(),
                 ],
-              ),
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    _launchForgetPssURL();
-                  },
-                  child: Text(
-                    trans(LABEL_FORGET_PASSWORD),
-                    style: GoogleFonts.inter(
-                      fontSize: FONT_MIDDLE,
-                      fontWeight: FontWeight.bold,
-                      color: PRIMARY_COLOR,
-                    ),
-                  ),
-                ),
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height <= 650 ? 10 : 30,

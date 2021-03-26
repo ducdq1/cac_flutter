@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:ui';
 
@@ -6,27 +5,20 @@ import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/utils/form_tools/form_tools.dart';
 import 'package:citizen_app/core/utils/validate/empty_validate.dart';
-import 'package:citizen_app/core/utils/validate/phone_validate.dart';
 import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
-import 'package:citizen_app/features/common/utils.dart';
 import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom_widget.dart';
 import 'package:citizen_app/features/common/widgets/inputs/text_field_custom.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
-import 'package:citizen_app/features/paht/data/models/media_from_server.dart';
 import 'package:citizen_app/features/paht/data/models/media_picker_ios_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
-import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_issue_paht.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_item_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/FrameLabelWidget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/poi_type_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/quotation_detail_item_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +29,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-import 'business_hour_page.dart';
+import '../../../../injection_container.dart';
 
 const SIZE_ICON = 20.0;
 const SIZE_PICKER_LOCATION_ICON = 36.0;
@@ -80,6 +73,9 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   List<Asset> images = List<Asset>();
   String _error = 'No Error Dectected';
   List<QuotationDetailModel> listQuotationDetailModel = [];
+  final prefs = singleton<SharedPreferences>();
+  int imageIdSelected;
+
   Map<String, dynamic> _chosenLocation = {
     'address': '',
     'latitude': null,
@@ -164,7 +160,71 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
             tooltip: 'Quét mã',
             elevation: 5,
             splashColor: Colors.grey,
-            onPressed: () {},
+            onPressed: () async{
+              clearFocus();
+              final PermissionHandler _permissionHandler =
+              PermissionHandler();
+              var permissionStatus = await _permissionHandler
+                  .checkPermissionStatus(PermissionGroup.camera);
+
+              switch (permissionStatus) {
+                case PermissionStatus.granted:
+                  String cameraScanResult = 'TB002.K025C';// await scanner.scan();
+                  //'G0349811';
+                  print(cameraScanResult);
+                  if (cameraScanResult != null &&
+                      cameraScanResult.isNotEmpty) {
+                    Navigator.pushNamed(
+                        context, ROUTER_CHOOSE_PRODUCT,
+                        arguments: PahtDetailArgument(
+                            productCode: cameraScanResult)).then((value) =>{
+                      if(value!=null){
+                        setState((){
+                        listQuotationDetailModel.add(value);
+                        })
+                      }
+                    });
+                  }
+
+                  break;
+                case PermissionStatus.denied:
+                  await _permissionHandler
+                      .requestPermissions([PermissionGroup.camera]);
+                  var permissionStatus = await _permissionHandler
+                      .checkPermissionStatus(
+                      PermissionGroup.camera);
+
+                  switch (permissionStatus) {
+                    case PermissionStatus.granted:
+
+                      String cameraScanResult = 'TB002.K025C';// await scanner.scan();
+                      // 'TB002.K025C';
+
+                      print(cameraScanResult);
+                      if (cameraScanResult != null &&
+                          cameraScanResult.isNotEmpty) {
+                        Navigator.pushNamed(
+                            context, ROUTER_CHOOSE_PRODUCT,
+                            arguments: PahtDetailArgument(
+                                productCode: cameraScanResult)).then((value) =>{
+                          setState((){
+                            listQuotationDetailModel.add(value);
+                          })
+                        });
+                      }
+                  }
+                  break;
+                case PermissionStatus.restricted:
+                  await _permissionHandler
+                      .requestPermissions([PermissionGroup.camera]);
+                  break;
+                case PermissionStatus.unknown:
+                // do something
+                  break;
+                default:
+              }
+
+            },
           ),
         ),
         title: args == null ? 'Tạo báo giá' : 'Cập nhật báo giá',
@@ -464,53 +524,52 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                 fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10,),
-          Container(
-            height: 2000,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-              //physics: NeverScrollableScrollPhysics() ,
-              padding: EdgeInsets.only(bottom: 10),
-              itemBuilder: (BuildContext context, int index) {
-                return  QuotationDetailItemWidget(
-                          onDelete: () {
-                            showDeleteConfirmDialog(
-                                context: context,
-                                onSubmit: () {
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics() ,
+            padding: EdgeInsets.only(bottom: 10),
+            itemBuilder: (BuildContext context, int index) {
+              return  QuotationDetailItemWidget(
+                        onDelete: () {
+                          showDeleteConfirmDialog(
+                              context: context,
+                              onSubmit: () {
+                                setState(() {
+                                  listQuotationDetailModel.removeAt(index);
+                                });
+                                Navigator.pop(context);
+                              },
+                           );
+                        },
+                        onEdit: () {
+                          Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
+                              arguments: UpdatePahtArgument(
+                                  content: pahtModel.cusName,
+                                  address: pahtModel.cusAddress
+                              ))
+                              .then((value) {
 
-                                  Navigator.pop(context);
-                                },
-                             );
-                          },
-                          onEdit: () {
-                            Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
-                                arguments: UpdatePahtArgument(
-                                    content: pahtModel.cusName,
-                                    address: pahtModel.cusAddress
-                                ))
-                                .then((value) {
-
-                            });
-                          },
-                          isPersonal: false,
-                          quotationDetailModel: QuotationDetailModel(productName: 'Sản phẩm ABC',productCode: 'CODE ABC', amount: 100),
-                          onTap: () {
-                            // Navigator.pushNamed(
-                            //   context,
-                            //   ROUTER_DETAILED_PAHT,
-                            //   arguments: PahtDetailArgument(
-                            //       poiDetail: widget.pahts[index],
-                            //       id: widget.pahts[index].id.toString(),
-                            //       title: widget.pahts[index].name),
-                            // );
-                          },
-                        );
-              },
-              // itemCount: widget.hasReachedMax
-              //     ? widget.pahts.length
-              //     : widget.pahts.length + 1,
-              itemCount: 5,//listProductModel.length,
-              controller: scrollController,
-            ),
+                          });
+                        },
+                        isPersonal: false,
+                        quotationDetailModel: listQuotationDetailModel[index],
+                        onTap: () {
+                          // Navigator.pushNamed(
+                          //   context,
+                          //   ROUTER_DETAILED_PAHT,
+                          //   arguments: PahtDetailArgument(
+                          //       poiDetail: widget.pahts[index],
+                          //       id: widget.pahts[index].id.toString(),
+                          //       title: widget.pahts[index].name),
+                          // );
+                        },
+                      );
+            },
+            // itemCount: widget.hasReachedMax
+            //     ? widget.pahts.length
+            //     : widget.pahts.length + 1,
+            itemCount: listQuotationDetailModel.length,
+            controller: scrollController,
           )
 
 
@@ -554,50 +613,26 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
       clearFocus();
 
-      if (!_formKey.currentState.validate()) {
-        FocusScope.of(context).requestFocus(_focusNodeError);
-        _focusNodeError = null;
-        if (parentScrollController.hasClients) {
-          parentScrollController.animateTo(0,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.fastOutSlowIn);
-        }
-        return;
-      }
-      if ((_chosenLocation['latitude'] == null ||
-          _chosenLocation['longitude'] == null ||
-          _chosenLocation['address'] == null ||
-          _chosenLocation['address'].toString().isEmpty)) {
-        if (parentScrollController.hasClients) {
-          parentScrollController.animateTo(0,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.fastOutSlowIn);
-        }
-        return;
-      }
-
       if (_formKey.currentState.validate()) {
+        final userName = prefs.get('userName').toString();
+        final userFullName = prefs.get('fullName').toString();
+
         BlocProvider.of<CreateIssueBloc>(context)
             .add(CreateIssueButtonPresseEvent(
-          params: IssueParams(
-              name: _poiNameController.text.trim(),
-              address: _chosenLocation['address'],
-              lat: _chosenLocation['latitude'].toString(),
-              lng: _chosenLocation['longitude'].toString(),
-              fromPoiType:
-                  _poiTypeValue == null ? null : int.parse(_poiTypeValue),
-              id: args == null ? null : int.parse(args.pahtId),
-              hyperlink: _webController.text.trim(),
-              phone: _phoneNumberController.text.trim(),
-              businessHour: isAddedBusinessHour ? BUSINESS_HOUR : null,
-              //files: listMedia,
-              deletePlaceImageIds: listMediaDeleted),
+          quotationParams: QuotationParams(quotation: PahtModel(type :0,
+              cusName :_poiNameController.text.trim(),
+              cusAddress : _addressController.text.trim(),
+              cusPhone  : _phoneNumberController.text.trim(),
+              createUserCode : userName,
+              createUserFullName : userFullName),
+              lstQuotationDetail: listQuotationDetailModel),
           type: args == null ? 0 : 1,
         ));
 
         _showCupertinoDialog(context);
       }
     }
+
     if (id == 'cancel_btn') {
       Navigator.pop(context);
     }
@@ -606,6 +641,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   void clearFocus() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
+
 }
 
 Future<bool> _checkPermission() async {

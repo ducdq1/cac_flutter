@@ -42,8 +42,7 @@ class _DeleteConfirmDialogState extends State<DeleteConfirmDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
-        margin: EdgeInsets.symmetric(horizontal: 17),
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 00),
         decoration: BoxDecoration(
           color: Colors.white,
         ),
@@ -51,9 +50,9 @@ class _DeleteConfirmDialogState extends State<DeleteConfirmDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                trans(CONFIRM_DELETE_INFO),
+                'Bạn chắc chắn muốn xóa?',
                 style: GoogleFonts.inter(
                   fontSize: FONT_MIDDLE,
                   color: PRIMARY_TEXT_COLOR,
@@ -61,44 +60,50 @@ class _DeleteConfirmDialogState extends State<DeleteConfirmDialog> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 30),
-            RaisedButton(
-              onPressed: widget.onSubmit,
-              elevation: 0,
-              color: Colors.red,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-              ),
-              child: Center(
-                child: Text(
-                  trans(TEXT_DELETE_BUTTON),
-                  style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: FONT_MIDDLE,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            RaisedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              elevation: 0,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: PRIMARY_COLOR),
-              ),
-              child: Center(
-                child: Text(
-                  trans(TEXT_CANCEL_CREATE_BUTTON),
-                  style: GoogleFonts.inter(
-                      color: PRIMARY_COLOR,
-                      fontSize: FONT_MIDDLE,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+            SizedBox(height: 50),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    elevation: 0,
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: PRIMARY_COLOR),
+                    ),
+                    child: Center(
+                      child: Text(
+                        trans(TEXT_CANCEL_CREATE_BUTTON),
+                        style: GoogleFonts.inter(
+                            color: PRIMARY_COLOR,
+                            fontSize: FONT_MIDDLE,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+              SizedBox(width: 20,),
+                  RaisedButton(
+                    onPressed: widget.onSubmit,
+                    elevation: 0,
+                    color: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        trans(TEXT_DELETE_BUTTON),
+                        style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: FONT_MIDDLE,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+            ]),
           ],
         ),
       ),

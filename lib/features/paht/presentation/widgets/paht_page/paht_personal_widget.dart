@@ -63,7 +63,7 @@ class _PahtPersonalState extends State<PahtPersonal> {
                     message: state.error.toString() == "UNAUTHORIZED" ? trans(MESSAGE_SESSION_EXPIRED) : state.error.toString(),
                     onPressed: () {
                       BlocProvider.of<PersonalPahtBloc>(context).add(
-                        ListPersonalPahtFetchingEvent(offset: 1),
+                        ListPersonalPahtFetchingEvent(offset: 0),
                       );
                     });
               }

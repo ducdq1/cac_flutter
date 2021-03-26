@@ -101,18 +101,19 @@ class AccountDataSourceImpl implements AccountDataSource {
   @override
   Future<AuthEntity> authNonOtp({String phone, String password}) async {
     try {
-      var client_id = "vtmaps";
-      var grant_type = "password";
-      var client_secret = "d1b21963-a7b9-4764-a3c6-4621b268ef6f";
-      print(baseSSOUrl);
+      final body = jsonEncode(
+        <String, String>{
+          "userName": phone,
+          "pw": password
+        },
+      );
       final response = await client
-          .post(baseSSOUrl,
+          .post('$baseUrl_api/login',
             headers: {
               'Accept-Language': 'vi',
-              'Content-Type': 'application/x-www-form-urlencoded'
+              'Content-Type': 'application/json'
             },
-            body:
-                "username=$phone&password=$password&client_id=$client_id&grant_type=$grant_type&client_secret=$client_secret",
+            body: body,
           )
           .timeout(Duration(seconds: 30),
               onTimeout: () => throw Exception(
@@ -120,15 +121,18 @@ class AccountDataSourceImpl implements AccountDataSource {
 
       var data = jsonDecode(utf8.decode(response.bodyBytes));
 
-      if (response.statusCode == 200) {
-        return AuthModel.fromJson(data);
+      if (response.statusCode == 200 ) {
+        if( data['user'] !=null) {
+          return AuthModel.fromJson(data['user']);
+        }else{
+          return null;
+        }
       } else if (response.statusCode == 401) {
         throw Exception(trans(TEXT_LOGIN_USER_INVALID));
       } else {
         throw Exception('Không thể kết nối đến máy chủ');
       }
     } catch (error) {
-    
       throw error;
     }
   }

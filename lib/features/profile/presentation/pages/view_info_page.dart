@@ -44,6 +44,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
           ),
           SizedBox(height: 150),
           Container(
+            height: 0,
             margin: EdgeInsets.symmetric(horizontal: 16),
             padding: EdgeInsets.only(left: 38, right: 38, top: 20, bottom: 40),
             decoration: BoxDecoration(
@@ -69,7 +70,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                     SizedBox(width: 14),
                     RichText(
                       text: TextSpan(
-                        text: trans(HOTLINE),
+                        text: '',
                         style: GoogleFonts.inter(
                           color: PRIMARY_TEXT_COLOR,
                           fontSize: FONT_MIDDLE,
@@ -77,7 +78,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                            text: '1800 8000',
+                            text: '',
                             style: GoogleFonts.inter(
                               color: PRIMARY_TEXT_COLOR,
                               fontSize: FONT_MIDDLE,
@@ -99,7 +100,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                     Expanded(
                       child: RichText(
                         text: TextSpan(
-                          text: 'Email: ',
+                          text: '',
                           style: GoogleFonts.inter(
                             color: PRIMARY_TEXT_COLOR,
                             fontSize: FONT_MIDDLE,
@@ -107,7 +108,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: 'cskh_vts@viettel.com.vn',
+                              text: '',
                               style: GoogleFonts.inter(
                                 color: PRIMARY_TEXT_COLOR,
                                 fontSize: FONT_MIDDLE,

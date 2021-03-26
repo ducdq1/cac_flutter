@@ -22,7 +22,7 @@ class _InputWithTitleWidgetState extends State<InputWithTitleWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
+            padding: EdgeInsets.symmetric(vertical: 0),
             child: Row(
               children: [
                 Text(

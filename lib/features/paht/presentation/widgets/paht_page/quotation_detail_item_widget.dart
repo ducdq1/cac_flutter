@@ -108,16 +108,14 @@ class QuotationDetailItemWidget extends StatelessWidget {
                             child: Text(
                                 quotationDetailModel.productName == null
                                     ? ''
-                                    : quotationDetailModel.productName.length < 60
-                                    ? quotationDetailModel.productName
-                                    : quotationDetailModel.productName
-                                    .substring(0, 60) +
-                                    '...',
+                                    : quotationDetailModel.productName ,
                                 style: GoogleFonts.inter(
                                     color: DESCRIPTION_COLOR,
                                     fontSize: FONT_SMALL,
                                     height: 1.5),
-                                softWrap: true),
+                                softWrap: true,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,),
                           )]),
                         ),
                         Padding(
@@ -138,16 +136,13 @@ class QuotationDetailItemWidget extends StatelessWidget {
                               Expanded(child: Text(
                                   quotationDetailModel.productCode == null
                                       ? ''
-                                      : quotationDetailModel.productCode.length < 60
-                                          ? quotationDetailModel.productCode
-                                          : quotationDetailModel.productCode
-                                                  .substring(0, 60) +
-                                              '...',
+                                      : quotationDetailModel.productCode ,
                                   style: GoogleFonts.inter(
                                       color: DESCRIPTION_COLOR,
                                       fontSize: FONT_SMALL,
                                       height: 1.5),
-                                  softWrap: true)
+                                  softWrap: true, maxLines: 2,
+                                overflow: TextOverflow.ellipsis,)
                               )
                             ],
                           ),
@@ -184,6 +179,7 @@ class QuotationDetailItemWidget extends StatelessWidget {
                       ],
                     ),
                   ),
+                  quotationDetailModel.image == null ? SizedBox() :
                   SvgPicture.asset(
                     SVG_ASSETS_PATH + 'icon_time.svg',
                     width: 32,

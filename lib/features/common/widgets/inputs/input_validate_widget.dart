@@ -96,7 +96,7 @@ class _InputValidateWidgetState extends State<InputValidateWidget> {
           labelText: widget.label,
           helperText: '',
           labelStyle: GoogleFonts.inter(
-            fontSize: _isFocus ? FONT_SMALL : FONT_MIDDLE,
+            fontSize: _isFocus ? FONT_MIDDLE : FONT_MIDDLE,
             color: _isFocus ? PRIMARY_TEXT_COLOR : SECONDARY_TEXT_COLOR,
             fontWeight: _isFocus ? FontWeight.bold : FontWeight.normal,
           ),
@@ -179,7 +179,7 @@ class _InputValidateWidgetState extends State<InputValidateWidget> {
 
   @override
   void dispose() {
-    widget.focusNode.dispose();
+    // widget.focusNode.dispose();
     super.dispose();
   }
 }

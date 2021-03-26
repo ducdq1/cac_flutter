@@ -19,6 +19,7 @@ import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/c
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/detailed_paht_bloc/detailed_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/pages/business_hour_page.dart';
+import 'package:citizen_app/features/paht/presentation/pages/choose_product_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:citizen_app/features/profile/presentation/bloc/update_profile_bloc.dart';
@@ -86,7 +87,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    String token = pref.get('token');
+    String token = pref.get('userName');
     return MultiBlocProvider(
       providers: [
         BlocProvider<CreateIssueBloc>(
@@ -158,7 +159,7 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navKey,
         title: 'Thu thập địa điểm',
         initialRoute:
-            (token != null && !token.isEmpty) ? ROUTER_HOME : ROUTER_HOME ,// ROUTER_SIGNIN,
+            (token != null && !token.isEmpty) ? ROUTER_HOME :  ROUTER_SIGNIN,
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),
           ROUTER_PAHT: (context) => Paht(),
@@ -171,6 +172,7 @@ class _MyAppState extends State<MyApp> {
               ),
           ROUTER_CREATE_PAHT: (context) => PahtCreateIssue(),
           ROUTER_DETAILED_PAHT: (context) => PahtDetailPage(),
+          ROUTER_CHOOSE_PRODUCT: (context) => ChooseProductPage(),
           ROUTER_PROFILE_PAGE: (context) => ProfilePage(),
           ROUTER_UPDATE_PROFILE_PAGE: (context) => UpdateProfilePage(),
           ROUTER_SETTINGS_PAGE: (context) => SettingsPage(),

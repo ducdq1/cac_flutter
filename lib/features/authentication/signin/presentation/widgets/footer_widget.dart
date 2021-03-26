@@ -18,32 +18,16 @@ class FooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.only(bottom: 16),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            trans(TITLE_NO_ACCOUNT),
+           'Công ty TNHH C.A.C',
             style: GoogleFonts.inter(
               fontSize: FONT_MIDDLE,
               fontWeight: FontWeight.w600,
               color: color,
-            ),
-          ),
-          TextButton(
-            onPressed: () async {
-              // await Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (_) => SignUpAccountPage()),
-              // );
-              _launchRegistrationURL();
-            },
-            child: Text(
-              trans(TITLE_SIGNUP),
-              style: GoogleFonts.inter(
-                fontSize: FONT_MIDDLE,
-                fontWeight: FontWeight.w600,
-                color: color,
-              ),
             ),
           ),
         ],

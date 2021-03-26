@@ -7,6 +7,7 @@ const String ROUTER_SEARCH_PUBLIC_PAHT = '$ROUTER_PAHT/search/public';
 const String ROUTER_CREATE_PAHT = '$ROUTER_PAHT/createReport';
 const String ROUTER_BUSINESS_HOUR_PAGE = '$ROUTER_PAHT/businessHour';
 const String ROUTER_DETAILED_PAHT = '$ROUTER_PAHT/detailed';
+const String ROUTER_CHOOSE_PRODUCT = '$ROUTER_PAHT/chooseProduct';
 const String ROUTER_CAMERA = '/camera';
 const String ROUTER_NEWS_VERIFICATION = '/XMTT';
 const String ROUTER_DETAILED_NEWS_VERIFICATION =

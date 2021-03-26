@@ -1,19 +1,37 @@
 import 'dart:convert';
 
 import 'package:citizen_app/core/usecases/usecase.dart';
+import 'package:citizen_app/features/paht/data/models/models.dart';
+import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
 import 'package:citizen_app/features/paht/domain/entities/entities.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
 import 'package:equatable/equatable.dart';
 
-class CreateIssuePaht implements UseCase<StatusEntity, IssueParams> {
+class CreateIssuePaht implements UseCase<StatusEntity, QuotationParams> {
   final PahtRepository repository;
 
   CreateIssuePaht(this.repository);
 
   @override
-  Future<bool> call(IssueParams issueParams) async {
+  Future<bool> call(QuotationParams issueParams) async {
     return await repository.createIssuePaht(issueParams);
+  }
+}
+
+
+class QuotationParams extends Equatable {
+  final PahtModel quotation;
+  final List<QuotationDetailModel> lstQuotationDetail;
+  QuotationParams({this.quotation,this.lstQuotationDetail});
+  @override
+  List<Object> get props => throw UnimplementedError();
+
+  toJson() {
+    return {
+      "quotation": quotation.toJson(),
+      "lstQuotationDetail": this.lstQuotationDetail.map((e) => e.toJson()).toList(),
+    };
   }
 }
 
@@ -33,6 +51,7 @@ class IssueParams extends Equatable {
   List<int> deletePlaceImageIds;
 
   final List<dynamic> files;
+
 
   IssueParams(
       {this.userId, this.address, this.lat,this.lng,this.phone,this.hyperlink,this.name,this.poiId,this.id,this.businessHour, this.description, this.fromPoiType,this.files,this.deletePlaceImageIds});

@@ -66,11 +66,11 @@ class _PahtState extends State<Paht> {
                 singleton<CategoryPahtBloc>()..add(ListCategoriesFetched())),
         BlocProvider<PublicPahtBloc>(
             create: (context) => singleton<PublicPahtBloc>()
-              ..add(ListPublicPahtFetchingEvent(offset: 1, limit: 10))),
+              ..add(ListPublicPahtFetchingEvent(offset: 0, limit: 10))),
         BlocProvider<PersonalPahtBloc>(
           create: (context) => singleton<PersonalPahtBloc>()
             ..add(
-              ListPersonalPahtFetchingEvent(offset: 1, limit: 10),
+              ListPersonalPahtFetchingEvent(offset: 0, limit: 10),
             ),
         ),
       ],

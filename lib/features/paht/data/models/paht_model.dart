@@ -14,7 +14,7 @@ class PahtModel extends PahtEntity {
       int type,
       int status,
       int totalPrice,
-      String modifyDate})
+      String modifyDate,String createUserFullName})
       : super(
             quotationID: quotationID,
             quotationNumber: quotationNumber,
@@ -25,7 +25,8 @@ class PahtModel extends PahtEntity {
             type: type,
             status: status,
             totalPrice: totalPrice,
-            modifyDate: modifyDate);
+            modifyDate: modifyDate,
+      createUserFullName : createUserFullName);
 
   factory PahtModel.fromJson(Map json) {
     //MediaModel mediaJson = MediaModel.fromJson(json['mediaUrls']);
@@ -39,11 +40,18 @@ class PahtModel extends PahtEntity {
         type: json['type'],
         status: json['status'],
         totalPrice: json['totalPrice'],
-        modifyDate : json['modifyDate']);
+        modifyDate : json['modifyDate'],
+        createUserFullName : json['createUserFullName']);
   }
 
   Map<String, dynamic> toJson() {
-    return {};
+    return { "cusName":cusName,
+      "cusAddress": cusAddress,
+      "cusPhone": cusPhone,
+      "createUserCode": createUserCode,
+      "createUserFullName": createUserFullName,
+      "type":type
+    };
   }
 
   @override
