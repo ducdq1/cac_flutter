@@ -57,7 +57,7 @@ class _BaseLayoutWidgetState extends State<BaseLayoutWidget> {
       child: Scaffold(
         extendBody: true,
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-        resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
+        //resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
         backgroundColor: PRIMARY_COLOR,
         appBar: AppBarBaseWidget(
           leading: widget.leading,

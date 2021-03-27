@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         //   },
         //   child:
         Scaffold(
-      resizeToAvoidBottomPadding: false,
+      //resizeToAvoidBottomPadding: false,
       backgroundColor: PRIMARY_COLOR,
       appBar: AppBarHomeWidget(),
       //floatingActionButton: Container(

@@ -18,8 +18,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:local_auth/auth_strings.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -33,9 +31,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String locale = ui.window.locale.languageCode;
   bool valueFP = false;
   bool useProxy = false;
-  final LocalAuthentication auth = LocalAuthentication();
   bool _canCheckBiometric;
-  List<BiometricType> _availableBiometrics;
   String autherized = "Not autherized";
 
   @override
@@ -48,84 +44,12 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    _checkBiometric();
-    _getAvailableBiometric();
     // print('language: ${language}');
     setState(() {
       language = handleLanguage();
       useProxy = pref.getBool('useProxy') ?? false;
     });
     // print('language: ${language}');
-  }
-
-  Future<void> _checkBiometric() async {
-    bool canCheckBiometric;
-    try {
-      canCheckBiometric = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    if (!mounted) return;
-    setState(() {
-      _canCheckBiometric = canCheckBiometric;
-    });
-  }
-
-  Future<void> _getAvailableBiometric() async {
-    List<BiometricType> availableBiometric;
-    try {
-      availableBiometric = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    setState(() {
-      _availableBiometrics = availableBiometric;
-    });
-  }
-
-  Future<bool> _authenticate() async {
-    bool authenticated = false;
-    try {
-      IOSAuthMessages iosStrings = IOSAuthMessages(
-        cancelButton: trans(CANCEL),
-        goToSettingsButton: trans(TITLE_SETTING_SCREEN),
-        goToSettingsDescription: trans(REQUIRE_SET_UP_TOUCH_ID),
-        lockOut: trans(ENABLE_TOUCH_ID),
-      );
-      AndroidAuthMessages androidStrings = AndroidAuthMessages(
-          cancelButton: trans(CANCEL),
-          goToSettingsButton: trans(TITLE_SETTING_SCREEN),
-          goToSettingsDescription: trans(REQUIRE_SET_UP_TOUCH_ID),
-          fingerprintHint: '',
-          fingerprintNotRecognized: trans(FINGERPRINT_NOT_RECOGNIZED),
-          fingerprintSuccess: trans(FINGERPRINT_RECOGNIZED),
-          fingerprintRequiredTitle: trans(FINGERPRINT_REQUIRED),
-          signInTitle: trans(FINGERPRINT_AUTHENTICATION));
-
-      authenticated = await auth.authenticateWithBiometrics(
-        localizedReason: trans(SCAN_FP_TO_AUTHENTICATION),
-        useErrorDialogs: true,
-        stickyAuth: true,
-        androidAuthStrings: androidStrings,
-        iOSAuthStrings: iosStrings,
-      );
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    if (!mounted) return false;
-    setState(() {
-      //!Thêm xử lý nếu vân tay hợp lệ ở đây
-      autherized =
-          authenticated ? "Autherized success" : "Failed to authenticate";
-      print(autherized);
-      if (authenticated) {
-        pref.setBool('fingerprint', true);
-        pref.setString('authTemp', pref.getString('auth'));
-        pref.setString('tokenTemp', pref.getString('token'));
-      }
-    });
-
-    return authenticated;
   }
 
   Future<bool> switchUseProxy(BuildContext context) async {
@@ -163,8 +87,6 @@ class _SettingsPageState extends State<SettingsPage> {
     } else {
       // showFingerPrintDialog(context: context);
       print('_canCheckBiometric: $_canCheckBiometric');
-      print('_availableBiometrics: $_availableBiometrics');
-      succeedSaveFPToCache = await _authenticate();
       setState(() {
         valueFP = succeedSaveFPToCache;
       });

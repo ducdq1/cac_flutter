@@ -76,6 +76,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   final prefs = singleton<SharedPreferences>();
   int imageIdSelected;
 
+  bool _isKhachHangLe= true;
+
   Map<String, dynamic> _chosenLocation = {
     'address': '',
     'latitude': null,
@@ -280,7 +282,9 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                             poiNameField(),
                             addressField(),
                             phoneNumberField(),
-                            listProductField()
+                            quotationTypField(),
+                            listProductField(),
+
                           ],
                         ),
                       ),
@@ -289,6 +293,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                   Container(
                       padding: EdgeInsets.only(bottom: 10),
                       decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10)),
@@ -296,6 +301,14 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                           width: 0.2,
                           color: PRIMARY_COLOR,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 12,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
                       ),
                       child: createIssueAction()),
                 ],
@@ -604,6 +617,82 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     );
   }
 
+  Widget quotationTypField() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(width: 10),
+        Expanded(
+          child:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Container(
+                  child: FlatButton(
+                    // here toggle the bool value so that when you click
+                    // on the whole item, it will reflect changes in Checkbox
+                      onPressed: () => setState(() {
+                        _isKhachHangLe = !_isKhachHangLe;
+
+                      }),
+                      child:
+                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        SizedBox(
+                            height: 24.0,
+                            width: 24.0,
+                            child: Checkbox(
+                                activeColor: PRIMARY_COLOR,
+                                value: _isKhachHangLe,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isKhachHangLe = value;
+
+                                  });
+                                })),
+                        // You can play with the width to adjust your
+                        // desired spacing
+                        SizedBox(width: 10.0),
+                        Text('Khách hàng lẽ')
+                      ])),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: FlatButton(
+                    // here toggle the bool value so that when you click
+                    // on the whole item, it will reflect changes in Checkbox
+                      onPressed: () => setState(() {
+                        _isKhachHangLe = !_isKhachHangLe;
+                      }),
+                      child:
+                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        SizedBox(
+                            height: 24.0,
+                            width: 24.0,
+                            child: Checkbox(
+                                activeColor: PRIMARY_COLOR,
+                                value: !_isKhachHangLe,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isKhachHangLe = !value;
+                                  });
+                                })),
+                        // You can play with the width to adjust your
+                        // desired spacing
+                        SizedBox(width: 10.0),
+                        Text('Công trình')
+                      ])),
+                ),
+              ),
+            ],
+          )
+        ),
+      ],
+    );
+  }
+
+
   @override
   onClick(String id) async {
     if (id == 'primary_btn') {
@@ -619,14 +708,14 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
         BlocProvider.of<CreateIssueBloc>(context)
             .add(CreateIssueButtonPresseEvent(
-          quotationParams: QuotationParams(quotation: PahtModel(type :0,
+          quotationParams: QuotationParams(quotation: PahtModel(type : _isKhachHangLe ? 0: 1,
               cusName :_poiNameController.text.trim(),
               cusAddress : _addressController.text.trim(),
               cusPhone  : _phoneNumberController.text.trim(),
               createUserCode : userName,
               createUserFullName : userFullName),
-              lstQuotationDetail: listQuotationDetailModel),
-          type: args == null ? 0 : 1,
+              lstQuotationDetail: listQuotationDetailModel)
+
         ));
 
         _showCupertinoDialog(context);

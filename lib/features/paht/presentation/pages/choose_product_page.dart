@@ -58,7 +58,8 @@ class SearchProductParam extends Equatable {
 }
 
 class _ChooseProductPageState extends State<ChooseProductPage>
-    with TickerProviderStateMixin  implements OnButtonClickListener {
+    with TickerProviderStateMixin
+    implements OnButtonClickListener {
   TabController _controller;
   final tabs = [trans(TITLE_INFORMATION_SCREEN), trans(LABEL_MEDIA_PAHT)];
   int _index;
@@ -69,6 +70,8 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   bool firstLoad = true;
   FocusNode _passFocusNode;
   TextEditingController _passController;
+  int selectedImageId = -1;
+
   @override
   void initState() {
     bool firstLoad = true;
@@ -440,8 +443,16 @@ class _ChooseProductPageState extends State<ChooseProductPage>
     return Container(
       decoration: BoxDecoration(
         ///color: Color(0xffE6EFF3).withOpacity(0.6),
-        color: Colors.white70,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 12,
+            blurRadius: 7,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -449,7 +460,8 @@ class _ChooseProductPageState extends State<ChooseProductPage>
             height: 5,
             decoration: BoxDecoration(
               color: Colors.red,
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(5),topRight: Radius.circular(5)),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5), topRight: Radius.circular(5)),
             ),
           ),
           Padding(
@@ -468,7 +480,8 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                             label: 'Số lượng',
                             limitLength: 20,
                             focusNode: _passFocusNode,
-                            textInputType: TextInputType.numberWithOptions(decimal: true,signed: true),
+                            textInputType: TextInputType.numberWithOptions(
+                                decimal: true, signed: true),
                             controller: _passController,
                             focusAction: () => FormTools.requestFocus(
                               currentFocusNode: _passFocusNode,
@@ -513,37 +526,42 @@ class _ChooseProductPageState extends State<ChooseProductPage>
     for (int i = 0; i < imageModels.length; i++) {
       ImageModel imageModel = imageModels[i];
       tiles.add(GridTile(
-          child: ClipRRect(
+          child: Container(
+            decoration: BoxDecoration(
+              color: selectedImageId == imageModel.attachId ? Colors.blue : Color.fromARGB(153, 250, 245, 232),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(1.5),
+              child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
+
         child:
-            //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
-            InkWell(
-          onTap: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MediaPresenterPage(
-                  urls: productModel.images,
-                  initialIndex: i,
-                ),
+                //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
+                InkWell(
+              onTap: () async {
+                setState(() {
+                  if(selectedImageId == imageModel.attachId){
+                    selectedImageId = -1;
+                  }else {
+                    selectedImageId = imageModel.attachId;
+                  }
+                });
+              },
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
+                placeholder: (context, url) =>
+                    new CircularProgressIndicator(strokeWidth: 2.0),
+                height: 15,
+                width: 15,
+                errorWidget: (context, url, error) => new Icon(Icons.error),
               ),
-            );
-            SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
-            );
-          },
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
-            placeholder: (context, url) =>
-                new CircularProgressIndicator(strokeWidth: 2.0),
-            height: 15,
-            width: 15,
-            errorWidget: (context, url, error) => new Icon(Icons.error),
-          ),
         ),
-      )));
+      ),
+            ),
+          )));
     }
     return tiles;
   }
@@ -555,19 +573,21 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       double amount;
       try {
         amount = double.parse(amountStr);
-      }catch(error){
+      } catch (error) {
         FocusScope.of(context).requestFocus(_passFocusNode);
         return;
       }
 
       if (amountStr.isEmpty || amount == 0) {
         FocusScope.of(context).requestFocus(_passFocusNode);
-      }else{
-        QuotationDetailModel model = QuotationDetailModel(productCode: productModel.productCode,
-            productId: productModel.productId,productName: productModel.productName,amount: amount);
-        Navigator.pop(context,model);
+      } else {
+        QuotationDetailModel model = QuotationDetailModel(
+            productCode: productModel.productCode,
+            productId: productModel.productId,
+            productName: productModel.productName,
+            amount: amount);
+        Navigator.pop(context, model);
       }
-
     }
     if (id == 'cancel_btn') {
       Navigator.pop(context);
