@@ -197,7 +197,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
             paht: results,
             hasReachedMax: results.length < 10 ? true : false);
       } catch (error) {
-        yield DeletePersonalPahtFailure(error: error);
+        yield DeletePersonalPahtFailure(error: error.message);
       }
     }
 

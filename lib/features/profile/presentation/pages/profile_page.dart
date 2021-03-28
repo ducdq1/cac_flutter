@@ -13,6 +13,7 @@ import 'package:citizen_app/features/profile/presentation/widgets/profile_page/o
 import 'package:citizen_app/features/profile/presentation/widgets/signout_confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../injection_container.dart';
@@ -78,24 +79,38 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  new Container(
-                      width: 130.0,
-                      height: 130.0,
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                    child : CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: '$baseUrl' + avartarPath,
-                      placeholder: (context, url) =>
-                      new CircularProgressIndicator(strokeWidth: 2.0),
-                      height: 15,
-                      width: 15,
-                      errorWidget: (context, url, error) => new Icon(Icons.error),
-                    )
+                  ClipOval(
+                    child: Container(
+                        width: 130.0,
+                        height: 130.0,
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: avartarPath + '2',
+                          placeholder: (context, url) =>
+                              new CircularProgressIndicator(strokeWidth: 2.0),
+                          height: 15,
+                          width: 15,
+                          errorWidget: (context, url, error) => Image.asset(
+                            ICONS_ASSETS + 'default-avatar.png',
+                            height: 100,
+                            width: 100,
+                          ),
+                        )),
                   ),
                   SizedBox(height: 20),
-                  Text(fullName, textScaleFactor: 1.5)
+                  Text(
+                    fullName,
+                    textScaleFactor: 1.5,
+                    style: GoogleFonts.inter(
+                      color: SECONDARY_TEXT_COLOR,
+                      fontSize: FONT_SMALL,
+                      fontWeight: FontWeight.bold
+                    ),
+
+                  ), SizedBox(height: 50),
                 ],
               )),
 

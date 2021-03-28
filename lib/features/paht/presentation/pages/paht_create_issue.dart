@@ -273,8 +273,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                             ? trans(ERROR_CONNECTION_FAILED)
                             : state.error.message.toString())
                         : args == null
-                            ? trans(TEXT_CREATE_ISSUE_FAILED)
-                            : trans(TEXT_UPDATE_ISSUE_FAILED));
+                        ? 'Tạo báo giá thất bại'
+                        : 'Cập nhật báo giá thất bại');
               }
             }
           },
@@ -420,7 +420,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       fontSize: FONT_SMALL,
                       textFieldWidget: InputValidateCustomWidget(
                         textInputType: TextInputType.text,
-                        limitLength: 15,
+                        limitLength: 500,
                         scrollPaddingForTop: true,
                         scrollPadding: 200,
                         isShowBorder: false,

@@ -163,7 +163,7 @@ class PahtRepositoryImpl implements PahtRepository {
       final result = await remoteDataSource.deletePaht(id: id);
       return result;
     } catch (error) {
-      throw Exception(error);
+      throw error;
     }
   }
 

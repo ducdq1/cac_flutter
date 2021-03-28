@@ -77,6 +77,12 @@ class _PahtPublicState extends State<PahtPublic> {
                   loadmore: state.hasReachedMax ? false : true,
                 );
               }
+
+              if (state is DeletePersonalPahtFailure) {
+                BlocProvider.of<PublicPahtBloc>(context).add(
+                  ListPublicPahtFetchingEvent(),
+                );
+              }
               return SkeletonPahtWidget();
             })));
   }

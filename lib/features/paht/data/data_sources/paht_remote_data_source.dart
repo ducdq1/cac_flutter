@@ -235,6 +235,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   @override
   Future<bool> deletePaht({String id}) async {
     try {
+      print('$baseUrl_api/quotation/delete/$id');
       final response = await networkRequest.postRequest(
           url:
               '$baseUrl_api/quotation/delete/$id');
@@ -254,7 +255,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
         throw Exception(data['message']);
       }
     } catch (error) {
-      return handleException(error);
+      throw (error);
     }
   }
 

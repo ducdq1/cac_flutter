@@ -601,7 +601,9 @@ class _ChooseProductPageState extends State<ChooseProductPage>
         QuotationDetailModel model = QuotationDetailModel(
             productCode: productModel.productCode,
             productId: productModel.productId,
-            productName: productModel.productName,
+            productName: (productModel.productType == 0 || productModel.productType == 1) ?
+            productModel.productName + " " + productModel.productCode :
+            "("+productModel.size  + ") "+productModel.productCode,
             unit: productModel.unit,
             amount: amount,
             image: image,

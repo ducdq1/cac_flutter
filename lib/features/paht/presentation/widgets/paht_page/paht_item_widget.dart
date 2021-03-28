@@ -86,11 +86,38 @@ class PAHTITemWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Container(
+                          alignment: Alignment.topRight,
+                          padding: const EdgeInsets.only(right: 0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                            SvgPicture.asset(
+                              SVG_ASSETS_PATH + 'icon_info.svg',
+                              fit: BoxFit.scaleDown,
+                              width: 22,
+                              height: 22,
+                            ),
+                            SizedBox(width: 5,),
+                            Text(
+                              pahtModel.quotationNumber == null
+                                  ? ''
+                                  : pahtModel.quotationNumber,
+                              style: GoogleFonts.inter(
+                                fontSize: FONT_SMALL,
+                                color: Color(0xff0F8E70),
+                                fontWeight: FontWeight.bold,
+                              ),
+                              softWrap: true,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ]),
+                        ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0,left: 20),
+                          padding: const EdgeInsets.only(bottom: 8.0, left: 20),
                           child: Text(
-                            pahtModel.cusName == null  ? ''
-                                : pahtModel.cusName ,
+                            pahtModel.cusName == null ? '' : pahtModel.cusName,
                             style: GoogleFonts.inter(
                               fontSize: FONT_SMALL,
                               color: PRIMARY_TEXT_COLOR,
@@ -106,25 +133,27 @@ class PAHTITemWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               Image.asset(
-                                ICONS_ASSETS +
-                                    'icon_marker_detail_address.png',
+                                ICONS_ASSETS + 'icon_marker_detail_address.png',
                                 width: 16,
                                 height: 16,
                               ),
                               SizedBox(
                                 width: 5,
                               ),
-                              Text(
+                              Expanded(
+                                child: Text(
                                   pahtModel.cusAddress == null
                                       ? ''
-                                      : pahtModel.cusAddress ,
+                                      : pahtModel.cusAddress,
                                   style: GoogleFonts.inter(
                                       color: DESCRIPTION_COLOR,
                                       fontSize: FONT_MIDDLE,
                                       height: 1.5),
                                   softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,)
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              )
                             ],
                           ),
                         ),
