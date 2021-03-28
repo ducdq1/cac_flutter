@@ -9,7 +9,7 @@ import 'package:citizen_app/features/paht/domain/entities/tonkho_entity.dart';
 class TonKhoModel extends TonKhoEntity {
   TonKhoModel({
     String sError,
-    int so_luong,
+    double so_luong,
     String dvt,
     String ten_vt,
   }) : super(sError: sError, so_luong: so_luong, dvt: dvt, ten_vt: ten_vt);

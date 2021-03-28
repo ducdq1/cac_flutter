@@ -17,7 +17,7 @@ class QuotationDetailEntity extends Equatable {
   int attachId;
   ImageEntity image;
   String note;
-
+String unit;
   @override
   // TODO: implement props
   List<Object> get props => throw UnimplementedError();
@@ -33,5 +33,6 @@ class QuotationDetailEntity extends Equatable {
       this.amount,
       this.attachId,
       this.image,
-      this.note});
+      this.note,
+      this.unit});
 }

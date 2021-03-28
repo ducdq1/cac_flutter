@@ -70,8 +70,11 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   bool firstLoad = true;
   FocusNode _passFocusNode;
   TextEditingController _passController;
+  TextEditingController _notController;
+  FocusNode _noteFocusNode;
   int selectedImageId = -1;
-
+  ImageModel image;
+  QuotationDetailModel quotationDetailModel;
   @override
   void initState() {
     bool firstLoad = true;
@@ -79,22 +82,13 @@ class _ChooseProductPageState extends State<ChooseProductPage>
     _index = _controller.index;
     _passFocusNode = FocusNode();
     _passController = TextEditingController();
+    _notController = TextEditingController();
+    _noteFocusNode  = FocusNode();
     _controller.addListener(() {
       setState(() {
         _index = _controller.index;
       });
     });
-
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        // arg = ModalRoute.of(context).settings.arguments as PahtDetailArgument;
-        // productCode = arg.productCode;
-        // BlocProvider.of<DetailedPahtBloc>(context).add(
-        //   DetailedPahtFetching(pahtId: productCode),
-        // );
-      });
-    });
-
     super.initState();
   }
 
@@ -104,6 +98,13 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       firstLoad = false;
       arg = ModalRoute.of(context).settings.arguments as PahtDetailArgument;
       productCode = arg.productCode;
+      quotationDetailModel = arg.quotationDetailModel;
+      if(quotationDetailModel !=null){
+        _passController.text = quotationDetailModel.amount.toString();
+        _notController.text = quotationDetailModel.note;
+        selectedImageId = quotationDetailModel.attachId ;
+
+      }
       BlocProvider.of<DetailedPahtBloc>(context).add(
         DetailedPahtFetching(pahtId: productCode),
       );
@@ -471,27 +472,41 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                  child: Row(
+                  child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: InputValidateWidget(
-                            isRequired: true,
-                            label: 'Số lượng',
-                            limitLength: 20,
-                            focusNode: _passFocusNode,
-                            textInputType: TextInputType.numberWithOptions(
-                                decimal: true, signed: true),
-                            controller: _passController,
-                            focusAction: () => FormTools.requestFocus(
-                              currentFocusNode: _passFocusNode,
-                              nextFocusNode: null,
-                              context: context,
-                            ),
-                            validates: [
-                              EmptyValidate(),
-                            ],
+                        InputValidateWidget(
+                          isRequired: true,
+                          label: 'Số lượng',
+                          limitLength: 20,
+                          focusNode: _passFocusNode,
+                          textInputType: TextInputType.numberWithOptions(
+                              decimal: true, signed: true),
+                          controller: _passController,
+                          focusAction: () => FormTools.requestFocus(
+                            currentFocusNode: _passFocusNode,
+                            nextFocusNode: _noteFocusNode,
+                            context: context,
                           ),
+                          validates: [
+                            EmptyValidate(),
+                          ],
+                        ),
+                        InputValidateWidget(
+                          isRequired: true,
+                          label: 'Ghi chú',
+                          limitLength: 2000,
+                          focusNode: _noteFocusNode,
+                          textInputType: TextInputType.text ,
+                          controller: _notController,
+                          focusAction: () => FormTools.requestFocus(
+                            currentFocusNode: _noteFocusNode,
+                            nextFocusNode: null,
+                            context: context,
+                          ),
+                          validates: [
+                            EmptyValidate(),
+                          ],
                         )
                       ]),
                 ),
@@ -544,8 +559,10 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                 setState(() {
                   if(selectedImageId == imageModel.attachId){
                     selectedImageId = -1;
+                    image =null;
                   }else {
                     selectedImageId = imageModel.attachId;
+                    image = imageModel;
                   }
                 });
               },
@@ -585,7 +602,11 @@ class _ChooseProductPageState extends State<ChooseProductPage>
             productCode: productModel.productCode,
             productId: productModel.productId,
             productName: productModel.productName,
-            amount: amount);
+            unit: productModel.unit,
+            amount: amount,
+            image: image,
+            note: _notController.text.trim(),
+            attachId: selectedImageId == -1 ? null : selectedImageId);
         Navigator.pop(context, model);
       }
     }

@@ -11,6 +11,7 @@ import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart'
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom_widget.dart';
 import 'package:citizen_app/features/common/widgets/inputs/text_field_custom.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
+import 'package:citizen_app/features/number_trivia/presentation/widgets/widgets.dart';
 import 'package:citizen_app/features/paht/data/models/media_picker_ios_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
@@ -31,7 +32,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-
+import 'package:qrscan/qrscan.dart' as scanner;
 import '../../../../injection_container.dart';
 
 const SIZE_ICON = 20.0;
@@ -76,7 +77,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   final prefs = singleton<SharedPreferences>();
   int imageIdSelected;
 
-  bool _isKhachHangLe= true;
+  bool _isKhachHangLe = true;
 
   Map<String, dynamic> _chosenLocation = {
     'address': '',
@@ -87,23 +88,27 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   UpdatePahtArgument args;
 
   initValue(args) async {
-    if (args != null  && args.pahtModel != null) {
+    if (args != null && args.pahtModel != null) {
       pahtModel = args.pahtModel;
 
-      if (pahtModel.cusName !=null) {
-        _poiNameController.text = args.content;
+      if (pahtModel.cusName != null) {
+        _poiNameController.text = pahtModel.cusName;
       }
 
       if (pahtModel.cusAddress != null) {
         _addressController.text = pahtModel.cusAddress;
       }
 
-      if (args.phone != null) {
+      if (pahtModel.cusPhone != null) {
         _phoneNumberController.text = pahtModel.cusPhone;
       }
+      if (pahtModel.type != null) {
+        _isKhachHangLe = pahtModel.type == 0;
+      }
 
-     //listQuotationDetailModel;
-
+      BlocProvider.of<CreateIssueBloc>(context).add(
+        GetListQuotationDetailEvent(id: pahtModel.quotationID),
+      );
     }
   }
 
@@ -127,19 +132,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     });
     _poiNameFocusNode = FocusNode();
 
-    Future.delayed(Duration(milliseconds: 500), () {
-      BlocProvider.of<CategoryPahtBloc>(context).add(ListCategoriesFetched());
-    });
-
     super.initState();
-  }
-
-  Future<List<MediaPickerIOSModel>> parsedListMediaPicker(
-      dynamic argJson) async {
-    List<MediaPickerIOSModel> convertedList = (argJson as List).map((s) {
-      return MediaPickerIOSModel.fromJson(s);
-    }).toList();
-    return convertedList;
   }
 
   onPop() {
@@ -153,39 +146,57 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
           padding: const EdgeInsets.only(bottom: 80),
           child: FloatingActionButton(
             child: Image.asset(
-              'assets/icons/icon_scan_qr.png',
+              'assets/icons/icon_scan_qr_white.png',
               height: 29,
               width: 29,
             ),
             // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
-            backgroundColor: Colors.amber,
+            backgroundColor: PRIMARY_COLOR,
             tooltip: 'Quét mã',
             elevation: 5,
             splashColor: Colors.grey,
-            onPressed: () async{
+            onPressed: () async {
               clearFocus();
-              final PermissionHandler _permissionHandler =
-              PermissionHandler();
+              final PermissionHandler _permissionHandler = PermissionHandler();
               var permissionStatus = await _permissionHandler
                   .checkPermissionStatus(PermissionGroup.camera);
 
               switch (permissionStatus) {
                 case PermissionStatus.granted:
-                  String cameraScanResult = 'TB002.K025C';// await scanner.scan();
+                  String cameraScanResult = await scanner.scan();
                   //'G0349811';
                   print(cameraScanResult);
-                  if (cameraScanResult != null &&
-                      cameraScanResult.isNotEmpty) {
-                    Navigator.pushNamed(
-                        context, ROUTER_CHOOSE_PRODUCT,
-                        arguments: PahtDetailArgument(
-                            productCode: cameraScanResult)).then((value) =>{
-                      if(value!=null){
-                        setState((){
-                        listQuotationDetailModel.add(value);
-                        })
-                      }
-                    });
+                  if (cameraScanResult != null && cameraScanResult.isNotEmpty) {
+                    Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
+                            arguments: PahtDetailArgument(
+                                productCode: cameraScanResult))
+                        .then((value) => {
+                              if (value != null)
+                                {
+                                  setState(() {
+                                    if (value is QuotationDetailModel) {
+                                      QuotationDetailModel exist;
+                                      int indexExist= -1;
+                                      for (int i = 0;
+                                          i < listQuotationDetailModel.length;
+                                          i++) {
+                                        if (listQuotationDetailModel[i]
+                                                .productId ==
+                                            value.productId) {
+                                          exist = value;
+                                          indexExist =i;
+                                        }
+                                      }
+
+                                      if (exist == null) {
+                                        listQuotationDetailModel.add(value);
+                                      } else {
+                                        listQuotationDetailModel[indexExist]= (value);
+                                      }
+                                    }
+                                  })
+                                }
+                            });
                   }
 
                   break;
@@ -193,26 +204,24 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                   await _permissionHandler
                       .requestPermissions([PermissionGroup.camera]);
                   var permissionStatus = await _permissionHandler
-                      .checkPermissionStatus(
-                      PermissionGroup.camera);
+                      .checkPermissionStatus(PermissionGroup.camera);
 
                   switch (permissionStatus) {
                     case PermissionStatus.granted:
-
-                      String cameraScanResult = 'TB002.K025C';// await scanner.scan();
+                      String cameraScanResult = await scanner.scan();
                       // 'TB002.K025C';
 
                       print(cameraScanResult);
                       if (cameraScanResult != null &&
                           cameraScanResult.isNotEmpty) {
-                        Navigator.pushNamed(
-                            context, ROUTER_CHOOSE_PRODUCT,
-                            arguments: PahtDetailArgument(
-                                productCode: cameraScanResult)).then((value) =>{
-                          setState((){
-                            listQuotationDetailModel.add(value);
-                          })
-                        });
+                        Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
+                                arguments: PahtDetailArgument(
+                                    productCode: cameraScanResult))
+                            .then((value) => {
+                                  setState(() {
+                                    listQuotationDetailModel.add(value);
+                                  })
+                                });
                       }
                   }
                   break;
@@ -221,11 +230,10 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       .requestPermissions([PermissionGroup.camera]);
                   break;
                 case PermissionStatus.unknown:
-                // do something
+                  // do something
                   break;
                 default:
               }
-
             },
           ),
         ),
@@ -233,13 +241,19 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         centerTitle: true,
         body: BlocConsumer<CreateIssueBloc, CreateIssueState>(
           listener: (_, state) {
+            if (state is GetListQuotationDetailSuccess) {
+              setState(() {
+                listQuotationDetailModel = state.listQuotationDetailModel;
+              });
+            }
+
             if (state is CreateIssueSuccess) {
               //Navigator.pop(context);
               Navigator.of(context, rootNavigator: true).pop('dialog');
               Fluttertoast.showToast(
                   msg: args == null
-                      ? trans(TEXT_CREATE_ISSUE_SUCCESS)
-                      : trans(TEXT_UPDATE_ISSUE_SUCCESS));
+                      ? 'Tạo báo giá thành công'
+                      : 'Cập nhật báo giá thành công');
 
               Navigator.pop(context, true);
             }
@@ -284,7 +298,9 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                             phoneNumberField(),
                             quotationTypField(),
                             listProductField(),
-
+                            state is GetListQuotationDetailLoading
+                                ? Center(child: LoadingWidget())
+                                : SizedBox()
                           ],
                         ),
                       ),
@@ -530,53 +546,51 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Sản phẩm (' + listQuotationDetailModel.length.toString()+')',
+            'Sản phẩm (' + listQuotationDetailModel.length.toString() + ')',
             style: GoogleFonts.inter(
                 color: Colors.green,
                 fontSize: FONT_EX_LARGE,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics() ,
+            physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.only(bottom: 10),
             itemBuilder: (BuildContext context, int index) {
-              return  QuotationDetailItemWidget(
-                        onDelete: () {
-                          showDeleteConfirmDialog(
-                              context: context,
-                              onSubmit: () {
-                                setState(() {
-                                  listQuotationDetailModel.removeAt(index);
-                                });
-                                Navigator.pop(context);
-                              },
-                           );
-                        },
-                        onEdit: () {
-                          Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
-                              arguments: UpdatePahtArgument(
-                                  content: pahtModel.cusName,
-                                  address: pahtModel.cusAddress
-                              ))
-                              .then((value) {
-
-                          });
-                        },
-                        isPersonal: false,
-                        quotationDetailModel: listQuotationDetailModel[index],
-                        onTap: () {
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   ROUTER_DETAILED_PAHT,
-                          //   arguments: PahtDetailArgument(
-                          //       poiDetail: widget.pahts[index],
-                          //       id: widget.pahts[index].id.toString(),
-                          //       title: widget.pahts[index].name),
-                          // );
-                        },
-                      );
+              return QuotationDetailItemWidget(
+                onDelete: () {
+                  showDeleteConfirmDialog(
+                    context: context,
+                    onSubmit: () {
+                      setState(() {
+                        listQuotationDetailModel.removeAt(index);
+                      });
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+                onEdit: () {
+                  Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
+                          arguments: PahtDetailArgument(
+                              productCode:
+                                  listQuotationDetailModel[index].productCode,
+                              quotationDetailModel:
+                                  listQuotationDetailModel[index]))
+                      .then((value) {
+                    if (value != null) {
+                      setState(() {
+                        listQuotationDetailModel[index] = value;
+                      });
+                    }
+                  });
+                },
+                isPersonal: false,
+                quotationDetailModel: listQuotationDetailModel[index],
+                onTap: () {},
+              );
             },
             // itemCount: widget.hasReachedMax
             //     ? widget.pahts.length
@@ -584,8 +598,6 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
             itemCount: listQuotationDetailModel.length,
             controller: scrollController,
           )
-
-
         ]);
   }
 
@@ -624,74 +636,72 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
       children: [
         SizedBox(width: 10),
         Expanded(
-          child:  Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Container(
-                  child: FlatButton(
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: Container(
+                child: FlatButton(
                     // here toggle the bool value so that when you click
                     // on the whole item, it will reflect changes in Checkbox
-                      onPressed: () => setState(() {
-                        _isKhachHangLe = !_isKhachHangLe;
-
-                      }),
-                      child:
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        SizedBox(
-                            height: 24.0,
-                            width: 24.0,
-                            child: Checkbox(
-                                activeColor: PRIMARY_COLOR,
-                                value: _isKhachHangLe,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isKhachHangLe = value;
-
-                                  });
-                                })),
-                        // You can play with the width to adjust your
-                        // desired spacing
-                        SizedBox(width: 10.0),
-                        Text('Khách hàng lẽ')
-                      ])),
-                ),
+                    onPressed: () => setState(() {
+                          _isKhachHangLe = !_isKhachHangLe;
+                        }),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 24.0,
+                              width: 24.0,
+                              child: Checkbox(
+                                  activeColor: PRIMARY_COLOR,
+                                  value: _isKhachHangLe,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isKhachHangLe = value;
+                                    });
+                                  })),
+                          // You can play with the width to adjust your
+                          // desired spacing
+                          SizedBox(width: 10.0),
+                          Text('Khách hàng lẽ')
+                        ])),
               ),
-              Expanded(
-                child: Container(
-                  child: FlatButton(
+            ),
+            Expanded(
+              child: Container(
+                child: FlatButton(
                     // here toggle the bool value so that when you click
                     // on the whole item, it will reflect changes in Checkbox
-                      onPressed: () => setState(() {
-                        _isKhachHangLe = !_isKhachHangLe;
-                      }),
-                      child:
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        SizedBox(
-                            height: 24.0,
-                            width: 24.0,
-                            child: Checkbox(
-                                activeColor: PRIMARY_COLOR,
-                                value: !_isKhachHangLe,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isKhachHangLe = !value;
-                                  });
-                                })),
-                        // You can play with the width to adjust your
-                        // desired spacing
-                        SizedBox(width: 10.0),
-                        Text('Công trình')
-                      ])),
-                ),
+                    onPressed: () => setState(() {
+                          _isKhachHangLe = !_isKhachHangLe;
+                        }),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              height: 24.0,
+                              width: 24.0,
+                              child: Checkbox(
+                                  activeColor: PRIMARY_COLOR,
+                                  value: !_isKhachHangLe,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isKhachHangLe = !value;
+                                    });
+                                  })),
+                          // You can play with the width to adjust your
+                          // desired spacing
+                          SizedBox(width: 10.0),
+                          Text('Công trình')
+                        ])),
               ),
-            ],
-          )
-        ),
+            ),
+          ],
+        )),
       ],
     );
   }
-
 
   @override
   onClick(String id) async {
@@ -701,22 +711,36 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
       });
 
       clearFocus();
+      if(listQuotationDetailModel.isEmpty){
+        Fluttertoast.showToast(
+          msg: "Phải chọn ít nhất 1 sản phẩm.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black87,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return;
+      }
 
       if (_formKey.currentState.validate()) {
         final userName = prefs.get('userName').toString();
         final userFullName = prefs.get('fullName').toString();
 
-        BlocProvider.of<CreateIssueBloc>(context)
-            .add(CreateIssueButtonPresseEvent(
-          quotationParams: QuotationParams(quotation: PahtModel(type : _isKhachHangLe ? 0: 1,
-              cusName :_poiNameController.text.trim(),
-              cusAddress : _addressController.text.trim(),
-              cusPhone  : _phoneNumberController.text.trim(),
-              createUserCode : userName,
-              createUserFullName : userFullName),
-              lstQuotationDetail: listQuotationDetailModel)
-
-        ));
+        BlocProvider.of<CreateIssueBloc>(context).add(
+            CreateIssueButtonPresseEvent(
+                quotationParams: QuotationParams(
+                    quotation: PahtModel(
+                        quotationID:
+                            pahtModel == null ? null : pahtModel.quotationID,
+                        type: _isKhachHangLe ? 0 : 1,
+                        cusName: _poiNameController.text.trim(),
+                        cusAddress: _addressController.text.trim(),
+                        cusPhone: _phoneNumberController.text.trim(),
+                        createUserCode: userName,
+                        createUserFullName: userFullName),
+                    lstQuotationDetail: listQuotationDetailModel)));
 
         _showCupertinoDialog(context);
       }
@@ -730,7 +754,6 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   void clearFocus() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
-
 }
 
 Future<bool> _checkPermission() async {

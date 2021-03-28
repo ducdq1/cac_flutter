@@ -2,6 +2,7 @@ import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
+import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
@@ -41,11 +42,12 @@ class UpdatePahtArgument {
 }
 
 class PahtDetailArgument {
+  final QuotationDetailModel quotationDetailModel;
   final PahtModel poiDetail;
   final String id;
   final String title;
   String productCode;
-  PahtDetailArgument({this.id, this.title, this.poiDetail,this.productCode});
+  PahtDetailArgument({this.id, this.title, this.poiDetail,this.productCode,this.quotationDetailModel});
 }
 
 class ListViewPahtsWidget extends StatefulWidget {
@@ -158,8 +160,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
 
                                 Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
                                         arguments: UpdatePahtArgument(
-                                            content: widget.pahts[index].cusName,
-                                            address: widget.pahts[index].cusAddress
+                                          pahtModel: widget.pahts[index]
                                         ))
                                     .then((value) {
                                   if (value != null) {

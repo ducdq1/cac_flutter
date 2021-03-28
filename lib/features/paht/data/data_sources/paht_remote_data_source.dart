@@ -9,6 +9,7 @@ import 'package:citizen_app/features/common/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/comment_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
@@ -35,6 +36,8 @@ abstract class PahtRemoteDataSource {
   Future<List<CommentModel>> fetchComments({String pahtId});
 
   Future<bool> createIssuePaht(QuotationParams issueParams);
+
+  Future<List<QuotationDetailModel>> getListQuotationDetail(int id);
 
   Future<bool> updatePaht(UpdatedParams updatedParams);
 
@@ -234,7 +237,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
     try {
       final response = await networkRequest.postRequest(
           url:
-              '$vtmaps_baseUrl/place/v1/places/delete-contribution?placeUpdateId=$id');
+              '$baseUrl_api/quotation/delete/$id');
       var data = json.decode(response.body);
       if (response.statusCode == 200) {
         Fluttertoast.showToast(
@@ -332,6 +335,41 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       }
     } catch (error) {
       return handleException(error);
+    }
+  }
+
+  @override
+  Future<List<QuotationDetailModel>> getListQuotationDetail(int id) async {
+    try {
+      String url = '$baseUrl_api/quotation/$id';
+      final response = await networkRequest.postRequest(
+          url: '$baseUrl_api/quotation/$id');
+      print('--> success');
+      var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      print(responseJson);
+      if (response.statusCode == 200) {
+        // ResponseDataSuccessModel responseDataSuccess =
+        //     ResponseDataSuccessModel.fromJson(data);
+        if (responseJson['statusCode'] == 1001 &&
+            responseJson['message'] == "UNAUTHORIZED") {
+          throw Exception(responseJson['message']);
+        } else {
+          final data = responseJson['listData'];
+          if (data != null) {
+            List<QuotationDetailModel> result = data.map<QuotationDetailModel>((paht) {
+              return QuotationDetailModel.fromJson(paht);
+            }).toList();
+            return result;
+          }
+          List<QuotationDetailModel> result = [];
+          return result;
+        }
+      } else {
+        throw Exception(responseJson['message']);
+      }
+    } catch (error) {
+      // return handleException(error);
+      throw error;
     }
   }
 }

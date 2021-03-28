@@ -1,4 +1,5 @@
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/comment_entity.dart';
 import 'package:citizen_app/features/paht/domain/entities/entities.dart';
@@ -22,7 +23,7 @@ abstract class PahtRepository {
   Future<List<CommentEntity>> getCommentsDetailedPaht({String pahtId});
 
   Future<bool> createIssuePaht(QuotationParams issueParams);
-
+  Future<List<QuotationDetailModel>> getListQuotationDetail(int id);
   Future<bool> updatePaht(UpdatedParams updatedParams);
 
   Future<bool> deletePaht({String id});

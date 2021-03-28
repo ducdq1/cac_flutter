@@ -9,12 +9,22 @@ abstract class CreateIssueState extends Equatable {
 
 class CreateIssueInitial extends CreateIssueState {}
 
-class CreateIssueLoading extends CreateIssueState {}
+class CreateIssueLoading extends CreateIssueState {
+
+}
 
 class CreateIssueFailure extends CreateIssueState {
   final dynamic error;
 
   CreateIssueFailure({@required this.error});
+}
+class GetListQuotationDetailSuccess extends CreateIssueState {
+  final List<QuotationDetailModel> listQuotationDetailModel;
+  GetListQuotationDetailSuccess({this.listQuotationDetailModel});
+}
+
+class GetListQuotationDetailLoading extends CreateIssueState {
+  GetListQuotationDetailLoading();
 }
 
 class CreateIssueSuccess extends CreateIssueState {}

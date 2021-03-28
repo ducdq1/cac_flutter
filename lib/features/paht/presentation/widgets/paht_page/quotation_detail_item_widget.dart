@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/app_localizations.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
@@ -79,7 +80,16 @@ class QuotationDetailItemWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.amber.shade100,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
               ),
+
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,10 +190,18 @@ class QuotationDetailItemWidget extends StatelessWidget {
                     ),
                   ),
                   quotationDetailModel.image == null ? SizedBox() :
-                  SvgPicture.asset(
-                    SVG_ASSETS_PATH + 'icon_time.svg',
-                    width: 32,
-                    height: 32,
+                  Container(
+                    height: 60,
+                    width: 60,
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: '$baseUrl' + quotationDetailModel.image.path + quotationDetailModel.image.name,
+                      placeholder: (context, url) =>
+                      new CircularProgressIndicator(strokeWidth: 2.0),
+                      height: 15,
+                      width: 15,
+                      errorWidget: (context, url, error) => new Icon(Icons.error),
+                    ),
                   )
                 ],
               ),

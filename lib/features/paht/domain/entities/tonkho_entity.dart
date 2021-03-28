@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 
 class TonKhoEntity extends Equatable {
   String sError;
-  int so_luong;
+  double so_luong;
   String dvt;
   String ten_vt;
 

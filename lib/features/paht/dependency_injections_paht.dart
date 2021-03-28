@@ -2,6 +2,7 @@ import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
 import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
 import 'package:citizen_app/features/paht/domain/usecases/get_comments.dart';
+import 'package:citizen_app/features/paht/domain/usecases/get_list_quotation_detail.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/detailed_paht_bloc/detailed_paht_bloc.dart';
@@ -23,6 +24,7 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
   singleton.registerLazySingleton(() => GetDetailedPaht(singleton()));
   singleton.registerLazySingleton(() => GetComments(singleton()));
   singleton.registerLazySingleton(() => CreateIssuePaht(singleton()));
+  singleton.registerLazySingleton(() => GetQuotationDetail(singleton()));
   singleton.registerLazySingleton(() => DeletePaht(singleton()));
   singleton.registerLazySingleton(() => UpdatePaht(singleton()));
   singleton.registerLazySingleton(() => CreateComment(singleton()));
@@ -48,7 +50,7 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
   singleton.registerFactory(
       () => CategoryPahtBloc(getListCategoriesPaht: singleton()));
   singleton.registerFactory(() =>
-      CreateIssueBloc(createIssuePaht: singleton(), updatePaht: singleton()));
+      CreateIssueBloc(createIssuePaht: singleton(), updatePaht: singleton(), getQuotationDetailPaht: singleton()));
   singleton.registerFactory(() => StatusPahtBloc(
       getListStatusPersonal: singleton(), getListStatusPublic: singleton()));
 

@@ -13,7 +13,8 @@ class QuotationDetailModel extends QuotationDetailEntity {
       String productCode,
       int price,
       int value,
-        double  amount,
+      double  amount,
+      String unit,
       int attachId,
       ImageModel image,
       String note})
@@ -28,6 +29,7 @@ class QuotationDetailModel extends QuotationDetailEntity {
             attachId: attachId,
             image: image,
             note: note,
+            unit: unit,
             productName: productName);
 
   factory QuotationDetailModel.fromJson(Map json) {
@@ -42,6 +44,7 @@ class QuotationDetailModel extends QuotationDetailEntity {
         value: json['value'],
         amount: json['amount'],
         attachId: json['attachId'],
+        unit: json['unit'],
         note: json['note'],
         image:
             json['image'] == null ? null : ImageModel.fromJson(json['image']));
@@ -54,7 +57,8 @@ class QuotationDetailModel extends QuotationDetailEntity {
       "attachId" : attachId,
       "note" : note,
       "productName" :productName,
-      "productCode" : productCode
+      "productCode" : productCode,
+      "unit": unit ,
     };
   }
 

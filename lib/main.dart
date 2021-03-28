@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
           return supportedLocales.first;
         },
         navigatorKey: navKey,
-        title: 'Thu thập địa điểm',
+        title: 'C.A.C Báo giá',
         initialRoute:
             (token != null && !token.isEmpty) ? ROUTER_HOME :  ROUTER_SIGNIN,
         routes: {

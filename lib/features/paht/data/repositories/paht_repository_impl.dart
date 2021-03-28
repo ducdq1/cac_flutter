@@ -2,6 +2,7 @@ import 'package:citizen_app/core/network/network_info.dart';
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/comment_entity.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
@@ -48,28 +49,7 @@ class PahtRepositoryImpl implements PahtRepository {
   Future<List<PahtModel>> _getListPaht(
     _PublicOrPersonalChooser getPublicOrPersonal,
   ) async {
-    // if (await networkInfo.isConnected) {
-    //   print('network is connect');
-    //   try {
-    //     final remotePaht = await getPublicOrPersonal();
-    //     localDataSource.cachePaht(remotePaht);
-    //     return remotePaht;
-    //   } catch (error) {
-    //     print('network ');
 
-    //     throw Exception(error.message);
-    //   }
-    // } else {
-    //   print('network is not connect');
-    //   try {
-    //     final localPaht = await localDataSource.getLastPaht();
-    //     return localPaht;
-    //   } catch (error) {
-    //     print('network 2');
-
-    //     throw Exception(error.message);
-    //   }
-    // }
 
     try {
       final remotePaht = await getPublicOrPersonal();
@@ -174,29 +154,7 @@ class PahtRepositoryImpl implements PahtRepository {
       throw error;
     }
 
-    // if (await networkInfo.isConnected) {
-    //   print('network is connect');
-    //   try {
-    //     final remoteCategoriesPaht =
-    //         await remoteDataSource.getListCategoriesPaht();
-    //     localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
-    //     return remoteCategoriesPaht;
-    //   } catch (error) {
-    //     print('network ');
 
-    //     throw Exception(error.message);
-    //   }
-    // } else {
-    //   print('network is not connect');
-    //   try {
-    //     final localPaht = await localDataSource.getLastCategoriesPaht();
-    //     return localPaht;
-    //   } catch (error) {
-    //     print('network 2');
-
-    //     throw Exception(error.message);
-    //   }
-    // }
   }
 
   @override
@@ -239,5 +197,17 @@ class PahtRepositoryImpl implements PahtRepository {
     } catch (error) {
       throw Exception(error);
     }
+  }
+
+  @override
+  Future<List<QuotationDetailModel>> getListQuotationDetail(int id)async{
+    try {
+      final remoteCreateIssuePaht =
+          await remoteDataSource.getListQuotationDetail(id);
+      return remoteCreateIssuePaht;
+    } catch (error) {
+      throw error;
+    }
+
   }
 }

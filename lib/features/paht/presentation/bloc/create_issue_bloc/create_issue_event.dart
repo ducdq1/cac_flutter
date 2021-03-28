@@ -7,6 +7,15 @@ abstract class CreateIssueEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetListQuotationDetailEvent extends CreateIssueEvent {
+  final int id;
+  GetListQuotationDetailEvent(
+      {this.id  });
+  @override
+  String toString() =>
+      'GetListQuotationDetailEvent:  $id';
+}
+
 class CreateIssueButtonPresseEvent extends CreateIssueEvent {
   final IssueParams params;
   final int type;

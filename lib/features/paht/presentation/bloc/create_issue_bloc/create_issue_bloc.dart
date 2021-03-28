@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
+import 'package:citizen_app/features/paht/domain/usecases/get_list_quotation_detail.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,8 +13,9 @@ part 'create_issue_state.dart';
 
 class CreateIssueBloc extends Bloc<CreateIssueEvent, CreateIssueState> {
   final CreateIssuePaht createIssuePaht;
+  final GetQuotationDetail getQuotationDetailPaht;
   final UpdatePaht updatePaht;
-  CreateIssueBloc({@required this.createIssuePaht, @required this.updatePaht})
+  CreateIssueBloc({@required this.createIssuePaht, @required this.updatePaht,@required this.getQuotationDetailPaht})
       : super(CreateIssueInitial());
 
   @override
@@ -25,17 +27,18 @@ class CreateIssueBloc extends Bloc<CreateIssueEvent, CreateIssueState> {
       try {
         // if (event.type == 0) {
           await createIssuePaht(event.quotationParams);
-        // } else {
-        //   await updatePaht(UpdatedParams(
-        //       address: event.address,
-        //       description: event.description,
-        //       files: event.files,
-        //       location: event.location,
-        //       userId: event.userId,
-        //       id: event.pahtId));
-        // }
 
         yield CreateIssueSuccess();
+      } catch (error) {
+        yield CreateIssueFailure(error: error);
+      }
+    }
+
+    if(event is GetListQuotationDetailEvent){
+      try {
+        yield GetListQuotationDetailLoading();
+        List<QuotationDetailModel>  listQuotationDetailModel=   await getQuotationDetailPaht(event.id);
+        yield GetListQuotationDetailSuccess(listQuotationDetailModel :listQuotationDetailModel);
       } catch (error) {
         yield CreateIssueFailure(error: error);
       }
