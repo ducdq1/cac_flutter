@@ -15,18 +15,19 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_pdfview (1.0.2):
+    - Flutter
   - flutter_webview_plugin (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - image_gallery_saver (1.5.0):
     - Flutter
   - image_picker (0.0.1):
-    - Flutter
-  - local_auth (0.0.1):
-    - Flutter
-  - location (0.0.1):
     - Flutter
   - multi_image_picker (4.7.15):
     - BSImagePicker (~> 2.10.3)
@@ -39,7 +40,6 @@ PODS:
     - Flutter
   - platform_device_id (0.0.1):
     - Flutter
-  - Polyline (4.2.1)
   - share (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
@@ -48,42 +48,16 @@ PODS:
     - Flutter
   - sms_autofill (0.0.1):
     - Flutter
-  - Solar (2.1.0)
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
   - thumbnails (0.0.1):
     - Flutter
   - Toast (4.0.0)
-  - Turf (0.3.0)
   - url_launcher (0.0.1):
     - Flutter
   - video_player (0.0.1):
     - Flutter
-  - ViettelMapAnnotationExtension (0.0.1):
-    - ViettelMapSDK (~> 1.0.1)
-  - ViettelMapCoreNavigation (0.0.1):
-    - Turf (~> 0.3.0)
-    - ViettelMapDirections (~> 1.0.1)
-    - ViettelMapMobileEvents
-    - ViettelMapNavigationNative (~> 6.2.1)
-  - ViettelMapDirections (1.0.1):
-    - Polyline (~> 4.2)
-  - ViettelMapGeocoder (1.0.17):
-    - ViettelMapSDK (~> 1.0.1)
-  - ViettelMapMobileEvents (0.0.1)
-  - ViettelMapNavigation (0.0.1):
-    - Solar (~> 2.1)
-    - ViettelMapCoreNavigation (= 0.0.1)
-    - ViettelMapSDK (~> 1.0.1)
-    - ViettelMapSpeechSwift (~> 0.1.0)
-  - ViettelMapNavigationNative (6.2.1)
-  - ViettelMapSDK (1.0.1)
-  - ViettelMapSpeechSwift (0.1.0)
-  - vtmap_gl (0.0.1):
-    - Flutter
-    - ViettelMapAnnotationExtension
-    - ViettelMapDirections (~> 1.0.1)
-    - ViettelMapGeocoder (~> 1.0.17)
-    - ViettelMapNavigation
-    - ViettelMapSDK (~> 1.0.1)
   - wakelock (0.0.1):
     - Flutter
   - webview_flutter (0.0.1):
@@ -96,12 +70,11 @@ DEPENDENCIES:
   - flutter_absolute_path (from `.symlinks/plugins/flutter_absolute_path/ios`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
-  - local_auth (from `.symlinks/plugins/local_auth/ios`)
-  - location (from `.symlinks/plugins/location/ios`)
   - multi_image_picker (from `.symlinks/plugins/multi_image_picker/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -111,10 +84,10 @@ DEPENDENCIES:
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sms (from `.symlinks/plugins/sms/ios`)
   - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - thumbnails (from `.symlinks/plugins/thumbnails/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
-  - vtmap_gl (from `.symlinks/plugins/vtmap_gl/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
@@ -123,20 +96,8 @@ SPEC REPOS:
     - BSGridCollectionViewLayout
     - BSImagePicker
     - BSImageView
-    - Polyline
-    - Solar
+    - FMDB
     - Toast
-    - Turf
-  https://github.com/vtmaps/pod_control.git:
-    - ViettelMapAnnotationExtension
-    - ViettelMapCoreNavigation
-    - ViettelMapDirections
-    - ViettelMapGeocoder
-    - ViettelMapMobileEvents
-    - ViettelMapNavigation
-    - ViettelMapNavigationNative
-    - ViettelMapSDK
-    - ViettelMapSpeechSwift
 
 EXTERNAL SOURCES:
   device_info:
@@ -151,6 +112,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_downloader/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_pdfview:
+    :path: ".symlinks/plugins/flutter_pdfview/ios"
   flutter_webview_plugin:
     :path: ".symlinks/plugins/flutter_webview_plugin/ios"
   fluttertoast:
@@ -159,10 +122,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
-  local_auth:
-    :path: ".symlinks/plugins/local_auth/ios"
-  location:
-    :path: ".symlinks/plugins/location/ios"
   multi_image_picker:
     :path: ".symlinks/plugins/multi_image_picker/ios"
   package_info:
@@ -181,14 +140,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sms/ios"
   sms_autofill:
     :path: ".symlinks/plugins/sms_autofill/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
   thumbnails:
     :path: ".symlinks/plugins/thumbnails/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
   video_player:
     :path: ".symlinks/plugins/video_player/ios"
-  vtmap_gl:
-    :path: ".symlinks/plugins/vtmap_gl/ios"
   wakelock:
     :path: ".symlinks/plugins/wakelock/ios"
   webview_flutter:
@@ -204,38 +163,26 @@ SPEC CHECKSUMS:
   flutter_absolute_path: 5adb13678c88f0bdfba527f3851f9543d01dde66
   flutter_downloader: 058b9c41564a90500f67f3e432e3524613a7fd83
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
-  local_auth: 25938960984c3a7f6e3253e3f8d962fdd16852bd
-  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   multi_image_picker: 58577ab96d99b35c82d626db7d81906d14c2b667
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: 8278954f2382902f63f00dd8828769c0bd6d511b
   platform_device_id: 81b3e2993881f87d0c82ef151dc274df4869aef5
-  Polyline: 0e9890790292741c8186201a536b6bb6a78d02dd
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sms: 1e6c3082da09f2a4961d61bc254cc86865993ffd
   sms_autofill: c461043483362c3f1709ee76eaae6eb570b31686
-  Solar: 2dc6e7cc39186cb0c8228fa08df76fb50c7d8f24
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   thumbnails: bb4f4e9bb4b51c8ae4e6ad9a2fa81373f9b634ad
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  Turf: c6bdf62d6a70c647874f295dd1cf4eefc0c3e9e6
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
-  ViettelMapAnnotationExtension: c880a0848fd6137ea8fb13213d41f2b731fc62df
-  ViettelMapCoreNavigation: 15f66a6bf4e69b648616d5a53c7e06b56e5ea3ca
-  ViettelMapDirections: a51c4aff74abb0917464d1784f4aae61e4a257cc
-  ViettelMapGeocoder: 4f9c3443dcc771ef55c56ebc4e573a8e07c0017e
-  ViettelMapMobileEvents: dd95a00320bf287cf1b11bc2c4e22b5977e61d9f
-  ViettelMapNavigation: 00f8025f6f0fc1809b0e6a26582d400099085d03
-  ViettelMapNavigationNative: 2c2262a459d08d0f0ae7f299e5590509a9096c55
-  ViettelMapSDK: bfac70143b090d5aea797a700593392460618ab7
-  ViettelMapSpeechSwift: 21f6cac0203f6c508152cfa2e635a405bde2cc6c
-  vtmap_gl: b1146da10c79e335383631d57ab9cfd82726545a
   wakelock: bfc7955c418d0db797614075aabbc58a39ab5107
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
