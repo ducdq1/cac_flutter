@@ -47,7 +47,7 @@ class PahtCreateIssue extends StatefulWidget {
 }
 
 class _PahtCreateIssueState extends State<PahtCreateIssue>
-    implements OnButtonClickListener {
+    with SingleTickerProviderStateMixin implements OnButtonClickListener {
   static const platform = const MethodChannel('citizens.app/media_picker_ios');
 
   List<int> listMediaDeleted = [];
@@ -76,6 +76,10 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   List<QuotationDetailModel> listQuotationDetailModel = [];
   final prefs = singleton<SharedPreferences>();
   int imageIdSelected;
+
+  AnimationController _controller;
+  Animation<double> _animation;
+
 
   bool _isKhachHangLe = true;
   bool _isUpdateAble = true;
@@ -114,6 +118,18 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
   @override
   void initState() {
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 700),
+      vsync: this,
+    );
+    final Animation curve = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    );
+    _animation = Tween(begin: 0.0, end: 29.0).animate(curve);
+    _controller.repeat(reverse: true);
+
+
     _formKey = GlobalKey<FormState>();
     _addressController = TextEditingController();
     _poiNameController = TextEditingController();
@@ -145,10 +161,35 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 80),
           child: !_isUpdateAble ? SizedBox() : FloatingActionButton(
-            child: Image.asset(
-              'assets/icons/icon_scan_qr_white.png',
-              height: 29,
-              width: 29,
+            // child: Image.asset(
+            //   'assets/icons/icon_scan_qr_white.png',
+            //   height: 29,
+            //   width: 29,
+            // ),
+            child:   Stack(
+              children: [
+                Image.asset(
+                'assets/icons/icon_scan_qr_white.png',
+                  width: 29,
+                  height: 29,
+                  filterQuality: FilterQuality.high,
+                  fit: BoxFit.scaleDown,
+                ),
+                AnimatedBuilder(
+                  animation: _animation,
+                  child: Container(
+                    color: Colors.amber,
+                    height: 1,
+                    width: 29,
+                  ),
+                  builder: (_, widget) {
+                    return Transform.translate(
+                      offset: Offset(0.0, _animation.value),
+                      child: widget,
+                    );
+                  },
+                )
+              ],
             ),
             // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
             backgroundColor: PRIMARY_COLOR,
@@ -645,7 +686,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                           // You can play with the width to adjust your
                           // desired spacing
                           SizedBox(width: 10.0),
-                          Text('Khách hàng lẽ')
+                          Expanded(child: Text('Khách hàng lẽ'))
                         ])),
               ),
             ),
@@ -674,7 +715,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                           // You can play with the width to adjust your
                           // desired spacing
                           SizedBox(width: 10.0),
-                          Text('Công trình')
+                    Expanded(child: Text('Công trình'))
                         ])),
               ),
             ),

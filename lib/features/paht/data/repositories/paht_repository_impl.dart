@@ -130,7 +130,7 @@ class PahtRepositoryImpl implements PahtRepository {
       // localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
       return remoteCategoriesPaht;
     } catch (error) {
-      throw Exception(error);
+      throw error;
     }
   }
 

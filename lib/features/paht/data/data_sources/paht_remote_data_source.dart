@@ -228,7 +228,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
         throw Exception(data['message']);
       }
     } catch (error) {
-      return handleException(error);
+      throw error;
     }
   }
 

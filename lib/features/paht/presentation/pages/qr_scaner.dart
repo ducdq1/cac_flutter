@@ -71,7 +71,7 @@ class _QRSCanerState extends State<QRSCaner> {
         if (hasVibrator) {
           Vibration.vibrate();
         }
-        Navigator.pop(context,result);
+        Navigator.of(context).pop(result);
     });
   }
 
