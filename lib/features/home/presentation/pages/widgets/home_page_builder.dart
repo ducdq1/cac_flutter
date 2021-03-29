@@ -65,18 +65,15 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                           var permissionStatus = await _permissionHandler
                               .checkPermissionStatus(PermissionGroup.camera);
 
-                          switch (permissionStatus) {
+                          switch (permissionStatus)  {
                             case PermissionStatus.granted:
-                              Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
-                                  .then((value) => {
-                                        if (value != null)
-                                          {
-                                            Navigator.pushNamed(
-                                                context, ROUTER_DETAILED_PAHT,
-                                                arguments: PahtDetailArgument(
-                                                    productCode: value))
-                                          }
-                                      });
+                              var value = await Navigator.of(context).pushNamed( ROUTER_QRCODE_SCANER);
+                              if (value != null){
+                                Navigator.pushNamed(
+                                    context, ROUTER_DETAILED_PAHT,
+                                    arguments: PahtDetailArgument(
+                                        productCode: value));
+                              }
 
                               break;
                             case PermissionStatus.denied:
@@ -90,16 +87,13 @@ class _HomePageBuilderState extends State<HomePageBuilder>
 
                                   switch (permissionStatus) {
                                     case PermissionStatus.granted:
-                                      Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
-                                          .then((value) => {
-                                        if (value != null)
-                                          {
-                                            Navigator.pushNamed(
-                                                context, ROUTER_DETAILED_PAHT,
-                                                arguments: PahtDetailArgument(
-                                                    productCode: value))
-                                          }
-                                      });
+                                      var value = await Navigator.of(context).pushNamed( ROUTER_QRCODE_SCANER);
+                                      if (value != null){
+                                        Navigator.pushNamed(
+                                            context, ROUTER_DETAILED_PAHT,
+                                            arguments: PahtDetailArgument(
+                                                productCode: value));
+                                      }
                                   }
                               break;
 

@@ -67,16 +67,6 @@ class _WebViewPageState extends State<WebViewPage> {
         title: widget.title.titleCase,
         body: Stack(
           children: [
-            // WebView(
-            //   initialUrl: widget.link,
-            //   //initialUrl: 'https://www.youtube.com/',
-            //   javascriptMode: JavascriptMode.unrestricted,
-            //   onPageFinished: (finish) {
-            //     setState(() {
-            //       isLoading = false;
-            //     });
-            //   },
-            // ),
             isLoading
                 ? LinearProgressIndicator(
                     backgroundColor: Colors.grey[300],
@@ -85,12 +75,12 @@ class _WebViewPageState extends State<WebViewPage> {
                         new AlwaysStoppedAnimation<Color>(PRIMARY_COLOR),
                   )
                 : SizedBox(),
-
-            PDF().cachedFromUrl(
-              widget.link,
-              placeholder: (progress) => Center(child: Text('$progress %')),
-              errorWidget: (error) => Center(child: Text(error.toString())),
-            )
+            PDF().cachedFromUrl(widget.link,
+                placeholder: (progress) => Center(child: Text('$progress %')),
+                errorWidget: (error) => Center(child: Text(error.toString())),
+                whenDone: (value) => {
+                      if (value != null) {Fluttertoast.showToast(msg: value)}
+                    })
           ],
         ),
       ),
