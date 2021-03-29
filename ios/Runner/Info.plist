@@ -73,5 +73,7 @@
 	<false/>
 	<key>VTMapAccessToken</key>
 	<string>6ht5fdbc-1996-4f54-87gf-5664f304f3d2</string>
+	<key>io.flutter.embedded_views_preview</key>
+    <true/>
 </dict>
 </plist>

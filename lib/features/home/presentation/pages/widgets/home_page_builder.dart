@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 
 class HomePageBuilder extends StatefulWidget {
   final ScrollController scrollController;
@@ -68,49 +67,42 @@ class _HomePageBuilderState extends State<HomePageBuilder>
 
                           switch (permissionStatus) {
                             case PermissionStatus.granted:
-                              String cameraScanResult  = await scanner.scan();
-                              //'G0349811';
-                              print(cameraScanResult);
-                              if (cameraScanResult != null &&
-                                  cameraScanResult.isNotEmpty) {
-                                Navigator.pushNamed(
-                                    context, ROUTER_DETAILED_PAHT,
-                                    arguments: PahtDetailArgument(
-                                        productCode: cameraScanResult));
-                              }
+                              Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
+                                  .then((value) => {
+                                        if (value != null)
+                                          {
+                                            Navigator.pushNamed(
+                                                context, ROUTER_DETAILED_PAHT,
+                                                arguments: PahtDetailArgument(
+                                                    productCode: value))
+                                          }
+                                      });
 
                               break;
                             case PermissionStatus.denied:
-                              await _permissionHandler
-                                  .requestPermissions([PermissionGroup.camera]);
-                              var permissionStatus = await _permissionHandler
-                                  .checkPermissionStatus(
-                                      PermissionGroup.camera);
-
-                              switch (permissionStatus) {
-                                case PermissionStatus.granted:
-
-                                  String cameraScanResult = await scanner.scan();
-                                     // 'TB002.K025C';
-                                  // await scanner.scan();
-
-                                  print(cameraScanResult);
-                                  if (cameraScanResult != null &&
-                                      cameraScanResult.isNotEmpty) {
-                                    Navigator.pushNamed(
-                                        context, ROUTER_DETAILED_PAHT,
-                                        arguments: PahtDetailArgument(
-                                            productCode: cameraScanResult));
-                                  }
-                              }
-                              break;
                             case PermissionStatus.restricted:
-                              await _permissionHandler
-                                  .requestPermissions([PermissionGroup.camera]);
-                              break;
                             case PermissionStatus.unknown:
-                              // do something
+                                  await _permissionHandler
+                                      .requestPermissions([PermissionGroup.camera]);
+                                  var permissionStatus = await _permissionHandler
+                                      .checkPermissionStatus(
+                                          PermissionGroup.camera);
+
+                                  switch (permissionStatus) {
+                                    case PermissionStatus.granted:
+                                      Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
+                                          .then((value) => {
+                                        if (value != null)
+                                          {
+                                            Navigator.pushNamed(
+                                                context, ROUTER_DETAILED_PAHT,
+                                                arguments: PahtDetailArgument(
+                                                    productCode: value))
+                                          }
+                                      });
+                                  }
                               break;
+
                             default:
                           }
                         },
@@ -120,8 +112,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                         icon: '/icons/icon_bao_gia.png',
                         needRedirect: '',
                         onPress: () {
-                          Navigator.pushNamed(
-                              context, ROUTER_PAHT);
+                          Navigator.pushNamed(context, ROUTER_PAHT);
                         },
                       )
                     ],

@@ -22,6 +22,7 @@ import 'package:citizen_app/features/paht/presentation/pages/business_hour_page.
 import 'package:citizen_app/features/paht/presentation/pages/choose_product_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
+import 'package:citizen_app/features/paht/presentation/pages/qr_scaner.dart';
 import 'package:citizen_app/features/profile/presentation/bloc/update_profile_bloc.dart';
 import 'package:citizen_app/features/profile/presentation/pages/change_password_page.dart';
 import 'package:citizen_app/features/profile/presentation/pages/profile_page.dart';
@@ -51,8 +52,8 @@ void main() async {
   final pref = singleton<SharedPreferences>();
   WidgetsFlutterBinding.ensureInitialized();
   //if(pref.get('token') == null || pref.get('token').toString().isEmpty || pref.get("useProxy") == true) {
-  //   HttpProxy httpProxy = await HttpProxy.createHttpProxy("10.61.11.42", "3128");
-  //   HttpOverrides.global = httpProxy;
+    HttpProxy httpProxy = await HttpProxy.createHttpProxy("10.61.11.42", "3128");
+    HttpOverrides.global = httpProxy;
   //   pref.setBool("useProxy", true);
 //  }
   runApp(MyApp());
@@ -179,6 +180,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_CHANGE_PASSWORD_PAGE: (context) => ChangePasswordPage(),
           ROUTER_INFO_PAGE: (context) => ViewInfoPage(),
           ROUTER_BUSINESS_HOUR_PAGE: (context) => BusinessHourPage(),
+          ROUTER_QRCODE_SCANER: (context) => QRSCaner(),
         },
         debugShowCheckedModeBanner: false,
       ),

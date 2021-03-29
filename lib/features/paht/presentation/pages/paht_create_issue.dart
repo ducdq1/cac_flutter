@@ -32,7 +32,6 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 import '../../../../injection_container.dart';
 import 'package:citizen_app/features/home/presentation/pages/web_view_page.dart';
 
@@ -164,74 +163,30 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
               switch (permissionStatus) {
                 case PermissionStatus.granted:
-                  String cameraScanResult = await scanner.scan();
-                  //'G0349811';
-                  print(cameraScanResult);
-                  if (cameraScanResult != null && cameraScanResult.isNotEmpty) {
-                    Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
-                            arguments: PahtDetailArgument(
-                                productCode: cameraScanResult))
-                        .then((value) => {
-                              if (value != null)
-                                {
-                                  setState(() {
-                                    if (value is QuotationDetailModel) {
-                                      QuotationDetailModel exist;
-                                      int indexExist= -1;
-                                      for (int i = 0;
-                                          i < listQuotationDetailModel.length;
-                                          i++) {
-                                        if (listQuotationDetailModel[i]
-                                                .productId ==
-                                            value.productId) {
-                                          exist = value;
-                                          indexExist =i;
-                                        }
-                                      }
-
-                                      if (exist == null) {
-                                        listQuotationDetailModel.add(value);
-                                      } else {
-                                        listQuotationDetailModel[indexExist]= (value);
-                                      }
-                                    }
-                                  })
-                                }
-                            });
-                  }
+                  Navigator.pushNamed(context,ROUTER_QRCODE_SCANER )
+                      .then((value) => {
+                        if(value !=null){
+                          gotoDetailProductPage(value)
+                        }
+                  });
 
                   break;
                 case PermissionStatus.denied:
+                case PermissionStatus.restricted:
+                case PermissionStatus.unknown:
                   await _permissionHandler
                       .requestPermissions([PermissionGroup.camera]);
                   var permissionStatus = await _permissionHandler
                       .checkPermissionStatus(PermissionGroup.camera);
-
-                  switch (permissionStatus) {
-                    case PermissionStatus.granted:
-                      String cameraScanResult = await scanner.scan();
-                      // 'TB002.K025C';
-
-                      print(cameraScanResult);
-                      if (cameraScanResult != null &&
-                          cameraScanResult.isNotEmpty) {
-                        Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
-                                arguments: PahtDetailArgument(
-                                    productCode: cameraScanResult))
-                            .then((value) => {
-                                  setState(() {
-                                    listQuotationDetailModel.add(value);
-                                  })
-                                });
+                      switch (permissionStatus) {
+                        case PermissionStatus.granted:
+                          Navigator.pushNamed(context,ROUTER_QRCODE_SCANER )
+                              .then((value) => {
+                            if(value !=null){
+                              gotoDetailProductPage(value)
+                            }
+                          });
                       }
-                  }
-                  break;
-                case PermissionStatus.restricted:
-                  await _permissionHandler
-                      .requestPermissions([PermissionGroup.camera]);
-                  break;
-                case PermissionStatus.unknown:
-                  // do something
                   break;
                 default:
               }
@@ -640,7 +595,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
       padding: const EdgeInsets.all(20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [           
+        children: [
           Expanded(
             child: Container(
               width: 142,
@@ -792,6 +747,39 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
   void clearFocus() {
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  void gotoDetailProductPage(String cameraScanResult){
+    Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
+        arguments: PahtDetailArgument(
+            productCode: cameraScanResult))
+        .then((value) => {
+      if (value != null)
+        {
+          setState(() {
+            if (value is QuotationDetailModel) {
+              QuotationDetailModel exist;
+              int indexExist= -1;
+              for (int i = 0;
+              i < listQuotationDetailModel.length;
+              i++) {
+                if (listQuotationDetailModel[i]
+                    .productId ==
+                    value.productId) {
+                  exist = value;
+                  indexExist =i;
+                }
+              }
+
+              if (exist == null) {
+                listQuotationDetailModel.add(value);
+              } else {
+                listQuotationDetailModel[indexExist]= (value);
+              }
+            }
+          })
+        }
+    });
   }
 }
 
