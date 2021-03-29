@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
-                          imageUrl: avartarPath + '2',
+                          imageUrl: avartarPath,
                           placeholder: (context, url) =>
                               new CircularProgressIndicator(strokeWidth: 2.0),
                           height: 15,

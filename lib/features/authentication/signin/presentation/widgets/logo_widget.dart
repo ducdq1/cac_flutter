@@ -13,9 +13,9 @@ class LogoWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
-              IMAGE_ASSETS_PATH + 'icon_menu_bds.png',
-                  width: 80,
-                  height: 90,
+              IMAGE_ASSETS_PATH + 'cac_logo.png',
+                  width: 100,
+                  height: 100,
           )
         ],
       ),

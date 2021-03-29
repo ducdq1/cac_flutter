@@ -74,8 +74,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       }
 
       try {
-        if (currentState is PublicPahtFailure ||
-            currentState is PublicPahtInitial &&
+        if (currentState is PublicPahtFailure || currentState is DeletePersonalPahtFailure ||
+        currentState is PublicPahtInitial &&
                 !_hasReachedMax(currentState)) {
           print('delay.....');
           await Future.delayed(Duration(milliseconds: 500));

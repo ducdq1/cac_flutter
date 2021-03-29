@@ -4,29 +4,31 @@ import 'package:citizen_app/features/paht/domain/entities/paht_entity.dart';
 import 'package:citizen_app/features/paht/data/models/from_category_model.dart';
 
 class PahtModel extends PahtEntity {
-  PahtModel(
-      {int quotationID,
-      String quotationNumber,
-      String cusName,
-      String cusAddress,
-      String cusPhone,
-      String createUserCode,
-      int type,
-      int status,
-      int totalPrice,
-      String modifyDate,String createUserFullName})
+  PahtModel({int quotationID,
+    String quotationNumber,
+    String cusName,
+    String cusAddress,
+    String cusPhone,
+    String createUserCode,
+    int type,
+    int status,
+    int totalPrice,
+    String modifyDate,
+    String createUserFullName,
+    String fileName,})
       : super(
-            quotationID: quotationID,
-            quotationNumber: quotationNumber,
-            cusName: cusName,
-            cusAddress: cusAddress,
-            cusPhone: cusPhone,
-            createUserCode: createUserCode,
-            type: type,
-            status: status,
-            totalPrice: totalPrice,
-            modifyDate: modifyDate,
-      createUserFullName : createUserFullName);
+      quotationID: quotationID,
+      quotationNumber: quotationNumber,
+      cusName: cusName,
+      cusAddress: cusAddress,
+      cusPhone: cusPhone,
+      createUserCode: createUserCode,
+      type: type,
+      status: status,
+      totalPrice: totalPrice,
+      modifyDate: modifyDate,
+      createUserFullName: createUserFullName,
+      fileName: fileName);
 
   factory PahtModel.fromJson(Map json) {
     //MediaModel mediaJson = MediaModel.fromJson(json['mediaUrls']);
@@ -40,17 +42,19 @@ class PahtModel extends PahtEntity {
         type: json['type'],
         status: json['status'],
         totalPrice: json['totalPrice'],
-        modifyDate : json['modifyDate'],
-        createUserFullName : json['createUserFullName']);
+        modifyDate: json['modifyDate'],
+        createUserFullName: json['createUserFullName'],
+        fileName: json['fileName']);
   }
 
   Map<String, dynamic> toJson() {
-    return { "cusName":cusName,
+    return {
+      "cusName": cusName,
       "cusAddress": cusAddress,
       "cusPhone": cusPhone,
       "createUserCode": createUserCode,
       "createUserFullName": createUserFullName,
-      "type":type
+      "type": type
     };
   }
 

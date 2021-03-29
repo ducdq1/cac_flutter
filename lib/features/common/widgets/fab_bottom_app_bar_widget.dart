@@ -124,13 +124,9 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
                         item.text  ,
                       style: GoogleFonts.inter(
                           color: color,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 14 *
-                              sqrt(MediaQuery.of(context).size.height *
-                                      MediaQuery.of(context).size.height +
-                                  MediaQuery.of(context).size.width *
-                                      MediaQuery.of(context).size.width) *
-                              0.001),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14
+                             ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     )

@@ -48,6 +48,7 @@ class _PahtPublicState extends State<PahtPublic> {
   @override
   Widget build(BuildContext context) {
     return Container(
+
         child: RefreshIndicator(
             onRefresh: () async => handleRefresh(context),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
@@ -80,7 +81,7 @@ class _PahtPublicState extends State<PahtPublic> {
 
               if (state is DeletePersonalPahtFailure) {
                 BlocProvider.of<PublicPahtBloc>(context).add(
-                  ListPublicPahtFetchingEvent(),
+                  ListPublicPahtFetchingEvent(offset: 0),
                 );
               }
               return SkeletonPahtWidget();

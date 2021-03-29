@@ -12,12 +12,12 @@ class QuotationDetailEntity extends Equatable {
   String productName;
   String productCode;
   int price;
-  int value;
+  double value;
   double amount;
   int attachId;
   ImageEntity image;
   String note;
-String unit;
+  String unit;
   @override
   // TODO: implement props
   List<Object> get props => throw UnimplementedError();

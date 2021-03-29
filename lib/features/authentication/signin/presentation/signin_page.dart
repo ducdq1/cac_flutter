@@ -93,28 +93,6 @@ class _SignInPageState extends State<SignInPage> {
             toolbarHeight: 20,
             backgroundColor: Colors.white,
             elevation: 0,
-            leading: Row(
-              children: [
-                // IconButton(
-                //   icon: SvgPicture.asset(
-                //     SVG_ASSETS_PATH + 'icon_back_black.svg',
-                //     width: SIZE_ARROW_BACK_ICON,
-                //     height: SIZE_ARROW_BACK_ICON,
-                //   ),
-                //   onPressed: () {
-                //     Navigator.of(context).pop();
-                //   },
-                // )
-              ],
-            ),
-            // title: Text(
-            //   trans(TITLE_LOGIN_SCREEN),
-            //   style: GoogleFonts.inter(
-            //     fontSize: FONT_EX_HUGE,
-            //     color: PRIMARY_TEXT_COLOR,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            //),
             centerTitle: true,
           ),
           body: BlocListener<SignInBloc, SignInState>(

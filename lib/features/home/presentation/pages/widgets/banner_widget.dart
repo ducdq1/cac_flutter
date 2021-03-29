@@ -73,7 +73,7 @@ class _BannerWidgetState extends State<BannerWidget> {
 
   void _onScroll() {
     double percent =
-        1 - (widget.scrollController.offset / (((widthCustom + 16) / 3) + 100));
+        1 - (widget.scrollController.offset / (1200));
     setState(() {
       opacity = percent;
     });
@@ -108,9 +108,9 @@ class _BannerWidgetState extends State<BannerWidget> {
             return Center(
               child: Container(
                 width: widthCustom,
-                height: ((widthCustom + 16) / 3) + 10,
+                height: 120,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: PRIMARY_COLOR,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                       width: 0.3, color: Colors.black.withOpacity(0.3)),
@@ -130,7 +130,7 @@ class _BannerWidgetState extends State<BannerWidget> {
               children: [
                 CarouselSlider(
                   options: CarouselOptions(
-                      height: ((widthCustom + 16) / 3) + 10,
+                      height: 120,
                       //aspectRatio: 16 / 9,
                       viewportFraction: 1.0,
                       initialPage: 0,
@@ -165,23 +165,23 @@ class _BannerWidgetState extends State<BannerWidget> {
                       },
                       child: Container(
                         width: widthCustom,
-                        height: ((widthCustom + 16) / 3) + 10,
+                        height: 120,
                         decoration: BoxDecoration(
-                          color: Color(0xffE6EFF3),
-                          borderRadius: BorderRadius.circular(16),
+                          color: PRIMARY_COLOR,
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Stack(
                           children: [
                             Container(
                               width: widthCustom,
-                              height: ((widthCustom + 16) / 3) + 10,
+                              height: 120,
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
                                   child: Image.asset(
                                     IMAGE_ASSETS_PATH + 'banner.png',
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                     width: widthCustom,
-                                    height: ((widthCustom + 16) / 3) + 10,
+                                    height: 120,
                                   ),
                               )),
                             Positioned.fill(
@@ -193,7 +193,7 @@ class _BannerWidgetState extends State<BannerWidget> {
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       // width: widthCustom * 1.8 / 3,
-                                      //height: ((widthCustom + 16) / 3) + 10,
+                                      //height: 120,
                                       child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.start,
@@ -271,7 +271,7 @@ class _BannerWidgetState extends State<BannerWidget> {
           return Center(
               child: SkeletonWidget(
             width: widthCustom,
-            height: ((widthCustom + 16) / 3) + 10,
+            height: 120,
             radius: 16,
           ));
         }),

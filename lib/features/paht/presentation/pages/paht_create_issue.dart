@@ -34,6 +34,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import '../../../../injection_container.dart';
+import 'package:citizen_app/features/home/presentation/pages/web_view_page.dart';
 
 const SIZE_ICON = 20.0;
 const SIZE_PICKER_LOCATION_ICON = 36.0;
@@ -78,7 +79,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   int imageIdSelected;
 
   bool _isKhachHangLe = true;
-
+  bool _isUpdateAble = true;
   Map<String, dynamic> _chosenLocation = {
     'address': '',
     'latitude': null,
@@ -90,7 +91,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   initValue(args) async {
     if (args != null && args.pahtModel != null) {
       pahtModel = args.pahtModel;
-
+      _isUpdateAble = args.isUpdateAble;
       if (pahtModel.cusName != null) {
         _poiNameController.text = pahtModel.cusName;
       }
@@ -144,7 +145,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     return BaseLayoutWidget(
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 80),
-          child: FloatingActionButton(
+          child: !_isUpdateAble ? SizedBox() : FloatingActionButton(
             child: Image.asset(
               'assets/icons/icon_scan_qr_white.png',
               height: 29,
@@ -237,7 +238,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
             },
           ),
         ),
-        title: args == null ? 'Tạo báo giá' : 'Cập nhật báo giá',
+        title: args == null ? 'Tạo báo giá' :  _isUpdateAble?'Cập nhật báo giá' : 'Chi tiết báo giá',
         centerTitle: true,
         body: BlocConsumer<CreateIssueBloc, CreateIssueState>(
           listener: (_, state) {
@@ -297,6 +298,11 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                             addressField(),
                             phoneNumberField(),
                             quotationTypField(),
+                            Divider(
+                              height: 2,
+                                color: Colors.green
+                            ),
+                            SizedBox(height: 5,),
                             listProductField(),
                             state is GetListQuotationDetailLoading
                                 ? Center(child: LoadingWidget())
@@ -306,7 +312,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       ),
                     ),
                   ),
-                  Container(
+                 Container(
                       padding: EdgeInsets.only(bottom: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -320,13 +326,13 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 12,
+                            spreadRadius: 10,
                             blurRadius: 7,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
                         ],
                       ),
-                      child: createIssueAction()),
+                      child: _isUpdateAble ?   createIssueAction() : viewBaoGiaFileAction() ) ,
                 ],
               ),
             );
@@ -629,6 +635,26 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     );
   }
 
+  Widget viewBaoGiaFileAction() {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [           
+          Expanded(
+            child: Container(
+              width: 142,
+              child: PrimaryButton(
+                  label: 'Xem báo giá',
+                  ctx: this,
+                  id: 'view_pdf_btn'),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget quotationTypField() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -748,6 +774,19 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
     if (id == 'cancel_btn') {
       Navigator.pop(context);
+    }
+    if(id == 'view_pdf_btn'){
+      if(pahtModel.fileName == null || pahtModel.fileName.isEmpty){
+        Fluttertoast.showToast(
+            msg:  'Không có file báo giá để xem');
+        return;
+      }
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WebViewPage(
+                title: 'Chi tiết báo giá', link: '$baseUrl' + 'bao_gia/'+pahtModel.fileName)),
+      );
     }
   }
 

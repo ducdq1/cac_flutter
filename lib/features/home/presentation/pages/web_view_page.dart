@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 // import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:recase/recase.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 class WebViewPage extends StatefulWidget {
   WebViewPage({Key key, @required this.title, @required this.link})
@@ -51,16 +52,16 @@ class _WebViewPageState extends State<WebViewPage> {
         title: widget.title.titleCase,
         body: Stack(
           children: [
-            WebView(
-              initialUrl: widget.link,
-              //initialUrl: 'https://www.youtube.com/',
-              javascriptMode: JavascriptMode.unrestricted,
-              onPageFinished: (finish) {
-                setState(() {
-                  isLoading = false;
-                });
-              },
-            ),
+            // WebView(
+            //   initialUrl: widget.link,
+            //   //initialUrl: 'https://www.youtube.com/',
+            //   javascriptMode: JavascriptMode.unrestricted,
+            //   onPageFinished: (finish) {
+            //     setState(() {
+            //       isLoading = false;
+            //     });
+            //   },
+            // ),
             isLoading
                 ? LinearProgressIndicator(
                     backgroundColor: Colors.grey[300],
@@ -69,6 +70,11 @@ class _WebViewPageState extends State<WebViewPage> {
                         new AlwaysStoppedAnimation<Color>(PRIMARY_COLOR),
                   )
                 : SizedBox(),
+            PDF().cachedFromUrl(
+              widget.link,
+              placeholder: (progress) => Center(child: Text('$progress %')),
+              errorWidget: (error) => Center(child: Text(error.toString())),
+            )
           ],
         ),
       ),

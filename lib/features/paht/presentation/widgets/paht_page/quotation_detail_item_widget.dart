@@ -13,6 +13,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 const DESCRIPTION_COLOR = Color(0xff353739);
 
@@ -83,13 +84,12 @@ class QuotationDetailItemWidget extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
+                    spreadRadius: 1,
+                    blurRadius: 0,
+                    offset: Offset(3, 3), // changes position of shadow
                   ),
                 ],
               ),
-
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,59 +101,60 @@ class QuotationDetailItemWidget extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5.0),
-                          child: Row(
-                              children: [
-                              Text(
-                              'Sản phẩm:',
-                              style: GoogleFonts.inter(
-                                  color: DESCRIPTION_COLOR,
-                                  fontSize: FONT_SMALL,
-                                  height: 1.5,
-                                  fontWeight: FontWeight.bold),
-                              softWrap: true),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Expanded(
-                            child: Text(
+                          child: Row(children: [
+                            Text('Sản phẩm:',
+                                style: GoogleFonts.inter(
+                                    color: DESCRIPTION_COLOR,
+                                    fontSize: FONT_SMALL,
+                                    height: 1.5,
+                                    fontWeight: FontWeight.bold),
+                                softWrap: true),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: Text(
                                 quotationDetailModel.productName == null
                                     ? ''
-                                    : quotationDetailModel.productName ,
+                                    : quotationDetailModel.productName,
                                 style: GoogleFonts.inter(
                                     color: DESCRIPTION_COLOR,
                                     fontSize: FONT_SMALL,
                                     height: 1.5),
                                 softWrap: true,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,),
-                          )]),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
+                          ]),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5.0),
                           child: Row(
                             children: [
-                              Text(
-                                  'Mã SP:',
+                              Text('Mã SP:',
                                   style: GoogleFonts.inter(
                                       color: DESCRIPTION_COLOR,
                                       fontSize: FONT_SMALL,
                                       height: 1.5,
-                                  fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold),
                                   softWrap: true),
                               SizedBox(
                                 width: 5,
                               ),
-                              Expanded(child: Text(
-                                  quotationDetailModel.productCode == null
-                                      ? ''
-                                      : quotationDetailModel.productCode ,
-                                  style: GoogleFonts.inter(
-                                      color: DESCRIPTION_COLOR,
-                                      fontSize: FONT_SMALL,
-                                      height: 1.5),
-                                  softWrap: true, maxLines: 2,
-                                overflow: TextOverflow.ellipsis,)
-                              )
+                              Expanded(
+                                  child: Text(
+                                quotationDetailModel.productCode == null
+                                    ? ''
+                                    : quotationDetailModel.productCode,
+                                style: GoogleFonts.inter(
+                                    color: DESCRIPTION_COLOR,
+                                    fontSize: FONT_SMALL,
+                                    height: 1.5),
+                                softWrap: true,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ))
                             ],
                           ),
                         ),
@@ -163,8 +164,7 @@ class QuotationDetailItemWidget extends StatelessWidget {
                                 padding: const EdgeInsets.only(bottom: 5),
                                 child: Row(
                                   children: [
-                                    Text(
-                                        'Số lượng:',
+                                    Text('Số lượng:',
                                         style: GoogleFonts.inter(
                                             color: DESCRIPTION_COLOR,
                                             fontSize: FONT_SMALL,
@@ -175,34 +175,74 @@ class QuotationDetailItemWidget extends StatelessWidget {
                                       width: 5,
                                     ),
                                     Text(
-                                        quotationDetailModel.amount == null
-                                            ? ''
-                                            : quotationDetailModel.amount.toString(),
+                                        quotationDetailModel.amount.toString() +
+                                            ' ' +
+                                            (quotationDetailModel.unit != null
+                                                ? quotationDetailModel.unit
+                                                    .toString()
+                                                : ''),
                                         style: GoogleFonts.inter(
-                                          color: DESCRIPTION_COLOR,
-                                          fontSize: FONT_SMALL,
-                                        ))
+                                            color: DESCRIPTION_COLOR,
+                                            fontSize: FONT_SMALL,
+                                            height: 1.5))
                                   ],
                                 ),
                               ),
-
+                        (quotationDetailModel.value == null ||
+                                quotationDetailModel.value == 0)
+                            ? SizedBox()
+                            : Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Row(
+                                  children: [
+                                    Text('Giá bán:',
+                                        style: GoogleFonts.inter(
+                                            color: DESCRIPTION_COLOR,
+                                            fontSize: FONT_SMALL,
+                                            height: 1.5,
+                                            fontWeight: FontWeight.bold),
+                                        softWrap: true),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                        NumberFormat.currency(locale: 'vi')
+                                                .format(
+                                                    quotationDetailModel.value)
+                                                .toString() +
+                                            ' VNĐ',
+                                        style: GoogleFonts.inter(
+                                            color: DESCRIPTION_COLOR,
+                                            fontSize: FONT_SMALL,
+                                            height: 1.5))
+                                  ],
+                                ),
+                              ),
                       ],
                     ),
                   ),
-                  quotationDetailModel.image == null ? SizedBox() :
-                  Container(
-                    height: 60,
-                    width: 60,
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: '$baseUrl' + quotationDetailModel.image.path + quotationDetailModel.image.name,
-                      placeholder: (context, url) =>
-                      new CircularProgressIndicator(strokeWidth: 2.0),
-                      height: 15,
-                      width: 15,
-                      errorWidget: (context, url, error) => new Icon(Icons.error),
-                    ),
-                  )
+                  quotationDetailModel.image == null
+                      ? SizedBox()
+                      : Container(
+                          height: 60,
+                          width: 60,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: '$baseUrl' +
+                                  quotationDetailModel.image.path +
+                                  quotationDetailModel.image.name,
+                              placeholder: (context, url) =>
+                                  new CircularProgressIndicator(
+                                      strokeWidth: 2.0),
+                              height: 15,
+                              width: 15,
+                              errorWidget: (context, url, error) =>
+                                  new Icon(Icons.error),
+                            ),
+                          ),
+                        )
                 ],
               ),
             ),

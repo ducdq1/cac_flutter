@@ -72,10 +72,18 @@ class PAHTITemWidget extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.amber.shade100,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(3, 3), // changes position of shadow
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,

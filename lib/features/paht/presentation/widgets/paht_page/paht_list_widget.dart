@@ -26,7 +26,7 @@ class UpdatePahtArgument {
   final String phone;
   final List<BusinessHourEntity> BUSINESS_HOUR;
   final PahtModel pahtModel;
-
+  final bool isUpdateAble;
   UpdatePahtArgument(
       {this.content,
       this.address,
@@ -38,7 +38,8 @@ class UpdatePahtArgument {
       this.hyperlink,
       this.phone,
       this.BUSINESS_HOUR,
-      this.pahtModel});
+      this.pahtModel,
+      this.isUpdateAble = true});
 }
 
 class PahtDetailArgument {
@@ -119,7 +120,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
     loadmore = widget.loadmore;
     return AnimationLimiter(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(10),
         child: widget.pahts.length != 0
             ? LazyLoadScrollView(
                 isLoading: isLoadingVertical,
@@ -157,7 +158,6 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                         BlocProvider.of<PublicPahtBloc>(context));
                               },
                               onEdit: () {
-
                                 Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
                                         arguments: UpdatePahtArgument(
                                           pahtModel: widget.pahts[index]
@@ -173,14 +173,18 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                               isPersonal: widget.isPersonal,
                               pahtModel: widget.pahts[index] ,
                               onTap: () {
-                                // Navigator.pushNamed(
-                                //   context,
-                                //   ROUTER_DETAILED_PAHT,
-                                //   arguments: PahtDetailArgument(
-                                //       poiDetail: widget.pahts[index],
-                                //       id: widget.pahts[index].id.toString(),
-                                //       title: widget.pahts[index].name),
-                               // );
+                                Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
+                                    arguments: UpdatePahtArgument(
+                                        pahtModel: widget.pahts[index],
+                                        isUpdateAble : widget.pahts[index].status == 0
+                                    ))
+                                    .then((value) {
+                                  if (value != null) {
+                                    BlocProvider.of<PublicPahtBloc>(context).add(
+                                      ReloadListEvent(), //ListPublicPahtFetchingEvent(isReload: true),
+                                    );
+                                  }
+                                });
                               },
                             )),),);
                     },
