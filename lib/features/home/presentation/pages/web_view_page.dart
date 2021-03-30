@@ -14,7 +14,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 // import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:recase/recase.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-
+import 'package:share/share.dart';
 // import 'package:pdf/pdf.dart';
 // import 'package:pdf/widgets.dart' as pw;
 
@@ -28,7 +28,7 @@ class WebViewPage extends StatefulWidget {
   _WebViewPageState createState() => _WebViewPageState();
 }
 
-class _WebViewPageState extends State<WebViewPage> {
+class _WebViewPageState extends State<WebViewPage>  implements OnButtonClickListener {
   bool isLoading = true;
   bool downloading = true;
   String downloadingStr = "No data";
@@ -79,8 +79,18 @@ class _WebViewPageState extends State<WebViewPage> {
                 placeholder: (progress) => Center(child: Text('$progress %')),
                 errorWidget: (error) => Center(child: Text(error.toString())),
                 whenDone: (value) => {
-                      if (value != null) {Fluttertoast.showToast(msg: value)}
-                    })
+                      // if (value != null) {
+                      //   Fluttertoast.showToast(msg: value)
+                      // }
+                    }),
+            Positioned.fill(
+                child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: PrimaryButton(
+                          label: 'Chia sẻ', ctx: this, id: 'share_btn'),
+                    ))),
           ],
         ),
       ),
@@ -108,5 +118,12 @@ class _WebViewPageState extends State<WebViewPage> {
       // value: progress == 1.0 ? 0 : progress,
       valueColor: new AlwaysStoppedAnimation<Color>(PRIMARY_COLOR),
     );
+  }
+
+  @override
+  onClick(String id) async {
+    if (id == 'share_btn') {
+        await Share.share(widget.link);
+    }
   }
 }

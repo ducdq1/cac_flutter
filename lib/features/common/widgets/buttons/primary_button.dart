@@ -18,7 +18,7 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 40,
       child: RaisedButton(
           color: PRIMARY_COLOR,
           shape: RoundedRectangleBorder(

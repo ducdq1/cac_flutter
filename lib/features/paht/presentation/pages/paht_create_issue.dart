@@ -309,7 +309,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                     ),
                   ),
                  Container(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: EdgeInsets.all( 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
@@ -605,7 +605,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
   Widget createIssueAction() {
     return Padding(
-      padding: const EdgeInsets.only(top: 25),
+      padding: const EdgeInsets.only(top: 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -633,7 +633,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
   Widget viewBaoGiaFileAction() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
