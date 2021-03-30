@@ -343,10 +343,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                               ],
                                             )),
                                         Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 0, vertical: 0),
-                                            //width: ,
-
+                                            padding: EdgeInsets.all(5),
                                             width: MediaQuery.of(context)
                                                 .size
                                                 .width,
@@ -368,10 +365,9 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                                         context))
                                                 : Text("Không có hình ảnh",
                                                     style: GoogleFonts.inter(
-                                                      fontSize: FONT_EX_MIDDLE,
+                                                      fontSize: FONT_SMALL,
                                                       color: Color(0xff0F8E70),
-                                                      fontWeight:
-                                                          FontWeight.w600,
+                                                      fontWeight: FontWeight.w500,
                                                     ))),
                                       ],
                                     ),

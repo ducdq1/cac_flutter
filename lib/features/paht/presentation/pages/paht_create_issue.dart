@@ -592,7 +592,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                     }
                   });
                 },
-                isPersonal: false,
+                isPersonal: _isUpdateAble ? false : true,
                 quotationDetailModel: listQuotationDetailModel[index],
                 onTap: () {},
               );

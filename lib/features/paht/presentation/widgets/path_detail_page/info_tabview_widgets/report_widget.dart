@@ -197,7 +197,7 @@ class ReportWidget extends StatelessWidget {
               )),
           Expanded(
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                padding: EdgeInsets.all(5),
                 //width: ,
                 width: MediaQuery.of(context).size.width,
                 child: productModel.images.isNotEmpty
@@ -215,7 +215,8 @@ class ReportWidget extends StatelessWidget {
                         style: GoogleFonts.inter(
                           fontSize: FONT_EX_MIDDLE,
                           color: Color(0xff0F8E70),
-                          fontWeight: FontWeight.w600,
+                          fontWeight:
+                          FontWeight.w600,
                         ))),
           ),
         ],

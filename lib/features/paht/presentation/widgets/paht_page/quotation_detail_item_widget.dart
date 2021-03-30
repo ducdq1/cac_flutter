@@ -195,7 +195,7 @@ class QuotationDetailItemWidget extends StatelessWidget {
                                 padding: const EdgeInsets.only(bottom: 5),
                                 child: Row(
                                   children: [
-                                    Text('Giá bán:',
+                                    Text('Thành tiền:',
                                         style: GoogleFonts.inter(
                                             color: DESCRIPTION_COLOR,
                                             fontSize: FONT_SMALL,
@@ -209,8 +209,8 @@ class QuotationDetailItemWidget extends StatelessWidget {
                                         NumberFormat.currency(locale: 'vi')
                                                 .format(
                                                     quotationDetailModel.value)
-                                                .toString() +
-                                            ' VNĐ',
+                                                .toString()
+                                            ,
                                         style: GoogleFonts.inter(
                                             color: DESCRIPTION_COLOR,
                                             fontSize: FONT_SMALL,
