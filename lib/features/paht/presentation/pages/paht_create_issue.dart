@@ -527,13 +527,16 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(left: 7),
-            child: Text(
-              trans(TEXT_WAITING_ALERT),
-              style: GoogleFonts.inter(
-                color: SECONDARY_TEXT_COLOR,
-                fontSize: FONT_SMALL,
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: 7),
+              child: Text(
+                trans(TEXT_WAITING_ALERT),
+                style: GoogleFonts.inter(
+                  color: SECONDARY_TEXT_COLOR,
+                  fontSize: FONT_SMALL,
+                ),
+                softWrap: true,
               ),
             ),
           ),

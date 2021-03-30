@@ -67,9 +67,10 @@ class _QRSCanerState extends State<QRSCaner> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
         result = scanData;
+        controller.pauseCamera();
         final hasVibrator = await Vibration.hasVibrator();
         if (hasVibrator) {
-          Vibration.vibrate();
+          Vibration.vibrate(duration: 100,amplitude: 1);
         }
         Navigator.of(context).pop(result);
     });

@@ -28,6 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is UnAuthenticatedEvent) {
       final SharedPreferences prefs = singleton<SharedPreferences>();
       try {
+        await prefs.remove('userName');
         await prefs.remove('auth');
         await prefs.remove('token');
       } catch (e) {
