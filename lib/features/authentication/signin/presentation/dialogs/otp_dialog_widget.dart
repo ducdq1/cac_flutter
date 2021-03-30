@@ -11,7 +11,6 @@ import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 const NUMBER_OTP = 6;
 
@@ -30,14 +29,14 @@ class _OTPDialogWidgetState extends State<OTPDialogWidget>
   int count = 0;
   String _otpEnter;
   TextEditingController _controller;
-  StreamController<ErrorAnimationType> _errorController;
+  //StreamController<ErrorAnimationType> _errorController;
   GlobalKey<FormState> _formKey;
 
   @override
   void initState() {
     _formKey = GlobalKey<FormState>();
     _controller = TextEditingController();
-    _errorController = StreamController<ErrorAnimationType>();
+   // _errorController = StreamController<ErrorAnimationType>();
     super.initState();
   }
 
@@ -46,7 +45,7 @@ class _OTPDialogWidgetState extends State<OTPDialogWidget>
     return BlocListener<SignInBloc, SignInState>(
       listener: (_, state) {
         if (state is SignInFaildState) {
-          _errorController.add(ErrorAnimationType.shake);
+          //_errorController.add(ErrorAnimationType.shake);
         }
       },
       child: Container(
@@ -71,52 +70,6 @@ class _OTPDialogWidgetState extends State<OTPDialogWidget>
                 key: _formKey,
                 child: Column(
                   children: [
-                    PinCodeTextField(
-                      appContext: context,
-                      pastedTextStyle: TextStyle(
-                        color: PRIMARY_TEXT_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      length: 6,
-                      obscureText: false,
-                      obscuringCharacter: '*',
-                      animationType: AnimationType.fade,
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(5),
-                        fieldHeight: 44,
-                        fieldWidth: 40,
-                        inactiveFillColor: Colors.white,
-                        inactiveColor: PRIMARY_COLOR,
-                        activeFillColor: Colors.white,
-                        activeColor: PRIMARY_COLOR,
-                        selectedColor: PRIMARY_COLOR,
-                        selectedFillColor: Colors.white,
-                        borderWidth: 0.6,
-                      ),
-                      cursorColor: PRIMARY_TEXT_COLOR,
-                      cursorHeight: 18,
-                      animationDuration: Duration(milliseconds: 300),
-                      textStyle: TextStyle(fontSize: 20, height: 1.2),
-                      backgroundColor: Colors.transparent,
-                      enableActiveFill: true,
-                      errorAnimationController: _errorController,
-                      controller: _controller,
-                      keyboardType: TextInputType.number,
-                      boxShadows: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          color: Colors.black12,
-                          blurRadius: 1,
-                        )
-                      ],
-                      onCompleted: (v) {},
-                      onChanged: (value) {},
-                      beforeTextPaste: (text) {
-                        print("Allowing to paste $text");
-                        return true;
-                      },
-                    ),
                   ],
                 ),
               ),
@@ -150,7 +103,6 @@ class _OTPDialogWidgetState extends State<OTPDialogWidget>
 
   @override
   void dispose() {
-    _errorController.close();
     super.dispose();
   }
 

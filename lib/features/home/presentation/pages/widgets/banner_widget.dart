@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
@@ -27,10 +28,10 @@ class _BannerWidgetState extends State<BannerWidget> {
   _BannerWidgetState(StopScrollController _stopScrollController) {
     _stopScrollController.stopScroll = stopScroll;
   }
+
   double widthCustom = 500;
   int _currentImage = 0;
   double opacity = 1;
-
   void stopScroll() {
     if (opacity > 0.7 && opacity < 1) {
       opacity = 1.0;
@@ -62,6 +63,7 @@ class _BannerWidgetState extends State<BannerWidget> {
     //   reload += 1;
     // });
     widget.scrollController.addListener(_onScroll);
+
     super.initState();
   }
 
@@ -72,8 +74,7 @@ class _BannerWidgetState extends State<BannerWidget> {
   }
 
   void _onScroll() {
-    double percent =
-        1 - (widget.scrollController.offset / (1200));
+    double percent = 1 - (widget.scrollController.offset / (1200));
     setState(() {
       opacity = percent;
     });
@@ -95,8 +96,18 @@ class _BannerWidgetState extends State<BannerWidget> {
   @override
   Widget build(BuildContext context) {
     final pref = singleton<SharedPreferences>();
-    String fullName =  pref.get('fullName');
+    String fullName = pref.get('fullName');
     widthCustom = MediaQuery.of(context).size.width - 32;
+    DateTime dateTime = DateTime.now();
+    String hello = '';
+    if (dateTime.hour < 12) {
+      hello = 'Chào buổi sáng,';
+    } else if (dateTime.hour < 18) {
+      hello = 'Chào buổi chiều,';
+    } else {
+      hello = 'Chào buổi tối,';
+    }
+
     return Opacity(
       opacity: opacity,
       child: Transform(
@@ -137,13 +148,12 @@ class _BannerWidgetState extends State<BannerWidget> {
                       enableInfiniteScroll: true,
                       //reverse: false,
                       autoPlay: false,
-                      pauseAutoPlayInFiniteScroll : true,
+                      pauseAutoPlayInFiniteScroll: true,
                       autoPlayInterval: Duration(seconds: 3),
                       autoPlayAnimationDuration: Duration(milliseconds: 800),
                       pauseAutoPlayOnTouch: true,
                       autoPlayCurve: Curves.fastOutSlowIn,
                       enlargeCenterPage: false,
-
                       scrollDirection: Axis.horizontal,
                       onPageChanged: (index, reason) {
                         setState(() {
@@ -173,9 +183,9 @@ class _BannerWidgetState extends State<BannerWidget> {
                         child: Stack(
                           children: [
                             Container(
-                              width: widthCustom,
-                              height: 120,
-                              child: ClipRRect(
+                                width: widthCustom,
+                                height: 120,
+                                child: ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
                                   child: Image.asset(
                                     IMAGE_ASSETS_PATH + 'banner.png',
@@ -183,7 +193,7 @@ class _BannerWidgetState extends State<BannerWidget> {
                                     width: widthCustom,
                                     height: 120,
                                   ),
-                              )),
+                                )),
                             Positioned.fill(
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -194,44 +204,47 @@ class _BannerWidgetState extends State<BannerWidget> {
                                       alignment: Alignment.centerLeft,
                                       // width: widthCustom * 1.8 / 3,
                                       //height: 120,
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text(
-                                          trans(LABEL_HELLO),
-                                          style: TextStyle(
-                                            fontSize: FONT_EX_HUGE *
-                                                MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.001,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text(
-                                              fullName != null
-                                                  ? fullName.toUpperCase()
-                                                  : ''
-                                        ,
-                                        style: TextStyle(
-                                          fontSize: FONT_EX_HUGE *
-                                              MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.001,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        ),
-                                      )]
-                                ),
+                                      child: Row(children: [
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              Text(
+                                                hello,
+                                                style: TextStyle(
+                                                  fontSize: FONT_EX_HUGE *
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.001,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              Text(
+                                                fullName != null
+                                                    ? fullName.toUpperCase()
+                                                    : '',
+                                                style: TextStyle(
+                                                  fontSize: FONT_EX_HUGE *
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.001,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            ]),
+                                      ]),
                                     )),
                               ),
                             ),

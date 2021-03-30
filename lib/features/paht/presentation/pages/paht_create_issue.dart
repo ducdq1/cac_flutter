@@ -28,7 +28,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+//import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
@@ -71,7 +71,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   FocusNode _webFocusNode;
   ScrollController parentScrollController;
   PahtModel pahtModel;
-  List<Asset> images = List<Asset>();
+  //List<Asset> images = List<Asset>();
   String _error = 'No Error Dectected';
   List<QuotationDetailModel> listQuotationDetailModel = [];
   final prefs = singleton<SharedPreferences>();

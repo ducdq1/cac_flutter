@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
@@ -10,6 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:route_transitions/route_transitions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../../injection_container.dart';
 
 class AppBarHomeWidget extends StatefulWidget implements PreferredSizeWidget {
   // final void Function() reloadPage;
@@ -28,11 +32,21 @@ class AppBarHomeWidget extends StatefulWidget implements PreferredSizeWidget {
 class _AppBarHomeWidgetState extends State<AppBarHomeWidget> {
   // var auth = BlocProvider.of<AuthBloc>(context).state;
   // AuthBloc _authBloc;
+  String avartarPath;
 
   @override
   void initState() {
     super.initState();
     // _authBloc = BlocProvider.of<AuthBloc>(context);
+    SharedPreferences prefs = singleton<SharedPreferences>();
+    setState(() {
+      if (prefs != null) {
+        avartarPath = prefs.getString("avartarPath");
+        if (avartarPath != null && avartarPath.isNotEmpty) {
+          avartarPath = '$baseUrl' + avartarPath;
+        }
+      }
+    });
   }
 
   @override
@@ -43,8 +57,30 @@ class _AppBarHomeWidgetState extends State<AppBarHomeWidget> {
       leading: IconButton(
         alignment: Alignment.center,
         // padding: EdgeInsets.only(left: 16),
-        icon:
-            Center(child: SvgPicture.asset(SVG_ASSETS_PATH + 'icon_user.svg')),
+        icon: Center(
+            child: (avartarPath == null || avartarPath.isEmpty)
+                ? SvgPicture.asset(SVG_ASSETS_PATH + 'icon_user.svg')
+                : ClipOval(
+                    child: Container(
+                        width: 40.0,
+                        height: 40.0,
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: avartarPath,
+                          placeholder: (context, url) =>
+                              new CircularProgressIndicator(strokeWidth: 2.0),
+                          height: 15,
+                          width: 15,
+                          errorWidget: (context, url, error) => Image.asset(
+                            ICONS_ASSETS + 'default-avatar.png',
+                            height: 40,
+                            width: 40,
+                          ),
+                        )),
+                  )),
         onPressed: () {
           if (BlocProvider.of<AuthBloc>(context).state is UnAuthenticateState) {
             showConfirmDialog(

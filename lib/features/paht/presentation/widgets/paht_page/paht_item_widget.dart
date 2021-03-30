@@ -48,7 +48,6 @@ class PAHTITemWidget extends StatelessWidget {
                     );
                   } else {
                     return IconSlideAction(
-                      caption: 'Delete',
                       color: Color.fromRGBO(221, 48, 48, 0.9),
                       onTap: onDelete,
                       iconWidget: SvgPicture.asset(

@@ -53,7 +53,6 @@ class QuotationDetailItemWidget extends StatelessWidget {
                     );
                   } else {
                     return IconSlideAction(
-                      caption: 'Delete',
                       color: Color.fromRGBO(221, 48, 48, 0.9),
                       onTap: onDelete,
                       iconWidget: SvgPicture.asset(
@@ -209,7 +208,6 @@ class QuotationDetailItemWidget extends StatelessWidget {
                                         NumberFormat.currency(locale: 'vi')
                                                 .format(
                                                     quotationDetailModel.value)
-                                                .toString()
                                             ,
                                         style: GoogleFonts.inter(
                                             color: DESCRIPTION_COLOR,

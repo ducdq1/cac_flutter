@@ -5,7 +5,6 @@ import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/image_entity.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/colors.dart';

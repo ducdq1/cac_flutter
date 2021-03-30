@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+//import 'package:webview_flutter/webview_flutter.dart';
 
 // import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:recase/recase.dart';
@@ -43,7 +43,7 @@ class _WebViewPageState extends State<WebViewPage>  implements OnButtonClickList
     super.initState();
 
     // Enable hybrid composition.
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    //if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
     // flutterWebViewPlugin.onProgressChanged.listen((progress) {
     //   print(progress);
