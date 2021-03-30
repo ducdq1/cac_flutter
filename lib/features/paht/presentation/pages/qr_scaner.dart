@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
@@ -17,6 +15,7 @@ class _QRSCanerState extends State<QRSCaner> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   String result;
   QRViewController controller;
+  bool isScanned = false;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -66,13 +65,25 @@ class _QRSCanerState extends State<QRSCaner> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
-        result = scanData;
-        controller.pauseCamera();
-        final hasVibrator = await Vibration.hasVibrator();
-        if (hasVibrator) {
-          Vibration.vibrate(duration: 100,amplitude: 1);
+      try {
+        if (!isScanned) {
+          isScanned = true;
+
+          result = scanData;
+          controller.pauseCamera();
+          final hasVibrator = await Vibration.hasVibrator();
+          if (hasVibrator) {
+            Vibration.vibrate(duration: 100, amplitude: 1);
+          }
+
+          Future.delayed(Duration(milliseconds: 1000), () {
+            Navigator.of(context).pop(result);
+          });
+
         }
-        Navigator.of(context).pop(result);
+      } catch (e) {
+
+      }
     });
   }
 
