@@ -166,7 +166,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
             //   height: 29,
             //   width: 29,
             // ),
-            child:   Stack(
+            child:  Stack(
               children: [
                 Image.asset(
                 'assets/icons/icon_scan_qr_white.png',

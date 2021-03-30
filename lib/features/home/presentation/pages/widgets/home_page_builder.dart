@@ -24,7 +24,25 @@ class HomePageBuilder extends StatefulWidget {
 }
 
 class _HomePageBuilderState extends State<HomePageBuilder>
+    with SingleTickerProviderStateMixin
     implements OnButtonClickListener {
+  AnimationController _controller;
+  Animation<double> _animation;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 700),
+      vsync: this,
+    );
+    final Animation curve = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    );
+    _animation = Tween(begin: 33.0, end: 75.0).animate(curve);
+    _controller.repeat(reverse: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -52,54 +70,77 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CitizensMenuItemWidget(
-                        label: 'Quét mã',
-                        icon: '/icons/icon_scan_qr.png',
-                        needRedirect: '',
-                        onPress: () async {
-                          // Navigator.pushNamed(
-                          //     context, '/${widget.menu[i].serviceType}');
+                      Stack(
+                        children: [
+                          CitizensMenuItemWidget(
+                            label: 'Quét mã',
+                            icon: '/icons/icon_scan_qr.png',
+                            needRedirect: '',
+                            onPress: () async {
+                              final PermissionHandler _permissionHandler =
+                                  PermissionHandler();
+                              var permissionStatus = await _permissionHandler
+                                  .checkPermissionStatus(
+                                      PermissionGroup.camera);
 
-                          final PermissionHandler _permissionHandler =
-                              PermissionHandler();
-                          var permissionStatus = await _permissionHandler
-                              .checkPermissionStatus(PermissionGroup.camera);
+                              switch (permissionStatus) {
+                                case PermissionStatus.granted:
+                                  var value = await Navigator.of(context)
+                                      .pushNamed(ROUTER_QRCODE_SCANER);
+                                  if (value != null) {
+                                    Navigator.pushNamed(
+                                        context, ROUTER_DETAILED_PAHT,
+                                        arguments: PahtDetailArgument(
+                                            productCode: value));
+                                  }
 
-                          switch (permissionStatus)  {
-                            case PermissionStatus.granted:
-                              var value = await Navigator.of(context).pushNamed( ROUTER_QRCODE_SCANER);
-                              if (value != null){
-                                Navigator.pushNamed(
-                                    context, ROUTER_DETAILED_PAHT,
-                                    arguments: PahtDetailArgument(
-                                        productCode: value));
-                              }
-
-                              break;
-                            case PermissionStatus.denied:
-                            case PermissionStatus.restricted:
-                            case PermissionStatus.unknown:
-                                  await _permissionHandler
-                                      .requestPermissions([PermissionGroup.camera]);
-                                  var permissionStatus = await _permissionHandler
-                                      .checkPermissionStatus(
-                                          PermissionGroup.camera);
+                                  break;
+                                case PermissionStatus.denied:
+                                case PermissionStatus.restricted:
+                                case PermissionStatus.unknown:
+                                  await _permissionHandler.requestPermissions(
+                                      [PermissionGroup.camera]);
+                                  var permissionStatus =
+                                      await _permissionHandler
+                                          .checkPermissionStatus(
+                                              PermissionGroup.camera);
 
                                   switch (permissionStatus) {
                                     case PermissionStatus.granted:
-                                      var value = await Navigator.of(context).pushNamed( ROUTER_QRCODE_SCANER);
-                                      if (value != null){
+                                      var value = await Navigator.of(context)
+                                          .pushNamed(ROUTER_QRCODE_SCANER);
+                                      if (value != null) {
                                         Navigator.pushNamed(
                                             context, ROUTER_DETAILED_PAHT,
                                             arguments: PahtDetailArgument(
                                                 productCode: value));
                                       }
                                   }
-                              break;
+                                  break;
 
-                            default:
-                          }
-                        },
+                                default:
+                              }
+                            },
+                          ),
+                          AnimatedBuilder(
+                            animation: _animation,
+                            child: Container(
+                              width: 140,
+                              child: Center(
+                                child: Container(
+                                    color: Colors.amber,
+                                    height: 1,
+                                    width: 60),
+                              ),
+                            ),
+                            builder: (_, widget) {
+                              return Transform.translate(
+                                offset: Offset(0.0, _animation.value),
+                                child: widget,
+                              );
+                            },
+                          )
+                        ],
                       ),
                       CitizensMenuItemWidget(
                         label: 'Báo giá',
