@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>115347221059-sgulpiopkrcf73upo44isflkgqmu8lpd.apps.googleusercontent.com</string>
+	<string>400504484458-ec2ic380eoa3tjng69f423d1cb1qfvrq.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.115347221059-sgulpiopkrcf73upo44isflkgqmu8lpd</string>
+	<string>com.googleusercontent.apps.400504484458-ec2ic380eoa3tjng69f423d1cb1qfvrq</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCxkwJj7V4S0tKb8rJF4XJ1NSS_l8SYzWU</string>
+	<string>AIzaSyCtw6taH5NIFH3fbig4ze5Q4um6p8vBFxg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>115347221059</string>
+	<string>400504484458</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.viettel.citizens</string>
+	<string>com.viettel.maps</string>
 	<key>PROJECT_ID</key>
-	<string>ioc-alarm</string>
+	<string>cac-demo-bcccd</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ioc-alarm.appspot.com</string>
+	<string>cac-demo-bcccd.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:115347221059:ios:cc5032a208ae1066bfc2f6</string>
-	<key>DATABASE_URL</key>
-	<string>https://ioc-alarm-default-rtdb.firebaseio.com</string>
+	<string>1:400504484458:ios:c3cb13c54e57c952e99013</string>
 </dict>
 </plist>

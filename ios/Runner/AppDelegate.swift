@@ -51,37 +51,24 @@ import Photos
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
     }
+
     let controller  = window?.rootViewController as! FlutterViewController
-//    mediaChannel = FlutterMethodChannel.init(name: "citizens.app/media_picker_ios",
-//                                              binaryMessenger: controller.binaryMessenger)
    
     weak var registrar = self.registrar(forPlugin: "plugin-name")
-//    let factory = MediaPickerViewFactory(messenger: registrar!.messenger() )
-//          self.registrar(forPlugin: "media")!.register(
-//              factory,
-//              withId: "mediaWidgetIOS")
-   
-//    mediaChannel.setMethodCallHandler({
-//      [weak self] (call: FlutterMethodCall, result: FlutterResult) -> Void in
-//        if (call.method == "getChosenMedia")  {
-//            guard  call.arguments != nil else {
-//                return
-//            }
-//            self?.mediaPicker(result: result)
-//            result("Tesst ++===========")
-//        }
-//        if (call.method == "nativeCallSomeFlutterMethod") {
-//            result(self!.selectedAssets[0].originalFileName)
-//        }
-//    })
+
     FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+
+  override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+              let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+              print("==== didRegisterForRemoteNotificationsWithDeviceToken ====")
+              print(deviceTokenString)
+              Messaging.messaging().apnsToken = deviceToken
+      }
     
 }
-
-
 
 private func registerPlugins(registry: FlutterPluginRegistry) {
     if (!registry.hasPlugin("FlutterDownloaderPlugin")) {
