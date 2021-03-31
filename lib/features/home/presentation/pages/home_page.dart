@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final StopScrollController _stopScrollController = StopScrollController();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings initializationSettingsAndroid;
+  var _firebaseMessaging;
   // bool closeTopContainer = false;
   // double scale = 1;
   // int reload = 0;
@@ -57,9 +58,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           .add(AppModulesFetched(provinceId: PROVINCE_ID, userId: userId));
     }
 
+    _firebaseMessaging = FirebaseMessaging();
+
+
     initFlutterLocalNotificationsPlugin();
 
-    var _firebaseMessaging = FirebaseMessaging();
+    _firebaseMessaging.subscribeToTopic('all');
+
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> msg) async {
         print("onMessage: $msg");
@@ -95,6 +100,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void initFlutterLocalNotificationsPlugin()async{
+    final token = await _firebaseMessaging.getToken();
+    print('token: ' + token.toString());
     initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
     final IOSInitializationSettings initializationSettingsIOS =
     IOSInitializationSettings(
