@@ -31,6 +31,7 @@ import Flutter
 import UIKit
 import flutter_downloader
 import Photos
+import Firebase
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
     

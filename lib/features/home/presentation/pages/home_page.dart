@@ -80,8 +80,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         } else {
           payload = msg['data'];
           showNotification(
-            title: msg['notification']['title'],
-            body: msg['notification']['body'],
+            title: utf8.decode(msg['notification']['title']),
+            body: utf8.decode(msg['notification']['body']),
             payload: jsonEncode(payload),
           );
         }
