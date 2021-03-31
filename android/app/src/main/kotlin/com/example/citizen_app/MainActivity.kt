@@ -1,4 +1,4 @@
-package com.viettel.maps.tools
+package com.cac.demo
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterFragmentActivity

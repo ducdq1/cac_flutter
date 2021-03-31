@@ -117,8 +117,8 @@ dependencies:
   auto_size_text: ^2.1.0
 
   # Firebase
-  # firebase_core: ^0.5.0
-  #firebase_messaging: ^7.0.3
+  firebase_core: ^0.5.0
+  firebase_messaging: ^7.0.3
   flutter_local_notifications: ^3.0.2
   #firebase_crashlytics: ^0.2.4
   #http_proxy: ^1.1.0

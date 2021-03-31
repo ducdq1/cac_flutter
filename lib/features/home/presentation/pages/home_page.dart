@@ -8,9 +8,12 @@ import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home
 import 'package:citizen_app/features/home/presentation/pages/widgets/home_page_builder.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/sos_button_widget.dart';
 import 'package:citizen_app/injection_container.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -48,6 +51,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       BlocProvider.of<HomePageBloc>(context)
           .add(AppModulesFetched(provinceId: PROVINCE_ID, userId: userId));
     }
+
+    var _firebaseMessaging = FirebaseMessaging();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+
+      },
+      onBackgroundMessage: myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+
+      },
+    );
+
   }
 
   @override
