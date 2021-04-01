@@ -80,8 +80,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         } else {
           payload = msg['data'];
           showNotification(
-            title: utf8.decode(msg['notification']['title']),
-            body: utf8.decode(msg['notification']['body']),
+            title: msg['notification']['title'],
+            body: msg['notification']['body'],
             payload: jsonEncode(payload),
           );
         }
@@ -129,6 +129,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Future<void> showNotification({String title, String body, String payload}) async {
+    //print(utf8.decode(title.toString().codeUnits));
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
         'cac_app_id',
@@ -144,7 +145,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     if (payload != null) {
       await flutterLocalNotificationsPlugin.show(
         0,
-        title,
+         title ,
         body,
         platformChannelSpecifics,
         payload: payload,

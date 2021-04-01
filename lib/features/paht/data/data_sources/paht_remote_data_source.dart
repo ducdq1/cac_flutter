@@ -113,7 +113,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
     try {
       final response = await networkRequest.getRequest(
           url: '$vtmaps_baseUrl/place/v1/categories');
-      print('$vtmaps_baseUrl/place/v1/categories');
+      //print('$vtmaps_baseUrl/place/v1/categories');
 
       var responseJson = json.decode(response.body);
       if (response.statusCode == 200) {
@@ -180,9 +180,9 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       String url = '$baseUrl_api/quotations';
       final response = await networkRequest.postRequest(
           url: '$baseUrl_api/quotations', body: body);
-      print('--> success');
+      //print('--> success');
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
-      print(responseJson);
+      //print(responseJson);
       if (response.statusCode == 200) {
         // ResponseDataSuccessModel responseDataSuccess =
         //     ResponseDataSuccessModel.fromJson(data);

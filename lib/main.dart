@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     String token = pref.get('userName');
-    token ='hard code';
+    //token ='hard code';
 
     return MultiBlocProvider(
       providers: [

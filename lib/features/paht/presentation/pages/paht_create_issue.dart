@@ -727,7 +727,11 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
       ],
     );
   }
-
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
   @override
   onClick(String id) async {
     if (id == 'primary_btn') {

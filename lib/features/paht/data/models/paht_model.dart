@@ -49,6 +49,7 @@ class PahtModel extends PahtEntity {
 
   Map<String, dynamic> toJson() {
     return {
+      "quotationID": quotationID,
       "cusName": cusName,
       "cusAddress": cusAddress,
       "cusPhone": cusPhone,
