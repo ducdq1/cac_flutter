@@ -126,6 +126,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         //selectNotificationSubject.add(payload);
       },
     );
+
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
   Future<void> showNotification({String title, String body, String payload}) async {

@@ -242,7 +242,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       var data = json.decode(response.body);
       if (response.statusCode == 200) {
         Fluttertoast.showToast(
-          msg: trans(MESSAGE_DELETE_POI_SUCCESS),
+          msg: 'Xóa thành công',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,

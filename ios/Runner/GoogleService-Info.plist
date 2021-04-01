@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>400504484458-ec2ic380eoa3tjng69f423d1cb1qfvrq.apps.googleusercontent.com</string>
+	<string>729940612804-c3tl2lfguvv7shnlioe22e6um4hrm5h7.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.400504484458-ec2ic380eoa3tjng69f423d1cb1qfvrq</string>
+	<string>com.googleusercontent.apps.729940612804-c3tl2lfguvv7shnlioe22e6um4hrm5h7</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCtw6taH5NIFH3fbig4ze5Q4um6p8vBFxg</string>
+	<string>AIzaSyCVetB-2dymOnHweeo-db3eQtD8sUvVuJY</string>
 	<key>GCM_SENDER_ID</key>
-	<string>400504484458</string>
+	<string>729940612804</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.viettel.maps</string>
 	<key>PROJECT_ID</key>
-	<string>cac-demo-bcccd</string>
+	<string>cac-demo-new</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cac-demo-bcccd.appspot.com</string>
+	<string>cac-demo-new.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:400504484458:ios:c3cb13c54e57c952e99013</string>
+	<string>1:729940612804:ios:67dce95e0cef6e86a6db91</string>
 </dict>
 </plist>
