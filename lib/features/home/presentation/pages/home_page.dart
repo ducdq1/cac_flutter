@@ -29,7 +29,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final StopScrollController _stopScrollController = StopScrollController();
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings initializationSettingsAndroid;
   final pref = singleton<SharedPreferences>();
   var _firebaseMessaging;
@@ -62,7 +63,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _firebaseMessaging = FirebaseMessaging();
 
-
     initFlutterLocalNotificationsPlugin();
     String token = _firebaseMessaging.getToken().toString();
     print('Firebase Device Token:  '  + token);
@@ -77,9 +77,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> msg) async {
         print("onMessage: $msg");
-        String title= msg['notification']['title'];
         var payload = {};
         if (Platform.isIOS) {
+          payload = {}; //{"orderId": msg["orderId"], "type": msg["type"]};
+          print('ios message');
           showNotification(
             title: msg['aps']['alert']['title'],
             body: msg['aps']['alert']['body'],
@@ -103,25 +104,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         Navigator.pushNamed(context, ROUTER_PAHT);
       },
     );
-
   }
 
-  void initFlutterLocalNotificationsPlugin()async{
+  void initFlutterLocalNotificationsPlugin() async {
     final token = await _firebaseMessaging.getToken();
     print('token: ' + token.toString());
     initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
     final IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings(
+        IOSInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
       onDidReceiveLocalNotification:
-          (int id, String title, String body, String payload) async {
-      },
+          (int id, String title, String body, String payload) async {},
     );
 
     final InitializationSettings initializationSettings =
-    InitializationSettings(
+        InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
       // macOS: initializationSettingsMacOS,
@@ -136,24 +135,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>()
+            IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 
-  Future<void> showNotification({String title, String body, String payload}) async {
-    //print(utf8.decode(title.toString().codeUnits));
+  Future<void> showNotification(
+      {String title, String body, String payload}) async {
+    print(title.toString());
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-        'cac_app_id',
-        'cac_app_channel',
-        'show notification',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker');
+        AndroidNotificationDetails(
+            'cac_app_id', 'cac_app_channel', 'show notification',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
 
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
@@ -161,7 +159,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     if (payload != null) {
       await flutterLocalNotificationsPlugin.show(
         0,
-         title ,
+        title,
         body,
         platformChannelSpecifics,
         payload: payload,
@@ -171,8 +169,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-   // print(
-     //   'Đường chéo: ${sqrt(MediaQuery.of(context).size.width * MediaQuery.of(context).size.width + MediaQuery.of(context).size.height * MediaQuery.of(context).size.height)}');
+    // print(
+    //   'Đường chéo: ${sqrt(MediaQuery.of(context).size.width * MediaQuery.of(context).size.width + MediaQuery.of(context).size.height * MediaQuery.of(context).size.height)}');
     return
         // BlocListener<AuthBloc, AuthState>(
         //   listener: (_, state) {
@@ -196,7 +194,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       //  height: 96,
       //  width: 96,
       //  child: SOSButtonWidget(),
-     // ),
+      // ),
       body: NotificationListener<ScrollNotification>(
           onNotification: (scrollNotification) {
             if (scrollNotification is ScrollEndNotification) {
