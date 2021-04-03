@@ -52,6 +52,8 @@ class QuotationDetailModel extends QuotationDetailEntity {
 
   toJson() {
     return {
+      "quotationDetailId": quotationDetailId,
+      "quotationId":quotationId,
       "productId": productId,
       "amount": amount,
       "attachId" : attachId,
@@ -59,6 +61,7 @@ class QuotationDetailModel extends QuotationDetailEntity {
       "productName" :productName,
       "productCode" : productCode,
       "unit": unit ,
+      "price" : price
     };
   }
 

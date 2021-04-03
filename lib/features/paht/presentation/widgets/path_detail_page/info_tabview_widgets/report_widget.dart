@@ -1,10 +1,13 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/app_localizations.dart';
+import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/paht/data/models/image_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/image_entity.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/colors.dart';
@@ -29,14 +32,18 @@ import 'package:skeleton_text/skeleton_text.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../../../injection_container.dart';
+
 class ReportWidget extends StatelessWidget {
   final ProductModel productModel;
   final TonKhoModel tonKhoModel;
+  final pref = singleton<SharedPreferences>();
 
   ReportWidget({this.productModel, this.tonKhoModel});
 
   @override
   Widget build(BuildContext context) {
+    int userType = pref.getInt('userType');
     return Container(
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -167,6 +174,36 @@ class ReportWidget extends StatelessWidget {
                     ])))
               ]),
           SizedBox(height: 10),
+          userType != null && userType == 3
+              ? //cho xem gia
+              Center(
+                child: Container(
+                  width: 150,
+                    padding: const EdgeInsets.only(bottom: 5.0),
+                    child: RaisedButton(
+                        color: PRIMARY_COLOR,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(36),
+                        ),
+                        onPressed: () {showDialog(context: context, child:
+                        new AlertDialog(
+                          title: new Text("Giá sản phẩm"),
+                          content: new Text(productModel.price!=null ? productModel.price.toString(): "Sản phẩm chưa có giá"),
+                        )
+                        );},
+                        child: AutoSizeText(
+                          'Xem giá',
+                          style: GoogleFonts.inter(
+                            fontSize: FONT_EX_SMALL,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          minFontSize: FONT_EX_SMALL,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ))),
+              )
+              : SizedBox(),
           Container(
               // color: Color(0xfff1e3c0),
               padding: EdgeInsets.all(5),
@@ -208,14 +245,12 @@ class ReportWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(4.0),
                         mainAxisSpacing: 4.0,
                         crossAxisSpacing: 4.0,
-                        children: _getTiles(productModel.images, context)
-    )
+                        children: _getTiles(productModel.images, context))
                     : Text("Không có hình ảnh",
                         style: GoogleFonts.inter(
                           fontSize: FONT_EX_MIDDLE,
                           color: Color(0xff0F8E70),
-                          fontWeight:
-                          FontWeight.w600,
+                          fontWeight: FontWeight.w600,
                         ))),
           ),
         ],
@@ -229,43 +264,43 @@ class ReportWidget extends StatelessWidget {
       ImageModel imageModel = imageModels[i];
       tiles.add(GridTile(
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            child:
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        child:
             //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
             InkWell(
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        MediaPresenterPage(
-                          urls: productModel.images,
-                          initialIndex: i,
-                        ),
-                  ),
-                );
-                SystemChrome.setSystemUIOverlayStyle(
-                    SystemUiOverlayStyle.light);
-                SystemChrome.setSystemUIOverlayStyle(
-                  SystemUiOverlayStyle(
-                      statusBarColor: PRIMARY_COLOR),
-                );
-              },
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
-                placeholder: (context, url) =>
-                new CircularProgressIndicator(
-                    strokeWidth: 2.0),
-                height: 15,
-                width: 15,
-                errorWidget: (context, url, error) =>
-                new Icon(Icons.error),
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => MediaPresenterPage(
+                  urls: productModel.images,
+                  initialIndex: i,
+                ),
               ),
-            ),
-          )));
+            );
+            SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+            SystemChrome.setSystemUIOverlayStyle(
+              SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
+            );
+          },
+          child: CachedNetworkImage(
+            fit: BoxFit.cover,
+            imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
+            placeholder: (context, url) =>
+                new CircularProgressIndicator(strokeWidth: 2.0),
+            height: 15,
+            width: 15,
+            errorWidget: (context, url, error) => new Icon(Icons.error),
+          ),
+        ),
+      )));
     }
     return tiles;
   }
 
+  @override
+  onClick(String id) {
+    // TODO: implement onClick
+    throw UnimplementedError();
+  }
 }

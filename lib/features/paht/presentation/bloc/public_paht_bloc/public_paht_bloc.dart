@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'public_paht_event.dart';
+
 part 'public_paht_state.dart';
 
 class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
@@ -18,6 +19,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
 
   PublicPahtBloc({@required this.getListPublicPaht, @required this.deletePaht})
       : super(PublicPahtInitial());
+
   bool _hasReachedMax(PublicPahtState state) =>
       state is PublicPahtSuccess && state.hasReachedMax;
 
@@ -46,8 +48,9 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           limit: 10,
           offset: 0,
           status: 0,
-        userName: userName,
-      search: event.search));
+          userName: userName,
+          search: event.search,
+         ));
       yield PublicPahtSuccess(
           paht: listPublicPaht, offset: 0, hasReachedMax: true);
       return;
@@ -59,7 +62,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         return;
       }
 
-       yield PublicPahtSuccess(
+      yield PublicPahtSuccess(
           paht: event.paht,
           offset: event.offset,
           hasReachedMax: event.paht.length < 10 ? true : false,
@@ -74,17 +77,16 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       }
 
       try {
-        if (currentState is PublicPahtFailure || currentState is DeletePersonalPahtFailure ||
-        currentState is PublicPahtInitial &&
+        if (currentState is PublicPahtFailure ||
+            currentState is DeletePersonalPahtFailure ||
+            currentState is PublicPahtInitial &&
                 !_hasReachedMax(currentState)) {
           print('delay.....');
           await Future.delayed(Duration(milliseconds: 500));
           print('loading.....');
           getListPublicPaht(PahtParams(
-                  limit: 10,
-                  offset: 0,
-                  status: 0
-              ,userName: userName))
+                  limit: 10, offset: 0, status: 0, userName: userName,
+              isApproveAble: event.isApproveAble))
               .then((value) {
             add(ListPublicPahtFetchedEvent(offset: 0, paht: value));
           }).catchError((err) {
@@ -95,10 +97,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
             !_hasReachedMax(currentState)) {
           int nextOffset = currentState.offset + 1;
           List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
-              limit: 10,
-              offset: nextOffset,
-              status : 0,
-              userName: userName));
+              limit: 10, offset: nextOffset, status: 0, userName: userName,
+          isApproveAble: event.isApproveAble));
 
           yield listPublicPaht.isEmpty
               ? currentState.copyWith(
@@ -146,11 +146,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       }
 
       try {
-        List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
-            limit: 10,
-            offset: 0,
-           status: 0,
-        userName: userName));
+        List<PahtModel> listPublicPaht = await getListPublicPaht(
+            PahtParams(limit: 10, offset: 0, status: 0, userName: userName,isApproveAble: event.isApproveAble));
 
         yield PublicPahtRefreshSuccess(
             paht: listPublicPaht,
@@ -186,11 +183,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       try {
         await deletePaht(event.id);
         yield DeletePersonalPahtSuccess();
-        List<PahtModel> results = await getListPublicPaht(PahtParams(
-            offset: 0,
-            limit: 10,
-            status: 0,
-            userName: userName));
+        List<PahtModel> results = await getListPublicPaht(
+            PahtParams(offset: 0, limit: 10, status: 0, userName: userName));
 
         yield PublicPahtSuccess(
             offset: 0,
@@ -204,11 +198,8 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
     if (event is ReloadListEvent) {
       try {
         yield DeletePersonalPahtSuccess();
-        List<PahtModel> results = await getListPublicPaht(PahtParams(
-            offset: 0,
-            limit: 10,
-           status: 0,
-        userName: userName));
+        List<PahtModel> results = await getListPublicPaht(
+            PahtParams(offset: 0, limit: 10, status: 0, userName: userName,isApproveAble: event.isApproveAble));
 
         yield PublicPahtSuccess(
             offset: 0,

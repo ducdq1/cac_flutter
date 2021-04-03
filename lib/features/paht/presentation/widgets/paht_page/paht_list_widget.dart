@@ -27,6 +27,8 @@ class UpdatePahtArgument {
   final List<BusinessHourEntity> BUSINESS_HOUR;
   final PahtModel pahtModel;
   final bool isUpdateAble;
+  final bool isApproveAble;
+
   UpdatePahtArgument(
       {this.content,
       this.address,
@@ -39,7 +41,8 @@ class UpdatePahtArgument {
       this.phone,
       this.BUSINESS_HOUR,
       this.pahtModel,
-      this.isUpdateAble = true});
+      this.isUpdateAble = true,
+      this.isApproveAble = false});
 }
 
 class PahtDetailArgument {
@@ -48,7 +51,16 @@ class PahtDetailArgument {
   final String id;
   final String title;
   String productCode;
-  PahtDetailArgument({this.id, this.title, this.poiDetail,this.productCode,this.quotationDetailModel});
+  final bool isUpdateAble;
+  final bool isApproveAble;
+  PahtDetailArgument(
+      {this.id,
+      this.title,
+      this.poiDetail,
+      this.productCode,
+      this.quotationDetailModel,
+        this.isUpdateAble = false,
+      this.isApproveAble = false});
 }
 
 class ListViewPahtsWidget extends StatefulWidget {
@@ -58,13 +70,15 @@ class ListViewPahtsWidget extends StatefulWidget {
   final ScrollController scrollController;
   final bool loadmore;
   final double paddingBottom;
+  final bool isApproveAble;
   ListViewPahtsWidget(
       {@required this.pahts,
       @required this.isPersonal,
       @required this.hasReachedMax,
       this.scrollController,
       this.loadmore = false,
-      this.paddingBottom = 100});
+      this.paddingBottom = 100,
+      this.isApproveAble = false});
 
   @override
   _ListViewPahtsWidgetState createState() => _ListViewPahtsWidgetState();
@@ -73,7 +87,7 @@ class ListViewPahtsWidget extends StatefulWidget {
 class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
   bool isLoadingVertical = false;
   bool loadmore = false;
-
+  bool  isApproveAble = false;
   Future _loadMoreVertical() async {
     if (widget.hasReachedMax) {
       return;
@@ -88,13 +102,13 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
     // Add in an artificial delay
     await new Future.delayed(const Duration(seconds: 1));
     print("Loadmore...");
-    if (widget.isPersonal) {
+    if (!widget.isApproveAble && widget.isPersonal) {
       BlocProvider.of<PersonalPahtBloc>(context).add(
         ListPersonalPahtFetchingEvent(),
       );
     } else {
       BlocProvider.of<PublicPahtBloc>(context).add(
-        ListPublicPahtFetchingEvent(),
+        ListPublicPahtFetchingEvent(isApproveAble: widget.isApproveAble),
       );
     }
 
@@ -104,13 +118,13 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
   }
 
   handleRefresh(context) {
-    if (widget.isPersonal) {
+    if (!widget.isApproveAble && widget.isPersonal) {
       BlocProvider.of<PersonalPahtBloc>(context).add(
         PersonalPahtRefreshRequestedEvent(),
       );
     } else {
       BlocProvider.of<PublicPahtBloc>(context).add(
-        PublicPahtRefreshRequestedEvent(),
+        PublicPahtRefreshRequestedEvent(isApproveAble: widget.isApproveAble),
       );
     }
   }
@@ -118,6 +132,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
   @override
   Widget build(BuildContext context) {
     loadmore = widget.loadmore;
+    isApproveAble = widget.isApproveAble;
     return AnimationLimiter(
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -131,62 +146,99 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                     padding: EdgeInsets.only(bottom: widget.paddingBottom),
                     itemBuilder: (BuildContext context, int index) {
                       return AnimationConfiguration.staggeredList(
-                      position: index,
-                      duration: const Duration(milliseconds: 375),
-                      child: SlideAnimation(
-                      verticalOffset: 50.0,
-                      child: FadeInAnimation(
-                      child:  loadmore && index >= widget.pahts.length - 1
-                          ? Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: BottomLoaderWidget(),
-                            )
-                          : PAHTITemWidget(
-                              onDelete: () {
-                                showDeleteConfirmDialog(
-                                    context: context,
-                                    onSubmit: () {
-                                      BlocProvider.of<PublicPahtBloc>(context)
-                                          .add(
-                                        DeleteButtonEvent(
-                                            id: widget.pahts[index].quotationID
-                                                .toString()),
-                                      );
-                                      Navigator.pop(context);
-                                    },
-                                    bloc:
-                                        BlocProvider.of<PublicPahtBloc>(context));
-                              },
-                              onEdit: () {
-                                Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
-                                        arguments: UpdatePahtArgument(
-                                          pahtModel: widget.pahts[index]
-                                        ))
-                                    .then((value) {
-                                  if (value != null) {
-                                    BlocProvider.of<PublicPahtBloc>(context).add(
-                                      ReloadListEvent(), //ListPublicPahtFetchingEvent(isReload: true),
-                                    );
-                                  }
-                                });
-                              },
-                              isPersonal: widget.isPersonal,
-                              pahtModel: widget.pahts[index] ,
-                              onTap: () {
-                                Navigator.pushNamed(context, ROUTER_CREATE_PAHT,
-                                    arguments: UpdatePahtArgument(
-                                        pahtModel: widget.pahts[index],
-                                        isUpdateAble : widget.pahts[index].status == 0
-                                    ))
-                                    .then((value) {
-                                  if (value != null) {
-                                    BlocProvider.of<PublicPahtBloc>(context).add(
-                                      ReloadListEvent(), //ListPublicPahtFetchingEvent(isReload: true),
-                                    );
-                                  }
-                                });
-                              },
-                            )),),);
+                        position: index,
+                        duration: const Duration(milliseconds: 375),
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                              child: loadmore &&
+                                      index >= widget.pahts.length - 1
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: BottomLoaderWidget(),
+                                    )
+                                  : PAHTITemWidget(
+                                      onDelete: () {
+                                        showDeleteConfirmDialog(
+                                            context: context,
+                                            onSubmit: () {
+                                              BlocProvider.of<PublicPahtBloc>(
+                                                      context)
+                                                  .add(
+                                                DeleteButtonEvent(
+                                                    id: widget.pahts[index]
+                                                        .quotationID
+                                                        .toString()),
+                                              );
+                                              Navigator.pop(context);
+                                            },
+                                            bloc:
+                                                BlocProvider.of<PublicPahtBloc>(
+                                                    context));
+                                      },
+                                      onEdit: () {
+                                        Navigator.pushNamed(
+                                                context, ROUTER_CREATE_PAHT,
+                                                arguments: UpdatePahtArgument(
+                                                    pahtModel:
+                                                        widget.pahts[index]))
+                                            .then((value) {
+                                          if (value != null) {
+                                            BlocProvider.of<PublicPahtBloc>(
+                                                    context)
+                                                .add(
+                                              ReloadListEvent(), //ListPublicPahtFetchingEvent(isReload: true),
+                                            );
+                                          }
+                                        });
+                                      },
+                                      isPersonal: widget.isPersonal,
+                                      pahtModel: widget.pahts[index],
+                                      onTap: () {
+                                        if (!widget.isApproveAble) {
+                                          Navigator.pushNamed(
+                                                  context, ROUTER_CREATE_PAHT,
+                                                  arguments: UpdatePahtArgument(
+                                                      pahtModel:
+                                                          widget.pahts[index],
+                                                      isUpdateAble: widget
+                                                              .pahts[index]
+                                                              .status ==
+                                                          0 //moi tao moi duoc phep cap nhat
+                                                      ))
+                                              .then((value) {
+                                            if (value != null) {
+                                              BlocProvider.of<PublicPahtBloc>(
+                                                      context)
+                                                  .add(
+                                                ReloadListEvent(), //ListPublicPahtFetchingEvent(isReload: true),
+                                              );
+                                            }
+                                          });
+                                        }else{// qua man hinh phe duyet bao gia
+
+                                          Navigator.pushNamed(
+                                              context, ROUTER_APPROVE_QUOTATION_PAGE,
+                                              arguments: UpdatePahtArgument(
+                                                  pahtModel:
+                                                  widget.pahts[index],
+                                                  isUpdateAble: false//moi tao moi duoc phep cap nhat
+                                              ))
+                                              .then((value) {
+                                            if (value != null) {
+                                              BlocProvider.of<PublicPahtBloc>(
+                                                  context)
+                                                  .add(
+                                                ReloadListEvent(isApproveAble: isApproveAble), //ListPublicPahtFetchingEvent(isReload: true),
+                                              );
+                                            }
+                                          });
+
+                                        }
+                                      },
+                                    )),
+                        ),
+                      );
                     },
                     // itemCount: widget.hasReachedMax
                     //     ? widget.pahts.length

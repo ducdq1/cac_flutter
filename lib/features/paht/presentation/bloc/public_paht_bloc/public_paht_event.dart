@@ -20,12 +20,12 @@ class ListPublicPahtFetchedEvent extends PublicPahtEvent {
 class ListPublicPahtFetchingEvent extends PublicPahtEvent {
   final int offset;
   final int limit;
-
+  final bool isApproveAble;
   final String search;
   final List<String> categoryIds;
   final List<String> statusIds;
   ListPublicPahtFetchingEvent(
-      {this.offset, this.search, this.categoryIds, this.statusIds, this.limit});
+      {this.offset, this.search, this.categoryIds, this.statusIds, this.limit,this.isApproveAble = false});
 
   @override
   List<Object> get props => [offset, search, categoryIds, statusIds];
@@ -38,9 +38,10 @@ class PublicPahtRefreshRequestedEvent extends PublicPahtEvent {
   final int type;
   final String search;
   final List<String> categoryIds;
+  final bool isApproveAble;
   final List<String> statusIds;
   PublicPahtRefreshRequestedEvent(
-      {this.search, this.categoryIds, this.statusIds, this.type});
+      {this.search, this.categoryIds, this.statusIds, this.type,this.isApproveAble = false});
 
   @override
   List<Object> get props => [search, categoryIds, statusIds];
@@ -49,7 +50,8 @@ class PublicPahtRefreshRequestedEvent extends PublicPahtEvent {
 }
 
 class ReloadListEvent extends PublicPahtEvent {
-  ReloadListEvent();
+  final bool isApproveAble;
+  ReloadListEvent({@required this.isApproveAble=false});
 }
 
 class DeleteButtonEvent extends PublicPahtEvent {

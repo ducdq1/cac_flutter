@@ -48,7 +48,6 @@ class _PahtPublicState extends State<PahtPublic> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
         child: RefreshIndicator(
             onRefresh: () async => handleRefresh(context),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(

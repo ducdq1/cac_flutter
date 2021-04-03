@@ -1,11 +1,10 @@
-import 'dart:ffi';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/utils/form_tools/form_tools.dart';
 import 'package:citizen_app/core/utils/validate/empty_validate.dart';
+import 'package:citizen_app/features/authentication/signup/presentation/widgets/signup_personal_page/input_datetime_widget.dart';
 import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
@@ -16,19 +15,18 @@ import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/detailed_paht_bloc/detailed_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/pages/media_presenter_page.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_item_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/path_detail_page/appbar_heading_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/path_detail_page/paht_info_tabview_widget.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:equatable/equatable.dart';
-
+import 'package:intl/intl.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 const PADDING_CONTENT_HORIZONTAL = 16.0;
 const SIZE_ARROW_BACK_ICON = 24.0;
 
@@ -41,8 +39,13 @@ class SearchProductParam extends Equatable {
   final String productCode;
   final String productName;
   final String userName;
+  final bool isApproveAble;
 
-  SearchProductParam({this.productCode, this.productName, this.userName});
+  SearchProductParam(
+      {this.productCode,
+      this.productName,
+      this.userName,
+      this.isApproveAble = false});
 
   @override
   // TODO: implement props
@@ -71,10 +74,14 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   FocusNode _passFocusNode;
   TextEditingController _passController;
   TextEditingController _notController;
+  TextEditingController _priceController;
+  FocusNode _priceFocusNode;
   FocusNode _noteFocusNode;
   int selectedImageId = -1;
   ImageModel image;
   QuotationDetailModel quotationDetailModel;
+  bool isApproveAble = false;
+  TextEditingController expireDateController;
   @override
   void initState() {
     bool firstLoad = true;
@@ -83,7 +90,11 @@ class _ChooseProductPageState extends State<ChooseProductPage>
     _passFocusNode = FocusNode();
     _passController = TextEditingController();
     _notController = TextEditingController();
-    _noteFocusNode  = FocusNode();
+     _priceController = TextEditingController();
+
+    expireDateController = TextEditingController();
+    _noteFocusNode = FocusNode();
+    _priceFocusNode = FocusNode();
     _controller.addListener(() {
       setState(() {
         _index = _controller.index;
@@ -99,11 +110,19 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       arg = ModalRoute.of(context).settings.arguments as PahtDetailArgument;
       productCode = arg.productCode;
       quotationDetailModel = arg.quotationDetailModel;
-      if(quotationDetailModel !=null){
+      if (quotationDetailModel != null) {
         _passController.text = quotationDetailModel.amount.toString();
         _notController.text = quotationDetailModel.note;
-        selectedImageId = quotationDetailModel.attachId ;
+        selectedImageId = quotationDetailModel.attachId;
+        isApproveAble = arg.isApproveAble;
+        if (isApproveAble) {
+          setState(() {
+            _priceController.text = quotationDetailModel.price != null
+                ?  NumberFormat.decimalPattern().format(quotationDetailModel.price)
+                : "";
+          });
 
+        }
       }
       BlocProvider.of<DetailedPahtBloc>(context).add(
         DetailedPahtFetching(pahtId: productCode),
@@ -367,7 +386,8 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                                     style: GoogleFonts.inter(
                                                       fontSize: FONT_SMALL,
                                                       color: Color(0xff0F8E70),
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ))),
                                       ],
                                     ),
@@ -439,13 +459,11 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   Widget addProductField() {
     return Container(
       decoration: BoxDecoration(
-        ///color: Color(0xffE6EFF3).withOpacity(0.6),
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(0),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 12,
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 5,
             blurRadius: 7,
             offset: Offset(0, 3), // changes position of shadow
           ),
@@ -454,56 +472,172 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       child: Column(
         children: [
           Container(
-            height: 5,
+            height: 7,
+            width: 35,
+            padding: const EdgeInsets.only(bottom: 30),
             decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+              color: Colors.white70,
+              borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
+          SizedBox(
+            height: 4,
+          ),
+          Container(
+            padding: const EdgeInsets.only(bottom: 10),
+            //color: Colors.white,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            ),
             child: Column(
               children: [
+                SizedBox(
+                  height: 7,
+                ),
                 Padding(
                   padding:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                      const EdgeInsets.only(left: 20, right: 20, bottom: 3),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        InputValidateWidget(
-                          isRequired: true,
-                          label: 'Số lượng',
-                          limitLength: 20,
-                          focusNode: _passFocusNode,
-                          textInputType: TextInputType.numberWithOptions(
-                              decimal: true, signed: true),
-                          controller: _passController,
-                          focusAction: () => FormTools.requestFocus(
-                            currentFocusNode: _passFocusNode,
-                            nextFocusNode: _noteFocusNode,
-                            context: context,
-                          ),
-                          validates: [
-                            EmptyValidate(),
-                          ],
+                        isApproveAble
+                            ? Row(children: [
+                                Text('Số lượng:',
+                                    style: GoogleFonts.inter(
+                                        color: DESCRIPTION_COLOR,
+                                        fontSize: FONT_MIDDLE,
+                                        height: 1.5,
+                                        fontWeight: FontWeight.bold),
+                                    softWrap: true),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    quotationDetailModel.amount != null
+                                        ? quotationDetailModel.amount.toString()
+                                        : "",
+                                    style: GoogleFonts.inter(
+                                      color: DESCRIPTION_COLOR,
+                                      fontSize: FONT_MIDDLE,
+                                      height: 1.5,
+                                    ),
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                )
+                              ])
+                            : InputValidateWidget(
+                                isRequired: true,
+                                label: 'Số lượng',
+                                readOnly: isApproveAble,
+                                limitLength: 20,
+                                focusNode: _passFocusNode,
+                                textInputType: TextInputType.numberWithOptions(
+                                    decimal: true, signed: true),
+                                controller: _passController,
+                                focusAction: () => FormTools.requestFocus(
+                                  currentFocusNode: _passFocusNode,
+                                  nextFocusNode: _noteFocusNode,
+                                  context: context,
+                                ),
+                                validates: [
+                                  EmptyValidate(),
+                                ],
+                              ),
+                        isApproveAble
+                            ? Row(children: [
+                                Text('Ghi chú:',
+                                    style: GoogleFonts.inter(
+                                        color: DESCRIPTION_COLOR,
+                                        fontSize: FONT_MIDDLE,
+                                        height: 1.5,
+                                        fontWeight: FontWeight.bold),
+                                    softWrap: true),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    quotationDetailModel.note == null ? "" : quotationDetailModel.note,
+                                    style: GoogleFonts.inter(
+                                      color: DESCRIPTION_COLOR,
+                                      fontSize: FONT_MIDDLE,
+                                      height: 1.5,
+                                    ),
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                )
+                              ])
+                            : InputValidateWidget(
+                                isRequired: true,
+                                label: 'Ghi chú',
+                                readOnly: isApproveAble,
+                                limitLength: 2000,
+                                focusNode: _noteFocusNode,
+                                textInputType: TextInputType.text,
+                                controller: _notController,
+                                focusAction: () => FormTools.requestFocus(
+                                  currentFocusNode: _noteFocusNode,
+                                  nextFocusNode: null,
+                                  context: context,
+                                ),
+                                validates: [
+                                  EmptyValidate(),
+                                ],
+                              ),
+                        SizedBox(
+                          height: 10,
                         ),
-                        InputValidateWidget(
-                          isRequired: true,
-                          label: 'Ghi chú',
-                          limitLength: 2000,
-                          focusNode: _noteFocusNode,
-                          textInputType: TextInputType.text ,
-                          controller: _notController,
-                          focusAction: () => FormTools.requestFocus(
-                            currentFocusNode: _noteFocusNode,
-                            nextFocusNode: null,
-                            context: context,
-                          ),
-                          validates: [
-                            EmptyValidate(),
-                          ],
-                        )
+                        !isApproveAble
+                            ? SizedBox()
+                            : Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: TextField(
+                                controller: _priceController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  ThousandsFormatter()
+                                ],
+                                decoration: new InputDecoration(
+                                    border: OutlineInputBorder(
+                                    borderSide: BorderSide(color: BORDER_COLOR, width: 0.6),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 0.6),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                    //enabledBorder: InputBorder.none,
+                                    //errorBorder: InputBorder.none,
+                                    //disabledBorder: InputBorder.none,
+                                    contentPadding:
+                                    EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                                    hintText: "Nhập giá bán"),
+                                   ),
+                            )
+                        // InputValidateWidget(
+                        //         isRequired: true,
+                        //         label: 'Giá bán',
+                        //         limitLength: 2000,
+                        //         focusNode: _priceFocusNode,
+                        //         textInputType: TextInputType.number,
+                        //         controller: _priceController,
+                        //         focusAction: () => FormTools.requestFocus(
+                        //           currentFocusNode: _priceFocusNode,
+                        //           nextFocusNode: null,
+                        //           context: context,
+                        //         ),
+                        //         validates: [
+                        //           EmptyValidate(),
+                        //         ],
+                        //       ),
+
                       ]),
                 ),
                 Row(
@@ -538,29 +672,31 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       ImageModel imageModel = imageModels[i];
       tiles.add(GridTile(
           child: Container(
-            decoration: BoxDecoration(
-              color: selectedImageId == imageModel.attachId ? Colors.blue : Color.fromARGB(153, 250, 245, 232),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(1.5),
-              child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-
-        child:
+        decoration: BoxDecoration(
+          color: selectedImageId == imageModel.attachId
+              ? Colors.blue
+              : Color.fromARGB(153, 250, 245, 232),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(1.5),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child:
                 //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
                 InkWell(
               onTap: () async {
-                setState(() {
-                  if(selectedImageId == imageModel.attachId){
-                    selectedImageId = -1;
-                    image =null;
-                  }else {
-                    selectedImageId = imageModel.attachId;
-                    image = imageModel;
-                  }
-                });
+                if (!isApproveAble) {
+                  setState(() {
+                    if (selectedImageId == imageModel.attachId) {
+                      selectedImageId = -1;
+                      image = null;
+                    } else {
+                      selectedImageId = imageModel.attachId;
+                      image = imageModel;
+                    }
+                  });
+                }
               },
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
@@ -571,10 +707,10 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                 width: 15,
                 errorWidget: (context, url, error) => new Icon(Icons.error),
               ),
-        ),
-      ),
             ),
-          )));
+          ),
+        ),
+      )));
     }
     return tiles;
   }
@@ -582,30 +718,50 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   @override
   onClick(String id) async {
     if (id == 'primary_btn') {
-      String amountStr = _passController.text.toString();
-      double amount;
-      try {
-        amount = double.parse(amountStr);
-      } catch (error) {
-        FocusScope.of(context).requestFocus(_passFocusNode);
-        return;
-      }
+      if (isApproveAble) {
+          String priceStr = _priceController.text.toString();
+          priceStr = priceStr.replaceAll(",", "");
+          int price;
+          try {
+            price = int.parse(priceStr);
+          } catch (error) {
+            FocusScope.of(context).requestFocus(_priceFocusNode);
+            return;
+          }
+          quotationDetailModel.price = price;
+          if(quotationDetailModel.amount !=null) {
+            quotationDetailModel.value = price * quotationDetailModel.amount;
+          }
+          Navigator.pop(context, quotationDetailModel);
 
-      if (amountStr.isEmpty || amount == 0) {
-        FocusScope.of(context).requestFocus(_passFocusNode);
       } else {
-        QuotationDetailModel model = QuotationDetailModel(
-            productCode: productModel.productCode,
-            productId: productModel.productId,
-            productName: (productModel.productType == 0 || productModel.productType == 1) ?
-            productModel.productName + " " + productModel.productCode :
-            "("+productModel.size  + ") "+productModel.productCode,
-            unit: productModel.unit,
-            amount: amount,
-            image: image,
-            note: _notController.text.trim(),
-            attachId: selectedImageId == -1 ? null : selectedImageId);
-        Navigator.pop(context, model);
+        String amountStr = _passController.text.toString();
+        double amount;
+        try {
+          amount = double.parse(amountStr);
+        } catch (error) {
+          FocusScope.of(context).requestFocus(_passFocusNode);
+          return;
+        }
+
+        if (amountStr.isEmpty || amount == 0) {
+          FocusScope.of(context).requestFocus(_passFocusNode);
+        } else {
+          QuotationDetailModel model = QuotationDetailModel(
+              quotationDetailId: quotationDetailModel != null ? quotationDetailModel.quotationDetailId : null,
+              productCode: productModel.productCode,
+              productId: productModel.productId,
+              productName: (productModel.productType == 0 ||
+                      productModel.productType == 1)
+                  ? productModel.productName + " " + productModel.productCode
+                  : "(" + productModel.size + ") " + productModel.productCode,
+              unit: productModel.unit,
+              amount: amount,
+              image: image,
+              note: _notController.text.trim(),
+              attachId: selectedImageId == -1 ? null : selectedImageId);
+          Navigator.pop(context, model);
+        }
       }
     }
     if (id == 'cancel_btn') {

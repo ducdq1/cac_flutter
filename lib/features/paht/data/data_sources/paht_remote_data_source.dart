@@ -35,7 +35,7 @@ abstract class PahtRemoteDataSource {
 
   Future<List<CommentModel>> fetchComments({String pahtId});
 
-  Future<bool> createIssuePaht(QuotationParams issueParams);
+  Future<String> createIssuePaht(QuotationParams issueParams);
 
   Future<List<QuotationDetailModel>> getListQuotationDetail(int id);
 
@@ -59,24 +59,30 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       @required this.sharedPreferences});
 
   @override
-  Future<bool> createIssuePaht(QuotationParams issueParams) async {
+  Future<String> createIssuePaht(QuotationParams issueParams) async {
     try {
       final token = sharedPreferences.getString('token');
       final body = jsonEncode(issueParams.toJson());
+      print('create or update QUOTATION ');
       print(body);
       String url = '$baseUrl_api/quotation';
       final response = await networkRequest.postRequest(
           url: '$baseUrl_api/quotation', body: body);
-      print('--> success');
+
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
 
-      final data = jsonDecode(response.body);
-      print('result: ' + responseJson.toString());
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      print('create or update QUOTATION result: ' + responseJson.toString());
       if (response.statusCode == 200) {
         if (data['statusCode'] == 1001 && data['message'] == "UNAUTHORIZED") {
           throw Exception(data['message'].toString());
         }
-        return true;
+
+        if (data['statusCode'] != 200) {
+          throw Exception(data['message'].toString());
+        }
+
+        return data['message'];
       } else {
         throw Exception("Lỗi ${response.statusCode}: ${data['message']}");
       }

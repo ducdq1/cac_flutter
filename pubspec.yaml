@@ -40,7 +40,7 @@ dependencies:
   shared_preferences: ^0.5.6
 
   rxdart: ^0.24.1
-
+  pattern_formatter: ^1.0.2
   #phone
   url_launcher: ^5.7.10
 

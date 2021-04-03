@@ -15,6 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../injection_container.dart';
 
 const PADDING_CONTENT_HORIZONTAL = 16.0;
 const SIZE_ARROW_BACK_ICON = 24.0;
@@ -54,6 +57,7 @@ class _PahtDetailPageState extends State<PahtDetailPage>
   ProductModel productModel;
   TonKhoModel tonKhoModel;
   bool firstLoad = true;
+
   @override
   void initState() {
     bool firstLoad = true;
@@ -62,16 +66,6 @@ class _PahtDetailPageState extends State<PahtDetailPage>
     _controller.addListener(() {
       setState(() {
         _index = _controller.index;
-      });
-    });
-
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        // arg = ModalRoute.of(context).settings.arguments as PahtDetailArgument;
-        // productCode = arg.productCode;
-        // BlocProvider.of<DetailedPahtBloc>(context).add(
-        //   DetailedPahtFetching(pahtId: productCode),
-       // );
       });
     });
 
@@ -88,6 +82,7 @@ class _PahtDetailPageState extends State<PahtDetailPage>
         DetailedPahtFetching(pahtId: productCode),
       );
     }
+
     return BaseLayoutWidget(
         title: 'Thông tin sản phẩm',
         centerTitle: true,

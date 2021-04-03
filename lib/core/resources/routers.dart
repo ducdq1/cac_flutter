@@ -2,9 +2,11 @@
 const String ROUTER_HOME = '/';
 //PAHT
 const String ROUTER_PAHT = '/PAHT';
+const String ROUTER_APROVE_PAHT = '$ROUTER_PAHT/APROVE_PAHT';
 const String ROUTER_SEARCH_PERSONAL_PAHT = '$ROUTER_PAHT/search/personal';
 const String ROUTER_SEARCH_PUBLIC_PAHT = '$ROUTER_PAHT/search/public';
 const String ROUTER_CREATE_PAHT = '$ROUTER_PAHT/createReport';
+const String ROUTER_APPROVE_QUOTATION_PAGE = '$ROUTER_PAHT/approveQuotationPage';
 const String ROUTER_BUSINESS_HOUR_PAGE = '$ROUTER_PAHT/businessHour';
 const String ROUTER_DETAILED_PAHT = '$ROUTER_PAHT/detailed';
 const String ROUTER_CHOOSE_PRODUCT = '$ROUTER_PAHT/chooseProduct';

@@ -15,7 +15,8 @@ class PahtModel extends PahtEntity {
     int totalPrice,
     String modifyDate,
     String createUserFullName,
-    String fileName,})
+    String fileName,
+  String quotationDate})
       : super(
       quotationID: quotationID,
       quotationNumber: quotationNumber,
@@ -28,7 +29,8 @@ class PahtModel extends PahtEntity {
       totalPrice: totalPrice,
       modifyDate: modifyDate,
       createUserFullName: createUserFullName,
-      fileName: fileName);
+      fileName: fileName,
+      quotationDate : quotationDate);
 
   factory PahtModel.fromJson(Map json) {
     //MediaModel mediaJson = MediaModel.fromJson(json['mediaUrls']);
@@ -44,7 +46,8 @@ class PahtModel extends PahtEntity {
         totalPrice: json['totalPrice'],
         modifyDate: json['modifyDate'],
         createUserFullName: json['createUserFullName'],
-        fileName: json['fileName']);
+        fileName: json['fileName'],
+        quotationDate: json['quotationDate']);
   }
 
   Map<String, dynamic> toJson() {
@@ -55,7 +58,8 @@ class PahtModel extends PahtEntity {
       "cusPhone": cusPhone,
       "createUserCode": createUserCode,
       "createUserFullName": createUserFullName,
-      "type": type
+      "type": type,
+      "quotationDate": quotationDate
     };
   }
 

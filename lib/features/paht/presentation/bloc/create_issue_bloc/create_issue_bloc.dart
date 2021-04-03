@@ -26,9 +26,9 @@ class CreateIssueBloc extends Bloc<CreateIssueEvent, CreateIssueState> {
       yield CreateIssueLoading();
       try {
         // if (event.type == 0) {
-          await createIssuePaht(event.quotationParams);
+        String result = await createIssuePaht(event.quotationParams);
 
-        yield CreateIssueSuccess();
+        yield CreateIssueSuccess(fileName: result);
       } catch (error) {
         yield CreateIssueFailure(error: error);
       }

@@ -11,6 +11,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../../injection_container.dart';
 
 class HomePageBuilder extends StatefulWidget {
   final ScrollController scrollController;
@@ -28,6 +31,8 @@ class _HomePageBuilderState extends State<HomePageBuilder>
     implements OnButtonClickListener {
   AnimationController _controller;
   Animation<double> _animation;
+  int userType;
+  final pref = singleton<SharedPreferences>();
 
   @override
   void initState() {
@@ -45,6 +50,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
 
   @override
   Widget build(BuildContext context) {
+    userType = pref.getInt('userType');
     return SingleChildScrollView(
       controller: widget.scrollController,
       child: Stack(
@@ -66,92 +72,126 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                 return Padding(
                   padding:
                       const EdgeInsets.only(top: 100.0, left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        children: [
-                          CitizensMenuItemWidget(
-                            label: 'Quét mã',
-                            icon: '/icons/icon_scan_qr.png',
-                            needRedirect: '',
-                            onPress: () async {
-                              final PermissionHandler _permissionHandler =
-                                  PermissionHandler();
-                              var permissionStatus = await _permissionHandler
-                                  .checkPermissionStatus(
-                                      PermissionGroup.camera);
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Stack(
+                              children: [
+                                CitizensMenuItemWidget(
+                                  label: 'Quét mã',
+                                  icon: '/icons/icon_scan_qr.png',
+                                  needRedirect: '',
+                                  onPress: () async {
+                                    final PermissionHandler _permissionHandler =
+                                        PermissionHandler();
+                                    var permissionStatus =
+                                        await _permissionHandler
+                                            .checkPermissionStatus(
+                                                PermissionGroup.camera);
 
-                              switch (permissionStatus) {
-                                case PermissionStatus.granted:
-                                  var value = await Navigator.of(context)
-                                      .pushNamed(ROUTER_QRCODE_SCANER);
-                                  if (value != null) {
-                                    Navigator.pushNamed(
-                                        context, ROUTER_DETAILED_PAHT,
-                                        arguments: PahtDetailArgument(
-                                            productCode: value));
-                                  }
+                                    switch (permissionStatus) {
+                                      case PermissionStatus.granted:
+                                        var value = await Navigator.of(context)
+                                            .pushNamed(ROUTER_QRCODE_SCANER);
+                                        if (value != null) {
+                                          Navigator.pushNamed(
+                                              context, ROUTER_DETAILED_PAHT,
+                                              arguments: PahtDetailArgument(
+                                                  productCode: value));
+                                        }
 
-                                  break;
-                                case PermissionStatus.denied:
-                                case PermissionStatus.restricted:
-                                case PermissionStatus.unknown:
-                                  await _permissionHandler.requestPermissions(
-                                      [PermissionGroup.camera]);
-                                  var permissionStatus =
-                                      await _permissionHandler
-                                          .checkPermissionStatus(
-                                              PermissionGroup.camera);
+                                        break;
+                                      case PermissionStatus.denied:
+                                      case PermissionStatus.restricted:
+                                      case PermissionStatus.unknown:
+                                        await _permissionHandler
+                                            .requestPermissions(
+                                                [PermissionGroup.camera]);
+                                        var permissionStatus =
+                                            await _permissionHandler
+                                                .checkPermissionStatus(
+                                                    PermissionGroup.camera);
 
-                                  switch (permissionStatus) {
-                                    case PermissionStatus.granted:
-                                      var value = await Navigator.of(context)
-                                          .pushNamed(ROUTER_QRCODE_SCANER);
-                                      if (value != null) {
-                                        Navigator.pushNamed(
-                                            context, ROUTER_DETAILED_PAHT,
-                                            arguments: PahtDetailArgument(
-                                                productCode: value));
-                                      }
-                                  }
-                                  break;
+                                        switch (permissionStatus) {
+                                          case PermissionStatus.granted:
+                                            var value =
+                                                await Navigator.of(context)
+                                                    .pushNamed(
+                                                        ROUTER_QRCODE_SCANER);
+                                            if (value != null) {
+                                              Navigator.pushNamed(
+                                                  context, ROUTER_DETAILED_PAHT,
+                                                  arguments: PahtDetailArgument(
+                                                      productCode: value));
+                                            }
+                                        }
+                                        break;
 
-                                default:
-                              }
-                            },
-                          ),
-                          AnimatedBuilder(
-                            animation: _animation,
-                            child: Container(
-                              width: 140,
-                              child: Center(
-                                child: Container(
-                                    color: Colors.amber,
-                                    height: 1,
-                                    width: 60),
-                              ),
+                                      default:
+                                    }
+                                  },
+                                ),
+                                AnimatedBuilder(
+                                  animation: _animation,
+                                  child: Container(
+                                    width: 140,
+                                    child: Center(
+                                      child: Container(
+                                          color: Colors.amber,
+                                          height: 1,
+                                          width: 60),
+                                    ),
+                                  ),
+                                  builder: (_, widget) {
+                                    return Transform.translate(
+                                      offset: Offset(0.0, _animation.value),
+                                      child: widget,
+                                    );
+                                  },
+                                )
+                              ],
                             ),
-                            builder: (_, widget) {
-                              return Transform.translate(
-                                offset: Offset(0.0, _animation.value),
-                                child: widget,
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                      CitizensMenuItemWidget(
-                        label: 'Báo giá',
-                        icon: '/icons/icon_bao_gia.png',
-                        needRedirect: '',
-                        onPress: () {
-                          Navigator.pushNamed(context, ROUTER_PAHT);
-                        },
-                      )
-                    ],
-                  ),
+                            CitizensMenuItemWidget(
+                              label: 'Báo giá',
+                              icon: '/icons/icon_bao_gia.png',
+                              needRedirect: '',
+                              onPress: () {
+                                Navigator.pushNamed(context, ROUTER_PAHT);
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        userType != null && userType == 3
+                            ? // quan ly ban hang  co them module duyet bao gia
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                    CitizensMenuItemWidget(
+                                      label: 'Duyệt báo giá',
+                                      icon: '/icons/icon_ds_bao_gia.png',
+                                      needRedirect: '',
+                                      onPress: () {
+                                        Navigator.pushNamed(
+                                            context, ROUTER_APROVE_PAHT);
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 140,
+                                      width: 140,
+                                    )
+                                  ])
+                            : SizedBox(),
+                      ]),
                 );
               },
             ),

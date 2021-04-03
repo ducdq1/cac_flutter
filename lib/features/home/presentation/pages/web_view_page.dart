@@ -64,7 +64,7 @@ class _WebViewPageState extends State<WebViewPage>  implements OnButtonClickList
     return Scaffold(
       body: BaseLayoutWidget(
         borderRadiusContent: 0,
-        title: widget.title.titleCase,
+        title: 'Bảng báo giá',
         body: Stack(
           children: [
             isLoading

@@ -51,7 +51,7 @@ class _CitizensMenuItemWidgetState extends State<CitizensMenuItemWidget> {
                     child: Text(
                       widget.label.replaceAll("\n", "\n").replaceAll("/n", "\n"),
                       style: TextStyle(
-                        fontSize: FONT_MIDDLE ,
+                        fontSize: 13 ,
                         color: PRIMARY_TEXT_COLOR,
                         fontWeight: FontWeight.bold,
                         height: 1.6,

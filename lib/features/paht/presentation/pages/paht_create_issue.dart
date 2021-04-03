@@ -311,7 +311,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                  Container(
                       padding: EdgeInsets.all( 10),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Color(0xffFDF9ED),
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10)),
@@ -735,9 +735,6 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   @override
   onClick(String id) async {
     if (id == 'primary_btn') {
-      setState(() {
-        _isSubmitted = true;
-      });
 
       clearFocus();
       if(listQuotationDetailModel.isEmpty){

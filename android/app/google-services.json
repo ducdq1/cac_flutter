@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "400504484458",
-    "project_id": "cac-demo-bcccd",
-    "storage_bucket": "cac-demo-bcccd.appspot.com"
+    "project_number": "729940612804",
+    "project_id": "cac-demo-new",
+    "storage_bucket": "cac-demo-new.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:400504484458:android:94c33871c743cbf8e99013",
+        "mobilesdk_app_id": "1:729940612804:android:46efe6addcaaf34ba6db91",
         "android_client_info": {
           "package_name": "com.cac.demo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "400504484458-siavs70ln9d70ogop8u1omvaq074s1e5.apps.googleusercontent.com",
+          "client_id": "729940612804-r7p7bk2ln7d8i3b58eerg8b52d7fsg75.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBQZ24jziiXF2S_OCkd_QZJH_PgDPVbneo"
+          "current_key": "AIzaSyBeUBZ6mB8Y0CrWXzm73FVUEpFslz8OwnA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "400504484458-siavs70ln9d70ogop8u1omvaq074s1e5.apps.googleusercontent.com",
+              "client_id": "729940612804-r7p7bk2ln7d8i3b58eerg8b52d7fsg75.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "729940612804-c3tl2lfguvv7shnlioe22e6um4hrm5h7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.viettel.maps"
+              }
             }
           ]
         }

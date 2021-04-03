@@ -64,7 +64,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
       List<PahtModel> listPublicPaht = await getListPersonalPaht(PahtParams(
           limit: 10,
           offset: 0,
-          search: event.search != null ? '=${event.search}' : '=',
+          search: event.search != null ? '=${event.search}' : null,
           status: 1,
           userName: userName
            ));
@@ -105,7 +105,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
           getListPersonalPaht(PahtParams(
                   limit: 10,
                   offset: 0,
-                  search: event.search != null ? '=${event.search}' : '=',
+                  search: event.search != null ? '=${event.search}' : null,
                   status: 1,
               userName: userName))
               .then((value) {
@@ -130,7 +130,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
               PahtParams(
                   limit: 10,
                   offset: nextOffset,
-                  search: event.search != null ? '=${event.search}' : '=',
+                  search: event.search != null ? '=${event.search}' : null,
                   status: 1,
                   userName: userName));
 
@@ -184,7 +184,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
         List<PahtModel> listPersonalPaht = await getListPersonalPaht(PahtParams(
             limit: 10,
             offset: 0,
-            search: event.search != null ? '=${event.search}' : '=',
+            search: event.search != null ? '=${event.search}' : null,
            status: 1,
             userName: userName));
 

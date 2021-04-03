@@ -27,6 +27,9 @@ class GetListQuotationDetailLoading extends CreateIssueState {
   GetListQuotationDetailLoading();
 }
 
-class CreateIssueSuccess extends CreateIssueState {}
+class CreateIssueSuccess extends CreateIssueState {
+  final String fileName;
+  CreateIssueSuccess({this.fileName});
+}
 
 class RefreshState extends CreateIssueState {}

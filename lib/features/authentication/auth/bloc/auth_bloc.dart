@@ -31,6 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await prefs.remove('userName');
         await prefs.remove('auth');
         await prefs.remove('token');
+        await prefs.remove('userType');
       } catch (e) {
         print(e);
       }

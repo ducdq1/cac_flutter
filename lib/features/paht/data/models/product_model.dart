@@ -19,7 +19,7 @@ class ProductModel extends ProductEntity {
       int productType,
       String color,
       List<ImageModel> images,
-  TonKhoModel tonKhoModel}  )
+  TonKhoModel tonKhoModel})
       : super(
             productId: productId,
             maHangHoa: maHangHoa,

@@ -21,8 +21,8 @@ class PahtParams extends Equatable {
   final int limit;
   final int offset;
   final int status;
-
-  PahtParams({this.search,this.userName, this.limit, this.offset, this.status});
+  final bool isApproveAble;
+  PahtParams({this.search,this.userName, this.limit, this.offset, this.status,this.isApproveAble = false});
 
   @override
   // TODO: implement props
@@ -35,6 +35,7 @@ class PahtParams extends Equatable {
       'limit': limit,
       'offset': offset,
       'status': status,
+      'isApproveAble' : isApproveAble
     };
   }
 }

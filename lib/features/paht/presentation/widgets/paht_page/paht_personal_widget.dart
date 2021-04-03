@@ -24,7 +24,6 @@ class _PahtPersonalState extends State<PahtPersonal> {
   @override
   void initState() {
     _refreshCompleter = Completer<void>();
-   // scrollController.addListener(onScroll);
     super.initState();
   }
 
@@ -33,7 +32,6 @@ class _PahtPersonalState extends State<PahtPersonal> {
     scrollController.dispose();
     super.dispose();
   }
-
 
   void handleRefresh(context) {
     setState(() {

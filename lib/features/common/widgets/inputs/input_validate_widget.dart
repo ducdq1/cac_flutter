@@ -19,7 +19,7 @@ class InputValidateWidget extends StatefulWidget {
   final double scrollPadding;
   final TextInputAction textInputAction;
   final int limitLength;
-
+  final bool readOnly;
   InputValidateWidget({
     this.label,
     this.isRequired = true,
@@ -32,6 +32,7 @@ class InputValidateWidget extends StatefulWidget {
     this.textInputType = TextInputType.text,
     this.scrollPadding = 150,
     this.limitLength,
+    this.readOnly = false
   });
   @override
   _InputValidateWidgetState createState() => _InputValidateWidgetState();
@@ -63,6 +64,7 @@ class _InputValidateWidgetState extends State<InputValidateWidget> {
       child: TextFormField(
         obscureText: _obscureText,
         controller: widget.controller,
+        readOnly: widget.readOnly,
         focusNode: widget.focusNode,
         textInputAction: widget.textInputAction,
         style: GoogleFonts.inter(

@@ -15,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../main.dart';
 
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   final StopScrollController _stopScrollController = StopScrollController();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings initializationSettingsAndroid;
+  final pref = singleton<SharedPreferences>();
   var _firebaseMessaging;
   // bool closeTopContainer = false;
   // double scale = 1;
@@ -62,8 +64,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
 
     initFlutterLocalNotificationsPlugin();
-
-    _firebaseMessaging.subscribeToTopic('all');
+    String token = _firebaseMessaging.getToken().toString();
+    print('Firebase Device Token:  '  + token);
+    String userName = pref.get('userName');
+    print(userName);
+      int userType = pref.getInt('userType');
+      if(userType !=null && userType == 3){
+        _firebaseMessaging.subscribeToTopic('create');
+      }
+    _firebaseMessaging.subscribeToTopic(userName);
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> msg) async {
@@ -71,14 +80,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         String title= msg['notification']['title'];
         var payload = {};
         if (Platform.isIOS) {
-          payload = {};//{"orderId": msg["orderId"], "type": msg["type"]};
           showNotification(
-            title: msg['notification']['title'],
-            body: msg['notification']['body'],
+            title: msg['aps']['alert']['title'],
+            body: msg['aps']['alert']['body'],
             payload: jsonEncode(payload),
           );
         } else {
-          payload = msg['data'];
           showNotification(
             title: msg['notification']['title'],
             body: msg['notification']['body'],

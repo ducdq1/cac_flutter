@@ -14,21 +14,27 @@ class CreateIssuePaht implements UseCase<StatusEntity, QuotationParams> {
   CreateIssuePaht(this.repository);
 
   @override
-  Future<bool> call(QuotationParams issueParams) async {
+  Future<String> call(QuotationParams issueParams) async {
     return await repository.createIssuePaht(issueParams);
   }
 }
 
 
 class QuotationParams extends Equatable {
+  final bool isApproveAble;
+  final bool isPreViewApprove;
   final PahtModel quotation;
   final List<QuotationDetailModel> lstQuotationDetail;
-  QuotationParams({this.quotation,this.lstQuotationDetail});
+  final String expiredDate;
+  QuotationParams({this.quotation,this.lstQuotationDetail,this.isApproveAble = false,this.expiredDate,this.isPreViewApprove= false});
   @override
   List<Object> get props => throw UnimplementedError();
 
   toJson() {
     return {
+      "isPreViewApprove" : isPreViewApprove,
+      "isApproveAble" : isApproveAble,
+      "expiredDate" : expiredDate,
       "quotation": quotation.toJson(),
       "lstQuotationDetail": this.lstQuotationDetail.map((e) => e.toJson()).toList(),
     };

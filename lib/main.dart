@@ -18,6 +18,7 @@ import 'package:citizen_app/features/paht/domain/usecases/get_detailed_paht.dart
 import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/detailed_paht_bloc/detailed_paht_bloc.dart';
+import 'package:citizen_app/features/paht/presentation/pages/approve_quotation_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/business_hour_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/choose_product_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
@@ -38,6 +39,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/aprove_quotation_widget.dart';
 import 'features/profile/presentation/bloc/change_password_bloc.dart';
 import 'injection_container.dart' as di;
 
@@ -197,6 +199,8 @@ class _MyAppState extends State<MyApp> {
           ROUTER_INFO_PAGE: (context) => ViewInfoPage(),
           ROUTER_BUSINESS_HOUR_PAGE: (context) => BusinessHourPage(),
           ROUTER_QRCODE_SCANER: (context) => QRSCaner(),
+          ROUTER_APROVE_PAHT: (context) => ApproveQuotation(),
+          ROUTER_APPROVE_QUOTATION_PAGE : (context) => ApproveQuotationPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

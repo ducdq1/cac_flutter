@@ -78,7 +78,7 @@ class QuotationDetailItemWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.amber.shade100,
+                color: quotationDetailModel.price !=null ? Colors.green.shade100 : Colors.amber.shade100,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
@@ -95,12 +95,15 @@ class QuotationDetailItemWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5.0),
-                          child: Row(children: [
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                             Text('Sản phẩm:',
                                 style: GoogleFonts.inter(
                                     color: DESCRIPTION_COLOR,
