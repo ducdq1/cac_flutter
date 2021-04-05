@@ -682,7 +682,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       tiles.add(GridTile(
           child: Container(
         decoration: BoxDecoration(
-          color: Color(0xfff1e3c0),
+          color: selectedImageId == imageModel.attachId ? Colors.green: Color(0xfff1e3c0),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Padding(
