@@ -27,6 +27,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
+
 const PADDING_CONTENT_HORIZONTAL = 16.0;
 const SIZE_ARROW_BACK_ICON = 24.0;
 
@@ -82,6 +83,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   QuotationDetailModel quotationDetailModel;
   bool isApproveAble = false;
   TextEditingController expireDateController;
+
   @override
   void initState() {
     bool firstLoad = true;
@@ -90,7 +92,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
     _passFocusNode = FocusNode();
     _passController = TextEditingController();
     _notController = TextEditingController();
-     _priceController = TextEditingController();
+    _priceController = TextEditingController();
 
     expireDateController = TextEditingController();
     _noteFocusNode = FocusNode();
@@ -118,10 +120,10 @@ class _ChooseProductPageState extends State<ChooseProductPage>
         if (isApproveAble) {
           setState(() {
             _priceController.text = quotationDetailModel.price != null
-                ?  NumberFormat.decimalPattern().format(quotationDetailModel.price)
+                ? NumberFormat.decimalPattern()
+                    .format(quotationDetailModel.price)
                 : "";
           });
-
         }
       }
       BlocProvider.of<DetailedPahtBloc>(context).add(
@@ -458,12 +460,19 @@ class _ChooseProductPageState extends State<ChooseProductPage>
 
   Widget addProductField() {
     return Container(
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        border: Border.all(
+          width: 0.2,
+          color: PRIMARY_COLOR,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 5,
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 10,
             blurRadius: 7,
             offset: Offset(0, 3), // changes position of shadow
           ),
@@ -472,20 +481,19 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       child: Column(
         children: [
           Container(
-            height: 7,
-            width: 35,
-            padding: const EdgeInsets.only(bottom: 30),
+            height: 4,
+            width: 30,
+            //padding: const EdgeInsets.only(bottom: 30),
             decoration: BoxDecoration(
-              color: Colors.white70,
+              color: Colors.red.shade400,
               borderRadius: BorderRadius.all(Radius.circular(5)),
             ),
           ),
           SizedBox(
-            height: 4,
+            height: 5,
           ),
           Container(
             padding: const EdgeInsets.only(bottom: 10),
-            //color: Colors.white,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -493,9 +501,6 @@ class _ChooseProductPageState extends State<ChooseProductPage>
             ),
             child: Column(
               children: [
-                SizedBox(
-                  height: 7,
-                ),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 20, right: 20, bottom: 3),
@@ -562,7 +567,9 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                 ),
                                 Expanded(
                                   child: Text(
-                                    quotationDetailModel.note == null ? "" : quotationDetailModel.note,
+                                    quotationDetailModel.note == null
+                                        ? ""
+                                        : quotationDetailModel.note,
                                     style: GoogleFonts.inter(
                                       color: DESCRIPTION_COLOR,
                                       fontSize: FONT_MIDDLE,
@@ -597,30 +604,33 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                         !isApproveAble
                             ? SizedBox()
                             : Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: TextField(
-                                controller: _priceController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  ThousandsFormatter()
-                                ],
-                                decoration: new InputDecoration(
-                                    border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: BORDER_COLOR, width: 0.6),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: PRIMARY_COLOR, width: 0.6),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                    //enabledBorder: InputBorder.none,
-                                    //errorBorder: InputBorder.none,
-                                    //disabledBorder: InputBorder.none,
-                                    contentPadding:
-                                    EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                                    hintText: "Nhập giá bán"),
-                                   ),
-                            )
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: TextField(
+                                  controller: _priceController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [ThousandsFormatter()],
+                                  decoration: new InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: BORDER_COLOR, width: 0.6),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: PRIMARY_COLOR, width: 0.6),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      //enabledBorder: InputBorder.none,
+                                      //errorBorder: InputBorder.none,
+                                      //disabledBorder: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(
+                                          left: 15,
+                                          bottom: 11,
+                                          top: 11,
+                                          right: 15),
+                                      hintText: "Nhập giá bán"),
+                                ),
+                              )
                         // InputValidateWidget(
                         //         isRequired: true,
                         //         label: 'Giá bán',
@@ -637,7 +647,6 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                         //           EmptyValidate(),
                         //         ],
                         //       ),
-
                       ]),
                 ),
                 Row(
@@ -673,41 +682,61 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       tiles.add(GridTile(
           child: Container(
         decoration: BoxDecoration(
-          color: selectedImageId == imageModel.attachId
-              ? Colors.blue
-              : Color.fromARGB(153, 250, 245, 232),
+          color: Color(0xfff1e3c0),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Padding(
           padding: const EdgeInsets.all(1.5),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            child:
-                //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
-                InkWell(
-              onTap: () async {
-                if (!isApproveAble) {
-                  setState(() {
-                    if (selectedImageId == imageModel.attachId) {
-                      selectedImageId = -1;
-                      image = null;
-                    } else {
-                      selectedImageId = imageModel.attachId;
-                      image = imageModel;
+          child: Stack(
+            alignment: Alignment.center,
+            fit: StackFit.expand,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child:
+                    //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
+                    InkWell(
+                  onTap: () async {
+                    if (!isApproveAble) {
+                      setState(() {
+                        if (selectedImageId == imageModel.attachId) {
+                          selectedImageId = -1;
+                          image = null;
+                        } else {
+                          selectedImageId = imageModel.attachId;
+                          image = imageModel;
+                        }
+                      });
                     }
-                  });
-                }
-              },
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
-                placeholder: (context, url) =>
-                    new CircularProgressIndicator(strokeWidth: 2.0),
-                height: 15,
-                width: 15,
-                errorWidget: (context, url, error) => new Icon(Icons.error),
+                  },
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
+                    placeholder: (context, url) =>
+                        new CircularProgressIndicator(strokeWidth: 2.0),
+                    height: 15,
+                    width: 15,
+                    errorWidget: (context, url, error) => new Icon(Icons.error),
+                  ),
+                ),
               ),
-            ),
+              Align(
+                alignment: Alignment.topRight,
+                child: selectedImageId == imageModel.attachId
+                    ? Container(
+                        decoration: BoxDecoration(
+                          color:  Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset(
+                          ICONS_ASSETS + 'icon_selected.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                      )
+                    : SizedBox(),
+              )
+            ],
           ),
         ),
       )));
@@ -719,21 +748,20 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   onClick(String id) async {
     if (id == 'primary_btn') {
       if (isApproveAble) {
-          String priceStr = _priceController.text.toString();
-          priceStr = priceStr.replaceAll(",", "");
-          int price;
-          try {
-            price = int.parse(priceStr);
-          } catch (error) {
-            FocusScope.of(context).requestFocus(_priceFocusNode);
-            return;
-          }
-          quotationDetailModel.price = price;
-          if(quotationDetailModel.amount !=null) {
-            quotationDetailModel.value = price * quotationDetailModel.amount;
-          }
-          Navigator.pop(context, quotationDetailModel);
-
+        String priceStr = _priceController.text.toString();
+        priceStr = priceStr.replaceAll(",", "");
+        int price;
+        try {
+          price = int.parse(priceStr);
+        } catch (error) {
+          FocusScope.of(context).requestFocus(_priceFocusNode);
+          return;
+        }
+        quotationDetailModel.price = price;
+        if (quotationDetailModel.amount != null) {
+          quotationDetailModel.value = price * quotationDetailModel.amount;
+        }
+        Navigator.pop(context, quotationDetailModel);
       } else {
         String amountStr = _passController.text.toString();
         double amount;
@@ -748,7 +776,9 @@ class _ChooseProductPageState extends State<ChooseProductPage>
           FocusScope.of(context).requestFocus(_passFocusNode);
         } else {
           QuotationDetailModel model = QuotationDetailModel(
-              quotationDetailId: quotationDetailModel != null ? quotationDetailModel.quotationDetailId : null,
+              quotationDetailId: quotationDetailModel != null
+                  ? quotationDetailModel.quotationDetailId
+                  : null,
               productCode: productModel.productCode,
               productId: productModel.productId,
               productName: (productModel.productType == 0 ||

@@ -164,7 +164,7 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
             ? 'Báo giá'
             : _isUpdateAble
                 ? 'Báo giá'
-                : 'Chi tiết báo giá',
+                : 'Chi tiết báo giá ' + (pahtModel !=null && pahtModel.quotationNumber!=null ? pahtModel.quotationNumber : ''),
         centerTitle: true,
         body: BlocConsumer<CreateIssueBloc, CreateIssueState>(
           listener: (_, state) {
@@ -260,29 +260,42 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
                       ),
                     ),
                     Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Color(0xffFDF9ED),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10)),
-                          border: Border.all(
-                            width: 0.2,
-                            color: PRIMARY_COLOR,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 10,
-                              blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
-                            ),
-                          ],
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10)),
+                        border: Border.all(
+                          width: 0.2,
+                          color: PRIMARY_COLOR,
                         ),
-                        child: pahtModel != null && pahtModel.status == 0
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 10,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(children: [
+                        Container(
+                          height: 4,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade400,
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        pahtModel != null && pahtModel.status == 0
                             ? createIssueAction()
-                            : viewBaoGiaFileAction()),
+                            : viewBaoGiaFileAction()
+                      ]),
+                    ),
                   ],
                 ),
               ),

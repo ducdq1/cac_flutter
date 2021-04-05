@@ -311,7 +311,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                  Container(
                       padding: EdgeInsets.all( 10),
                       decoration: BoxDecoration(
-                        color: Color(0xffFDF9ED),
+                        color: Colors.white,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             topRight: Radius.circular(10)),
@@ -328,7 +328,18 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                           ),
                         ],
                       ),
-                      child: _isUpdateAble ?   createIssueAction() : viewBaoGiaFileAction() ) ,
+                      child: Column(children: [
+                        Container(
+                        height: 4,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade400,
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      ),
+                     SizedBox(
+                       height: 10,
+                     ), _isUpdateAble ?   createIssueAction() : viewBaoGiaFileAction() ]) ) ,
                 ],
               ),
             );

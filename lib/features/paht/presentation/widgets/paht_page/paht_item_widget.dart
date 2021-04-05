@@ -73,7 +73,7 @@ class PAHTITemWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.amber.shade100,
+                color: pahtModel.status == 0 ? Colors.amber.shade100 : Colors.green.shade100  ,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(

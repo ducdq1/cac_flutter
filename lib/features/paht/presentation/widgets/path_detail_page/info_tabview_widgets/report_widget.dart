@@ -263,37 +263,52 @@ class ReportWidget extends StatelessWidget {
     for (int i = 0; i < imageModels.length; i++) {
       ImageModel imageModel = imageModels[i];
       tiles.add(GridTile(
-          child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        child:
-            //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
-            InkWell(
-          onTap: () async {
-            await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MediaPresenterPage(
-                  urls: productModel.images,
-                  initialIndex: i,
-                ),
+
+          child:
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xfff1e3c0),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(1),
+              child: ClipRRect(
+
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child:
+                //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
+                InkWell(
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => MediaPresenterPage(
+                      urls: productModel.images,
+                      initialIndex: i,
+                    ),
+                  ),
+                );
+                SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+                SystemChrome.setSystemUIOverlayStyle(
+                  SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
+                );
+              },
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
+                placeholder: (context, url) =>
+                    new CircularProgressIndicator(strokeWidth: 2.0),
+                height: 15,
+                width: 15,
+                errorWidget: (context, url, error) => new Icon(Icons.error),
               ),
-            );
-            SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
-            );
-          },
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
-            placeholder: (context, url) =>
-                new CircularProgressIndicator(strokeWidth: 2.0),
-            height: 15,
-            width: 15,
-            errorWidget: (context, url, error) => new Icon(Icons.error),
-          ),
         ),
-      )));
+
+      ),
+            ),
+          )
+      )
+      );
     }
     return tiles;
   }
