@@ -7,6 +7,7 @@ import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
 import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
 import 'package:citizen_app/features/common/http_proxy.dart';
+import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/profile/presentation/widgets/settings_page/language_dialog.dart';
@@ -18,14 +19,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatefulWidget  {
   @override
   _SettingsPageState createState() => _SettingsPageState();
+
+
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends State<SettingsPage>   implements OnButtonClickListener{
   final pref = singleton<SharedPreferences>();
   String language = "vi";
   String locale = ui.window.locale.languageCode;
@@ -33,6 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool useProxy = false;
   bool _canCheckBiometric;
   String autherized = "Not autherized";
+  TextEditingController controller;
 
   @override
   void setState(fn) {
@@ -42,32 +48,33 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   @override
+  onClick(String id) {
+    saveConfig();
+    Navigator.of(context).pop();
+  }
+
+  @override
   void initState() {
-    super.initState();
+    controller = new TextEditingController();
+
     // print('language: ${language}');
     setState(() {
       language = handleLanguage();
       useProxy = pref.getBool('useProxy') ?? false;
+      String IP_SERVER = pref.getString('IP_SERVER');
+      controller.text = IP_SERVER == null || IP_SERVER.isEmpty
+          ? "http://117.2.164.156/"
+          : IP_SERVER;
     });
+    super.initState();
     // print('language: ${language}');
   }
 
-  Future<bool> switchUseProxy(BuildContext context) async {
-    if(!useProxy) {
-      HttpProxy httpProxy = await HttpProxy.createHttpProxy(
-          "10.61.11.42", "3128");
-      HttpOverrides.global = httpProxy;
-    }else{
-      HttpOverrides.global = null;//await HttpProxy.createHttpProxy("", "");
-    }
-
-    setState(() {
-      useProxy = !useProxy;
-    });
-    pref.setBool('useProxy', useProxy);
+  Future<bool> saveConfig() async {
+    pref.setString('IP_SERVER', controller.text);
     return useProxy;
   }
-  
+
   Future<bool> switchFP(BuildContext context) async {
     bool succeedSaveFPToCache = valueFP;
     if (valueFP == true) {
@@ -110,50 +117,63 @@ class _SettingsPageState extends State<SettingsPage> {
               //   label: 'Thiết lập người dùng',
               //   value: 'Khách du lịch',
               // ),
-              InkWell(
-                onTap: () {
-                  showLanguageSettingDialog(
-                      context: context,
-                      languagePicked: language,
-                      func: (String lang) async {
-                        setState(() {
-                          language = lang;
-                        });
-                        await pref.setString(
-                            'languageDevice', language.toString());
-                        Locale newLocale = Locale(language.toString(), '');
-                        MyApp.setLocale(context, newLocale);
 
-                        final authState =
-                            BlocProvider.of<AuthBloc>(context).state;
-                        if (authState is AuthenticatedState) {
-                          BlocProvider.of<HomePageBloc>(context).add(
-                              AppModulesFetched(
-                                  provinceId: PROVINCE_ID,
-                                  userId: 1));//authState.auth.userId
-                        } else {
-                          BlocProvider.of<HomePageBloc>(context).add(
-                              AppModulesFetched(
-                                  provinceId: PROVINCE_ID, userId: null));
-                        }
-                      });
-                },
-                child: TextSettingWidget(
-                  icon: 'icon_lang.svg',
-                  label: trans(SELECT_LANGUAGE),
-                  value: language == "en" ? trans(ENGLISH) : trans(VIETNAMESE),
-                ),
-              ),
-              ToggleFingerPrintWidget(
-                  icon: 'icon_fingerprint_unselected.svg',
-                  label: 'Use Proxy',
-                  value: useProxy,
-                  callback: () => switchUseProxy(context)),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Image.asset(
+                    //   IMAGE_ASSETS_PATH + 'icon_info.png',
+                    //   width: 24,
+                    //   height: 24,
+                    //   fit: BoxFit.fill,
+                    // ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'IP máy chủ: ',
+                              style: GoogleFonts.inter(
+                                fontSize: FONT_MIDDLE,
+                                fontWeight: FontWeight.bold,
+                                color: PRIMARY_TEXT_COLOR,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            TextField(
+                              controller: controller,
+                              keyboardType: TextInputType.text,
+                              decoration: new InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: BORDER_COLOR, width: 0.6),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: PRIMARY_COLOR, width: 0.6),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  //enabledBorder: InputBorder.none,
+                                  //errorBorder: InputBorder.none,
+                                  //disabledBorder: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15, bottom: 11, top: 11, right: 15),
+                                  hintText: "Địa chỉ máy chủ"),
+                            )
+                          ]),
+
+                    ),
+                  ]),
               // ToggleNotificationWidget(
               //     icon: 'icon_notify.svg',
               //     label: trans(RECEIVE_NOTIFY),
               //     value: false),
-            ],
+              SizedBox(height: 30),
+              PrimaryButton(
+                  label: 'Lưu thông tin', ctx: this, id: 'share_btn')],
           ),
         ),
       ),

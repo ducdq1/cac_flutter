@@ -27,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isAuthViettel = false;
   String avartarPath;
   String fullName = "";
-
+  String userName = "";
   @override
   void initState() {
     SharedPreferences prefs = singleton<SharedPreferences>();
@@ -35,6 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
       avartarPath = prefs.getString("avartarPath");
       avartarPath = '$baseUrl' + avartarPath;
       fullName = prefs.getString("fullName");
+      userName= prefs.getString("userName");
     }
     isAuthViettel().then((isAuthViettel) {
       setState(() {
@@ -79,26 +80,33 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  ClipOval(
-                    child: Container(
-                        width: 130.0,
-                        height: 130.0,
-                        decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: avartarPath,
-                          placeholder: (context, url) =>
-                              new CircularProgressIndicator(strokeWidth: 2.0),
-                          height: 15,
-                          width: 15,
-                          errorWidget: (context, url, error) => Image.asset(
-                            ICONS_ASSETS + 'default-avatar.png',
-                            height: 100,
-                            width: 100,
-                          ),
-                        )),
+                  Container(
+                    decoration: BoxDecoration(
+                      //color: const Color(0xff7c94b6),
+                      borderRadius: new BorderRadius.all(new Radius.circular(80)),
+                      border: new Border.all(
+                        color: Color(0xff7c94b6),
+                        width: 2.0,
+                      ),
+                    ),
+                    child: ClipOval(
+                      child: Container(
+                          width: 130.0,
+                          height: 130.0,
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: avartarPath,
+                            placeholder: (context, url) =>
+                                new CircularProgressIndicator(strokeWidth: 2.0),
+                            height: 15,
+                            width: 15,
+                            errorWidget: (context, url, error) => Image.asset(
+                              ICONS_ASSETS + 'default-avatar.png',
+                              height: 100,
+                              width: 100,
+                            ),
+                          )),
+                    ),
                   ),
                   SizedBox(height: 20),
                   Text(
@@ -110,17 +118,17 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontWeight: FontWeight.bold
                     ),
 
-                  ), SizedBox(height: 50),
+                  ),
+                  SizedBox(height: 50),
                 ],
               )),
 
-              SizedBox(),
-              // : OptionItemWidget(
-              //     icon: 'icon_change_password.png',
-              //     label: trans(TITLE_CHANGE_PASSWORD),
-              //     // route: ROUTER_CHANGE_PASSWORD_PAGE,
-              //     page: ChangePasswordPage(),
-              //   ),
+              OptionItemWidget(
+                  icon: 'icon_settings.png',
+                  label: 'Cài đặt',
+                  // route: ROUTER_CHANGE_PASSWORD_PAGE,
+                  page: SettingsPage(),
+                ),
               OptionItemWidget(
                 icon: 'icon_info.png',
                 label: trans(INFORMATION),
