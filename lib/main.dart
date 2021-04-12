@@ -39,6 +39,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/saled_quotation_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/aprove_quotation_widget.dart';
 import 'features/profile/presentation/bloc/change_password_bloc.dart';
 import 'injection_container.dart' as di;
@@ -106,7 +107,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     String token = pref.get('userName');
     //token ='hard code';
-
+    int loginTime = pref.get('loginTime');
+    if(loginTime != null){
+      int now =  DateTime.now().millisecondsSinceEpoch;
+      if(now - loginTime> (1000 * 7 * 24 * 60 * 60) ){
+        token = null;
+      }
+    }
     return MultiBlocProvider(
       providers: [
         BlocProvider<CreateIssueBloc>(
@@ -201,6 +208,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_QRCODE_SCANER: (context) => QRSCaner(),
           ROUTER_APROVE_PAHT: (context) => ApproveQuotation(),
           ROUTER_APPROVE_QUOTATION_PAGE : (context) => ApproveQuotationPage(),
+          ROUTER_SALED_QUOTATION : (context) => SaledQuotation(),
         },
         debugShowCheckedModeBanner: false,
       ),

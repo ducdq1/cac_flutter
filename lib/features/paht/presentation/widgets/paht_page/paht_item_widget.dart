@@ -18,13 +18,14 @@ class PAHTITemWidget extends StatelessWidget {
   final bool isPersonal;
   final Function onEdit;
   final Function onDelete;
-
+  final bool isSaled;
   PAHTITemWidget(
       {@required this.pahtModel,
       @required this.onTap,
       @required this.isPersonal,
       this.onDelete,
-      this.onEdit});
+      this.onEdit,
+      this.isSaled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,9 @@ class PAHTITemWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: pahtModel.status == 0 ? Colors.amber.shade100 : Colors.green.shade100  ,
+                color: pahtModel.status == 0
+                    ? Colors.amber.shade100
+                    : Colors.green.shade100,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
@@ -97,33 +100,71 @@ class PAHTITemWidget extends StatelessWidget {
                           alignment: Alignment.topRight,
                           padding: const EdgeInsets.only(right: 0),
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                            SvgPicture.asset(
-                              SVG_ASSETS_PATH + 'icon_info.svg',
-                              fit: BoxFit.scaleDown,
-                              width: 22,
-                              height: 22,
-                            ),
-                            SizedBox(width: 5,),
-                            Text(
-                              pahtModel.quotationNumber == null
-                                  ? ''
-                                  : pahtModel.quotationNumber,
-                              style: GoogleFonts.inter(
-                                fontSize: FONT_SMALL,
-                                color: Color(0xff0F8E70),
-                                fontWeight: FontWeight.bold,
-                              ),
-                              softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ]),
+                                pahtModel.saledDate == null ? SizedBox() : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                        ICONS_ASSETS + 'icon_da_ban.png',
+                                        height: 24,
+                                        width: 24,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        'Đã bán: ' +
+                                            handleTime(pahtModel.saledDate),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.inter(
+                                            fontSize: FONT_SMALL,
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ]),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      SVG_ASSETS_PATH + 'icon_info.svg',
+                                      fit: BoxFit.scaleDown,
+                                      width: 22,
+                                      height: 22,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      pahtModel.quotationNumber == null
+                                          ? ''
+                                          : pahtModel.quotationNumber,
+                                      style: GoogleFonts.inter(
+                                        fontSize: FONT_SMALL,
+                                        color: Color(0xff0F8E70),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      softWrap: true,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0, left: 20),
-                          child: Text(
+                          padding: const EdgeInsets.only(bottom: 8.0, top: 10),
+                          child:Row(
+                            children: [ Image.asset(
+                              ICONS_ASSETS + 'icon_user2.png',
+                              width: 16,
+                              height: 16,
+                            ),
+                              SizedBox(
+                                width: 5,
+                              ),Text(
                             pahtModel.cusName == null ? '' : pahtModel.cusName,
                             style: GoogleFonts.inter(
                               fontSize: FONT_SMALL,
@@ -133,7 +174,7 @@ class PAHTITemWidget extends StatelessWidget {
                             softWrap: true,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                          ),
+                          ) ]),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
@@ -211,25 +252,21 @@ class PAHTITemWidget extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(getIcon(pahtModel.status)),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      getStatus(pahtModel.status),
-                                      overflow: TextOverflow.ellipsis,
-                                      style: GoogleFonts.inter(
-                                          fontSize: FONT_SMALL,
-                                          color: getColor(pahtModel.status)),
-                                    ),
-                                  ],
+                                SvgPicture.asset(getIcon(pahtModel.status)),
+                                SizedBox(width: 5),
+                                Text(
+                                  getStatus(pahtModel.status),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                      fontSize: FONT_SMALL,
+                                      color: getColor(pahtModel.status)),
                                 )
                               ],
                             )
                           ],
                         ),
                         SizedBox(
-                          height: 14,
+                          height: 5,
                         ),
                       ],
                     ),

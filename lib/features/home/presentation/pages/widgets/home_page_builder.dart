@@ -49,6 +49,12 @@ class _HomePageBuilderState extends State<HomePageBuilder>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     userType = pref.getInt('userType');
     return SingleChildScrollView(
@@ -71,7 +77,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
               builder: (context, state) {
                 return Padding(
                   padding:
-                      const EdgeInsets.only(top: 100.0, left: 20, right: 20),
+                      const EdgeInsets.only(top: 80.0, left: 20, right: 20),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,14 +175,23 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                         SizedBox(
                           height: 20,
                         ),
-                        userType != null && userType == 3
-                            ? // quan ly ban hang  co them module duyet bao gia
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                    CitizensMenuItemWidget(
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CitizensMenuItemWidget(
+                                label: 'Đã bán',
+                                icon: '/icons/icon_saled.png',
+                                needRedirect: '',
+                                onPress: () {
+                                  Navigator.pushNamed(
+                                      context, ROUTER_SALED_QUOTATION);
+                                },
+                              ),
+                              userType != null &&
+                                      userType ==
+                                          3 //quan ly ban hang  co them module duyet bao gia
+                                  ? CitizensMenuItemWidget(
                                       label: 'Duyệt báo giá',
                                       icon: '/icons/icon_ds_bao_gia.png',
                                       needRedirect: '',
@@ -184,13 +199,13 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                         Navigator.pushNamed(
                                             context, ROUTER_APROVE_PAHT);
                                       },
-                                    ),
-                                    SizedBox(
-                                      height: 140,
-                                      width: 140,
                                     )
-                                  ])
-                            : SizedBox(),
+                                  :
+                              SizedBox(
+                                height: 140,
+                                width: 140,
+                              )
+                            ])
                       ]),
                 );
               },

@@ -26,3 +26,14 @@ class CreateIssueButtonPresseEvent extends CreateIssueEvent {
   String toString() =>
       'CreateIssueButtonPresseEvent:  $params';
 }
+
+class UpdateSaleDateEvent extends CreateIssueEvent {
+  final IssueParams params;
+  final int type;
+  final QuotationParams quotationParams;
+  UpdateSaleDateEvent(
+      {this.params,this.type,this.quotationParams});
+  @override
+  String toString() =>
+      'UpdateSaleDateEvent:  $params';
+}

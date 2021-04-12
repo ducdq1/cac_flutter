@@ -28,7 +28,7 @@ class UpdatePahtArgument {
   final PahtModel pahtModel;
   final bool isUpdateAble;
   final bool isApproveAble;
-
+  final bool isSaled;
   UpdatePahtArgument(
       {this.content,
       this.address,
@@ -42,7 +42,8 @@ class UpdatePahtArgument {
       this.BUSINESS_HOUR,
       this.pahtModel,
       this.isUpdateAble = true,
-      this.isApproveAble = false});
+      this.isApproveAble = false,
+      this.isSaled = false});
 }
 
 class PahtDetailArgument {
@@ -71,6 +72,7 @@ class ListViewPahtsWidget extends StatefulWidget {
   final bool loadmore;
   final double paddingBottom;
   final bool isApproveAble;
+  final bool isSaled;
   ListViewPahtsWidget(
       {@required this.pahts,
       @required this.isPersonal,
@@ -78,7 +80,8 @@ class ListViewPahtsWidget extends StatefulWidget {
       this.scrollController,
       this.loadmore = false,
       this.paddingBottom = 100,
-      this.isApproveAble = false});
+      this.isApproveAble = false,
+      this.isSaled = false});
 
   @override
   _ListViewPahtsWidgetState createState() => _ListViewPahtsWidgetState();
@@ -88,6 +91,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
   bool isLoadingVertical = false;
   bool loadmore = false;
   bool  isApproveAble = false;
+  bool  isSaled = false;
   Future _loadMoreVertical() async {
     if (widget.hasReachedMax) {
       return;
@@ -108,7 +112,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
       );
     } else {
       BlocProvider.of<PublicPahtBloc>(context).add(
-        ListPublicPahtFetchingEvent(isApproveAble: widget.isApproveAble),
+        ListPublicPahtFetchingEvent(isApproveAble: widget.isApproveAble,isSaled: widget.isSaled),
       );
     }
 
@@ -124,7 +128,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
       );
     } else {
       BlocProvider.of<PublicPahtBloc>(context).add(
-        PublicPahtRefreshRequestedEvent(isApproveAble: widget.isApproveAble),
+        PublicPahtRefreshRequestedEvent(isApproveAble: widget.isApproveAble,isSaled: widget.isSaled),
       );
     }
   }
@@ -133,6 +137,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
   Widget build(BuildContext context) {
     loadmore = widget.loadmore;
     isApproveAble = widget.isApproveAble;
+    isSaled = widget.isSaled;
     return AnimationLimiter(
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -195,7 +200,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                       isPersonal: widget.isPersonal,
                                       pahtModel: widget.pahts[index],
                                       onTap: () {
-                                        if (!widget.isApproveAble) {
+                                        if (!widget.isApproveAble && !widget.isSaled) {
                                           Navigator.pushNamed(
                                                   context, ROUTER_CREATE_PAHT,
                                                   arguments: UpdatePahtArgument(
@@ -208,11 +213,19 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                                       ))
                                               .then((value) {
                                             if (value != null) {
-                                              BlocProvider.of<PublicPahtBloc>(
-                                                      context)
-                                                  .add(
-                                                ReloadListEvent(), //ListPublicPahtFetchingEvent(isReload: true),
-                                              );
+                                              if(widget.isPersonal){
+                                                BlocProvider.of<PersonalPahtBloc>(
+                                                    context)
+                                                    .add(
+                                                  PersonalPahtRefreshRequestedEvent(),//ListPublicPahtFetchingEvent(isReload: true),
+                                                );
+                                              }else {
+                                                BlocProvider.of<PublicPahtBloc>(
+                                                    context)
+                                                    .add(
+                                                  ReloadListEvent(), //ListPublicPahtFetchingEvent(isReload: true),
+                                                );
+                                              }
                                             }
                                           });
                                         }else{// qua man hinh phe duyet bao gia
@@ -222,14 +235,15 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                               arguments: UpdatePahtArgument(
                                                   pahtModel:
                                                   widget.pahts[index],
-                                                  isUpdateAble: false//moi tao moi duoc phep cap nhat
+                                                  isUpdateAble: false,
+                                                isSaled: isSaled//moi tao moi duoc phep cap nhat
                                               ))
                                               .then((value) {
                                             if (value != null) {
                                               BlocProvider.of<PublicPahtBloc>(
                                                   context)
                                                   .add(
-                                                ReloadListEvent(isApproveAble: isApproveAble), //ListPublicPahtFetchingEvent(isReload: true),
+                                                ReloadListEvent(isApproveAble: isApproveAble,isSaled: isSaled), //ListPublicPahtFetchingEvent(isReload: true),
                                               );
                                             }
                                           });

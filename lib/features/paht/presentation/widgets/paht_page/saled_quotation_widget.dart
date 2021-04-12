@@ -3,12 +3,16 @@ import 'dart:async';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/routers.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
 import 'package:citizen_app/features/common/blocs/bottom_navigation/bottom_navigation_bloc.dart';
+import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/no_network_failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
+import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
+import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_page.dart';
-import 'package:citizen_app/features/paht/presentation/pages/paht_search.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/widgets.dart';
@@ -19,12 +23,12 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../../../injection_container.dart';
 
-class ApproveQuotation extends StatefulWidget {
+class SaledQuotation extends StatefulWidget {
   @override
-  _ApproveQuotationState createState() => _ApproveQuotationState();
+  _SaledQuotationState createState() => _SaledQuotationState();
 }
 
-class _ApproveQuotationState extends State<ApproveQuotation> {
+class _SaledQuotationState extends State<SaledQuotation> {
   Completer<void> _refreshCompleter;
   bool isRefresh = false;
   final scrollController = ScrollController();
@@ -46,8 +50,8 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
     setState(() {
       isRefresh = !isRefresh;
     });
-    BlocProvider.of<PublicPahtBloc>(context).add(
-      ListPublicPahtFetchingEvent(offset: 0, limit: 10, isApproveAble: true),
+    BlocProvider.of<PersonalPahtBloc>(context).add(
+      ListPersonalPahtFetchingEvent(offset: 0, limit: 10, isSaled: true),
     );
   }
 
@@ -55,14 +59,14 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<PublicPahtBloc>(
-            create: (context) => singleton<PublicPahtBloc>()
-              ..add(ListPublicPahtFetchingEvent(offset: 0, limit: 10, isApproveAble: true))),
+        BlocProvider<PersonalPahtBloc>(
+            create: (context) => singleton<PersonalPahtBloc>()
+              ..add(ListPersonalPahtFetchingEvent(offset: 0, limit: 10, isSaled: true))),
       ],
-      child: BlocBuilder<PublicPahtBloc, PublicPahtState>(
-        builder: (BuildContext context, PublicPahtState state) {
+      child: BlocBuilder<PersonalPahtBloc, PersonalPahtState>(
+        builder: (BuildContext context, PersonalPahtState state) {
           return BaseLayoutWidget(
-              title: 'Danh sách Báo giá',
+              title: 'Danh sách đã bán',
               actions: [
                 InkWell(
                   child: SvgPicture.asset(
@@ -72,7 +76,7 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
                     height: SIZE_ICON_ACTIONS,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, ROUTER_SEARCH_PUBLIC_PAHT, arguments: SearchArgument(isApproveAble: true));
+                      Navigator.pushNamed(context, ROUTER_SEARCH_PERSONAL_PAHT, arguments: SearchArgument(isSaled: true));
                   },
                 ),
                 SizedBox(
@@ -82,9 +86,9 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
               body: Container(
                   child: RefreshIndicator(
                       onRefresh: () async => handleRefresh(context),
-                      child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
+                      child: BlocConsumer<PersonalPahtBloc, PersonalPahtState>(
                           listener: (context, state) {
-                        if (state is PublicPahtFailure &&
+                        if (state is PersonalPahtFailure &&
                             state.error.toString() == "UNAUTHORIZED") {
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               ROUTER_SIGNIN, (Route<dynamic> route) => false);
@@ -92,31 +96,26 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
                         _refreshCompleter?.complete();
                         _refreshCompleter = Completer();
                       }, builder: (context, state) {
-                        if (state is PublicPahtFailure) {
+                        if (state is PersonalPahtFailure) {
                           return NoNetworkFailureWidget(
                               message: state.error.toString() == "UNAUTHORIZED"
                                   ? trans(MESSAGE_SESSION_EXPIRED)
                                   : state.error.toString(),
                               onPressed: () {
-                                BlocProvider.of<PublicPahtBloc>(context).add(
-                                  ListPublicPahtFetchingEvent(offset: 0, limit: 10, isApproveAble: true),
+                                BlocProvider.of<PersonalPahtBloc>(context).add(
+                                  ListPersonalPahtFetchingEvent(offset: 0, limit: 10,isSaled: true),
                                 );
                               });
                         }
-                        if (state is PublicPahtSuccess) {
+                        if (state is PersonalPahtSuccess) {
                           return ListViewPahtsWidget(
                             hasReachedMax: state.hasReachedMax,
                             pahts: state.paht,
                             isPersonal: true,
                             scrollController: scrollController,
                             loadmore: state.hasReachedMax ? false : true,
-                              isApproveAble: true
-                          );
-                        }
-
-                        if (state is DeletePersonalPahtFailure) {
-                          BlocProvider.of<PublicPahtBloc>(context).add(
-                            ListPublicPahtFetchingEvent(offset: 0, limit: 10, isApproveAble: true),
+                             isApproveAble: false,
+                            isSaled: true,
                           );
                         }
                         return SkeletonPahtWidget();

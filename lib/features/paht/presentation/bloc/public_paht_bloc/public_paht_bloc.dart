@@ -50,6 +50,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           status: 0,
           userName: userName,
           search: event.search,
+          isApproveAble: event.isApproveAble
          ));
       yield PublicPahtSuccess(
           paht: listPublicPaht, offset: 0, hasReachedMax: true);
@@ -86,7 +87,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           print('loading.....');
           getListPublicPaht(PahtParams(
                   limit: 10, offset: 0, status: 0, userName: userName,
-              isApproveAble: event.isApproveAble))
+              isApproveAble: event.isApproveAble, isSaled: event.isSaled))
               .then((value) {
             add(ListPublicPahtFetchedEvent(offset: 0, paht: value));
           }).catchError((err) {
@@ -98,7 +99,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           int nextOffset = currentState.offset + 1;
           List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
               limit: 10, offset: nextOffset, status: 0, userName: userName,
-          isApproveAble: event.isApproveAble));
+          isApproveAble: event.isApproveAble, isSaled: event.isSaled));
 
           yield listPublicPaht.isEmpty
               ? currentState.copyWith(
@@ -147,7 +148,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
 
       try {
         List<PahtModel> listPublicPaht = await getListPublicPaht(
-            PahtParams(limit: 10, offset: 0, status: 0, userName: userName,isApproveAble: event.isApproveAble));
+            PahtParams(limit: 10, offset: 0, status: 0, userName: userName,isApproveAble: event.isApproveAble, isSaled: event.isSaled));
 
         yield PublicPahtRefreshSuccess(
             paht: listPublicPaht,
@@ -199,7 +200,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       try {
         yield DeletePersonalPahtSuccess();
         List<PahtModel> results = await getListPublicPaht(
-            PahtParams(offset: 0, limit: 10, status: 0, userName: userName,isApproveAble: event.isApproveAble));
+            PahtParams(offset: 0, limit: 10, status: 0, userName: userName,isApproveAble: event.isApproveAble, isSaled: event.isSaled));
 
         yield PublicPahtSuccess(
             offset: 0,

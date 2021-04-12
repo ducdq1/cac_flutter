@@ -90,6 +90,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         await prefs.setString('avartarPath', auth.avartarPath);
         await prefs.setString('userId', auth.userId.toString());
         await prefs.setInt('userType', auth.userType);
+        await prefs.setInt('loginTime', DateTime.now().millisecondsSinceEpoch);
+
         yield SignInSucceedState(auth: auth);
         // yield SignInAccountSucceedState();
       }

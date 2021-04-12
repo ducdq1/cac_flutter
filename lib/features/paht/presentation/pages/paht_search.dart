@@ -13,9 +13,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+class SearchArgument {
+  final bool isSaled;
+  final bool isApproveAble;
+  SearchArgument({this.isSaled = false,this.isApproveAble});
+}
+
 class PahtSearch extends StatefulWidget {
   final int searchPahtType;
+
   PahtSearch({@required this.searchPahtType});
+
   @override
   _PahtSearchState createState() => _PahtSearchState();
 }
@@ -27,6 +35,9 @@ class _PahtSearchState extends State<PahtSearch>
   final FocusNode searchFocus = FocusNode();
   var items = List<PahtModel>();
   bool isSearch = false;
+  bool isSaled = false;
+  bool isApproveAble = false;
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +45,12 @@ class _PahtSearchState extends State<PahtSearch>
 
   @override
   Widget build(BuildContext context) {
+    SearchArgument args =
+        ModalRoute.of(context).settings.arguments as SearchArgument;
+    if (args != null) {
+      isSaled = args.isSaled;
+      isApproveAble = args.isApproveAble;
+    }
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -41,15 +58,14 @@ class _PahtSearchState extends State<PahtSearch>
         child: widget.searchPahtType == 0
             ? BlocProvider<PublicPahtBloc>(
                 create: (context) => singleton<PublicPahtBloc>()
-                  ..add(ListPublicPahtFetchingEvent(offset: 0, limit: 10)),
+                  ..add(ListPublicPahtFetchingEvent(offset: 0, limit: 10,isApproveAble: isApproveAble)),
                 child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                     listener: (context, state) {
-                      if (state is PublicPahtFailure) {
-                        // Fluttertoast.showToast(
-                        //     msg: state.error.toString()  );
-                      }
-                    },
-                    builder: (context, state) {
+                  if (state is PublicPahtFailure) {
+                    // Fluttertoast.showToast(
+                    //     msg: state.error.toString()  );
+                  }
+                }, builder: (context, state) {
                   return BaseLayoutWidget(
                       title: trans(TITLE_PAHT),
                       isTitleHeaderWidget: true,
@@ -61,7 +77,7 @@ class _PahtSearchState extends State<PahtSearch>
                             });
                             BlocProvider.of<PublicPahtBloc>(context).add(
                                 SearchPublicButtonPressedEvent(
-                                    search: searchController.text.trim()));
+                                    search: searchController.text.trim(), isApproveAble: isApproveAble));
                           }
                           if (value.isNotEmpty) {
                             setState(() {
@@ -72,7 +88,7 @@ class _PahtSearchState extends State<PahtSearch>
                         onEditingComplete: () {
                           BlocProvider.of<PublicPahtBloc>(context).add(
                               SearchPublicButtonPressedEvent(
-                                  search: searchController.text.trim()));
+                                  search: searchController.text.trim(), isApproveAble: isApproveAble,));
                         },
                         isSearch: isSearch,
                         isShowClearSearch: isShowClearSearch,
@@ -85,30 +101,34 @@ class _PahtSearchState extends State<PahtSearch>
                               pahts: state.paht,
                               isPersonal: false,
                               loadmore: state.hasReachedMax ? false : true,
-                        paddingBottom: 00,
-                             // isSearchPage: true,
+                              paddingBottom: 00,
+                            isApproveAble: isApproveAble,
+                              // isSearchPage: true,
                             )
                           : state is PublicPahtFailure
                               ? NoNetworkFailureWidget(
-                              message: state.error.toString() == "UNAUTHORIZED" ? trans(MESSAGE_SESSION_EXPIRED) : state.error.toString(),
-                              onPressed: () {
-                              BlocProvider.of<PublicPahtBloc>(context).add(
-                              ListPublicPahtFetchingEvent(),
-                              );}
-                                )
+                                  message:
+                                      state.error.toString() == "UNAUTHORIZED"
+                                          ? trans(MESSAGE_SESSION_EXPIRED)
+                                          : state.error.toString(),
+                                  onPressed: () {
+                                    BlocProvider.of<PublicPahtBloc>(context)
+                                        .add(
+                                      ListPublicPahtFetchingEvent( isApproveAble: isApproveAble,),
+                                    );
+                                  })
                               : SkeletonPahtWidget());
                 }))
             : BlocProvider<PersonalPahtBloc>(
                 create: (context) => singleton<PersonalPahtBloc>()
-                  ..add(ListPersonalPahtFetchingEvent(offset: 0, limit: 10 )),
+                  ..add(ListPersonalPahtFetchingEvent(
+                      offset: 0, limit: 10, isSaled: isSaled)),
                 child: BlocConsumer<PersonalPahtBloc, PersonalPahtState>(
                     listener: (context, state) {
-                      if (state is PersonalPahtFailure) {
-                        Fluttertoast.showToast(
-                            msg: state.error.toString()  );
-                      }
-                    },
-                    builder: (context, state) {
+                  if (state is PersonalPahtFailure) {
+                    Fluttertoast.showToast(msg: state.error.toString());
+                  }
+                }, builder: (context, state) {
                   return BaseLayoutWidget(
                       title: trans(TITLE_PAHT),
                       centerTitle: true,
@@ -121,7 +141,8 @@ class _PahtSearchState extends State<PahtSearch>
                             });
                             BlocProvider.of<PersonalPahtBloc>(context).add(
                                 SearchPersonalButtonPressedEvent(
-                                    search: searchController.text.trim()));
+                                    search: searchController.text.trim(),
+                                    isSaled: isSaled));
                           }
                           if (value.isNotEmpty) {
                             setState(() {
@@ -132,7 +153,8 @@ class _PahtSearchState extends State<PahtSearch>
                         onEditingComplete: () {
                           BlocProvider.of<PersonalPahtBloc>(context).add(
                               SearchPersonalButtonPressedEvent(
-                                  search: searchController.text.trim()));
+                                  search: searchController.text.trim(),
+                                  isSaled: isSaled));
                         },
                         isSearch: isSearch,
                         isShowClearSearch: isShowClearSearch,
@@ -140,30 +162,40 @@ class _PahtSearchState extends State<PahtSearch>
                         searchFocus: searchFocus,
                       ),
                       body: state is PersonalPahtLoadmore
-                      ? ListViewPahtsWidget(
-                          hasReachedMax: state.hasReachedMax,
-                          pahts: state.paht,
-                          isPersonal: true,
-                          loadmore: true,
-                        paddingBottom: 00,
-                        ):
-                      state is PersonalPahtSuccess
                           ? ListViewPahtsWidget(
                               hasReachedMax: state.hasReachedMax,
                               pahts: state.paht,
                               isPersonal: true,
-                              loadmore: state.hasReachedMax ? false : true,
+                              loadmore: true,
                               paddingBottom: 00,
+                              isSaled: isSaled,
+                        isApproveAble: isApproveAble,
                             )
-                          : state is PersonalPahtFailure
-                              ? NoNetworkFailureWidget(
-                              message: state.error.toString() == "UNAUTHORIZED" ? trans(MESSAGE_SESSION_EXPIRED) : state.error.toString(),
-                              onPressed: () {
-                                BlocProvider.of<PersonalPahtBloc>(context).add(
-                              ListPersonalPahtFetchingEvent(),
-                            );
-                      })
-                              : SkeletonPahtWidget());
+                          : state is PersonalPahtSuccess
+                              ? ListViewPahtsWidget(
+                                  hasReachedMax: state.hasReachedMax,
+                                  pahts: state.paht,
+                                  isPersonal: true,
+                                  loadmore: state.hasReachedMax ? false : true,
+                                  paddingBottom: 00,
+                                  isSaled: isSaled,
+
+                                )
+                              : state is PersonalPahtFailure
+                                  ? NoNetworkFailureWidget(
+                                      message: state.error.toString() ==
+                                              "UNAUTHORIZED"
+                                          ? trans(MESSAGE_SESSION_EXPIRED)
+                                          : state.error.toString(),
+                                      onPressed: () {
+                                        BlocProvider.of<PersonalPahtBloc>(
+                                                context)
+                                            .add(
+                                          ListPersonalPahtFetchingEvent(
+                                              isSaled: isSaled),
+                                        );
+                                      })
+                                  : SkeletonPahtWidget());
                 })));
   }
 

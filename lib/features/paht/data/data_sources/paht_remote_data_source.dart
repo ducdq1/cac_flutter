@@ -64,10 +64,21 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       final token = sharedPreferences.getString('token');
       final body = jsonEncode(issueParams.toJson());
       print('create or update QUOTATION ');
-      print(body);
+
       String url = '$baseUrl_api/quotation';
+      if (issueParams.quotationDate != null &&
+          issueParams.quotationDate.isNotEmpty &&
+          issueParams.lstQuotationDetail == null) {
+        url = '$baseUrl_api/quotation/update-saledate';
+      } else {
+        url = '$baseUrl_api/quotation';
+      }
+
+      print(url);
+      print(body);
       final response = await networkRequest.postRequest(
-          url: '$baseUrl_api/quotation', body: body);
+          url: url, body: body);
+
 
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -182,11 +193,12 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   Future<List<PahtModel>> _fetchListPahtFromUrl(PahtParams param) async {
     try {
       final body = jsonEncode(param.toJson());
-      print(body);
-      String url = '$baseUrl_api/quotations';
+
+      String url = '$baseUrl_api/quotations?time='+  DateTime.now().millisecondsSinceEpoch.toString();
       final response = await networkRequest.postRequest(
-          url: '$baseUrl_api/quotations', body: body);
-      //print('--> success');
+          url: url, body: body);
+       print(url);
+      print(body);
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       //print(responseJson);
       if (response.statusCode == 200) {

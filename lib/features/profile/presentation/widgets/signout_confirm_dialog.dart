@@ -8,9 +8,14 @@ import 'package:citizen_app/features/authentication/auth/bloc/auth_event.dart';
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_bloc.dart';
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_event.dart';
 import 'package:citizen_app/features/profile/presentation/widgets/loader_dialog.dart';
+import 'package:citizen_app/injection_container.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignOutConfirmDialog extends StatefulWidget {
   @override
@@ -103,6 +108,13 @@ class _SignOutConfirmDialogState extends State<SignOutConfirmDialog>
                           .add(UnAuthenticatedEvent());
                       // BlocProvider.of<SignInBloc>(context)
                       //     .add(SignInClearEvent());
+                      try{
+                        final pref = singleton<SharedPreferences>();
+                        await FirebaseMessaging().unsubscribeFromTopic(pref.getString('userName'));
+                        await FirebaseMessaging().unsubscribeFromTopic(pref.getString('create'));
+                      }catch(e){
+
+                      }
 
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           ROUTER_SIGNIN, (Route<dynamic> route) => false);

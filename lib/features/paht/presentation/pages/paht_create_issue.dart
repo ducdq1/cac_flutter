@@ -5,6 +5,8 @@ import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/utils/form_tools/form_tools.dart';
 import 'package:citizen_app/core/utils/validate/empty_validate.dart';
+import 'package:citizen_app/features/authentication/signup/presentation/widgets/signup_personal_page/input_datetime_widget.dart';
+import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
 import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
@@ -28,6 +30,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+
 //import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,7 +51,8 @@ class PahtCreateIssue extends StatefulWidget {
 }
 
 class _PahtCreateIssueState extends State<PahtCreateIssue>
-    with SingleTickerProviderStateMixin implements OnButtonClickListener {
+    with SingleTickerProviderStateMixin
+    implements OnButtonClickListener {
   static const platform = const MethodChannel('citizens.app/media_picker_ios');
 
   List<int> listMediaDeleted = [];
@@ -59,6 +64,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   TextEditingController _phoneNumberController;
   TextEditingController _addressController;
   TextEditingController _webController;
+  TextEditingController saledDateController;
   FocusNode _contentFocusNode;
   FocusNode _focusNodeError;
   GlobalKey<FormState> _formKey;
@@ -71,7 +77,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   FocusNode _webFocusNode;
   ScrollController parentScrollController;
   PahtModel pahtModel;
-  //List<Asset> images = List<Asset>();
+
   String _error = 'No Error Dectected';
   List<QuotationDetailModel> listQuotationDetailModel = [];
   final prefs = singleton<SharedPreferences>();
@@ -79,7 +85,6 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
   AnimationController _controller;
   Animation<double> _animation;
-
 
   bool _isKhachHangLe = true;
   bool _isUpdateAble = true;
@@ -110,6 +115,12 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         _isKhachHangLe = pahtModel.type == 0;
       }
 
+      if(pahtModel.saledDate !=null){
+        String saledDate =  DateFormat("dd/MM/yyyy").format(DateTime.parse(pahtModel.saledDate));
+        saledDateController.text =  saledDate;
+
+      }
+
       BlocProvider.of<CreateIssueBloc>(context).add(
         GetListQuotationDetailEvent(id: pahtModel.quotationID),
       );
@@ -129,8 +140,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     _animation = Tween(begin: 0.0, end: 29.0).animate(curve);
     _controller.repeat(reverse: true);
 
-
     _formKey = GlobalKey<FormState>();
+    saledDateController = TextEditingController();
     _addressController = TextEditingController();
     _poiNameController = TextEditingController();
     parentScrollController = new ScrollController();
@@ -160,81 +171,86 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     return BaseLayoutWidget(
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 80),
-          child: !_isUpdateAble ? SizedBox() : FloatingActionButton(
-            // child: Image.asset(
-            //   'assets/icons/icon_scan_qr_white.png',
-            //   height: 29,
-            //   width: 29,
-            // ),
-            child:  Stack(
-              children: [
-                Image.asset(
-                'assets/icons/icon_scan_qr_white.png',
-                  width: 29,
-                  height: 29,
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.scaleDown,
-                ),
-                AnimatedBuilder(
-                  animation: _animation,
-                  child: Container(
-                    color: Colors.amber,
-                    height: 1,
-                    width: 29,
+          child: !_isUpdateAble
+              ? SizedBox()
+              : FloatingActionButton(
+                  // child: Image.asset(
+                  //   'assets/icons/icon_scan_qr_white.png',
+                  //   height: 29,
+                  //   width: 29,
+                  // ),
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        'assets/icons/icon_scan_qr_white.png',
+                        width: 29,
+                        height: 29,
+                        filterQuality: FilterQuality.high,
+                        fit: BoxFit.scaleDown,
+                      ),
+                      AnimatedBuilder(
+                        animation: _animation,
+                        child: Container(
+                          color: Colors.amber,
+                          height: 1,
+                          width: 29,
+                        ),
+                        builder: (_, widget) {
+                          return Transform.translate(
+                            offset: Offset(0.0, _animation.value),
+                            child: widget,
+                          );
+                        },
+                      )
+                    ],
                   ),
-                  builder: (_, widget) {
-                    return Transform.translate(
-                      offset: Offset(0.0, _animation.value),
-                      child: widget,
-                    );
-                  },
-                )
-              ],
-            ),
-            // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
-            backgroundColor: PRIMARY_COLOR,
-            tooltip: 'Quét mã',
-            elevation: 5,
-            splashColor: Colors.grey,
-            onPressed: () async {
-              clearFocus();
-              final PermissionHandler _permissionHandler = PermissionHandler();
-              var permissionStatus = await _permissionHandler
-                  .checkPermissionStatus(PermissionGroup.camera);
+                  // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
+                  backgroundColor: PRIMARY_COLOR,
+                  tooltip: 'Quét mã',
+                  elevation: 5,
+                  splashColor: Colors.grey,
+                  onPressed: () async {
+                    clearFocus();
+                    final PermissionHandler _permissionHandler =
+                        PermissionHandler();
+                    var permissionStatus = await _permissionHandler
+                        .checkPermissionStatus(PermissionGroup.camera);
 
-              switch (permissionStatus) {
-                case PermissionStatus.granted:
-                  Navigator.pushNamed(context,ROUTER_QRCODE_SCANER )
-                      .then((value) => {
-                        if(value !=null){
-                          gotoDetailProductPage(value)
+                    switch (permissionStatus) {
+                      case PermissionStatus.granted:
+                        Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
+                            .then((value) => {
+                                  if (value != null)
+                                    {gotoDetailProductPage(value)}
+                                });
+
+                        break;
+                      case PermissionStatus.denied:
+                      case PermissionStatus.restricted:
+                      case PermissionStatus.unknown:
+                        await _permissionHandler
+                            .requestPermissions([PermissionGroup.camera]);
+                        var permissionStatus = await _permissionHandler
+                            .checkPermissionStatus(PermissionGroup.camera);
+                        switch (permissionStatus) {
+                          case PermissionStatus.granted:
+                            Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
+                                .then((value) => {
+                                      if (value != null)
+                                        {gotoDetailProductPage(value)}
+                                    });
                         }
-                  });
-
-                  break;
-                case PermissionStatus.denied:
-                case PermissionStatus.restricted:
-                case PermissionStatus.unknown:
-                  await _permissionHandler
-                      .requestPermissions([PermissionGroup.camera]);
-                  var permissionStatus = await _permissionHandler
-                      .checkPermissionStatus(PermissionGroup.camera);
-                      switch (permissionStatus) {
-                        case PermissionStatus.granted:
-                          Navigator.pushNamed(context,ROUTER_QRCODE_SCANER )
-                              .then((value) => {
-                            if(value !=null){
-                              gotoDetailProductPage(value)
-                            }
-                          });
-                      }
-                  break;
-                default:
-              }
-            },
-          ),
+                        break;
+                      default:
+                    }
+                  },
+                ),
         ),
-        title: args == null ? 'Tạo báo giá' :  _isUpdateAble?'Cập nhật báo giá' : 'Chi tiết báo giá',
+        title: args == null
+            ? 'Tạo báo giá'
+            : _isUpdateAble
+                ? 'Cập nhật báo giá'
+                : 'Chi tiết báo giá',
         centerTitle: true,
         body: BlocConsumer<CreateIssueBloc, CreateIssueState>(
           listener: (_, state) {
@@ -246,7 +262,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
             if (state is CreateIssueSuccess) {
               //Navigator.pop(context);
-              Navigator.of(context, rootNavigator: true).pop('dialog');
+                Navigator.of(context, rootNavigator: true).pop('dialog');
               Fluttertoast.showToast(
                   msg: args == null
                       ? 'Tạo báo giá thành công'
@@ -270,8 +286,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                             ? trans(ERROR_CONNECTION_FAILED)
                             : state.error.message.toString())
                         : args == null
-                        ? 'Tạo báo giá thất bại'
-                        : 'Cập nhật báo giá thất bại');
+                            ? 'Tạo báo giá thất bại'
+                            : 'Cập nhật báo giá thất bại');
               }
             }
           },
@@ -294,11 +310,10 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                             addressField(),
                             phoneNumberField(),
                             quotationTypField(),
-                            Divider(
-                              height: 2,
-                                color: Colors.green
+                            Divider(height: 2, color: Colors.green),
+                            SizedBox(
+                              height: 5,
                             ),
-                            SizedBox(height: 5,),
                             listProductField(),
                             state is GetListQuotationDetailLoading
                                 ? Center(child: LoadingWidget())
@@ -308,8 +323,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       ),
                     ),
                   ),
-                 Container(
-                      padding: EdgeInsets.all( 10),
+                  Container(
+                      padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
@@ -330,16 +345,20 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       ),
                       child: Column(children: [
                         Container(
-                        height: 4,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade400,
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          height: 4,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade400,
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
                         ),
-                      ),
-                     SizedBox(
-                       height: 10,
-                     ), _isUpdateAble ?   createIssueAction() : viewBaoGiaFileAction() ]) ) ,
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _isUpdateAble
+                            ? createIssueAction()
+                            : viewBaoGiaFileAction()
+                      ])),
                 ],
               ),
             );
@@ -648,20 +667,43 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
   Widget viewBaoGiaFileAction() {
     return Padding(
       padding: const EdgeInsets.all(0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-            child: Container(
-              width: 142,
-              child: PrimaryButton(
-                  label: 'Xem báo giá',
-                  ctx: this,
-                  id: 'view_pdf_btn'),
-            ),
-          )
-        ],
-      ),
+      child: Column(children: [
+          InputDatetimeWidget(
+                scrollPadding: 200,
+                hintText: 'Ngày bán hàng',
+                controller: saledDateController,
+                validates: [EmptyValidate()],
+
+              ) ,
+          pahtModel.saledDate == null
+            ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                Expanded(
+                  child: Container(
+                    width: 142,
+                    child: PrimaryButton(
+                        label: 'Cập nhật ngày bán',
+                        ctx: this,
+                        id: 'update_saled_date_btn'),
+                  ),
+                )
+              ])
+            : SizedBox(),
+        SizedBox(
+                height: 20,
+              ) ,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: Container(
+                width: 142,
+                child: PrimaryButton(
+                    label: 'Xem báo giá', ctx: this, id: 'view_pdf_btn'),
+              ),
+            )
+          ],
+        ),
+      ]),
     );
   }
 
@@ -729,7 +771,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                           // You can play with the width to adjust your
                           // desired spacing
                           SizedBox(width: 10.0),
-                    Expanded(child: Text('Công trình'))
+                          Expanded(child: Text('Công trình'))
                         ])),
               ),
             ),
@@ -738,17 +780,18 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
       ],
     );
   }
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
+
   @override
   onClick(String id) async {
     if (id == 'primary_btn') {
-
       clearFocus();
-      if(listQuotationDetailModel.isEmpty){
+      if (listQuotationDetailModel.isEmpty) {
         Fluttertoast.showToast(
           msg: "Phải chọn ít nhất 1 sản phẩm.",
           toastLength: Toast.LENGTH_SHORT,
@@ -786,18 +829,42 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     if (id == 'cancel_btn') {
       Navigator.pop(context);
     }
-    if(id == 'view_pdf_btn'){
-      if(pahtModel.fileName == null || pahtModel.fileName.isEmpty){
-        Fluttertoast.showToast(
-            msg:  'Không có file báo giá để xem');
+    if (id == 'view_pdf_btn') {
+      if (pahtModel.fileName == null || pahtModel.fileName.isEmpty) {
+        Fluttertoast.showToast(msg: 'Không có file báo giá để xem');
         return;
       }
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => WebViewPage(
-                title: 'Chi tiết báo giá', link: '$baseUrl' + 'bao_gia/'+pahtModel.fileName)),
+                title: 'Chi tiết báo giá',
+                link: '$baseUrl' + 'bao_gia/' + pahtModel.fileName)),
       );
+    }
+
+    if (id == 'update_saled_date_btn') {
+      if (saledDateController.text.isEmpty) {
+        Fluttertoast.showToast(msg: 'Bạn chưa nhập ngày bán');
+        return;
+      }
+      showConfirmDialog(
+          context: context,
+          title: 'Bạn muốn cập nhật đã bán hàng vào ngày: ' +
+              saledDateController.text,
+          label: 'Cập nhật',
+          onSubmit: () {
+            BlocProvider.of<CreateIssueBloc>(context).add(
+              CreateIssueButtonPresseEvent(
+                quotationParams: QuotationParams(
+                    quotation: PahtModel(
+                      quotationID: pahtModel.quotationID,
+                    ),
+                    quotationDate: saledDateController.text),
+              ),
+            );
+            _showCupertinoDialog(context);
+          });
     }
   }
 
@@ -805,37 +872,35 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  void gotoDetailProductPage(String cameraScanResult){
+  void gotoDetailProductPage(String cameraScanResult) {
     Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
-        arguments: PahtDetailArgument(
-            productCode: cameraScanResult))
+            arguments: PahtDetailArgument(productCode: cameraScanResult))
         .then((value) => {
-      if (value != null)
-        {
-          setState(() {
-            if (value is QuotationDetailModel) {
-              QuotationDetailModel exist;
-              int indexExist= -1;
-              for (int i = 0;
-              i < listQuotationDetailModel.length;
-              i++) {
-                if (listQuotationDetailModel[i]
-                    .productId ==
-                    value.productId) {
-                  exist = value;
-                  indexExist =i;
-                }
-              }
+              if (value != null)
+                {
+                  setState(() {
+                    if (value is QuotationDetailModel) {
+                      QuotationDetailModel exist;
+                      int indexExist = -1;
+                      for (int i = 0;
+                          i < listQuotationDetailModel.length;
+                          i++) {
+                        if (listQuotationDetailModel[i].productId ==
+                            value.productId) {
+                          exist = value;
+                          indexExist = i;
+                        }
+                      }
 
-              if (exist == null) {
-                listQuotationDetailModel.add(value);
-              } else {
-                listQuotationDetailModel[indexExist]= (value);
-              }
-            }
-          })
-        }
-    });
+                      if (exist == null) {
+                        listQuotationDetailModel.add(value);
+                      } else {
+                        listQuotationDetailModel[indexExist] = (value);
+                      }
+                    }
+                  })
+                }
+            });
   }
 }
 

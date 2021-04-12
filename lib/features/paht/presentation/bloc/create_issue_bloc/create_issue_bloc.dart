@@ -34,6 +34,18 @@ class CreateIssueBloc extends Bloc<CreateIssueEvent, CreateIssueState> {
       }
     }
 
+    if (event is UpdateSaleDateEvent) {
+      yield CreateIssueLoading();
+      try {
+        // if (event.type == 0) {
+        String result = await createIssuePaht(event.quotationParams);
+
+        yield CreateIssueSuccess(fileName: result);
+      } catch (error) {
+        yield CreateIssueFailure(error: error);
+      }
+    }
+
     if(event is GetListQuotationDetailEvent){
       try {
         yield GetListQuotationDetailLoading();

@@ -26,7 +26,8 @@ class QuotationParams extends Equatable {
   final PahtModel quotation;
   final List<QuotationDetailModel> lstQuotationDetail;
   final String expiredDate;
-  QuotationParams({this.quotation,this.lstQuotationDetail,this.isApproveAble = false,this.expiredDate,this.isPreViewApprove= false});
+  final String quotationDate;
+  QuotationParams({this.quotation,this.lstQuotationDetail,this.isApproveAble = false,this.expiredDate,this.isPreViewApprove= false,this.quotationDate});
   @override
   List<Object> get props => throw UnimplementedError();
 
@@ -35,8 +36,9 @@ class QuotationParams extends Equatable {
       "isPreViewApprove" : isPreViewApprove,
       "isApproveAble" : isApproveAble,
       "expiredDate" : expiredDate,
+      "quotationDate" : quotationDate,
       "quotation": quotation.toJson(),
-      "lstQuotationDetail": this.lstQuotationDetail.map((e) => e.toJson()).toList(),
+      "lstQuotationDetail": lstQuotationDetail == null ? null : this.lstQuotationDetail.map((e) => e.toJson()).toList(),
     };
   }
 }

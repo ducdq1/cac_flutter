@@ -50,7 +50,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
           offset: 0,
           search: event.search,
           status: 1,
-          userName: userName));
+          userName: userName, isSaled: event.isSaled));
 
       yield PersonalPahtSuccess(
           paht: listPublicPaht,
@@ -66,7 +66,8 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
           offset: 0,
           search: event.search != null ? '=${event.search}' : null,
           status: 1,
-          userName: userName
+          userName: userName, isSaled: event.isSaled,
+
            ));
       yield PersonalPahtSuccess(
           paht: listPublicPaht,
@@ -107,7 +108,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
                   offset: 0,
                   search: event.search != null ? '=${event.search}' : null,
                   status: 1,
-              userName: userName))
+              userName: userName, isSaled: event.isSaled))
               .then((value) {
             add(ListPersonalPahtFetchedEvent(offset: 0, paht: value));
             return;
@@ -132,7 +133,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
                   offset: nextOffset,
                   search: event.search != null ? '=${event.search}' : null,
                   status: 1,
-                  userName: userName));
+                  userName: userName, isSaled: event.isSaled));
 
           print(" yield PersonalPahtSuccess...");
 
@@ -186,7 +187,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
             offset: 0,
             search: event.search != null ? '=${event.search}' : null,
            status: 1,
-            userName: userName));
+            userName: userName, isSaled: event.isSaled));
 
         yield PersonalPahtRefreshSuccess(
             paht: listPersonalPaht,
@@ -224,7 +225,7 @@ class PersonalPahtBloc extends Bloc<PersonalPahtEvent, PersonalPahtState> {
             limit: 10,
             status: 1,
             search: '',
-            userName: userName));
+            userName: userName, isSaled: event.isSaled));
 
         yield PersonalPahtSuccess(
             paht: results, hasReachedMax: results.length < 10 ? true : false);

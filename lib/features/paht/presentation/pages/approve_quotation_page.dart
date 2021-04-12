@@ -83,6 +83,9 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
 
   bool _isKhachHangLe = true;
   bool _isUpdateAble = true;
+
+  bool isSaled = false;
+
   Map<String, dynamic> _chosenLocation = {
     'address': '',
     'latitude': null,
@@ -94,6 +97,7 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
   initValue(args) async {
     if (args != null && args.pahtModel != null) {
       pahtModel = args.pahtModel;
+      isSaled = args.isSaled;
       _isUpdateAble = args.isUpdateAble;
       if (pahtModel.cusName != null) {
         _poiNameController.text = pahtModel.cusName;
