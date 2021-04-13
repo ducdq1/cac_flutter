@@ -164,17 +164,19 @@ class PAHTITemWidget extends StatelessWidget {
                             ),
                               SizedBox(
                                 width: 5,
-                              ),Text(
-                            pahtModel.cusName == null ? '' : pahtModel.cusName,
+                              ),Expanded(
+                                child: Text(
+                                  pahtModel.cusName == null ? '' : pahtModel.cusName,
                             style: GoogleFonts.inter(
-                              fontSize: FONT_MIDDLE,
-                              color: PRIMARY_TEXT_COLOR,
-                              fontWeight: FontWeight.bold,
+                                fontSize: FONT_MIDDLE,
+                                color: PRIMARY_TEXT_COLOR,
+                                fontWeight: FontWeight.bold,
                             ),
                             softWrap: true,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                          ) ]),
+                          ),
+                              ) ]),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
