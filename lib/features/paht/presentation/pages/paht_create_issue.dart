@@ -118,7 +118,6 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
       if(pahtModel.saledDate !=null){
         String saledDate =  DateFormat("dd/MM/yyyy").format(DateTime.parse(pahtModel.saledDate));
         saledDateController.text =  saledDate;
-
       }
 
       BlocProvider.of<CreateIssueBloc>(context).add(

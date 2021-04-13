@@ -30,6 +30,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 //import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -60,6 +61,7 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
   TextEditingController _phoneNumberController;
   TextEditingController _addressController;
   TextEditingController expireDateController;
+  TextEditingController saledDateController;
   FocusNode _contentFocusNode;
   FocusNode _focusNodeError;
   GlobalKey<FormState> _formKey;
@@ -110,8 +112,15 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
       if (pahtModel.cusPhone != null) {
         _phoneNumberController.text = pahtModel.cusPhone;
       }
+
       if (pahtModel.type != null) {
         _isKhachHangLe = pahtModel.type == 0;
+      }
+
+      if(pahtModel.saledDate !=null){
+        String saledDate =  DateFormat("dd/MM/yyyy").format(DateTime.parse(pahtModel.saledDate));
+        saledDateController.text =  saledDate;
+
       }
 
       BlocProvider.of<CreateIssueBloc>(context).add(
@@ -139,6 +148,7 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
     parentScrollController = new ScrollController();
     _phoneNumberController = TextEditingController();
     expireDateController = TextEditingController();
+    saledDateController = TextEditingController();
     _addressFocusNode = FocusNode();
     _contentFocusNode = FocusNode();
     _phoneNumberFocusNode = FocusNode();
@@ -540,17 +550,28 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
   Widget viewBaoGiaFileAction() {
     return Padding(
       padding: const EdgeInsets.all(0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
         children: [
-          Expanded(
-            child: Container(
-              width: 142,
-              child: PrimaryButton(
-                  label: 'Xem báo giá', ctx: this, id: 'view_pdf_btn'),
-            ),
-          )
-        ],
+          pahtModel.saledDate !=null && pahtModel.saledDate.isNotEmpty ? InputDatetimeWidget(
+            scrollPadding: 200,
+            hintText: 'Ngày bán hàng',
+            controller: saledDateController,
+            validates: [EmptyValidate()],
+
+          ) : SizedBox(),
+          Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: Container(
+                width: 142,
+                child: PrimaryButton(
+                    label: 'Xem báo giá', ctx: this, id: 'view_pdf_btn'),
+              ),
+            )
+          ],
+        )
+      ],
       ),
     );
   }

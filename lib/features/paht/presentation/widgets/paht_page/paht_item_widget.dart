@@ -167,7 +167,7 @@ class PAHTITemWidget extends StatelessWidget {
                               ),Text(
                             pahtModel.cusName == null ? '' : pahtModel.cusName,
                             style: GoogleFonts.inter(
-                              fontSize: FONT_SMALL,
+                              fontSize: FONT_MIDDLE,
                               color: PRIMARY_TEXT_COLOR,
                               fontWeight: FontWeight.bold,
                             ),

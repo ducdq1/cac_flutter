@@ -195,10 +195,12 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       final body = jsonEncode(param.toJson());
 
       String url = '$baseUrl_api/quotations?time='+  DateTime.now().millisecondsSinceEpoch.toString();
+      print(url);
+      print(body);
+
       final response = await networkRequest.postRequest(
           url: url, body: body);
-       print(url);
-      print(body);
+
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       //print(responseJson);
       if (response.statusCode == 200) {
