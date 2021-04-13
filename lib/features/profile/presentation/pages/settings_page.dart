@@ -39,7 +39,7 @@ class _SettingsPageState extends State<SettingsPage>   implements OnButtonClickL
   bool _canCheckBiometric;
   String autherized = "Not autherized";
   TextEditingController controller;
-
+  TextEditingController applicationController;
   @override
   void setState(fn) {
     if (mounted) {
@@ -56,11 +56,15 @@ class _SettingsPageState extends State<SettingsPage>   implements OnButtonClickL
   @override
   void initState() {
     controller = new TextEditingController();
-
+    applicationController = new TextEditingController();
     // print('language: ${language}');
     setState(() {
       language = handleLanguage();
       useProxy = pref.getBool('useProxy') ?? false;
+
+      String appName = pref.getString('APPLICATION_NAME');
+      applicationController.text =appName == null || appName.isEmpty ? "ketoan" : appName;
+
       String IP_SERVER = pref.getString('IP_SERVER');
       controller.text = IP_SERVER == null || IP_SERVER.isEmpty
           ? "http://117.2.164.156/"
@@ -72,6 +76,7 @@ class _SettingsPageState extends State<SettingsPage>   implements OnButtonClickL
 
   Future<bool> saveConfig() async {
     pref.setString('IP_SERVER', controller.text);
+    pref.setString('APPLICATION_NAME',applicationController.text);
     return useProxy;
   }
 
@@ -144,6 +149,37 @@ class _SettingsPageState extends State<SettingsPage>   implements OnButtonClickL
                             SizedBox(height: 10),
                             TextField(
                               controller: controller,
+                              keyboardType: TextInputType.text,
+                              decoration: new InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: BORDER_COLOR, width: 0.6),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: PRIMARY_COLOR, width: 0.6),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  //enabledBorder: InputBorder.none,
+                                  //errorBorder: InputBorder.none,
+                                  //disabledBorder: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(
+                                      left: 15, bottom: 11, top: 11, right: 15),
+                                  hintText: "Địa chỉ máy chủ"),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Ứng dụng: ',
+                              style: GoogleFonts.inter(
+                                fontSize: FONT_MIDDLE,
+                                fontWeight: FontWeight.bold,
+                                color: PRIMARY_TEXT_COLOR,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            TextField(
+                              controller: applicationController,
                               keyboardType: TextInputType.text,
                               decoration: new InputDecoration(
                                   border: OutlineInputBorder(
