@@ -173,7 +173,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                           ],
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 50,
                         ),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,

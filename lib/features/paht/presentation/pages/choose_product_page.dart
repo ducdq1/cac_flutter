@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/colors.dart';
@@ -27,7 +28,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+import '../../../../injection_container.dart';
 const PADDING_CONTENT_HORIZONTAL = 16.0;
 const SIZE_ARROW_BACK_ICON = 24.0;
 
@@ -83,6 +86,8 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   QuotationDetailModel quotationDetailModel;
   bool isApproveAble = false;
   TextEditingController expireDateController;
+  int userType =0 ;
+  final pref = singleton<SharedPreferences>();
 
   @override
   void initState() {
@@ -107,6 +112,8 @@ class _ChooseProductPageState extends State<ChooseProductPage>
 
   @override
   Widget build(BuildContext context) {
+    int userType = pref.getInt('userType');
+
     if (firstLoad) {
       firstLoad = false;
       arg = ModalRoute.of(context).settings.arguments as PahtDetailArgument;
@@ -332,6 +339,36 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                                     ),
                                                   ])))
                                             ]),
+                                        userType != null && userType == 3
+                                            ? //cho xem gia
+                                        Center(
+                                          child: Container(
+                                              width: 200,
+                                              padding: const EdgeInsets.only(bottom: 0.0),
+                                              child: RaisedButton(
+                                                  color: PRIMARY_COLOR,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(36),
+                                                  ),
+                                                  onPressed: () {showDialog(context: context, child:
+                                                  new AlertDialog(
+                                                    title: new Text("Giá sản phẩm"),
+                                                    content: new Text(productModel.price!=null && productModel.price.isNotEmpty ? productModel.price.toString(): "Sản phẩm chưa có giá"),
+                                                  )
+                                                  );},
+                                                  child: AutoSizeText(
+                                                    'Xem giá',
+                                                    style: GoogleFonts.inter(
+                                                      fontSize: FONT_EX_SMALL,
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                    minFontSize: FONT_EX_SMALL,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ))),
+                                        )
+                                            : SizedBox(),
                                         SizedBox(height: 10),
                                         Container(
                                             // color: Color(0xfff1e3c0),

@@ -68,10 +68,12 @@ class FilterPublicButtonPressedEvent extends PublicPahtEvent {
   final String search;
   final List<String> categoryIds;
   final List<String> statusIds;
+  final bool isApproveAble;
   FilterPublicButtonPressedEvent({
     this.search,
     this.categoryIds,
     this.statusIds,
+    this.isApproveAble = false
   });
 
   @override

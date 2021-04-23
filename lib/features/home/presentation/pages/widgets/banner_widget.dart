@@ -217,11 +217,7 @@ class _BannerWidgetState extends State<BannerWidget> {
                                               Text(
                                                 hello,
                                                 style: TextStyle(
-                                                  fontSize: FONT_EX_HUGE *
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.001,
+                                                  fontSize: FONT_MIDDLE  ,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),
@@ -234,11 +230,7 @@ class _BannerWidgetState extends State<BannerWidget> {
                                                     ? fullName.toUpperCase()
                                                     : '',
                                                 style: TextStyle(
-                                                  fontSize: FONT_EX_HUGE *
-                                                      MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.001,
+                                                  fontSize: FONT_LARGE,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                 ),

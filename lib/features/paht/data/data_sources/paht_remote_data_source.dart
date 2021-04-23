@@ -114,8 +114,8 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   Future<List<StatusModel>> _fetchListStatusFromUrl(String url) async {
     try {
       List<StatusModel> result = [];
-      result.add(StatusModel(name: trans(STATUS_APPROVED), id: 1));
-      result.add(StatusModel(name: trans(STATUS_DENNY), id: 2));
+      result.add(StatusModel(name: 'Chưa Bán', id: 0));
+      result.add(StatusModel(name: 'Đã bán', id: 1));
       return result;
       // } else {
       //   throw Exception(data['message']);

@@ -15,7 +15,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
 import '../../../../injection_container.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -131,9 +132,23 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               OptionItemWidget(
                 icon: 'icon_info.png',
-                label: trans(INFORMATION),
+                label: 'Cập nhật ứng dụng',
                 // route: ROUTER_INFO_PAGE,
-                page: ViewInfoPage(),
+                page: null,
+                callback: () async{
+                  String url ;
+                  if (Platform.isAndroid) {
+                    url = 'https://install.appcenter.ms/users/duc.doanquang-gmail.com/apps/c.a.c/distribution_groups/all%20public' ;
+                  } else if (Platform.isIOS) {
+                    url = 'https://install.appcenter.ms/users/duc.doanquang-gmail.com/apps/c.a.c-1/distribution_groups/all%20public' ;
+                  }
+
+                  if (await canLaunch(url)) {
+                  await launch(url);
+                  } else {
+                  throw 'Could not launch $url';
+                  }
+                },
               ),
               OptionItemWidget(
                 icon: 'icon_sign_out.png',

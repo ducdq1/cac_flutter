@@ -7,6 +7,7 @@ import 'package:citizen_app/features/common/blocs/bottom_navigation/bottom_navig
 import 'package:citizen_app/features/common/widgets/failure_widget/no_network_failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
+import 'package:citizen_app/features/paht/presentation/bloc/status_paht_bloc/status_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_search.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
@@ -29,7 +30,7 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
   bool isRefresh = false;
   final scrollController = ScrollController();
   final scrollThreshold = 200.0;
-
+  bool isFilter = false;
   @override
   void initState() {
     _refreshCompleter = Completer<void>();
@@ -54,16 +55,41 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
+      providers: [ BlocProvider<StatusPahtBloc>(
+          create: (context) => singleton<StatusPahtBloc>()
+            ..add(  ListStatusPublicFetched())),
         BlocProvider<PublicPahtBloc>(
-            create: (context) => singleton<PublicPahtBloc>()
-              ..add(ListPublicPahtFetchingEvent(offset: 0, limit: 10, isApproveAble: true))),
+            create: (context) =>
+            singleton<PublicPahtBloc>()
+              ..add(ListPublicPahtFetchingEvent(
+                  offset: 0, limit: 10, isApproveAble: true))),
       ],
       child: BlocBuilder<PublicPahtBloc, PublicPahtState>(
         builder: (BuildContext context, PublicPahtState state) {
           return BaseLayoutWidget(
               title: 'Danh sách Báo giá',
               actions: [
+              //   InkWell(
+              //   child: SvgPicture.asset(
+              //     isFilter
+              //         ? SVG_ASSETS_PATH + 'icon_filter_active.svg'
+              //         : SVG_ASSETS_PATH + 'icon_filter.svg',
+              //     width: SIZE_ICON_ACTIONS,
+              //     height: SIZE_ICON_ACTIONS,
+              //   ),
+              //   onTap: () {
+              //     setState(() {
+              //       isFilter = !isFilter;
+              //     });
+              //     if (isFilter) {
+              //       BlocProvider.of<StatusPahtBloc>(context)
+              //           .add(ListStatusPublicFetched());
+              //     }
+              //   },
+              // ),
+              //   SizedBox(
+              //     width: 10,
+              //   ),
                 InkWell(
                   child: SvgPicture.asset(
                     SVG_ASSETS_PATH + 'icon_search.svg',
@@ -72,26 +98,36 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
                     height: SIZE_ICON_ACTIONS,
                   ),
                   onTap: () {
-                    Navigator.pushNamed(context, ROUTER_SEARCH_PUBLIC_PAHT, arguments: SearchArgument(isApproveAble: true));
+                    Navigator.pushNamed(context, ROUTER_SEARCH_PUBLIC_PAHT,
+                        arguments: SearchArgument(isApproveAble: true));
                   },
                 ),
                 SizedBox(
                   width: 10,
                 ),
               ],
-              body: Container(
+              body:  Stack(
+                  children: [
+                  // Visibility(
+                  // visible: isFilter,
+                  // child: FilterCategoryContainer(indexTab: 1)),
+              Padding(
+                  padding: EdgeInsets.only(
+                      top: isFilter ? 130 :0 ),
+                  child: Container(
                   child: RefreshIndicator(
                       onRefresh: () async => handleRefresh(context),
                       child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                           listener: (context, state) {
-                        if (state is PublicPahtFailure &&
-                            state.error.toString() == "UNAUTHORIZED") {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              ROUTER_SIGNIN, (Route<dynamic> route) => false);
-                        }
-                        _refreshCompleter?.complete();
-                        _refreshCompleter = Completer();
-                      }, builder: (context, state) {
+                            if (state is PublicPahtFailure &&
+                                state.error.toString() == "UNAUTHORIZED") {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  ROUTER_SIGNIN, (Route<
+                                  dynamic> route) => false);
+                            }
+                            _refreshCompleter?.complete();
+                            _refreshCompleter = Completer();
+                          }, builder: (context, state) {
                         if (state is PublicPahtFailure) {
                           return NoNetworkFailureWidget(
                               message: state.error.toString() == "UNAUTHORIZED"
@@ -99,28 +135,32 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
                                   : state.error.toString(),
                               onPressed: () {
                                 BlocProvider.of<PublicPahtBloc>(context).add(
-                                  ListPublicPahtFetchingEvent(offset: 0, limit: 10, isApproveAble: true),
+                                  ListPublicPahtFetchingEvent(offset: 0,
+                                      limit: 10,
+                                      isApproveAble: true),
                                 );
                               });
                         }
                         if (state is PublicPahtSuccess) {
                           return ListViewPahtsWidget(
-                            hasReachedMax: state.hasReachedMax,
-                            pahts: state.paht,
-                            isPersonal: true,
-                            scrollController: scrollController,
-                            loadmore: state.hasReachedMax ? false : true,
+                              hasReachedMax: state.hasReachedMax,
+                              pahts: state.paht,
+                              isPersonal: true,
+                              scrollController: scrollController,
+                              loadmore: state.hasReachedMax ? false : true,
                               isApproveAble: true
                           );
                         }
 
                         if (state is DeletePersonalPahtFailure) {
                           BlocProvider.of<PublicPahtBloc>(context).add(
-                            ListPublicPahtFetchingEvent(offset: 0, limit: 10, isApproveAble: true),
+                            ListPublicPahtFetchingEvent(
+                                offset: 0, limit: 10, isApproveAble: true),
                           );
                         }
                         return SkeletonPahtWidget();
-                      }))));
+                      })))),
+          ]));
         },
       ),
     );

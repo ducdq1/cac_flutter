@@ -35,37 +35,37 @@ class _FilterCategoryContainerState extends State<FilterCategoryContainer> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: widget.indexTab == 1 ? 225 : 130,
+      height:  130,//widget.indexTab == 1 ? 225 : 130,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 0, 0),
         child: Column(
           children: [
-            BlocProvider<CategoryPahtBloc>(
-                create: (context) => singleton<CategoryPahtBloc>()
-                  ..add(ListCategoriesFetched()),
-                child: BlocBuilder<CategoryPahtBloc, CategoryPahtState>(
-                    builder: (context, state) {
-                      if (state is CategoryPahtSuccess) {
-                        return FilterField(
-                          filterType: 0,
-                          titleFilter: trans(TITLE_FIELD_1),
-                          list: state.listCategories,
-                          indexTab: widget.indexTab,
-                          isRefresh: widget.isRefresh,
-                        );
-                      }
-                      return FilterField(
-                        filterType: 0,
-                        titleFilter: trans(TITLE_FIELD_1),
-                        list: null,
-                        categoryLoading: true,
-                        indexTab: widget.indexTab,
-                        isRefresh: widget.isRefresh,
-                      );
-                    }))
-            ,
-            widget.indexTab == 1
-                ?  BlocBuilder<StatusPahtBloc, StatusPahtState>(
+            // BlocProvider<CategoryPahtBloc>(
+            //     create: (context) => singleton<CategoryPahtBloc>()
+            //       ..add(ListCategoriesFetched()),
+            //     child: BlocBuilder<CategoryPahtBloc, CategoryPahtState>(
+            //         builder: (context, state) {
+            //           if (state is CategoryPahtSuccess) {
+            //             return FilterField(
+            //               filterType: 0,
+            //               titleFilter: trans(TITLE_FIELD_1),
+            //               list: state.listCategories,
+            //               indexTab: widget.indexTab,
+            //               isRefresh: widget.isRefresh,
+            //             );
+            //           }
+            //           return FilterField(
+            //             filterType: 0,
+            //             titleFilter: trans(TITLE_FIELD_1),
+            //             list: null,
+            //             categoryLoading: true,
+            //             indexTab: widget.indexTab,
+            //             isRefresh: widget.isRefresh,
+            //           );
+            //         }))
+            // ,
+            //widget.indexTab == 1 ?
+            BlocBuilder<StatusPahtBloc, StatusPahtState>(
                 builder: (context, state) {
                   if (state is StatusPahtSuccess) {
                     return FilterField(
@@ -85,7 +85,7 @@ class _FilterCategoryContainerState extends State<FilterCategoryContainer> {
                     isRefresh: widget.isRefresh,
                   );
                 })
-                : SizedBox(),
+              //  : SizedBox(),
           ],
         ),
       ),
@@ -187,32 +187,22 @@ class _FilterFieldState extends State<FilterField> {
             Text(
               widget.titleFilter,
               style: TextStyle(
-                  fontSize: FONT_EX_SMALL,
+                  fontSize: FONT_SMALL,
                   fontWeight: FontWeight.bold,
                   color: SECONDARY_TEXT_COLOR),
             ),
             FlatButton(
               onPressed: () {
                 isFilter = true;
-                if (widget.filterType == 0) {
-                  isChosenCategories.clear();
-                } else if (widget.filterType == 1) {
-                  isChosenStatus.clear();
-                }
 
-                if (widget.indexTab == 0) {
+                isChosenStatus.clear();
+
                   BlocProvider.of<PublicPahtBloc>(context).add(
                     FilterPublicButtonPressedEvent(
                         categoryIds: listChosenCategories,
                         statusIds: listChosenStatus),
                   );
-                } else if (widget.indexTab == 1) {
-                  BlocProvider.of<PersonalPahtBloc>(context).add(
-                    FilterPersonalButtonPressedEvent(
-                        categoryIds: listChosenCategories,
-                        statusIds: listChosenStatus),
-                  );
-                }
+
                 setState(
                       () {
                     isChooseAll = !isChooseAll;
@@ -222,7 +212,7 @@ class _FilterFieldState extends State<FilterField> {
               child: Text(
                 isChooseAll ? '' : trans(ACT_DESELECT_ALL),
                 style: TextStyle(
-                  fontSize: FONT_EX_SMALL,
+                  fontSize: FONT_SMALL,
                   fontWeight: FontWeight.bold,
                   color: PRIMARY_COLOR,
                 ),
@@ -296,7 +286,7 @@ class _FilterFieldState extends State<FilterField> {
                               }else {
                                 isChosenStatus.add(listData[i].id);
                               }
-                              isChooseAll = false;
+                              isChooseAll = isChosenStatus.isEmpty;// ? isChooseAll = false : isChooseAll = true ;
                             },
                           );
                         }
@@ -307,19 +297,11 @@ class _FilterFieldState extends State<FilterField> {
                           isChosenCategories: isChosenCategories,
                           listChosenCategories: listChosenCategories,
                         );
-                        if (widget.indexTab == 0) {
                           BlocProvider.of<PublicPahtBloc>(context).add(
                             FilterPublicButtonPressedEvent(
                                 categoryIds: listChosenCategories,
                                 statusIds: listChosenStatus),
                           );
-                        } else if (widget.indexTab == 1) {
-                          BlocProvider.of<PersonalPahtBloc>(context).add(
-                            FilterPersonalButtonPressedEvent(
-                                categoryIds: listChosenCategories,
-                                statusIds: listChosenStatus),
-                          );
-                        }
                       },
                       child: Row(
                         children: [
@@ -327,8 +309,8 @@ class _FilterFieldState extends State<FilterField> {
                             widget.filterType == 0
                                 ? SVG_ASSETS_PATH + 'icon_environment.svg'
                                 : getIcon(listData[i].id),
-                            width: 20,
-                            height: 20,
+                            width: 16,
+                            height: 16,
                             color: widget.filterType == 0
                                 ? (checkCategoriesSelected(listData[i].type)
                                 ? TEXT_CHOSEN_CATEGORY_COLOR
@@ -354,7 +336,7 @@ class _FilterFieldState extends State<FilterField> {
                                   ? TEXT_CHOSEN_CATEGORY_COLOR
                                   : TEXT_CATEGORY_COLOR
                               ),
-                              fontSize: FONT_MIDDLE,
+                              fontSize: FONT_SMALL,
                               fontWeight: widget.filterType == 0
                                   ? (checkCategoriesSelected(listData[i].type)
                                   ? FontWeight.bold
@@ -373,7 +355,7 @@ class _FilterFieldState extends State<FilterField> {
                       ),
                     ),
                     SizedBox(
-                      width: 8,
+                      width: 10,
                     )
                   ],
                 )
