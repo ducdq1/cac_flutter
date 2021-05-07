@@ -8,6 +8,7 @@ import 'package:citizen_app/core/utils/validate/empty_validate.dart';
 import 'package:citizen_app/features/authentication/signup/presentation/widgets/signup_personal_page/input_datetime_widget.dart';
 import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
 import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
+import 'package:citizen_app/features/common/dialogs/input_dialog.dart';
 import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom_widget.dart';
@@ -172,78 +173,113 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
           padding: const EdgeInsets.only(bottom: 80),
           child: !_isUpdateAble
               ? SizedBox()
-              : FloatingActionButton(
-                  // child: Image.asset(
-                  //   'assets/icons/icon_scan_qr_white.png',
-                  //   height: 29,
-                  //   width: 29,
-                  // ),
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        'assets/icons/icon_scan_qr_white.png',
-                        width: 29,
-                        height: 29,
-                        filterQuality: FilterQuality.high,
-                        fit: BoxFit.scaleDown,
-                      ),
-                      AnimatedBuilder(
-                        animation: _animation,
-                        child: Container(
-                          color: Colors.amber,
-                          height: 1,
+              : Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+                children : [
+                  FloatingActionButton(
+                    heroTag: "scan",
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          'assets/icons/icon_scan_qr_white.png',
                           width: 29,
+                          height: 29,
+                          filterQuality: FilterQuality.high,
+                          fit: BoxFit.scaleDown,
                         ),
-                        builder: (_, widget) {
-                          return Transform.translate(
-                            offset: Offset(0.0, _animation.value),
-                            child: widget,
-                          );
-                        },
-                      )
-                    ],
+                        AnimatedBuilder(
+                          animation: _animation,
+                          child: Container(
+                            color: Colors.amber,
+                            height: 1,
+                            width: 29,
+                          ),
+                          builder: (_, widget) {
+                            return Transform.translate(
+                              offset: Offset(0.0, _animation.value),
+                              child: widget,
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                    // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
+                    backgroundColor: PRIMARY_COLOR,
+                    tooltip: 'Quét mã',
+                    elevation: 5,
+                    splashColor: Colors.grey,
+                    onPressed: () async {
+                      clearFocus();
+                      final PermissionHandler _permissionHandler =
+                          PermissionHandler();
+                      var permissionStatus = await _permissionHandler
+                          .checkPermissionStatus(PermissionGroup.camera);
+
+                      switch (permissionStatus) {
+                        case PermissionStatus.granted:
+                          Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
+                              .then((value) => {
+                                    if (value != null)
+                                      {gotoDetailProductPage(value)}
+                                  });
+
+                          break;
+                        case PermissionStatus.denied:
+                        case PermissionStatus.restricted:
+                        case PermissionStatus.unknown:
+                          await _permissionHandler
+                              .requestPermissions([PermissionGroup.camera]);
+                          var permissionStatus = await _permissionHandler
+                              .checkPermissionStatus(PermissionGroup.camera);
+                          switch (permissionStatus) {
+                            case PermissionStatus.granted:
+                              Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
+                                  .then((value) => {
+                                        if (value != null)
+                                          {gotoDetailProductPage(value)}
+                                      });
+                          }
+                          break;
+                        default:
+                      }
+                    },
                   ),
-                  // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
-                  backgroundColor: PRIMARY_COLOR,
-                  tooltip: 'Quét mã',
-                  elevation: 5,
-                  splashColor: Colors.grey,
-                  onPressed: () async {
-                    clearFocus();
-                    final PermissionHandler _permissionHandler =
-                        PermissionHandler();
-                    var permissionStatus = await _permissionHandler
-                        .checkPermissionStatus(PermissionGroup.camera);
+                  SizedBox(height: 20,),
+                  FloatingActionButton(
+                    heroTag: "search",
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          'assets/icons/ic_search_small.png',
+                          width: 23,
+                          height: 23,
+                          filterQuality: FilterQuality.high,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ],
+                    ),
+                    // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
+                    backgroundColor: PRIMARY_COLOR,
+                    tooltip: 'Tìm kiếm',
+                    elevation: 5,
+                    splashColor: Colors.grey,
+                    onPressed: () async {
+                      clearFocus();
+                      showInputDialog(
+                          context: context,
+                          title: "Nhập mã SP để xem thông tin",
+                          label: "Nhập mã sản phẩm",
+                          onSubmit: (value) {
+                            if (value !=null && value.toString().isNotEmpty) {
+                              gotoDetailProductPage(value);
+                            }
+                          });
+                    },
+                  ),
 
-                    switch (permissionStatus) {
-                      case PermissionStatus.granted:
-                        Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
-                            .then((value) => {
-                                  if (value != null)
-                                    {gotoDetailProductPage(value)}
-                                });
 
-                        break;
-                      case PermissionStatus.denied:
-                      case PermissionStatus.restricted:
-                      case PermissionStatus.unknown:
-                        await _permissionHandler
-                            .requestPermissions([PermissionGroup.camera]);
-                        var permissionStatus = await _permissionHandler
-                            .checkPermissionStatus(PermissionGroup.camera);
-                        switch (permissionStatus) {
-                          case PermissionStatus.granted:
-                            Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
-                                .then((value) => {
-                                      if (value != null)
-                                        {gotoDetailProductPage(value)}
-                                    });
-                        }
-                        break;
-                      default:
-                    }
-                  },
-                ),
+                ],
+              ),
         ),
         title: args == null
             ? 'Tạo báo giá'
