@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:citizen_app/core/resources/resources.dart';
+import 'package:citizen_app/features/common/dialogs/input_dialog.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
@@ -77,7 +78,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
               builder: (context, state) {
                 return Padding(
                   padding:
-                      const EdgeInsets.only(top: 80.0, left: 20, right: 20),
+                      const EdgeInsets.only(top: 50.0, left: 20, right: 20),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,22 +164,41 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                               ],
                             ),
                             CitizensMenuItemWidget(
-                              label: 'Báo giá',
-                              icon: '/icons/icon_bao_gia.png',
+                              label: 'Tìm kiếm',
+                              icon: '/icons/icon_search.png',
                               needRedirect: '',
                               onPress: () {
-                                Navigator.pushNamed(context, ROUTER_PAHT);
+                                showInputDialog(
+                                    context: context,
+                                    title: "Nhập mã SP để xem thông tin",
+                                    label: "Nhập mã sản phẩm",
+                                    onSubmit: (value) {
+                                      if (value !=null && value.toString().isNotEmpty) {
+                                        Navigator.pushNamed(
+                                            context, ROUTER_DETAILED_PAHT,
+                                            arguments: PahtDetailArgument(
+                                                productCode: value));
+                                      }
+                                    });
                               },
                             ),
                           ],
                         ),
                         SizedBox(
-                          height: 50,
+                          height: 20,
                         ),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              CitizensMenuItemWidget(
+                                label: 'Báo giá',
+                                icon: '/icons/icon_bao_gia.png',
+                                needRedirect: '',
+                                onPress: () {
+                                  Navigator.pushNamed(context, ROUTER_PAHT);
+                                },
+                              ),
                               CitizensMenuItemWidget(
                                 label: 'Đã bán',
                                 icon: '/icons/icon_saled.png',
@@ -188,6 +208,14 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                       context, ROUTER_SALED_QUOTATION);
                                 },
                               ),
+                            ]),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               userType != null &&
                                       userType ==
                                           3 //quan ly ban hang  co them module duyet bao gia
@@ -200,7 +228,10 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                             context, ROUTER_APROVE_PAHT);
                                       },
                                     )
-                                  :
+                                  : SizedBox(
+                                      height: 140,
+                                      width: 140,
+                                    ),
                               SizedBox(
                                 height: 140,
                                 width: 140,

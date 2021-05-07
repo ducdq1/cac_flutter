@@ -20,7 +20,7 @@ def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
     flutterVersionCode = '3'
 //}
 
-//def flutterVersionName = localProperties.getProperty('flutter.versionName')
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
 //if (flutterVersionName == null) {
     flutterVersionName = '2.0.0'
 //}
