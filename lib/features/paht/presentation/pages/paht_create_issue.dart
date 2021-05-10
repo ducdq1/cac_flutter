@@ -116,9 +116,10 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         _isKhachHangLe = pahtModel.type == 0;
       }
 
-      if(pahtModel.saledDate !=null){
-        String saledDate =  DateFormat("dd/MM/yyyy").format(DateTime.parse(pahtModel.saledDate));
-        saledDateController.text =  saledDate;
+      if (pahtModel.saledDate != null) {
+        String saledDate = DateFormat("dd/MM/yyyy")
+            .format(DateTime.parse(pahtModel.saledDate));
+        saledDateController.text = saledDate;
       }
 
       BlocProvider.of<CreateIssueBloc>(context).add(
@@ -174,112 +175,109 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
           child: !_isUpdateAble
               ? SizedBox()
               : Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-                children : [
-                  FloatingActionButton(
-                    heroTag: "scan",
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'assets/icons/icon_scan_qr_white.png',
-                          width: 29,
-                          height: 29,
-                          filterQuality: FilterQuality.high,
-                          fit: BoxFit.scaleDown,
-                        ),
-                        AnimatedBuilder(
-                          animation: _animation,
-                          child: Container(
-                            color: Colors.amber,
-                            height: 1,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FloatingActionButton(
+                      heroTag: "scan",
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/icons/icon_scan_qr_white.png',
                             width: 29,
+                            height: 29,
+                            filterQuality: FilterQuality.high,
+                            fit: BoxFit.scaleDown,
                           ),
-                          builder: (_, widget) {
-                            return Transform.translate(
-                              offset: Offset(0.0, _animation.value),
-                              child: widget,
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                    // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
-                    backgroundColor: PRIMARY_COLOR,
-                    tooltip: 'Quét mã',
-                    elevation: 5,
-                    splashColor: Colors.grey,
-                    onPressed: () async {
-                      clearFocus();
-                      final PermissionHandler _permissionHandler =
-                          PermissionHandler();
-                      var permissionStatus = await _permissionHandler
-                          .checkPermissionStatus(PermissionGroup.camera);
+                          AnimatedBuilder(
+                            animation: _animation,
+                            child: Container(
+                              color: Colors.amber,
+                              height: 1,
+                              width: 29,
+                            ),
+                            builder: (_, widget) {
+                              return Transform.translate(
+                                offset: Offset(0.0, _animation.value),
+                                child: widget,
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                      // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
+                      backgroundColor: PRIMARY_COLOR,
+                      tooltip: 'Quét mã',
+                      elevation: 5,
+                      splashColor: Colors.grey,
+                      onPressed: () async {
+                        clearFocus();
+                        final PermissionHandler _permissionHandler =
+                            PermissionHandler();
+                        var permissionStatus = await _permissionHandler
+                            .checkPermissionStatus(PermissionGroup.camera);
 
-                      switch (permissionStatus) {
-                        case PermissionStatus.granted:
-                          Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
-                              .then((value) => {
-                                    if (value != null)
-                                      {gotoDetailProductPage(value)}
-                                  });
+                        switch (permissionStatus) {
+                          case PermissionStatus.granted:
+                            Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
+                                .then((value) => {
+                                      if (value != null)
+                                        {gotoDetailProductPage(value)}
+                                    });
 
-                          break;
-                        case PermissionStatus.denied:
-                        case PermissionStatus.restricted:
-                        case PermissionStatus.unknown:
-                          await _permissionHandler
-                              .requestPermissions([PermissionGroup.camera]);
-                          var permissionStatus = await _permissionHandler
-                              .checkPermissionStatus(PermissionGroup.camera);
-                          switch (permissionStatus) {
-                            case PermissionStatus.granted:
-                              Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
-                                  .then((value) => {
-                                        if (value != null)
-                                          {gotoDetailProductPage(value)}
-                                      });
-                          }
-                          break;
-                        default:
-                      }
-                    },
-                  ),
-                  SizedBox(height: 20,),
-                  FloatingActionButton(
-                    heroTag: "search",
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          'assets/icons/ic_search_small.png',
-                          width: 23,
-                          height: 23,
-                          filterQuality: FilterQuality.high,
-                          fit: BoxFit.scaleDown,
-                        ),
-                      ],
-                    ),
-                    // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
-                    backgroundColor: PRIMARY_COLOR,
-                    tooltip: 'Tìm kiếm',
-                    elevation: 5,
-                    splashColor: Colors.grey,
-                    onPressed: () async {
-                      clearFocus();
-                      showInputDialog(
-                          context: context,
-                          title: "Nhập mã SP để xem thông tin",
-                          label: "Nhập mã sản phẩm",
-                          onSubmit: (value) {
-                            if (value !=null && value.toString().isNotEmpty) {
-                              gotoDetailProductPage(value);
+                            break;
+                          case PermissionStatus.denied:
+                          case PermissionStatus.restricted:
+                          case PermissionStatus.unknown:
+                            await _permissionHandler
+                                .requestPermissions([PermissionGroup.camera]);
+                            var permissionStatus = await _permissionHandler
+                                .checkPermissionStatus(PermissionGroup.camera);
+                            switch (permissionStatus) {
+                              case PermissionStatus.granted:
+                                Navigator.pushNamed(
+                                        context, ROUTER_QRCODE_SCANER)
+                                    .then((value) => {
+                                          if (value != null)
+                                            {gotoDetailProductPage(value)}
+                                        });
                             }
-                          });
-                    },
-                  ),
-
-
-                ],
-              ),
+                            break;
+                          default:
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    FloatingActionButton(
+                      heroTag: "search",
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            'assets/icons/ic_search_small.png',
+                            width: 23,
+                            height: 23,
+                            filterQuality: FilterQuality.high,
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ],
+                      ),
+                      // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
+                      backgroundColor: PRIMARY_COLOR,
+                      tooltip: 'Tìm kiếm',
+                      elevation: 5,
+                      splashColor: Colors.grey,
+                      onPressed: () async {
+                        clearFocus();
+                        Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT)
+                            .then((value) => {
+                                  if (value != null)
+                                    {gotoDetailProductPage(value)}
+                                });
+                      },
+                    ),
+                  ],
+                ),
         ),
         title: args == null
             ? 'Tạo báo giá'
@@ -297,7 +295,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
 
             if (state is CreateIssueSuccess) {
               //Navigator.pop(context);
-                Navigator.of(context, rootNavigator: true).pop('dialog');
+              Navigator.of(context, rootNavigator: true).pop('dialog');
               Fluttertoast.showToast(
                   msg: args == null
                       ? 'Tạo báo giá thành công'
@@ -703,14 +701,66 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Column(children: [
-          InputDatetimeWidget(
-                scrollPadding: 200,
-                hintText: 'Ngày bán hàng',
-                controller: saledDateController,
-                validates: [EmptyValidate()],
+        pahtModel.saledDate == null ? Padding(
+          padding:   EdgeInsets.only(bottom: 10.0),
+          child: InkWell(
+            onTap: () {
+              showInputDialog(
+                  context: context,
+                  title: "Cập nhật tiến độ",
+                  value: pahtModel.note,
+                  onSubmit: (value) {
+                    if (value != null) {
+                      pahtModel.note = value;
+                      BlocProvider.of<CreateIssueBloc>(context).add(
+                        CreateIssueButtonPresseEvent(
+                          quotationParams: QuotationParams(
+                            updateNote: true,
+                              quotation: PahtModel(
+                                quotationID: pahtModel.quotationID,
+                                note: pahtModel.note
+                              ),
+                             ),
+                        ),
+                      );
+                      _showCupertinoDialog(context);
+                    }
+                  });
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'Cập nhật Tiến độ',
+                  style: GoogleFonts.inter(
+                    color: Colors.blue,
+                    fontSize: FONT_SMALL,
+                    fontWeight: FontWeight.bold
+                  ),
+                  softWrap: true,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Image.asset(
+                  'assets/icons/icon_marker_line.png',
+                  width: 22,
+                  height: 22,
+                  filterQuality: FilterQuality.high,
+                  fit: BoxFit.scaleDown,
+                ),
+              ],
+            ),
+          ),
+        )  : SizedBox(),
 
-              ) ,
-          pahtModel.saledDate == null
+        InputDatetimeWidget(
+          scrollPadding: 200,
+          hintText: 'Ngày bán hàng',
+          controller: saledDateController,
+          validates: [EmptyValidate()],
+        ),
+        pahtModel.saledDate == null
             ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 Expanded(
                   child: Container(
@@ -724,8 +774,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
               ])
             : SizedBox(),
         SizedBox(
-                height: 20,
-              ) ,
+          height: 20,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

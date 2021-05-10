@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:citizen_app/features/paht/data/models/paht_model.dart';
+import 'package:citizen_app/features/paht/data/models/product_model.dart';
+import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
+import 'package:citizen_app/features/paht/domain/usecases/search_product.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:equatable/equatable.dart';
@@ -9,15 +12,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 part 'public_paht_event.dart';
 
 part 'public_paht_state.dart';
 
 class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
   final GetListPublicPaht getListPublicPaht;
+  final SearchProduct searchProduct;
   final DeletePaht deletePaht;
 
-  PublicPahtBloc({@required this.getListPublicPaht, @required this.deletePaht})
+  PublicPahtBloc({@required this.getListPublicPaht, @required this.deletePaht,@required this.searchProduct})
       : super(PublicPahtInitial());
 
   bool _hasReachedMax(PublicPahtState state) =>
@@ -41,6 +46,26 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
     final currentState = state;
     final prefs = singleton<SharedPreferences>();
     final userName = prefs.get('token').toString();
+
+    if (event is ListProductFetchingEvent) {
+      yield PublicPahtLoading();
+      try {
+        SearchProductModel listPublicPaht = await searchProduct(
+            SearchProductParam(
+                productCode: event.search,
+                limit: 100,
+                offset: 0
+            ));
+        yield SearchProductSuccess(
+            lstProduct: listPublicPaht.lstProduct,
+            offset: 0,
+            hasReachedMax: true);
+      }catch (error) {
+        yield PublicPahtFailure(error: error.message);
+    }
+      return;
+    }
+
     if (event is SearchPublicButtonPressedEvent) {
       yield PublicPahtLoading();
 

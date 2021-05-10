@@ -23,6 +23,7 @@ import 'package:citizen_app/features/paht/presentation/pages/business_hour_page.
 import 'package:citizen_app/features/paht/presentation/pages/choose_product_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
+import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
 import 'package:citizen_app/features/paht/presentation/pages/qr_scaner.dart';
 import 'package:citizen_app/features/profile/presentation/bloc/update_profile_bloc.dart';
 import 'package:citizen_app/features/profile/presentation/pages/change_password_page.dart';
@@ -209,6 +210,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_APROVE_PAHT: (context) => ApproveQuotation(),
           ROUTER_APPROVE_QUOTATION_PAGE : (context) => ApproveQuotationPage(),
           ROUTER_SALED_QUOTATION : (context) => SaledQuotation(),
+          ROUTER_SEARCH_PRODUCT :(context) => ProductSearch(),
         },
         debugShowCheckedModeBanner: false,
       ),

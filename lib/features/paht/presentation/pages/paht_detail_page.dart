@@ -31,8 +31,9 @@ class SearchProductParam extends Equatable {
   final String productCode;
   final String productName;
   final String userName;
-
-  SearchProductParam({this.productCode, this.productName, this.userName});
+  final int limit;
+  final int offset;
+  SearchProductParam({this.productCode, this.productName, this.userName,this.limit, this.offset});
 
   @override
   // TODO: implement props
@@ -40,9 +41,11 @@ class SearchProductParam extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'productCode': productCode,
+      'productCode': productCode == null ? '' : productCode,
       'productName': productName,
-      'userName': userName
+      'userName': userName,
+      'limit' : limit,
+      'offset' : offset
     };
   }
 }

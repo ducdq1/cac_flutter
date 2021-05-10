@@ -18,6 +18,8 @@ abstract class PahtRepository {
 
   Future<List<StatusEntity>> getListStatusPersonal();
 
+  Future<SearchProductModel> searchProduct(SearchProductParam param);
+
   Future<SearchProductModel> getDetailedPaht(SearchProductParam param);
 
   Future<List<CommentEntity>> getCommentsDetailedPaht({String pahtId});

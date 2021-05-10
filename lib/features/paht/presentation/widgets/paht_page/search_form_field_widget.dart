@@ -47,7 +47,7 @@ class _SearchFormFieldWidgetState extends State<SearchFormFieldWidget> {
               focusNode: widget.searchFocus,
               onChanged: widget.onChanged,
               onEditingComplete: widget.onEditingComplete,
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.search,
               onFieldSubmitted: (value) =>
                   FocusScope.of(context).requestFocus(FocusNode()),
               controller: widget.searchController,
@@ -60,7 +60,7 @@ class _SearchFormFieldWidgetState extends State<SearchFormFieldWidget> {
                     color: Color.fromRGBO(255, 255, 255, 0.6),
                     fontSize: FONT_EX_SMALL,
                     fontWeight: FontWeight.w600),
-                hintText: 'Nhập tên hoặc địa chỉ' ,
+                hintText: 'Bạn cần tìm gì nào?' ,
                 focusColor: Color.fromRGBO(0, 0, 0, 0.25),
                 filled: true,
                 fillColor: Color.fromRGBO(0, 0, 0, 0.25),
@@ -84,24 +84,28 @@ class _SearchFormFieldWidgetState extends State<SearchFormFieldWidget> {
               )),
         ),
         widget.isShowClearSearch
-            ? Padding(
-                padding: EdgeInsets.fromLTRB(0, 7, 10, 0),
-                child: InkWell(
-                  onTap: () {
-                    widget.searchController.clear();
-                    setState(() {
-                      widget.isShowClearSearch = false;
-                    });
-                  },
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: SvgPicture.asset(
-                      SVG_ASSETS_PATH + 'icon_clear.svg',
-                      height: 20,
-                      width: 20,
+            ? Positioned(
+          right: 0,
+
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 7, 10, 0),
+                  child: InkWell(
+                    onTap: () {
+                      widget.searchController.clear();
+                      setState(() {
+                        widget.isShowClearSearch = false;
+                      });
+                    },
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: SvgPicture.asset(
+                        SVG_ASSETS_PATH + 'icon_clear.svg',
+                        height: 20,
+                        width: 20,
+                      ),
                     ),
-                  ),
-                ))
+                  )),
+            )
             : Text('')
       ],
     );

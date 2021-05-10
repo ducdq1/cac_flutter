@@ -3,6 +3,7 @@ const String ROUTER_HOME = '/';
 //PAHT
 const String ROUTER_PAHT = '/PAHT';
 const String ROUTER_APROVE_PAHT = '$ROUTER_PAHT/APROVE_PAHT';
+const String ROUTER_SEARCH_PRODUCT = '$ROUTER_PAHT/search/product';
 const String ROUTER_SEARCH_PERSONAL_PAHT = '$ROUTER_PAHT/search/personal';
 const String ROUTER_SEARCH_PUBLIC_PAHT = '$ROUTER_PAHT/search/public';
 const String ROUTER_CREATE_PAHT = '$ROUTER_PAHT/createReport';

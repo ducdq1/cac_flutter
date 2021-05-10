@@ -6,7 +6,7 @@ import 'input_dialog_widget.dart';
 Future showInputDialog({
   BuildContext context,
   String title,
-  String label,
+  String value,
   Icon icon,
   Function onSubmit,
 }) async {
@@ -14,7 +14,7 @@ Future showInputDialog({
     context: context,
     builder: (_) => InputDialog(
       icon: icon,
-      label: label,
+      value: value,
       onSubmit: onSubmit,
       title: title,
     ),

@@ -31,6 +31,8 @@ abstract class PahtRemoteDataSource {
 
   Future<List<StatusModel>> fetchListStatusPublic();
 
+  Future<SearchProductModel> searchProduct(SearchProductParam param);
+
   Future<SearchProductModel> fetchDetailedPaht(SearchProductParam param);
 
   Future<List<CommentModel>> fetchComments({String pahtId});
@@ -66,9 +68,9 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       print('create or update QUOTATION ');
 
       String url = '$baseUrl_api/quotation';
-      if (issueParams.quotationDate != null &&
+      if (issueParams.updateNote || (issueParams.quotationDate != null &&
           issueParams.quotationDate.isNotEmpty &&
-          issueParams.lstQuotationDetail == null) {
+          issueParams.lstQuotationDetail == null)) {
         url = '$baseUrl_api/quotation/update-saledate';
       } else {
         url = '$baseUrl_api/quotation';
@@ -390,6 +392,29 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       }
     } catch (error) {
       // return handleException(error);
+      throw error;
+    }
+  }
+
+  @override
+  Future<SearchProductModel> searchProduct(SearchProductParam param)async {
+    try {
+      final body = jsonEncode(param.toJson());
+      print(body);
+      String url = '$baseUrl_api/search-product';
+      final response = await networkRequest.postRequest(
+          url: '$baseUrl_api/search-product', body: body);
+      print(url);
+      var data = json.decode(utf8.decode(response.bodyBytes));
+      print(data);
+
+      if (response.statusCode == 200) {
+        SearchProductModel result = SearchProductModel.fromJson(data);
+        return result;
+      } else {
+        throw Exception(data['message']);
+      }
+    } catch (error) {
       throw error;
     }
   }

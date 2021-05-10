@@ -11,6 +11,16 @@ class PublicPahtInitial extends PublicPahtState {}
 
 class PublicPahtLoading extends PublicPahtState {}
 
+class SearchProductSuccess extends PublicPahtState {
+  final List<ProductModel> lstProduct;
+  final bool hasReachedMax;
+  final int offset;
+  final String error;
+
+  SearchProductSuccess(
+      {@required this.lstProduct, this.hasReachedMax, this.offset, this.error});
+}
+
 class PublicPahtSuccess extends PublicPahtState {
   final List<PahtModel> paht;
   final bool hasReachedMax;

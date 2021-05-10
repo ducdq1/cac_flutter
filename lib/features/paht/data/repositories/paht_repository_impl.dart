@@ -210,4 +210,15 @@ class PahtRepositoryImpl implements PahtRepository {
     }
 
   }
+
+  @override
+  Future<SearchProductModel> searchProduct(SearchProductParam param) async{
+    try {
+      final remoteCreateIssuePaht =
+          await remoteDataSource.searchProduct(param);
+      return remoteCreateIssuePaht;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

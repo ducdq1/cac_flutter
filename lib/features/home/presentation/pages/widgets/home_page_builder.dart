@@ -168,18 +168,17 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                               icon: '/icons/icon_search.png',
                               needRedirect: '',
                               onPress: () {
-                                showInputDialog(
-                                    context: context,
-                                    title: "Nhập mã SP để xem thông tin",
-                                    label: "Nhập mã sản phẩm",
-                                    onSubmit: (value) {
-                                      if (value !=null && value.toString().isNotEmpty) {
-                                        Navigator.pushNamed(
-                                            context, ROUTER_DETAILED_PAHT,
-                                            arguments: PahtDetailArgument(
-                                                productCode: value));
-                                      }
-                                    });
+                                Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT)
+                                    .then((value) => {
+                                  if (value != null)
+                                    {
+                                    Navigator.pushNamed(
+                                    context, ROUTER_DETAILED_PAHT,
+                                    arguments: PahtDetailArgument(
+                                        productCode: value))
+                                    }
+                                });
+
                               },
                             ),
                           ],

@@ -21,13 +21,14 @@ class CreateIssuePaht implements UseCase<StatusEntity, QuotationParams> {
 
 
 class QuotationParams extends Equatable {
+  final bool updateNote;//cap nhat tien do
   final bool isApproveAble;
   final bool isPreViewApprove;
   final PahtModel quotation;
   final List<QuotationDetailModel> lstQuotationDetail;
   final String expiredDate;
   final String quotationDate;
-  QuotationParams({this.quotation,this.lstQuotationDetail,this.isApproveAble = false,this.expiredDate,this.isPreViewApprove= false,this.quotationDate});
+  QuotationParams({this.quotation,this.lstQuotationDetail,this.isApproveAble = false,this.expiredDate,this.isPreViewApprove= false,this.quotationDate,this.updateNote = false});
   @override
   List<Object> get props => throw UnimplementedError();
 

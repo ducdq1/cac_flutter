@@ -19,6 +19,7 @@ class PahtEntity extends Equatable {
   String createUserFullName;
   String fileName;
   String saledDate;
+  String note;
   PahtEntity(
       {this.quotationID,
       this.quotationNumber,
@@ -33,7 +34,8 @@ class PahtEntity extends Equatable {
       this.createUserFullName,
       this.fileName,
         this.quotationDate,
-      this.saledDate});
+      this.saledDate,
+      this.note});
 
   Map<String, dynamic> toJson() {
     return {};
