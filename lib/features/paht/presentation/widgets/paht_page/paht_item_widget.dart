@@ -19,6 +19,7 @@ class PAHTITemWidget extends StatelessWidget {
   final Function onEdit;
   final Function onDelete;
   final bool isSaled;
+
   PAHTITemWidget(
       {@required this.pahtModel,
       @required this.onTap,
@@ -102,30 +103,33 @@ class PAHTITemWidget extends StatelessWidget {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                pahtModel.saledDate == null ? SizedBox() : Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        ICONS_ASSETS + 'icon_da_ban.png',
-                                        height: 24,
-                                        width: 24,
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        'Đã bán: ' +
-                                            handleTime(pahtModel.saledDate),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.inter(
-                                            fontSize: FONT_SMALL,
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ]),
+                                pahtModel.saledDate == null
+                                    ? SizedBox()
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                            Image.asset(
+                                              ICONS_ASSETS + 'icon_da_ban.png',
+                                              height: 24,
+                                              width: 24,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              'Đã bán: ' +
+                                                  handleTime(
+                                                      pahtModel.saledDate),
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.inter(
+                                                  fontSize: FONT_SMALL,
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ]),
                                 Row(
                                   children: [
                                     SvgPicture.asset(
@@ -156,27 +160,31 @@ class PAHTITemWidget extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0, top: 10),
-                          child:Row(
-                            children: [ Image.asset(
+                          child: Row(children: [
+                            Image.asset(
                               ICONS_ASSETS + 'icon_user2.png',
                               width: 16,
                               height: 16,
                             ),
-                              SizedBox(
-                                width: 5,
-                              ),Expanded(
-                                child: Text(
-                                  pahtModel.cusName == null ? '' : pahtModel.cusName,
-                            style: GoogleFonts.inter(
-                                fontSize: FONT_MIDDLE,
-                                color: PRIMARY_TEXT_COLOR,
-                                fontWeight: FontWeight.bold,
+                            SizedBox(
+                              width: 5,
                             ),
-                            softWrap: true,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                              ) ]),
+                            Expanded(
+                              child: Text(
+                                pahtModel.cusName == null
+                                    ? ''
+                                    : pahtModel.cusName,
+                                style: GoogleFonts.inter(
+                                  fontSize: FONT_MIDDLE,
+                                  color: PRIMARY_TEXT_COLOR,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                softWrap: true,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
+                          ]),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
@@ -267,7 +275,45 @@ class PAHTITemWidget extends StatelessWidget {
                             )
                           ],
                         ),
-                        SizedBox(
+                        pahtModel.status == 1 && pahtModel.saledDate == null && pahtModel.note != null ?
+                        Padding(
+                                padding: const EdgeInsets.only(bottom: 10,top: 5),
+                                child: Row(
+                                  children: [
+                                    // SizedBox(
+                                    //   width: 16,
+                                    //   height: 16,
+                                    // ),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                'Tiến độ: ',
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.red,
+                                                  fontSize: FONT_MIDDLE,
+                                                  fontWeight: FontWeight.bold
+                                                )),
+                                            Expanded(
+                                              child: Text(
+                                              pahtModel.note == null
+                                                  ? ''
+                                                  : pahtModel.note,
+                                              style: GoogleFonts.inter(
+                                                color: Colors.red,
+                                                fontSize: FONT_MIDDLE,
+                                              )),
+                                            )
+                          ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            : SizedBox(),
+                         SizedBox(
                           height: 5,
                         ),
                       ],
