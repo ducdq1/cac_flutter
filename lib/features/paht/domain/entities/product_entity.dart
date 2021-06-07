@@ -20,6 +20,7 @@ class ProductEntity extends Equatable {
   String price;
   int productType;
   String color;
+  String createDate;
   List<ImageEntity> images;
 
   @override
@@ -41,5 +42,6 @@ class ProductEntity extends Equatable {
       this.price,
       this.productType,
       this.color,
-      this.images});
+      this.images,
+      this.createDate});
 }

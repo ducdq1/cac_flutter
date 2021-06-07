@@ -21,7 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'dart:math';
-
+import 'package:citizen_app/features/common/dialogs/view_price_dialog.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/paht/data/models/place_images_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/place_images_entity.dart';
@@ -185,12 +185,11 @@ class ReportWidget extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(36),
                         ),
-                        onPressed: () {showDialog(context: context, child:
-                        new AlertDialog(
-                          title: new Text("Giá sản phẩm"),
-                          content: new Text(productModel.price!=null ? productModel.price.toString(): "Sản phẩm chưa có giá"),
-                        )
-                        );},
+                        onPressed: () {
+                          showViewPriceDialog(context: context, giaBan: productModel.salePrice!=null ? productModel.salePrice.toString(): "Chưa có giá",
+                          giaNhap: productModel.price!=null ? productModel.price.toString(): "Chưa có giá",
+                          ngayCapNhat: productModel.createDate);
+                        },
                         child: AutoSizeText(
                           'Xem giá',
                           style: GoogleFonts.inter(

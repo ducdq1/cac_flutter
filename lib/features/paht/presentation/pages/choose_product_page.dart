@@ -1,3 +1,4 @@
+import 'package:citizen_app/features/common/dialogs/view_price_dialog.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/core/functions/trans.dart';
@@ -350,12 +351,11 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(36),
                                                   ),
-                                                  onPressed: () {showDialog(context: context, child:
-                                                  new AlertDialog(
-                                                    title: new Text("Giá sản phẩm"),
-                                                    content: new Text(productModel.price!=null && productModel.price.isNotEmpty ? productModel.price.toString(): "Sản phẩm chưa có giá"),
-                                                  )
-                                                  );},
+                                                  onPressed: () {
+                                                    showViewPriceDialog(context: context, giaBan: productModel.salePrice!=null ? productModel.salePrice.toString(): "Chưa có giá",
+                                                        giaNhap: productModel.price!=null ? productModel.price.toString(): "Chưa có giá",
+                                                        ngayCapNhat: productModel.createDate);
+                                                  },
                                                   child: AutoSizeText(
                                                     'Xem giá',
                                                     style: GoogleFonts.inter(
