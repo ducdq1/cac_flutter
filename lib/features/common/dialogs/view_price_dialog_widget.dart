@@ -57,10 +57,10 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
             children: [
               Center(
                 child: Text(
-                  'Ngày cập nhật: ' + formatTime(widget.ngayCapNhat),
+                  'NGÀY CẬP NHẬT: ' + formatTime(widget.ngayCapNhat),
                   softWrap: true,
                   style: TextStyle(
-                      fontSize: FONT_LARGE,
+                      fontSize: FONT_MIDDLE,
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
@@ -74,11 +74,11 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
               Row(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                 Text(
-                  'Giá nhập:  ',
+                  'Giá nhập: ',
                   softWrap: true,
                   style: TextStyle(
-                      fontSize: FONT_EX_MIDDLE,
-                      color: Colors.green,
+                      fontSize: FONT_EX_LARGE,
+                      color: Color(0xffff8000),
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.left,
                 ),
@@ -86,8 +86,8 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
                   child: Text(
                     widget.giaNhap ?? '',
                     style: TextStyle(
-                      fontSize: FONT_EX_MIDDLE,
-                      color: Colors.green,
+                      fontSize: FONT_EX_LARGE,
+                      color: Color(0xffff8000),
                     ),
                     textAlign: TextAlign.left,
                   ),

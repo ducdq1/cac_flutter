@@ -1,4 +1,5 @@
 import 'package:citizen_app/core/functions/trans.dart';
+import 'package:citizen_app/core/resources/routers.dart';
 import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
@@ -13,6 +14,20 @@ import 'package:citizen_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:citizen_app/core/resources/resources.dart';
+import 'package:citizen_app/features/common/dialogs/input_dialog.dart';
+import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
+import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
+import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
+import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widget.dart';
+import 'package:citizen_app/features/home/presentation/pages/widgets/citizens_menu_item_widget.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart' as paht_list_widget;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 
 class SearchArgument {
   final bool isSaled;
