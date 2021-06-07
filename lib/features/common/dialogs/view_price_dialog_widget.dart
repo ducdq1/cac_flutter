@@ -12,7 +12,8 @@ class ViewPriceDialog extends StatefulWidget {
   final String ngayCapNhat;
   final Icon icon;
 
-  ViewPriceDialog({this.onSubmit, this.giaBan, this.icon, this.giaNhap,this.ngayCapNhat});
+  ViewPriceDialog(
+      {this.onSubmit, this.giaBan, this.icon, this.giaNhap, this.ngayCapNhat});
 
   @override
   _ViewPiceDialogState createState() => _ViewPiceDialogState();
@@ -56,64 +57,76 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
             children: [
               Center(
                 child: Text(
-                 'Ngày cập nhật: ' + formatTime(widget.ngayCapNhat),
+                  'Ngày cập nhật: ' + formatTime(widget.ngayCapNhat),
+                  softWrap: true,
                   style: TextStyle(
-                    fontSize: FONT_LARGE,
-                    color:Colors.black,
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontSize: FONT_LARGE,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 40),
-      Row(
-        children : [ Text(
-                'Giá nhập:  ',
-                style: TextStyle(
-                  fontSize: FONT_EX_MIDDLE,
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold
-                ),
-                textAlign: TextAlign.left,
+              Divider(
+                height: 40,
+                thickness: 2,
               ),
+              SizedBox(height: 30),
+              Row(mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
                 Text(
-                widget.giaNhap ?? '',
-                style: TextStyle(
-                  fontSize: FONT_EX_MIDDLE,
-                  color: Colors.green,
-                ),
-                textAlign: TextAlign.center,
-              )]),
-              SizedBox(height: 40),
-              Row(
-                children : [ Text(
-                  'Giá bán lẽ:  ',
+                  'Giá nhập:  ',
+                  softWrap: true,
                   style: TextStyle(
-                    fontSize: FONT_EX_MIDDLE,
-                    color: Colors.lightBlue,
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontSize: FONT_EX_MIDDLE,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold),
                   textAlign: TextAlign.left,
-                ), Text(
-                  widget.giaBan ?? '',
-                  style: TextStyle(
-                    fontSize: FONT_EX_MIDDLE,
-                    color:Colors.lightBlue,
+                ),
+                Expanded(
+                  child: Text(
+                    widget.giaNhap ?? '',
+                    style: TextStyle(
+                      fontSize: FONT_EX_MIDDLE,
+                      color: Colors.green,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.center,
-                ) ],
+                )
+              ]),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Giá bán lẽ:  ',
+                    style: TextStyle(
+                        fontSize: FONT_EX_MIDDLE,
+                        color: Colors.lightBlue,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left,
+                  ),
+                  Expanded(
+                    child: Text(
+                     widget.giaBan ?? '',
+                      style: TextStyle(
+                        fontSize: FONT_EX_MIDDLE,
+                        color: Colors.lightBlue,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  )
+                ],
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   RaisedButton(
-
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                     elevation: 0,
-                    color:  PRIMARY_COLOR,
+                    color: PRIMARY_COLOR,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                       side: BorderSide(color: PRIMARY_COLOR),
