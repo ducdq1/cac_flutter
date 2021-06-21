@@ -57,17 +57,29 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
         onPressed: _updateIndex,
       );
     });
-    items.insert(items.length >> 1, _buildMiddleTabItem());
+    //items.insert(items.length >> 1, _buildMiddleTabItem());
 
     return BottomAppBar(
-      notchMargin: 18,
-      shape: widget.notchedShape,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: items,
+      //notchMargin: 18,
+      shape: CircularNotchedRectangle(),
+      child: Container(
+        padding: EdgeInsets.only(top:0,left: 5,right: 5),
+        decoration: BoxDecoration(
+          color: Colors.white,
+            border: Border.all(color: Color(0xffD8D8D8)),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: items,
+        ),
       ),
-      color: widget.backgroundColor,
+      color: Colors.white,
+      elevation: 0,
     );
   }
 
@@ -105,12 +117,14 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
           child: InkWell(
               onTap: () => onPressed(index),
               child: Container(
-                margin: EdgeInsets.all(10),
-                decoration: _selectedIndex == index
-                    ? BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                        color: Color(0xffEBEEF0))
-                    : null,
+                margin: EdgeInsets.all(5),
+                decoration:   null,
+                // _selectedIndex == index
+                //     ? BoxDecoration(
+                //         borderRadius: BorderRadius.circular(6),
+                //         color: Color(0xffEBEEF0).withOpacity(0.5))
+                //     :
+                // null,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -124,8 +138,8 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
                         item.text  ,
                       style: GoogleFonts.inter(
                           color: color,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14
+                          fontWeight: _selectedIndex == index ? FontWeight.w500 : FontWeight.w300,
+                          fontSize: _selectedIndex == index ? 13: 10,
                              ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

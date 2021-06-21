@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:citizen_app/app_localizations.dart';
 import 'package:citizen_app/core/resources/resources.dart';
@@ -42,6 +40,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/saled_quotation_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/aprove_quotation_widget.dart';
+import 'features/customer/presentation/index_page.dart';
 import 'features/profile/presentation/bloc/change_password_bloc.dart';
 import 'injection_container.dart' as di;
 
@@ -186,7 +185,8 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navKey,
         title: 'C.A.C Báo giá',
         initialRoute:
-            (token != null && !token.isEmpty) ? ROUTER_HOME :  ROUTER_SIGNIN,
+            //(token != null && !token.isEmpty) ? ROUTER_HOME :  ROUTER_SIGNIN,
+        ROUTER_CUS_HOME_PAGE,
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),
           ROUTER_PAHT: (context) => Paht(),
@@ -211,6 +211,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_APPROVE_QUOTATION_PAGE : (context) => ApproveQuotationPage(),
           ROUTER_SALED_QUOTATION : (context) => SaledQuotation(),
           ROUTER_SEARCH_PRODUCT :(context) => ProductSearch(),
+          ROUTER_CUS_HOME_PAGE: (context) => Indexpage()  ,
         },
         debugShowCheckedModeBanner: false,
       ),

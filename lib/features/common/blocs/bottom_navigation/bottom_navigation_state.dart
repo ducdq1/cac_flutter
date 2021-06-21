@@ -35,3 +35,12 @@ class SecondTabLoaded extends BottomNavigationState {
   @override
   String toString() => 'SecondTabLoaded';
 }
+class Tab3Loaded extends BottomNavigationState {
+  @override
+  String toString() => 'Tab3Loaded';
+}
+
+class Tab4Loaded extends BottomNavigationState {
+  @override
+  String toString() => 'Tab4Loaded';
+}

@@ -30,6 +30,12 @@ class BottomNavigationBloc
       if (this.currentIndex == 1) {
         yield SecondTabLoaded();
       }
+      if(this.currentIndex == 2){
+        yield Tab3Loaded();
+      }
+      if(this.currentIndex == 3){
+        yield Tab4Loaded();
+      }
     }
   }
 }

@@ -17,114 +17,112 @@ class ViewInfoPage extends StatefulWidget {
 class _ViewInfoPageState extends State<ViewInfoPage> {
   @override
   Widget build(BuildContext context) {
-    return BaseLayoutWidget(
-      title: trans(TITLE_INFORMATION_SCREEN),
-      centerTitle: true,
-      body: Column(
-        children: [
-          SizedBox(height: 100),
-          SvgPicture.asset(SVG_ASSETS_PATH + 'icon_version.svg'),
-          SizedBox(height: 20),
-          Text(
-            trans(VERSION),
-            style: GoogleFonts.inter(
-              fontSize: FONT_EX_LARGE,
-              color: PRIMARY_TEXT_COLOR,
-              fontWeight: FontWeight.w600,
+    return Padding(
+      padding:
+          const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Color(0xff0F8E70).withOpacity(0.1),
+          borderRadius: BorderRadius.all(Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 40),
+            Image.asset(
+              ICONS_ASSETS + 'icon_da_ban.png',
+              width: 62,
+              height: 62,
             ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            singleton<PackageInfo>().version.toString(),
-            style: GoogleFonts.inter(
-              fontSize: FONT_MIDDLE,
-              color: PRIMARY_TEXT_COLOR,
-              fontWeight: FontWeight.w600,
+            SizedBox(height: 20),
+            Text("Liên hệ với Chúng tôi ",
+                style: GoogleFonts.inter(
+                  fontSize: FONT_LARGE,
+                  color: PRIMARY_TEXT_COLOR,
+                  fontWeight: FontWeight.w600,
+                )),
+            Text(
+              "để được tư vấn và báo giá tốt nhất",
+              style: GoogleFonts.inter(
+                fontSize: FONT_LARGE,
+                color: PRIMARY_TEXT_COLOR,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-          SizedBox(height: 150),
-          Container(
-            height: 0,
-            margin: EdgeInsets.symmetric(horizontal: 16),
-            padding: EdgeInsets.only(left: 38, right: 38, top: 20, bottom: 40),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-              color: Color.fromARGB(80, 235, 238, 240),
-            ),
-            child: Column(
-              children: [
-                Text(
-                  trans(TITLE_SUPPORT_SCREEN),
-                  style: GoogleFonts.inter(
-                    fontSize: FONT_EX_LARGE,
-                    color: PRIMARY_TEXT_COLOR,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      SVG_ASSETS_PATH + 'icon_call.svg',
-                    ),
-                    SizedBox(width: 14),
-                    RichText(
-                      text: TextSpan(
-                        text: '',
-                        style: GoogleFonts.inter(
-                          color: PRIMARY_TEXT_COLOR,
-                          fontSize: FONT_MIDDLE,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: '',
-                            style: GoogleFonts.inter(
-                              color: PRIMARY_TEXT_COLOR,
-                              fontSize: FONT_MIDDLE,
-                              fontWeight: FontWeight.normal,
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(ICONS_ASSETS + 'ic_call.png',
+                              width: 24, height: 24),
+                          SizedBox(width: 10),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Phone: ',
+                              style: GoogleFonts.inter(
+                                color: PRIMARY_TEXT_COLOR,
+                                fontSize: FONT_MIDDLE,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: '0236.381.2805',
+                                  style: GoogleFonts.inter(
+                                    color: PRIMARY_TEXT_COLOR,
+                                    fontSize: FONT_MIDDLE,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      SVG_ASSETS_PATH + 'icon_mail.svg',
-                    ),
-                    SizedBox(width: 14),
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          text: '',
-                          style: GoogleFonts.inter(
-                            color: PRIMARY_TEXT_COLOR,
-                            fontSize: FONT_MIDDLE,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: '',
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(ICONS_ASSETS + 'ic_gmail.png',
+                              width: 24, height: 24),
+                          SizedBox(width: 10),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Email: ',
                               style: GoogleFonts.inter(
                                 color: PRIMARY_TEXT_COLOR,
                                 fontSize: FONT_MIDDLE,
-                                fontWeight: FontWeight.normal,
+                                fontWeight: FontWeight.bold,
                               ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'cac_cskh@gmail.com',
+                                  style: GoogleFonts.inter(
+                                    color: PRIMARY_TEXT_COLOR,
+                                    fontSize: FONT_MIDDLE,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    )
-                  ],
-                )
-              ],
+                    ]),
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: 50),
+          ],
+        ),
       ),
     );
   }
