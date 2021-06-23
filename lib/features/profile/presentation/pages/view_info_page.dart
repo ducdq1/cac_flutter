@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewInfoPage extends StatefulWidget {
   @override
@@ -116,6 +117,47 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                             ),
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                       InkWell(
+                        splashColor: Color(0xffF1FBEE),
+                        highlightColor: Color(0xffF1FBEF),
+                        onTap: () async{
+                          print('ok ok ok ');
+                       await canLaunch('https://www.facebook.com/Gạch-và-Thiết-Bị-Nội-Thất-CAC-Đà-Nẵng-104247451488013') ? await launch('https://www.facebook.com/Gạch-và-Thiết-Bị-Nội-Thất-CAC-Đà-Nẵng-104247451488013') : throw 'Could not launch' ;
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(ICONS_ASSETS + 'ic_facebook.png',
+                                width: 28, height: 28),
+                            SizedBox(width: 7),
+                            Expanded(
+                              child: RichText(
+                                text: TextSpan(
+                                  text: 'Facebook: ',
+                                  style: GoogleFonts.inter(
+                                    color: PRIMARY_TEXT_COLOR,
+                                    fontSize: FONT_MIDDLE,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'facebook.com/Gạch-và-Thiết-Bị-Nội-Thất-CAC-Đà-Nẵng',
+                                      style: GoogleFonts.inter(
+                                        color: PRIMARY_TEXT_COLOR,
+                                        fontSize: FONT_MIDDLE,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ]),
               ),

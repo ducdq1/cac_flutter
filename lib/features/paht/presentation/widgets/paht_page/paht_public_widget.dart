@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PahtPublic extends StatefulWidget {
-
   @override
   _PahtPublicState createState() => _PahtPublicState();
 }
@@ -48,42 +47,49 @@ class _PahtPublicState extends State<PahtPublic> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: RefreshIndicator(
-            onRefresh: () async => handleRefresh(context),
-            child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
-                listener: (context, state) {
-                  if (state is PublicPahtFailure && state.error.toString() == "UNAUTHORIZED") {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        ROUTER_SIGNIN, (Route<dynamic> route) => false);
-                  }
-              _refreshCompleter?.complete();
-              _refreshCompleter = Completer();
-            }, builder: (context, state) {
-              if (state is PublicPahtFailure) {
-                  return NoNetworkFailureWidget(
-                      message: state.error.toString() == "UNAUTHORIZED" ? trans(MESSAGE_SESSION_EXPIRED) : state.error.toString(),
-                      onPressed: () {
-                        BlocProvider.of<PublicPahtBloc>(context).add(
-                          ListPublicPahtFetchingEvent(),
-                        );
-                      });
-              }
-              if (state is PublicPahtSuccess) {
-                return ListViewPahtsWidget(
-                  hasReachedMax: state.hasReachedMax,
-                  pahts: state.paht,
-                  isPersonal: false,
-                  scrollController: scrollController,
-                  loadmore: state.hasReachedMax ? false : true,
-                );
-              }
+      child: RefreshIndicator(
+        onRefresh: () async => handleRefresh(context),
+        child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
+          listener: (context, state) {
+            if (state is PublicPahtFailure &&
+                state.error.toString() == "UNAUTHORIZED") {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  ROUTER_SIGNIN, (Route<dynamic> route) => false);
+            }
+            _refreshCompleter?.complete();
+            _refreshCompleter = Completer();
+          },
+          builder: (context, state) {
+            if (state is PublicPahtFailure) {
+              return NoNetworkFailureWidget(
+                  message: state.error.toString() == "UNAUTHORIZED"
+                      ? trans(MESSAGE_SESSION_EXPIRED)
+                      : state.error.toString(),
+                  onPressed: () {
+                    BlocProvider.of<PublicPahtBloc>(context).add(
+                      ListPublicPahtFetchingEvent(),
+                    );
+                  });
+            }
+            if (state is PublicPahtSuccess) {
+              return ListViewPahtsWidget(
+                hasReachedMax: state.hasReachedMax,
+                pahts: state.paht,
+                isPersonal: false,
+                scrollController: scrollController,
+                loadmore: state.hasReachedMax ? false : true,
+              );
+            }
 
-              if (state is DeletePersonalPahtFailure) {
-                BlocProvider.of<PublicPahtBloc>(context).add(
-                  ListPublicPahtFetchingEvent(offset: 0),
-                );
-              }
-              return SkeletonPahtWidget();
-            })));
+            if (state is DeletePersonalPahtFailure) {
+              BlocProvider.of<PublicPahtBloc>(context).add(
+                ListPublicPahtFetchingEvent(offset: 0),
+              );
+            }
+            return SkeletonPahtWidget();
+          },
+        ),
+      ),
+    );
   }
 }

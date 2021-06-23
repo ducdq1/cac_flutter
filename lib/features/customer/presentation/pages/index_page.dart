@@ -24,6 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:citizen_app/features/profile/presentation/pages/view_info_page.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:citizen_app/features/customer/presentation/pages/promotions_page.dart';
 
 const SIZE_ICON_BOTTOM_BAR = 28.0;
 const SIZE_ICON_FLOATING_BUTTON = 24.0;
@@ -94,18 +95,6 @@ class _IndexpageState extends State<Indexpage> {
                   },
                   items: [
                     FABBottomAppBarItem(
-                        icon: Image.asset(
-                          ICONS_ASSETS + 'ic_home.png',
-                          width: SIZE_ICON_BOTTOM_BAR,
-                          height: SIZE_ICON_BOTTOM_BAR,
-                        ),
-                        iconActive: Image.asset(
-                          ICONS_ASSETS + 'ic_home_active.png',
-                          width: SIZE_ICON_BOTTOM_BAR,
-                          height: SIZE_ICON_BOTTOM_BAR,
-                        ),
-                        text: 'Trang chủ'),
-                    FABBottomAppBarItem(
                       icon: Image.asset(
                         ICONS_ASSETS + 'ic_km.png',
                         width: SIZE_ICON_BOTTOM_BAR,
@@ -118,6 +107,18 @@ class _IndexpageState extends State<Indexpage> {
                       ),
                       text: 'Khuyến mãi',
                     ),
+                    FABBottomAppBarItem(
+                        icon: Image.asset(
+                          ICONS_ASSETS + 'ic_product.png',
+                          width: SIZE_ICON_BOTTOM_BAR,
+                          height: SIZE_ICON_BOTTOM_BAR,
+                        ),
+                        iconActive: Image.asset(
+                          ICONS_ASSETS + 'ic_product_active.png',
+                          width: SIZE_ICON_BOTTOM_BAR,
+                          height: SIZE_ICON_BOTTOM_BAR,
+                        ),
+                        text: 'Sản phẩm'),
                     FABBottomAppBarItem(
                       icon: Image.asset(
                         ICONS_ASSETS + 'ic_message.png',
@@ -166,10 +167,6 @@ class _IndexpageState extends State<Indexpage> {
                       ),
                       child: Stack(
                         children: [
-                          Visibility(
-                              visible: isFilter,
-                              child:
-                                  FilterCategoryContainer(indexTab: indexTab)),
                           Padding(
                             padding: EdgeInsets.only(
                                 top: isFilter
@@ -182,7 +179,7 @@ class _IndexpageState extends State<Indexpage> {
                               builder: (BuildContext context,
                                   BottomNavigationState state) {
                                 if (state is FirstTabLoaded) {}
-
+                                  return PromotionPage();
                                 if (state is SecondTabLoaded) {}
 
                                 if (state is Tab3Loaded) {}
@@ -209,15 +206,18 @@ class _IndexpageState extends State<Indexpage> {
               Positioned(
                 bottom: 0,
                 right: 0,
-                child: IconButton(
-                  icon: Image.asset(
-                    ICONS_ASSETS + 'ic_call_now.png',
-                    //  width: 100, height: 100
+                child: Visibility(
+                  visible: indexTab == 3,
+                  child: IconButton(
+                    icon: Image.asset(
+                      ICONS_ASSETS + 'ic_call_now.png',
+                      //  width: 100, height: 100
+                    ),
+                    iconSize: 70,
+                    onPressed: () {
+                      UrlLauncher.launch("tel://02363812805");
+                    },
                   ),
-                  iconSize: 70,
-                  onPressed: () {
-                    UrlLauncher.launch("tel://02363812805");
-                  },
                 ),
               )
             ]),
