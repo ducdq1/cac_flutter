@@ -1,6 +1,5 @@
 import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/core/resources/font_sizes.dart';
-import 'package:citizen_app/features/authentication/signup/presentation/widgets/signup_personal_page/radio_custom_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -113,16 +112,6 @@ class LabeledRadio<T> extends StatelessWidget {
               child: Container(
                 width: 24,
                 height: 24,
-                child: RadioCustomWidget<T>(
-                  groupValue: groupValue,
-                  value: value,
-                  activeColor: PRIMARY_COLOR,
-                  hoverColor: BORDER_COLOR,
-                  focusColor: BORDER_COLOR,
-                  onChanged: (T newValue) {
-                    onChanged(newValue);
-                  },
-                ),
               ),
             ),
             SizedBox(width: 5),

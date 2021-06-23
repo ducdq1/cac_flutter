@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class GetListPersonalPaht implements UseCase<PahtEntity, PahtParams> {
   final PahtRepository repository;
 
-  GetListPersonalPaht(this.repository);
+   GetListPersonalPaht(this.repository);
 
   @override
   Future<List<PahtEntity>> call(PahtParams params) async {

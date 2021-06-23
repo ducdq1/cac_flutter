@@ -1,3 +1,4 @@
+import 'package:citizen_app/features/customer/data/data_sources/cus_remote_data_source.dart';
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
 import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
@@ -11,6 +12,8 @@ import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/cr
 import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/status_paht_bloc/status_paht_bloc.dart';
+import 'package:citizen_app/features/customer/data/data_sources/data_sources.dart';
+import 'package:citizen_app/features/customer/domain/usecases/usecases.dart';
 
 import 'package:get_it/get_it.dart';
 
@@ -31,7 +34,8 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
   singleton.registerLazySingleton(() => CreateComment(singleton()));
   singleton.registerLazySingleton(() => ReplyComment(singleton()));
   singleton.registerLazySingleton(() => SearchProduct(singleton()));
-
+  singleton.registerLazySingleton(() => GetListProductCategory(singleton()));
+  singleton.registerLazySingleton(() => GetListPromotion(singleton()));
   singleton.registerFactory(
     () => PersonalPahtBloc(
         getListPersonalPaht: singleton(), deletePaht: singleton()),
@@ -68,6 +72,13 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
 
   singleton.registerLazySingleton<PahtRemoteDataSource>(
     () => PahtRemoteDataSourceImpl(
+        client: singleton(),
+        networkRequest: singleton(),
+        sharedPreferences: singleton()),
+  );
+
+  singleton.registerLazySingleton<CusRemoteDataSource>(
+        () => CusRemoteDataSourceImpl(
         client: singleton(),
         networkRequest: singleton(),
         sharedPreferences: singleton()),
