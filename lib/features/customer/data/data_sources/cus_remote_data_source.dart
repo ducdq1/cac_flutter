@@ -426,6 +426,15 @@ class CusRemoteDataSourceImpl implements CusRemoteDataSource {
   @override
   Future<List<PromotionModel>> fetchListPromotions(String name) async {
     try {
+      List<PromotionModel> pros =[];
+      for(int i=0;i<=20;i++) {
+        pros.add(PromotionModel(id: 1,
+            name: "Khuyến mãi đặc biệt",
+            imageUrl: "",
+            description: "Chương tình khuyến mãi từ 10/6 - 12/6"));
+      }
+      return pros;
+
       final response = await networkRequest.getRequest(
           url: '$vtmaps_baseUrl/place/v1/categories');
       //print('$vtmaps_baseUrl/place/v1/categories');

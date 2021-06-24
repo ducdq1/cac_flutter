@@ -1,4 +1,8 @@
 import 'package:citizen_app/features/customer/data/data_sources/cus_remote_data_source.dart';
+import 'package:citizen_app/features/customer/data/repositories/cus_repository.dart';
+import 'package:citizen_app/features/customer/data/repositories/cus_repository_impl.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
 import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
@@ -53,6 +57,18 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
   );
 
   singleton.registerFactory(
+        () => PromotionBloc(
+      getListPromotion: singleton(),
+    ),
+  );
+
+  singleton.registerFactory(
+        () => ProductCategoryBloc(
+      getListProductCategory: singleton(),
+    ),
+  );
+
+  singleton.registerFactory(
       () => CategoryPahtBloc(getListCategoriesPaht: singleton()));
   singleton.registerFactory(() =>
       CreateIssueBloc(createIssuePaht: singleton(), updatePaht: singleton(), getQuotationDetailPaht: singleton()));
@@ -75,6 +91,13 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
         client: singleton(),
         networkRequest: singleton(),
         sharedPreferences: singleton()),
+  );
+
+  // Repository
+  singleton.registerLazySingleton<CusRepository>(
+        () => CusRepositoryImpl(
+      remoteDataSource: singleton(),
+    ),
   );
 
   singleton.registerLazySingleton<CusRemoteDataSource>(

@@ -17,10 +17,16 @@ class PromotionFailure extends PromotionState {
   String toString() => 'PromotionFailure $error';
 }
 
-class PromotionSuccess extends PromotionState {
-  final List<PromotionModel> listCategories;
-
-  PromotionSuccess({@required this.listCategories});
+class PromotionLoading extends PromotionState {
+  PromotionLoading();
   @override
-  String toString() => 'PromotionSuccess ${listCategories.length}';
+  String toString() => 'PromotionLoading}';
+}
+
+class PromotionSuccess extends PromotionState {
+  final List<PromotionModel> listPromotion;
+
+  PromotionSuccess({@required this.listPromotion});
+  @override
+  String toString() => 'PromotionSuccess ${listPromotion.length}';
 }

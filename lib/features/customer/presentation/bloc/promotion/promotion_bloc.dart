@@ -19,10 +19,11 @@ class PromotionBloc extends Bloc<PromotionEvent, PromotionState> {
   Stream<PromotionState> mapEventToState(
     PromotionEvent event,
   ) async* {
-    if (event is ListCategoriesFetched) {
+    if (event is ListPromotionFetching) {
       try {
+        yield PromotionLoading();
         List<PromotionModel> listCategories = await getListPromotion('');
-        yield PromotionSuccess(listCategories: listCategories);
+        yield PromotionSuccess(listPromotion: listCategories);
       } catch (error) {
         print(error);
         yield PromotionFailure(error: error.message);

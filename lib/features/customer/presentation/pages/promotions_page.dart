@@ -2,6 +2,8 @@ import 'package:citizen_app/app_localizations.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
+import 'package:citizen_app/features/customer/presentation/widgets/promotion_list_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/sos_button_widget.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:flutter/material.dart';
@@ -71,43 +73,28 @@ class _PromotionPageState extends State<PromotionPage> {
       child: Container(
         child: RefreshIndicator(
           onRefresh: () async => handleRefresh(context),
-          child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
+          child: BlocConsumer<PromotionBloc, PromotionState>(
             listener: (context, state) {
-              if (state is PublicPahtFailure &&
-                  state.error.toString() == "UNAUTHORIZED") {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    ROUTER_SIGNIN, (Route<dynamic> route) => false);
-              }
               _refreshCompleter?.complete();
               _refreshCompleter = Completer();
             },
             builder: (context, state) {
-              if (state is PublicPahtFailure) {
+              if (state is PromotionFailure) {
                 return NoNetworkFailureWidget(
-                    message: state.error.toString() == "UNAUTHORIZED"
-                        ? trans(MESSAGE_SESSION_EXPIRED)
-                        : state.error.toString(),
+                    message:  state.error.message,
                     onPressed: () {
-                      BlocProvider.of<PublicPahtBloc>(context).add(
-                        ListPublicPahtFetchingEvent(),
+                      BlocProvider.of<PromotionBloc>(context).add(
+                          ListPromotionFetching()
                       );
                     });
               }
-              if (state is PublicPahtSuccess) {
-                return ListViewPahtsWidget(
-                  hasReachedMax: state.hasReachedMax,
-                  pahts: state.paht,
-                  isPersonal: false,
+              if (state is PromotionSuccess) {
+                return ListViewPromotionWidget(
+                  promotions:  state.listPromotion,
                   scrollController: scrollController,
-                  loadmore: state.hasReachedMax ? false : true,
                 );
               }
 
-              if (state is DeletePersonalPahtFailure) {
-                BlocProvider.of<PublicPahtBloc>(context).add(
-                  ListPublicPahtFetchingEvent(offset: 0),
-                );
-              }
               return SkeletonPahtWidget();
             },
           ),

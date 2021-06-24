@@ -7,6 +7,8 @@ import 'package:citizen_app/features/common/blocs/blocs.dart';
 import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widget.dart';
@@ -54,21 +56,13 @@ class _IndexpageState extends State<Indexpage> {
       providers: [
         BlocProvider<BottomNavigationBloc>(
             create: (context) => BottomNavigationBloc()..add(TabStarted())),
-        BlocProvider<StatusPahtBloc>(
-            create: (context) => singleton<StatusPahtBloc>()
-              ..add(indexTab == 0
-                  ? ListStatusPublicFetched()
-                  : ListStatusPersonalFetched())),
-        BlocProvider<CategoryPahtBloc>(
-            create: (context) =>
-                singleton<CategoryPahtBloc>()..add(ListCategoriesFetched())),
-        BlocProvider<PublicPahtBloc>(
-            create: (context) => singleton<PublicPahtBloc>()
-              ..add(ListPublicPahtFetchingEvent(offset: 0, limit: 10))),
-        BlocProvider<PersonalPahtBloc>(
-          create: (context) => singleton<PersonalPahtBloc>()
+        BlocProvider<PromotionBloc>(
+            create: (context) => singleton<PromotionBloc>()
+              ..add(ListPromotionFetching())),
+        BlocProvider<ProductCategoryBloc>(
+          create: (context) => singleton<ProductCategoryBloc>()
             ..add(
-              ListPersonalPahtFetchingEvent(offset: 0, limit: 10),
+              ListProductCategoriesFetching(),
             ),
         ),
       ],
@@ -92,6 +86,9 @@ class _IndexpageState extends State<Indexpage> {
                       indexTab = index;
                       isFilter = false;
                     });
+
+                    BlocProvider.of<PromotionBloc>(context)
+                        .add(ListPromotionFetching());
                   },
                   items: [
                     FABBottomAppBarItem(
@@ -178,9 +175,12 @@ class _IndexpageState extends State<Indexpage> {
                                 BottomNavigationState>(
                               builder: (BuildContext context,
                                   BottomNavigationState state) {
-                                if (state is FirstTabLoaded) {}
+                                if (state is FirstTabLoaded) {
                                   return PromotionPage();
-                                if (state is SecondTabLoaded) {}
+                                }
+                                if (state is SecondTabLoaded) {
+
+                                }
 
                                 if (state is Tab3Loaded) {}
 

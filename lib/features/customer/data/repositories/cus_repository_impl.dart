@@ -7,10 +7,10 @@ import 'package:meta/meta.dart';
 import 'cus_repository.dart';
 
 
-class PahtRepositoryImpl implements CusRepository {
+class CusRepositoryImpl implements CusRepository {
   final CusRemoteDataSource remoteDataSource;
 
-  PahtRepositoryImpl({
+  CusRepositoryImpl({
     @required this.remoteDataSource
   });
 

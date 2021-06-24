@@ -7,4 +7,4 @@ abstract class PromotionEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ListCategoriesFetched extends PromotionEvent {}
+class ListPromotionFetching extends PromotionEvent {}

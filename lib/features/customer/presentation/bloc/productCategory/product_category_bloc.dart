@@ -18,7 +18,7 @@ class ProductCategoryBloc extends Bloc<ProductCategoryEvent, ProductCategoryStat
   Stream<ProductCategoryState> mapEventToState(
       ProductCategoryEvent event,
   ) async* {
-    if (event is ListCategoriesFetched) {
+    if (event is ListProductCategoriesFetching) {
       try {
         List<ProductCategoryModel> listCategories =
             await getListProductCategory('');
