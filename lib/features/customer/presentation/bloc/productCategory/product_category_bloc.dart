@@ -20,6 +20,7 @@ class ProductCategoryBloc extends Bloc<ProductCategoryEvent, ProductCategoryStat
   ) async* {
     if (event is ListProductCategoriesFetching) {
       try {
+        yield ProductCategoryLoading();
         List<ProductCategoryModel> listCategories =
             await getListProductCategory('');
         yield ProductCategorySuccess(listCategories: listCategories);

@@ -68,8 +68,7 @@ class _PromotionPageState extends State<PromotionPage> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(top: 20.0, left: 15, right: 15, bottom: 20),
+      padding: const EdgeInsets.only(top: 20.0, left: 0, right: 0, bottom: 20),
       child: Container(
         child: RefreshIndicator(
           onRefresh: () async => handleRefresh(context),

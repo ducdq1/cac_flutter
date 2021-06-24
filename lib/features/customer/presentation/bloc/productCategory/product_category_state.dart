@@ -8,6 +8,8 @@ abstract class ProductCategoryState extends Equatable {
 }
 
 class ProductCategoryInitial extends ProductCategoryState {}
+class ProductCategoryLoading extends ProductCategoryState {}
+
 
 class ProductCategoryFailure extends ProductCategoryState {
   final dynamic error;

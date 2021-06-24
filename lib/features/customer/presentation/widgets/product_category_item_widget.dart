@@ -1,23 +1,15 @@
-import 'package:citizen_app/app_localizations.dart';
-import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
-import 'package:citizen_app/features/common/utils.dart';
-import 'package:citizen_app/core/functions/handle_time.dart';
-import 'package:citizen_app/features/customer/data/models/promotion_model.dart';
-import 'package:citizen_app/features/paht/data/models/paht_model.dart';
+import 'package:citizen_app/features/customer/data/models/product_category_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const DESCRIPTION_COLOR = Color(0xff353739);
 
-class PromotionItemWidget extends StatelessWidget {
-  final PromotionModel model;
+class ProductCategoryItemWidget extends StatelessWidget {
+  final ProductCategoryModel model;
   final Function onTap;
 
-  PromotionItemWidget({@required this.model, @required this.onTap});
+  ProductCategoryItemWidget({@required this.model, @required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +98,7 @@ class PromotionItemWidget extends StatelessWidget {
                               Expanded(
                                 child: Column(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(

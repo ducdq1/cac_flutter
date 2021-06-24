@@ -23,7 +23,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
           const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xff0F8E70).withOpacity(0.1),
+          color: Color(0xff0F8E70).withOpacity(0.4),
           borderRadius: BorderRadius.all(Radius.circular(24)),
         ),
         child: Column(
@@ -53,7 +53,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
             ),
             SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 15),
+              padding: const EdgeInsets.only(left: 40, top: 10),
               child: Container(
                 alignment: Alignment.center,
                 child: Column(
@@ -62,7 +62,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset(ICONS_ASSETS + 'ic_call.png',
+                          Image.asset(IMAGE_ASSETS_PATH + 'icon_info.png',
                               width: 24, height: 24),
                           SizedBox(width: 10),
                           RichText(
@@ -162,7 +162,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                     ]),
               ),
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 120),
           ],
         ),
       ),
