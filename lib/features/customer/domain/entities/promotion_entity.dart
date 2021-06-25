@@ -9,8 +9,8 @@ class PromotionEntity extends Equatable {
   String name;
   String description;
   String imageUrl;
-
-  PromotionEntity({this.id, this.name, this.description, this.imageUrl});
+  String numberSaleOff;
+  PromotionEntity({this.id, this.name, this.description, this.imageUrl,this.numberSaleOff});
 
   Map<String, dynamic> toJson() {
     return {};

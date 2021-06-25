@@ -61,12 +61,12 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
 
     return BottomAppBar(
       //notchMargin: 18,
-      shape: CircularNotchedRectangle(),
+      //shape: CircularNotchedRectangle(),
       child: Container(
         padding: EdgeInsets.only(top:0,left: 5,right: 5),
         decoration: BoxDecoration(
-          color: Colors.white,
-            border: Border.all(color: Color(0xffD8D8D8)),
+          color: Color(0xffF8F2E3),//Colors.white,
+          border: Border.all(color: Color(0xffA8A8A8),width: 1),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
@@ -78,7 +78,7 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
           children: items,
         ),
       ),
-      color: Colors.white,
+      color: Color(0xffF8F2E3),
       elevation: 0,
     );
   }

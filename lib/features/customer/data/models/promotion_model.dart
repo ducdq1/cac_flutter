@@ -5,11 +5,13 @@ class PromotionModel extends PromotionEntity {
     String name,
     String imageUrl,
     String description,
+    String numberSaleOff,
     }) : super(
       id :id,
       name: name,
       description: description,
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
+      numberSaleOff: numberSaleOff
       );
 
   factory PromotionModel.fromJson(Map json) {
@@ -18,7 +20,8 @@ class PromotionModel extends PromotionEntity {
         id: json['id'],
         name: json['name'],
         description: json['description'],
-        imageUrl: json['imageUrl']
+        imageUrl: json['imageUrl'],
+        numberSaleOff : json['numberSaleOff']
     );
   }
 
@@ -27,7 +30,8 @@ class PromotionModel extends PromotionEntity {
       "id": id,
       "name": name,
       "imageUrl": imageUrl,
-      "description": description
+      "description": description,
+      "numberSaleOff" : numberSaleOff
     };
   }
 

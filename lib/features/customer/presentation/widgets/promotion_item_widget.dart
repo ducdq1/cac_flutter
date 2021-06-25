@@ -33,7 +33,7 @@ class PromotionItemWidget extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10.0),
           child: Stack(children: [
             Padding(
-              padding: const EdgeInsets.only(top: 16.0, left: 5),
+              padding: const EdgeInsets.only(top: 25.0, left: 5),
               child: Column(
                 children: [
                   Container(
@@ -42,30 +42,35 @@ class PromotionItemWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       //color: Color(0xff82C341), //Colors.green.withOpacity(0.8),
                       //borderRadius: BorderRadius.all(Radius.circular(6)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 3,
-                          blurRadius: 3,
-                          offset: Offset(3, 3), // changes position of shadow
-                        ),
-                      ],
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     // /color: Colors.grey.withOpacity(0.1),
+                      //     //spreadRadius: 3,
+                      //     //blurRadius: 3,
+                      //    // offset: Offset(3, 3), // changes position of shadow
+                      //   ),
+                      // ],
                     ),
                     child: Stack(
                       children: [
                         Container(
                             width: MediaQuery.of(context).size.width,
                             //height: 120,
+                            //padding: EdgeInsets.all( 20),
+                            //color: Colors.red,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
+                              //borderRadius: BorderRadius.circular(6),
                               child: Image.network(
                                 model.imageUrl,
-                                width: (MediaQuery.of(context).size.width - 70) / 3,
-                                //height: 150,
+                                //width: (MediaQuery.of(context).size.width - 70) / 3,
+                                //height: 130,
                                 fit: BoxFit.cover,
                                 errorBuilder: (BuildContext context, Object exception,
                                     StackTrace stackTrace) {
-                                  return Image.asset(IMAGE_ASSETS_PATH + 'banner_old.png');
+                                  return Image.asset(IMAGE_ASSETS_PATH + 'banner_new4.png',
+                                    fit: BoxFit.cover,
+                                   // height: 120,
+                                  );
                                 },
                                 loadingBuilder: (BuildContext context, Widget child,
                                     ImageChunkEvent loadingProgress) {
@@ -73,7 +78,7 @@ class PromotionItemWidget extends StatelessWidget {
                                   return Container(
                                     color: Color(0xffE6EFF3).withOpacity(0.6),
                                     width: (MediaQuery.of(context).size.width - 70) / 3,
-                                    height: 150,
+                                    //height: 150,
                                     child: Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: Align(
@@ -111,12 +116,13 @@ class PromotionItemWidget extends StatelessWidget {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          bottom: 8.0, top: 10),
+                                        left: 20,
+                                          bottom: 8.0, top: 0),
                                       child: Row(children: [
                                         Image.asset(
-                                          ICONS_ASSETS + 'icon_112.png',
-                                          width: 24,
-                                          height: 24,
+                                          ICONS_ASSETS + 'hot_deal1.png',
+                                          width: 29,
+                                          height: 29,
                                         ),
                                         SizedBox(
                                           width: 5,
@@ -131,14 +137,14 @@ class PromotionItemWidget extends StatelessWidget {
                                               fontWeight: FontWeight.bold,
                                             ),
                                             softWrap: true,
-                                            maxLines: 2,
+                                           // maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         )
                                       ]),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      padding: const EdgeInsets.only(bottom: 0.0),
                                       child: Row(
                                         children: [
                                           Expanded(
@@ -151,7 +157,7 @@ class PromotionItemWidget extends StatelessWidget {
                                                   fontSize: FONT_MIDDLE,
                                                   height: 1.5),
                                               softWrap: true,
-                                              maxLines: 2,
+                                              //maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           )
@@ -159,7 +165,7 @@ class PromotionItemWidget extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 5,
+                                      height: 0,
                                     ),
                                   ],
                                 ),
@@ -171,18 +177,38 @@ class PromotionItemWidget extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 00,
                   )
                 ],
               ),
             ),
             Positioned(
                 top: 0,
-                left: 0,
+                right: 0,
                 child: Image.asset(
-                  IMAGE_ASSETS_PATH + 'km31.png',
+                  IMAGE_ASSETS_PATH + 'supper_sale.png',
+                  height: 45,
+                )),
+            Positioned(
+                top: 25,
+                left: 8,
+                child: Image.asset(
+                  IMAGE_ASSETS_PATH + 'icon_hot.png',
                   height: 35,
-                ))
+                )),
+            Positioned(
+              top: 25,
+              right: 13,
+                child: Text(model.numberSaleOff !=null ? model.numberSaleOff : '',
+                  style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: FONT_SMALL,
+                      fontWeight: FontWeight.bold,
+                      ),
+                  softWrap: true,
+                  //maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),)
           ]),
         ),
       ),

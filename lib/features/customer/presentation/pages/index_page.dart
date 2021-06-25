@@ -57,8 +57,8 @@ class _IndexpageState extends State<Indexpage> {
         BlocProvider<BottomNavigationBloc>(
             create: (context) => BottomNavigationBloc()..add(TabStarted())),
         BlocProvider<PromotionBloc>(
-            create: (context) => singleton<PromotionBloc>()
-              ..add(ListPromotionFetching())),
+            create: (context) =>
+                singleton<PromotionBloc>()..add(ListPromotionFetching())),
         BlocProvider<ProductCategoryBloc>(
           create: (context) => singleton<ProductCategoryBloc>()
             ..add(
@@ -76,8 +76,8 @@ class _IndexpageState extends State<Indexpage> {
               builder: (BuildContext context, BottomNavigationState state) {
                 return FABBottomAppBarWidget(
                   color: Color(0xff606060),
-                  backgroundColor: Colors.white,
-                  selectedColor: COLOR_BACKGROUND,
+                 // backgroundColor: Colors.white,
+                  //selectedColor: COLOR_BACKGROUND,
                   // notchedShape: CircularNotchedRectangle(),
                   onTabSelected: (index) {
                     BlocProvider.of<BottomNavigationBloc>(context)
@@ -156,7 +156,7 @@ class _IndexpageState extends State<Indexpage> {
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height - 150),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Color(0xffF8F2E3),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(24),
                           topRight: Radius.circular(24),
@@ -164,32 +164,30 @@ class _IndexpageState extends State<Indexpage> {
                       ),
                       child: Stack(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: isFilter
-                                    ? indexTab == 0
-                                        ? 130
-                                        : 225
-                                    : 0),
-                            child: BlocBuilder<BottomNavigationBloc,
-                                BottomNavigationState>(
-                              builder: (BuildContext context,
-                                  BottomNavigationState state) {
-                                if (state is FirstTabLoaded) {
-                                  return PromotionPage();
-                                }
-                                if (state is SecondTabLoaded) {
+                          Container(
+                            //color: Color(0xffFFF1CE),//,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  top:  0),
+                              child: BlocBuilder<BottomNavigationBloc,
+                                  BottomNavigationState>(
+                                builder: (BuildContext context,
+                                    BottomNavigationState state) {
+                                  _scrollController.jumpTo(0);
+                                  if (state is FirstTabLoaded) {
+                                    return PromotionPage();
+                                  }
+                                  if (state is SecondTabLoaded) {}
 
-                                }
+                                  if (state is Tab3Loaded) {}
 
-                                if (state is Tab3Loaded) {}
+                                  if (state is Tab4Loaded) {
+                                    return ViewInfoPage();
+                                  }
 
-                                if (state is Tab4Loaded) {
-                                  return ViewInfoPage();
-                                }
-
-                                return SkeletonPahtWidget();
-                              },
+                                  return SkeletonPahtWidget();
+                                },
+                              ),
                             ),
                           )
                         ],

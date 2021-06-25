@@ -431,7 +431,8 @@ class CusRemoteDataSourceImpl implements CusRemoteDataSource {
         pros.add(PromotionModel(id: 1,
             name: "Khuyến mãi đặc biệt",
             imageUrl: "",
-            description: "Chương tình khuyến mãi từ 10/6 - 12/6"));
+            numberSaleOff: '20%',
+            description: "Chương tình khuyến mãi từ 10/6 - 12/6 \nGiảm giá 20% thiết bị vệ sinh\nGiảm 100 Gạch men"));
       }
       return pros;
 

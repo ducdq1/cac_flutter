@@ -31,7 +31,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
           children: [
             SizedBox(height: 40),
             Image.asset(
-              ICONS_ASSETS + 'icon_da_ban.png',
+              IMAGE_ASSETS_PATH + 'icon_info.png',
               width: 62,
               height: 62,
             ),
@@ -53,21 +53,55 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
             ),
             SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 10),
+              padding: const EdgeInsets.only(left: 30, top: 30),
               child: Container(
                 alignment: Alignment.center,
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset(IMAGE_ASSETS_PATH + 'icon_info.png',
+                          Image.asset(ICONS_ASSETS + 'icon_marker_detail_address.png',
+                              width: 24, height: 24),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                text: 'Địa chỉ: ',
+                                style: GoogleFonts.inter(
+                                  color: PRIMARY_TEXT_COLOR,
+                                  fontSize: FONT_MIDDLE,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: '11 Pasteur, Hải Châu, Đà Nẵng',
+                                    style: GoogleFonts.inter(
+                                      color: PRIMARY_TEXT_COLOR,
+                                      fontSize: FONT_MIDDLE,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(ICONS_ASSETS + 'ic_call.png',
                               width: 24, height: 24),
                           SizedBox(width: 10),
                           RichText(
                             text: TextSpan(
-                              text: 'Phone: ',
+                              text: 'Điện thoại: ',
                               style: GoogleFonts.inter(
                                 color: PRIMARY_TEXT_COLOR,
                                 fontSize: FONT_MIDDLE,
