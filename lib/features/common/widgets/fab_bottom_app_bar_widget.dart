@@ -65,7 +65,7 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
       child: Container(
         padding: EdgeInsets.only(top:0,left: 5,right: 5),
         decoration: BoxDecoration(
-          color: Color(0xffF8F2E3),//Colors.white,
+          color: Colors.white, //Color(0xffF8F2E3),//Colors.white,
           border: Border.all(color: Color(0xffA8A8A8),width: 1),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
@@ -78,7 +78,7 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
           children: items,
         ),
       ),
-      color: Color(0xffF8F2E3),
+      color: Colors.white,//Color(0xffF8F2E3),
       elevation: 0,
     );
   }

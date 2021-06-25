@@ -36,7 +36,7 @@ class _ListViewProductCategoryWidgetState extends State<ListViewProductCategoryW
     return AnimationLimiter(
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: widget.promotions.length != 0
+        child: widget.categories.length != 0
             ? LazyLoadScrollView(
                 onEndOfPage: () => {},
                 isLoading: isLoadingVertical,
@@ -53,7 +53,7 @@ class _ListViewProductCategoryWidgetState extends State<ListViewProductCategoryW
                           verticalOffset: 50.0,
                           child: FadeInAnimation(
                               child: ProductCategoryItemWidget(
-                                model: widget.promotions[index],
+                                model: widget.categories[index],
                             onTap: () {},
                           ),
                           ),
@@ -63,7 +63,7 @@ class _ListViewProductCategoryWidgetState extends State<ListViewProductCategoryW
                     // itemCount: widget.hasReachedMax
                     //     ? widget.pahts.length
                     //     : widget.pahts.length + 1,
-                    itemCount: widget.promotions.length,
+                    itemCount: widget.categories.length,
                     controller: widget.scrollController,
                   ),
                 ),
@@ -75,9 +75,9 @@ class _ListViewProductCategoryWidgetState extends State<ListViewProductCategoryW
 }
 
 class ListViewProductCategoryWidget extends StatefulWidget {
-  final List<ProductCategoryModel> promotions;
+  final List<ProductCategoryModel> categories;
   final ScrollController scrollController;
-  ListViewProductCategoryWidget({@required this.promotions,@required  this.scrollController});
+  ListViewProductCategoryWidget({@required this.categories,@required  this.scrollController});
 
   @override
   _ListViewProductCategoryWidgetState createState() =>

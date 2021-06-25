@@ -1,32 +1,21 @@
-import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/strings.dart';
-import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
-import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
 import 'package:citizen_app/features/common/blocs/blocs.dart';
-import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
-import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
+import 'package:citizen_app/features/customer/presentation/pages/promotions_page.dart';
+import 'package:citizen_app/features/customer/presentation/pages/product_category_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widget.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/status_paht_bloc/status_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/filter_category_status_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
+import 'package:citizen_app/features/profile/presentation/pages/view_info_page.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:citizen_app/features/profile/presentation/pages/view_info_page.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-import 'package:citizen_app/features/customer/presentation/pages/promotions_page.dart';
 
 const SIZE_ICON_BOTTOM_BAR = 28.0;
 const SIZE_ICON_FLOATING_BUTTON = 24.0;
@@ -84,11 +73,14 @@ class _IndexpageState extends State<Indexpage> {
                         .add(TabTapped(index: index));
                     setState(() {
                       indexTab = index;
-                      isFilter = false;
                     });
-
-                    BlocProvider.of<PromotionBloc>(context)
-                        .add(ListPromotionFetching());
+                    if(indexTab ==0) {
+                      BlocProvider.of<PromotionBloc>(context)
+                          .add(ListPromotionFetching());
+                    }else if(indexTab == 1){
+                      BlocProvider.of<ProductCategoryBloc>(context)
+                          .add(ListProductCategoriesFetching());
+                    }
                   },
                   items: [
                     FABBottomAppBarItem(
@@ -156,7 +148,7 @@ class _IndexpageState extends State<Indexpage> {
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height - 150),
                       decoration: BoxDecoration(
-                        color: Color(0xffF8F2E3),
+                        color: Colors.white,// Color(0xffF8F2E3),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(24),
                           topRight: Radius.circular(24),
@@ -177,7 +169,9 @@ class _IndexpageState extends State<Indexpage> {
                                   if (state is FirstTabLoaded) {
                                     return PromotionPage();
                                   }
-                                  if (state is SecondTabLoaded) {}
+                                  if (state is SecondTabLoaded) {
+                                    return ProductCategoryPage();
+                                  }
 
                                   if (state is Tab3Loaded) {}
 
