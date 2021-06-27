@@ -16,13 +16,24 @@ class ListPublicPahtFetchedEvent extends PublicPahtEvent {
   ListPublicPahtFetchedEvent(
       {@required this.paht, this.hasReachedMax, this.offset, this.error});
 }
+class ListProductFetchedEvent extends PublicPahtEvent {
+  final List<ProductModel> products;
+  final bool hasReachedMax;
+  final int offset;
+  final String error;
+
+  ListProductFetchedEvent(
+      {@required this.products, this.hasReachedMax, this.offset, this.error});
+}
+
 
 class ListProductFetchingEvent extends PublicPahtEvent {
   final int offset;
   final int limit;
   final String search;
+  final int type ;
   ListProductFetchingEvent(
-      {this.offset, this.search , this.limit = 10});
+      {this.offset, this.search , this.limit = 10,this.type =-1});
 
   @override
   List<Object> get props => [offset, search];
@@ -30,6 +41,7 @@ class ListProductFetchingEvent extends PublicPahtEvent {
   @override
   String toString() => 'ListProductFetchingEvent { offset: $offset}';
 }
+
 
 class ListPublicPahtFetchingEvent extends PublicPahtEvent {
   final int offset;

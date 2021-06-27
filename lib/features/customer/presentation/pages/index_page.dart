@@ -34,6 +34,8 @@ class _IndexpageState extends State<Indexpage> {
 
   @override
   void initState() {
+    // BlocProvider.of<PromotionBloc>(context)
+    //     .add(ListPromotionFetching());
     super.initState();
   }
 
@@ -167,13 +169,17 @@ class _IndexpageState extends State<Indexpage> {
                                     BottomNavigationState state) {
                                   _scrollController.jumpTo(0);
                                   if (state is FirstTabLoaded) {
+                                    print('PromotionPage');
                                     return PromotionPage();
                                   }
                                   if (state is SecondTabLoaded) {
+                                    print('ProductCategoryPage');
                                     return ProductCategoryPage();
                                   }
 
-                                  if (state is Tab3Loaded) {}
+                                  if (state is Tab3Loaded) {
+
+                                  }
 
                                   if (state is Tab4Loaded) {
                                     return ViewInfoPage();

@@ -20,6 +20,13 @@ class SearchProductSuccess extends PublicPahtState {
   SearchProductSuccess(
       {@required this.lstProduct, this.hasReachedMax, this.offset, this.error});
 }
+class SearchProducttFailure extends PublicPahtState {
+  final dynamic error;
+
+  SearchProducttFailure({@required this.error});
+  @override
+  String toString() => 'PublicPahtFailure';
+}
 
 class PublicPahtSuccess extends PublicPahtState {
   final List<PahtModel> paht;

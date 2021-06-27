@@ -31,6 +31,7 @@ class UpdatePahtArgument {
   final bool isUpdateAble;
   final bool isApproveAble;
   final bool isSaled;
+
   UpdatePahtArgument(
       {this.content,
       this.address,
@@ -56,13 +57,14 @@ class PahtDetailArgument {
   String productCode;
   final bool isUpdateAble;
   final bool isApproveAble;
+
   PahtDetailArgument(
       {this.id,
       this.title,
       this.poiDetail,
       this.productCode,
       this.quotationDetailModel,
-        this.isUpdateAble = false,
+      this.isUpdateAble = false,
       this.isApproveAble = false});
 }
 
@@ -75,6 +77,8 @@ class ListViewProductsWidget extends StatefulWidget {
   final double paddingBottom;
   final bool isApproveAble;
   final Function onTap;
+  final String textSearch;
+
   ListViewProductsWidget(
       {@required this.pahts,
       @required this.isPersonal,
@@ -83,7 +87,8 @@ class ListViewProductsWidget extends StatefulWidget {
       this.loadmore = false,
       this.paddingBottom = 100,
       this.isApproveAble = false,
-      this.onTap});
+      this.onTap,
+      this.textSearch});
 
   @override
   _ListViewProductsWidgetState createState() => _ListViewProductsWidgetState();
@@ -92,8 +97,9 @@ class ListViewProductsWidget extends StatefulWidget {
 class _ListViewProductsWidgetState extends State<ListViewProductsWidget> {
   bool isLoadingVertical = false;
   bool loadmore = false;
-  bool  isApproveAble = false;
-  bool  isSaled = false;
+  bool isApproveAble = false;
+  bool isSaled = false;
+
   Future _loadMoreVertical() async {
     if (widget.hasReachedMax) {
       return;
@@ -111,6 +117,10 @@ class _ListViewProductsWidgetState extends State<ListViewProductsWidget> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +152,8 @@ class _ListViewProductsWidgetState extends State<ListViewProductsWidget> {
                                   : ProductITemWidget(
                                       pahtModel: widget.pahts[index],
                                       onTap: () {
-                                        widget.onTap( widget.pahts[index].productCode);
+                                        widget.onTap(
+                                            widget.pahts[index].productCode);
                                       },
                                     )),
                         ),

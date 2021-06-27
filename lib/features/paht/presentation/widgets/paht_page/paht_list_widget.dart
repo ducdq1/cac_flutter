@@ -54,14 +54,16 @@ class PahtDetailArgument {
   String productCode;
   final bool isUpdateAble;
   final bool isApproveAble;
-  PahtDetailArgument(
+  final bool fromCategoryPage;
+   PahtDetailArgument(
       {this.id,
       this.title,
       this.poiDetail,
       this.productCode,
       this.quotationDetailModel,
         this.isUpdateAble = false,
-      this.isApproveAble = false});
+      this.isApproveAble = false,
+      this.fromCategoryPage = false});
 }
 
 class ListViewPahtsWidget extends StatefulWidget {

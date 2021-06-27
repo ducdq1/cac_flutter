@@ -18,8 +18,8 @@ import 'skeletons_widget.dart/skeleton_detailed_paht_widget.dart';
 class PahtInfoTabViewWidget extends StatefulWidget {
   final ProductModel productModel;
   final TonKhoModel tonKhoModel;
-
-  PahtInfoTabViewWidget({Key key, this.productModel, this.tonKhoModel})
+  final bool isViewTonKho;
+  PahtInfoTabViewWidget({Key key, this.productModel, this.tonKhoModel, this.isViewTonKho = true})
       : super(key: key);
 
   @override
@@ -45,6 +45,7 @@ class _PahtInfoTabViewWidgetState extends State<PahtInfoTabViewWidget> {
               child: ReportWidget(
                 productModel: widget.productModel,
                 tonKhoModel: widget.tonKhoModel,
+                isViewTonKho: widget.isViewTonKho,
               ),
             ),
           ],

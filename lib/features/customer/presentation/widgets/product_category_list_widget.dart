@@ -1,25 +1,18 @@
 import 'package:citizen_app/core/resources/resources.dart';
-import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
 import 'package:citizen_app/features/customer/data/models/product_category_model.dart';
-import 'package:citizen_app/features/customer/data/models/promotion_model.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
-import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/widgets/product_category_item_widget.dart';
-import 'package:citizen_app/features/paht/data/models/models.dart';
-import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
-import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/bottom_loader_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/widgets.dart';
+import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
+import 'package:citizen_app/features/paht/presentation/pages/product_search.dart' as productSearch;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
-class _ListViewProductCategoryWidgetState extends State<ListViewProductCategoryWidget> {
+class _ListViewProductCategoryWidgetState
+    extends State<ListViewProductCategoryWidget> {
   bool isLoadingVertical = false;
   bool loadmore = false;
   bool isApproveAble = false;
@@ -52,10 +45,17 @@ class _ListViewProductCategoryWidgetState extends State<ListViewProductCategoryW
                         child: SlideAnimation(
                           verticalOffset: 50.0,
                           child: FadeInAnimation(
-                              child: ProductCategoryItemWidget(
-                                model: widget.categories[index],
-                            onTap: () {},
-                          ),
+                            child: ProductCategoryItemWidget(
+                              model: widget.categories[index],
+                              onTap: () {
+                                Navigator.pushNamed(
+                                        context, ROUTER_SEARCH_PRODUCT,
+                                        arguments: productSearch.SearchArgument(
+                                    fromCategoryPage: true,
+                                        type:  widget.categories[index].type ))
+                                    .then((value) => {});
+                              },
+                            ),
                           ),
                         ),
                       );
@@ -77,7 +77,9 @@ class _ListViewProductCategoryWidgetState extends State<ListViewProductCategoryW
 class ListViewProductCategoryWidget extends StatefulWidget {
   final List<ProductCategoryModel> categories;
   final ScrollController scrollController;
-  ListViewProductCategoryWidget({@required this.categories,@required  this.scrollController});
+
+  ListViewProductCategoryWidget(
+      {@required this.categories, @required this.scrollController});
 
   @override
   _ListViewProductCategoryWidgetState createState() =>

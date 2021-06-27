@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
 import 'package:citizen_app/features/paht/data/models/paht_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
@@ -53,15 +54,16 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         SearchProductModel listPublicPaht = await searchProduct(
             SearchProductParam(
                 productCode: event.search,
-                limit: 100,
-                offset: 0
+                limit: 500,
+                offset: 0,
+                type: event.type
             ));
         yield SearchProductSuccess(
             lstProduct: listPublicPaht.lstProduct,
             offset: 0,
             hasReachedMax: true);
       }catch (error) {
-        yield PublicPahtFailure(error: error.message);
+        yield SearchProducttFailure(error: error.message);
     }
       return;
     }

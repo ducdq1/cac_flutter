@@ -38,9 +38,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class ProductCategoryPage extends StatefulWidget {
-
   @override
   _ProductCategoryPageState createState() => _ProductCategoryPageState();
 }
@@ -66,7 +64,6 @@ class _ProductCategoryPageState extends State<ProductCategoryPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -82,16 +79,15 @@ class _ProductCategoryPageState extends State<ProductCategoryPage> {
             builder: (context, state) {
               if (state is ProductCategoryFailure) {
                 return NoNetworkFailureWidget(
-                    message:  state.error.message,
+                    message: state.error.message,
                     onPressed: () {
-                      BlocProvider.of<ProductCategoryBloc>(context).add(
-                          ListProductCategoriesFetching()
-                      );
+                      BlocProvider.of<ProductCategoryBloc>(context)
+                          .add(ListProductCategoriesFetching());
                     });
               }
               if (state is ProductCategorySuccess) {
                 return ListViewProductCategoryWidget(
-                  categories:  state.listCategories,
+                  categories: state.listCategories,
                   scrollController: scrollController,
                 );
               }

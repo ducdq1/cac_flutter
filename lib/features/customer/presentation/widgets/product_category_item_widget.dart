@@ -24,7 +24,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
         onTap: () => onTap(),
         child: Padding(
           padding:
-              const EdgeInsets.only(top: 10.0, left: 40, right: 40, bottom: 30),
+              const EdgeInsets.only(top: 10.0, left: 30, right: 30, bottom: 20),
           child: Column(children: [
             SizedBox(
               height: 10,
@@ -34,7 +34,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
               // width: 250,//MediaQuery.of(context).size.width,
               //padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color(0xff82C341), //Colors.green.withOpacity(0.8),
+                color:  Colors.grey.shade50, //Colors.green.withOpacity(0.8),
                 borderRadius: BorderRadius.all(Radius.circular(6)),
                 boxShadow: [
                   BoxShadow(
@@ -46,7 +46,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -55,72 +55,70 @@ class ProductCategoryItemWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Center(
-                          child: Container(
-                            width: 45,
-                            height: 45,
-                            //padding: EdgeInsets.all( 20),
-                            //color: Colors.red,
-                            child: ClipRRect(
-                              //borderRadius: BorderRadius.circular(6),
-                              child: Image.network(
-                                model.imageUrl,
-                                //width: (MediaQuery.of(context).size.width - 70) / 3,
-                                //height: 130,
-                                fit: BoxFit.cover,
-                                errorBuilder: (BuildContext context,
-                                    Object exception, StackTrace stackTrace) {
-                                  return Image.asset(
-                                    IMAGE_ASSETS_PATH + 'supper_sale.png',
-                                    fit: BoxFit.cover,
-                                    // height: 120,
-                                  );
-                                },
-                                loadingBuilder: (BuildContext context,
-                                    Widget child,
-                                    ImageChunkEvent loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Container(
-                                    color: Color(0xffE6EFF3).withOpacity(0.6),
-                                    width: 60,
-                                    //height: 150,
-                                    child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: SizedBox(
-                                            width: 45,
-                                            height: 45,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 1.5,
-                                              valueColor:
-                                                  new AlwaysStoppedAnimation<
-                                                      Color>(PRIMARY_COLOR),
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes
-                                                  : null,
-                                            ),
+                        Container(
+                          width: 85,
+                          //height: 90,
+                          //padding: EdgeInsets.all( 20),
+                          //color: Colors.red,
+                          child: ClipRRect(
+
+                            //borderRadius: BorderRadius.circular(6),
+                            child: Image.network(
+                              model.imageUrl,
+                              fit: BoxFit.cover,
+                              width: 25,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace stackTrace) {
+                                return Image.asset(
+                                  IMAGE_ASSETS_PATH + 'supper_sale.png',
+                                  fit: BoxFit.cover,
+                                  // height: 120,
+                                );
+                              },
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Container(
+                                  color: Color(0xffE6EFF3).withOpacity(0.6),
+                                  width: 30,
+                                  //height: 150,
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: SizedBox(
+                                          width: 45,
+                                          height: 45,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 1.5,
+                                            valueColor:
+                                                new AlwaysStoppedAnimation<
+                                                    Color>(PRIMARY_COLOR),
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes
+                                                : null,
                                           ),
-                                        )),
-                                  );
-                                },
-                              ),
+                                        ),
+                                      )),
+                                );
+                              },
                             ),
                           ),
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        Center(
+                        Expanded(
                           child: Text(
                             model.name == null ? '' : model.name,
                             style: GoogleFonts.inter(
-                              fontSize: FONT_EX_LARGE,
+                              fontSize: FONT_LARGE,
                               color: DESCRIPTION_COLOR,
                               fontWeight: FontWeight.bold,
                             ),
@@ -153,8 +151,9 @@ class ProductCategoryItemWidget extends StatelessWidget {
                         Text(
                           'Xem tất cả',
                           style: GoogleFonts.inter(
-                              color: DESCRIPTION_COLOR,
-                              fontSize: FONT_MIDDLE,
+                              color: Colors.teal,
+                              fontSize: FONT_SMALL,
+                              fontStyle: FontStyle.italic,
                               height: 1.5),
                           softWrap: true,
                         )

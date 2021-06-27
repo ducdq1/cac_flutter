@@ -44,13 +44,13 @@ class CusRemoteDataSourceImpl implements CusRemoteDataSource {
       List<ProductCategoryModel> pros =[];
       pros.add(ProductCategoryModel(id: 1,
           name: "Thiết bị nội thất",
-          imageUrl: "",
+          imageUrl: "http://getbehome.com/wp-content/uploads/2017/12/GACH-MEN-OP-LAT.jpg",
           type: 0,
           description: "Hơn 500 mẫu mã đến từ 20 nhà cung cấp thiết bị hàng đầu thế giới"));
 
       pros.add(ProductCategoryModel(id: 1,
-          name: "Gạch men cao cấp",
-          imageUrl: "",
+          name: "Gạch men cao cấp ",
+          imageUrl: "http://getbehome.com/wp-content/uploads/2017/12/GACH-MEN-OP-LAT.jpg",
           type: 1,
           description: "Mẫu mã đa dạng, phù hợp với mọi loại thiết kế"));
 

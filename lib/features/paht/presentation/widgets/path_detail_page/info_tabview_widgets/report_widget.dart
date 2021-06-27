@@ -38,8 +38,9 @@ class ReportWidget extends StatelessWidget {
   final ProductModel productModel;
   final TonKhoModel tonKhoModel;
   final pref = singleton<SharedPreferences>();
+  final bool isViewTonKho;
 
-  ReportWidget({this.productModel, this.tonKhoModel});
+  ReportWidget({this.productModel, this.tonKhoModel, this.isViewTonKho = true});
 
   @override
   Widget build(BuildContext context) {
@@ -150,58 +151,69 @@ class ReportWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Expanded(
-                    child: Container(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                      Text("Tồn kho",
-                          style: GoogleFonts.inter(
-                            fontSize: FONT_MIDDLE,
-                            color: PRIMARY_TEXT_COLOR,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      SizedBox(height: 10),
-                      Text(
-                        tonKhoModel == null || tonKhoModel.so_luong == null
-                            ? "Không có thông tin"
-                            : tonKhoModel.so_luong.toString(),
-                        style: GoogleFonts.inter(
-                          color: Colors.amber.shade900,
-                          fontSize: FONT_MIDDLE,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ])))
+                  child: isViewTonKho
+                      ? Container(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Tồn kho",
+                                    style: GoogleFonts.inter(
+                                      fontSize: FONT_MIDDLE,
+                                      color: PRIMARY_TEXT_COLOR,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                                SizedBox(height: 10),
+                                Text(
+                                  tonKhoModel == null ||
+                                          tonKhoModel.so_luong == null
+                                      ? "Không có thông tin"
+                                      : tonKhoModel.so_luong.toString(),
+                                  style: GoogleFonts.inter(
+                                    color: Colors.amber.shade900,
+                                    fontSize: FONT_MIDDLE,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ]),
+                        )
+                      : SizedBox(),
+                )
               ]),
           SizedBox(height: 10),
           userType != null && userType == 3
               ? //cho xem gia
               Center(
-                child: Container(
-                  width: 150,
-                    padding: const EdgeInsets.only(bottom: 5.0),
-                    child: RaisedButton(
-                        color: PRIMARY_COLOR,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(36),
-                        ),
-                        onPressed: () {
-                          showViewPriceDialog(context: context, giaBan: productModel.salePrice!=null ? productModel.salePrice.toString(): "Chưa có giá",
-                          giaNhap: productModel.price!=null ? productModel.price.toString(): "Chưa có giá",
-                          ngayCapNhat: productModel.createDate);
-                        },
-                        child: AutoSizeText(
-                          'Xem giá',
-                          style: GoogleFonts.inter(
-                            fontSize: FONT_EX_SMALL,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                  child: Container(
+                      width: 150,
+                      padding: const EdgeInsets.only(bottom: 5.0),
+                      child: RaisedButton(
+                          color: PRIMARY_COLOR,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(36),
                           ),
-                          minFontSize: FONT_EX_SMALL,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ))),
-              )
+                          onPressed: () {
+                            showViewPriceDialog(
+                                context: context,
+                                giaBan: productModel.salePrice != null
+                                    ? productModel.salePrice.toString()
+                                    : "Chưa có giá",
+                                giaNhap: productModel.price != null
+                                    ? productModel.price.toString()
+                                    : "Chưa có giá",
+                                ngayCapNhat: productModel.createDate);
+                          },
+                          child: AutoSizeText(
+                            'Xem giá',
+                            style: GoogleFonts.inter(
+                              fontSize: FONT_EX_SMALL,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            minFontSize: FONT_EX_SMALL,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ))),
+                )
               : SizedBox(),
           Container(
               // color: Color(0xfff1e3c0),
@@ -262,17 +274,14 @@ class ReportWidget extends StatelessWidget {
     for (int i = 0; i < imageModels.length; i++) {
       ImageModel imageModel = imageModels[i];
       tiles.add(GridTile(
-
-          child:
-          Container(
-            decoration: BoxDecoration(
-              color: Color(0xfff1e3c0),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(1),
-              child: ClipRRect(
-
+          child: Container(
+        decoration: BoxDecoration(
+          color: Color(0xfff1e3c0),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(1),
+          child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             child:
                 //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
@@ -287,7 +296,8 @@ class ReportWidget extends StatelessWidget {
                     ),
                   ),
                 );
-                SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+                SystemChrome.setSystemUIOverlayStyle(
+                    SystemUiOverlayStyle.light);
                 SystemChrome.setSystemUIOverlayStyle(
                   SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
                 );
@@ -301,13 +311,10 @@ class ReportWidget extends StatelessWidget {
                 width: 15,
                 errorWidget: (context, url, error) => new Icon(Icons.error),
               ),
-        ),
-
-      ),
             ),
-          )
-      )
-      );
+          ),
+        ),
+      )));
     }
     return tiles;
   }

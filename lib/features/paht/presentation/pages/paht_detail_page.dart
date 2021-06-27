@@ -33,7 +33,8 @@ class SearchProductParam extends Equatable {
   final String userName;
   final int limit;
   final int offset;
-  SearchProductParam({this.productCode, this.productName, this.userName,this.limit, this.offset});
+  final int type;
+  SearchProductParam({this.productCode, this.productName, this.userName,this.limit, this.offset, this.type = -1});
 
   @override
   // TODO: implement props
@@ -45,7 +46,8 @@ class SearchProductParam extends Equatable {
       'productName': productName,
       'userName': userName,
       'limit' : limit,
-      'offset' : offset
+      'offset' : offset,
+       'type' : type
     };
   }
 }
@@ -126,7 +128,8 @@ class _PahtDetailPageState extends State<PahtDetailPage>
                               color: Colors.white,
                               child: PahtInfoTabViewWidget(
                                   productModel: productModel,
-                                  tonKhoModel: tonKhoModel),
+                                  tonKhoModel: tonKhoModel,
+                                  isViewTonKho:  arg.fromCategoryPage == false,),
                             ),
                           ),
                         ),
