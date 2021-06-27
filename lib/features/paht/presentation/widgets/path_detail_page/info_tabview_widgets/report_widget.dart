@@ -139,7 +139,8 @@ class ReportWidget extends StatelessWidget {
             ],
           ),
           SizedBox(height: 18),
-          Row(
+    isViewTonKho
+    ? Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -151,8 +152,7 @@ class ReportWidget extends StatelessWidget {
                 ),
                 SizedBox(width: 12),
                 Expanded(
-                  child: isViewTonKho
-                      ? Container(
+                  child:Container(
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -176,9 +176,9 @@ class ReportWidget extends StatelessWidget {
                                 ),
                               ]),
                         )
-                      : SizedBox(),
+
                 )
-              ]),
+              ])  : SizedBox(),
           SizedBox(height: 10),
           userType != null && userType == 3
               ? //cho xem gia

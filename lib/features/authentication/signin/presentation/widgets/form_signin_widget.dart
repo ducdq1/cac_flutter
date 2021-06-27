@@ -23,7 +23,6 @@ import 'group_button_widget.dart';
 
 class FormSignInWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-
   FormSignInWidget({this.formKey});
   @override
   _FormSignInWidgetState createState() => _FormSignInWidgetState();
@@ -37,6 +36,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
   TextEditingController _passController;
   bool _isButtonDisabled = false;
   SignInBloc _signInBloc;
+  bool isCustomer = true;
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InputValidateWidget(
-                label: trans(LABEL_LOGIN_USER_NAME),
+                label: isCustomer ? 'Số điện thoại' :trans(LABEL_LOGIN_USER_NAME),
                 limitLength: 200,
                 focusNode: _phoneFocusNode,
                 textInputType: TextInputType.text,
@@ -90,12 +90,13 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
               ),
               SizedBox(height: 8),
               InputValidateWidget(
-                label: trans(LABEL_LOGIN_PASSWORD),
+                label:  isCustomer ? 'Họ tên' : trans(LABEL_LOGIN_PASSWORD),
                 focusNode: _passFocusNode,
                 controller: _passController,
-                obscureText: true,
+                obscureText: !isCustomer,
                 focusAction: () => _passFocusNode.unfocus(),
                 textInputAction: TextInputAction.done,
+
                 validates: [
                   EmptyValidate(),
                   //PasswordValidate(),
@@ -119,6 +120,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                     _signInBloc.add(SignInAccountEvent(
                       password: _passController.text.trim(),
                       phone: _phoneController.text.trim(),
+                        isCustomer : isCustomer
                     ));
                     // await showOtpDialog(
                     //   context,
@@ -129,7 +131,42 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                     // _isButtonDisabled = false;
                   }
                 },
+              ),
+              SizedBox(
+                height:20,
+              ),
+              Center(
+                child: Text(
+                'Hoặc',
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    color: PRIMARY_COLOR,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height:20,
+              ),
+
+              Center(
+                child: InkWell(
+                  onTap:(){
+                    setState(() {
+                      isCustomer = !isCustomer;
+                    });
+                  },
+                  child: Text(
+                    isCustomer ? 'Đăng nhập dành cho nhân viên' : 'Đăng nhập dành cho khách hàng',
+                    style: GoogleFonts.inter(
+                      fontSize: FONT_MIDDLE,
+                      color: PRIMARY_COLOR,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               )
+
             ],
           ),
         ),

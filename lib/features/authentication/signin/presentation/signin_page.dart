@@ -104,8 +104,13 @@ class _SignInPageState extends State<SignInPage> {
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil(args, (route) => false);
                 } else {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/', (route) => false);
+                  if(state.isCustomer){
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil(ROUTER_CUS_HOME_PAGE, (route) => false);
+                  }else {
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/', (route) => false);
+                  }
                 }
               } else if (state is SignInSsoState ||
                   state is SignInOtpConfirmState ||
@@ -160,7 +165,7 @@ class _SignInPageState extends State<SignInPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           LogoWidget(),
-                          SizedBox(height: 20),
+                          SizedBox(height: 30),
                           Text(
                             trans(TITLE_LOGIN_SCREEN),
                             style: GoogleFonts.inter(

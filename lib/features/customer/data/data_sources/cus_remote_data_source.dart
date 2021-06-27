@@ -41,26 +41,28 @@ class CusRemoteDataSourceImpl implements CusRemoteDataSource {
   @override
   Future<List<ProductCategoryModel>> fetchListProductCategory(String name) async{
     try {
-      List<ProductCategoryModel> pros =[];
-      pros.add(ProductCategoryModel(id: 1,
-          name: "Thiết bị nội thất",
-          imageUrl: "http://getbehome.com/wp-content/uploads/2017/12/GACH-MEN-OP-LAT.jpg",
-          type: 0,
-          description: "Hơn 500 mẫu mã đến từ 20 nhà cung cấp thiết bị hàng đầu thế giới"));
+      // List<ProductCategoryModel> pros =[];
+      // pros.add(ProductCategoryModel(id: 1,
+      //     name: "Thiết bị nội thất",
+      //     imageUrl: "http://getbehome.com/wp-content/uploads/2017/12/GACH-MEN-OP-LAT.jpg",
+      //     type: 0,
+      //     description: "Hơn 500 mẫu mã đến từ 20 nhà cung cấp thiết bị hàng đầu thế giới"));
+      //
+      // pros.add(ProductCategoryModel(id: 1,
+      //     name: "Gạch men cao cấp ",
+      //     imageUrl: "http://getbehome.com/wp-content/uploads/2017/12/GACH-MEN-OP-LAT.jpg",
+      //     type: 1,
+      //     description: "Mẫu mã đa dạng, phù hợp với mọi loại thiết kế"));
+      //
+      // return pros;
+      var body = jsonEncode({
+      'name': name});
 
-      pros.add(ProductCategoryModel(id: 1,
-          name: "Gạch men cao cấp ",
-          imageUrl: "http://getbehome.com/wp-content/uploads/2017/12/GACH-MEN-OP-LAT.jpg",
-          type: 1,
-          description: "Mẫu mã đa dạng, phù hợp với mọi loại thiết kế"));
+      final response = await networkRequest.postRequest(
+          url: '$base_cus_url_api/productCategory/search', body: body.toString());
+      print('$vtmaps_baseUrl/place/v1/categories');
 
-      return pros;
-
-      final response = await networkRequest.getRequest(
-          url: '$vtmaps_baseUrl/place/v1/categories');
-      //print('$vtmaps_baseUrl/place/v1/categories');
-
-      var responseJson = json.decode(response.body);
+      var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 200) {
         //final data = responseJson['data'];
 
@@ -82,21 +84,22 @@ class CusRemoteDataSourceImpl implements CusRemoteDataSource {
   @override
   Future<List<PromotionModel>> fetchListPromotions(String name) async {
     try {
-      List<PromotionModel> pros =[];
-      for(int i=0;i<=20;i++) {
-        pros.add(PromotionModel(id: 1,
-            name: "Khuyến mãi đặc biệt",
-            imageUrl: "",
-            numberSaleOff: '20%',
-            description: "Chương tình khuyến mãi từ 10/6 - 12/6 \nGiảm giá 20% thiết bị vệ sinh\nGiảm 100 Gạch men"));
-      }
-      return pros;
-
-      final response = await networkRequest.getRequest(
-          url: '$vtmaps_baseUrl/place/v1/categories');
+      // List<PromotionModel> pros =[];
+      // for(int i=0;i<=20;i++) {
+      //   pros.add(PromotionModel(id: 1,
+      //       name: "Khuyến mãi đặc biệt",
+      //       imageUrl: "",
+      //       numberSaleOff: '20%',
+      //       description: "Chương tình khuyến mãi từ 10/6 - 12/6 \nGiảm giá 20% thiết bị vệ sinh\nGiảm 100 Gạch men"));
+      // }
+      // return pros;
+      var body = jsonEncode({
+        'name': name});
+      final response = await networkRequest.postRequest(
+          url: '$base_cus_url_api/promotions/search', body: body);
       //print('$vtmaps_baseUrl/place/v1/categories');
 
-      var responseJson = json.decode(response.body);
+      var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 200) {
         //final data = responseJson['datas'];
 

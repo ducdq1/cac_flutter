@@ -19,9 +19,9 @@ class PromotionModel extends PromotionEntity {
     return PromotionModel(
         id: json['id'],
         name: json['name'],
-        description: json['description'],
-        imageUrl: json['imageUrl'],
-        numberSaleOff : json['numberSaleOff']
+        description: json['description'] ?? null,
+        imageUrl: json['imageUrl'] ?? null,
+        numberSaleOff : json['numberSaleOff'] ?? null,
     );
   }
 

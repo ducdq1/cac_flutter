@@ -31,7 +31,8 @@ class SignInAccountSucceedState extends SignInState {
 
 class SignInSucceedState extends SignInState {
   AuthEntity auth;
-  SignInSucceedState({this.auth});
+  bool isCustomer;
+  SignInSucceedState({this.auth,this.isCustomer});
 }
 
 class SignInFaildState extends SignInState {

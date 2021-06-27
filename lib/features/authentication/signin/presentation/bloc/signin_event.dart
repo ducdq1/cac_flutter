@@ -12,8 +12,8 @@ class SignInSsoEvent extends SignInEvent {
 class SignInAccountEvent extends SignInEvent {
   String phone;
   String password;
-
-  SignInAccountEvent({this.phone, this.password});
+  bool isCustomer;
+  SignInAccountEvent({this.phone, this.password,this.isCustomer =true});
 }
 
 class SignInOtpEvent extends SignInEvent {

@@ -171,7 +171,8 @@ class ProductITemWidget extends StatelessWidget {
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    RichText(
+                                    Expanded(
+                                        child: RichText(
                                       text: TextSpan(
                                         text: pahtModel.size == null
                                             ? ''
@@ -195,12 +196,66 @@ class ProductITemWidget extends StatelessWidget {
                                           ),
                                         ],
                                       ),
+                                    )),
+                                  ],
+                                ),
+                              ),
+                        pahtModel.feature == null || pahtModel.feature.isEmpty
+                            ? SizedBox()
+                            : Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Expanded(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Tính năng: ',
+                                          style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: FONT_MIDDLE,
+                                            color: PRIMARY_TEXT_COLOR,
+                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: pahtModel.feature,
+                                              style: GoogleFonts.inter(
+                                                color: PRIMARY_TEXT_COLOR,
+                                                fontSize: FONT_MIDDLE,
+                                                fontWeight: FontWeight.normal,
+                                                height: 1.7,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                         SizedBox(
                           height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Xem chi tiết >>>',
+                              style: GoogleFonts.inter(
+                                  color: Colors.teal,
+                                  fontSize: FONT_SMALL,
+                                  fontStyle: FontStyle.italic,
+                                  height: 1.5),
+                              softWrap: true,
+                            )
+                          ],
                         ),
                       ],
                     ),

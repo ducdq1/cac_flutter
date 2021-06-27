@@ -75,8 +75,10 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         if (accountRepository == null) {
           accountRepository = AccountRepositoryImpl(phone: event.phone);
         }
+
         final auth = await accountRepository.signInWithAccount(
-            phone: event.phone, password: event.password);
+            phone: event.phone, password: event.password, isCustomer: event.isCustomer);
+
         if( auth ==null || auth.userName == null || auth.userName.isEmpty){
           yield SignInFaildState(message: 'Tên đăng nhập hoặc mật khẩu không đúng');
           return;
@@ -88,11 +90,12 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         await prefs.setString('userName', auth.userName);
         await prefs.setString('fullName', auth.fullName);
         await prefs.setString('avartarPath', auth.avartarPath);
-        await prefs.setString('userId', auth.userId.toString());
+        await prefs.setString('userId', auth.userId == null ? null : auth.userId.toString());
         await prefs.setInt('userType', auth.userType);
+        await prefs.setBool('isCustomer', event.isCustomer);
         await prefs.setInt('loginTime', DateTime.now().millisecondsSinceEpoch);
 
-        yield SignInSucceedState(auth: auth);
+        yield SignInSucceedState(auth: auth,isCustomer: event.isCustomer);
         // yield SignInAccountSucceedState();
       }
 

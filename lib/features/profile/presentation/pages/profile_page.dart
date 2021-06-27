@@ -34,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
     SharedPreferences prefs = singleton<SharedPreferences>();
     if (prefs != null) {
       avartarPath = prefs.getString("avartarPath");
-      avartarPath = '$baseUrl' + avartarPath;
+      avartarPath = '$baseUrl' + (avartarPath == null ? '' : avartarPath);
       fullName = prefs.getString("fullName");
       userName= prefs.getString("userName");
     }

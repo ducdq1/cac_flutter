@@ -20,9 +20,9 @@ class ProductCategoryModel extends ProductCategoryEntity {
     return ProductCategoryModel(
         id: json['id'],
         name: json['name'],
-        description: json['description'],
-        imageUrl: json['imageUrl'],
-      type: json['type'],
+        description: json['description'] !=null ? json['description'] : null,
+        imageUrl: json['imageUrl'] !=null ? json['imageUrl'] : null,
+        type: json['type'],
     );
   }
 

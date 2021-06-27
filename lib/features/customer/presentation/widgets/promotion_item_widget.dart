@@ -61,7 +61,7 @@ class PromotionItemWidget extends StatelessWidget {
                             child: ClipRRect(
                               //borderRadius: BorderRadius.circular(6),
                               child: Image.network(
-                                model.imageUrl,
+                                model.imageUrl ?? '',
                                 //width: (MediaQuery.of(context).size.width - 70) / 3,
                                 //height: 130,
                                 fit: BoxFit.cover,
@@ -199,7 +199,7 @@ class PromotionItemWidget extends StatelessWidget {
             Positioned(
               top: 25,
               right: 13,
-                child: Text(model.numberSaleOff !=null ? model.numberSaleOff : '',
+                child: Text(model.numberSaleOff !=null ? model.numberSaleOff.toString() : '',
                   style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: FONT_SMALL,

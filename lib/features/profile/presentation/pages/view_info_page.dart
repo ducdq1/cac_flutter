@@ -23,13 +23,13 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
           const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xff0F8E70).withOpacity(0.4),
+          color: Colors.grey.shade300,//(0xff0F8E70).withOpacity(0.4),
           borderRadius: BorderRadius.all(Radius.circular(24)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 40),
+            SizedBox(height: 20),
             Image.asset(
               IMAGE_ASSETS_PATH + 'icon_info.png',
               width: 62,

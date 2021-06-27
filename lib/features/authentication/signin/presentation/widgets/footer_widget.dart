@@ -18,25 +18,44 @@ class FooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      height: 50,
+      padding: EdgeInsets.only(bottom: 0),
+      child: Column(
         children: [
-          Text(
-           'Công ty TNHH C.A.C',
-            style: GoogleFonts.inter(
-              fontSize: FONT_MIDDLE,
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Công ty TNHH C.A.C',
+                style: GoogleFonts.inter(
+                  fontSize: FONT_MIDDLE,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '11 Pasteur, Hải Châu, Đà Nẵng',
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );
   }
 
   _launchRegistrationURL() async {
-    const url = 'https://sso.viettelmaps.vn/auth/realms/vts-mientrung/protocol/openid-connect/auth?client_id=vtmaps&redirect_uri=https%3A%2F%2Flive.viettelmaps.vn%2Fmaps&state=f0bdb728-3bbe-40c3-8eca-d98892a90166&response_mode=fragment&response_type=code&scope=openid&nonce=00c12e5c-106d-475d-bbfe-c5167eee1df8&kc_locale=vn';
+    const url =
+        'https://sso.viettelmaps.vn/auth/realms/vts-mientrung/protocol/openid-connect/auth?client_id=vtmaps&redirect_uri=https%3A%2F%2Flive.viettelmaps.vn%2Fmaps&state=f0bdb728-3bbe-40c3-8eca-d98892a90166&response_mode=fragment&response_type=code&scope=openid&nonce=00c12e5c-106d-475d-bbfe-c5167eee1df8&kc_locale=vn';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

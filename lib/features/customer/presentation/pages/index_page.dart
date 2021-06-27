@@ -73,6 +73,9 @@ class _IndexpageState extends State<Indexpage> {
                   onTabSelected: (index) {
                     BlocProvider.of<BottomNavigationBloc>(context)
                         .add(TabTapped(index: index));
+                    if(indexTab == index){
+                      return;
+                    }
                     setState(() {
                       indexTab = index;
                     });
@@ -168,8 +171,10 @@ class _IndexpageState extends State<Indexpage> {
                                 builder: (BuildContext context,
                                     BottomNavigationState state) {
                                   _scrollController.jumpTo(0);
-                                  if (state is FirstTabLoaded) {
+                                  if (state is BottomNavigationInitial || state is FirstTabLoaded) {
                                     print('PromotionPage');
+                                    BlocProvider.of<PromotionBloc>(context)
+                                        .add(ListPromotionFetching());
                                     return PromotionPage();
                                   }
                                   if (state is SecondTabLoaded) {

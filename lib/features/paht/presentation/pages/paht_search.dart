@@ -102,7 +102,7 @@ class _PahtSearchState extends State<PahtSearch>
                               isPersonal: false,
                               loadmore: state.hasReachedMax ? false : true,
                               paddingBottom: 00,
-                            isApproveAble: isApproveAble,
+                              isApproveAble: isApproveAble,
                               // isSearchPage: true,
                             )
                           : state is PublicPahtFailure

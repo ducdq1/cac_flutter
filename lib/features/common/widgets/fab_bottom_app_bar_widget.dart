@@ -42,6 +42,9 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
   int _selectedIndex = 0;
 
   _updateIndex(int index) {
+    if(_selectedIndex == index){
+      return;
+    }
     widget.onTabSelected(index);
     setState(() {
       _selectedIndex = index;
