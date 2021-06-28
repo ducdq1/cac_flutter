@@ -62,7 +62,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                             //padding: EdgeInsets.all( 20),
                             //color: Colors.red,
                             child: ClipRRect(
-                              //borderRadius: BorderRadius.circular(6),
+                               borderRadius: BorderRadius.circular(6),
                               child: Image.network(
                                 model.imageUrl ?? '',
                                 fit: BoxFit.cover,

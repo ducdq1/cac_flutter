@@ -31,7 +31,7 @@ class _IndexpageState extends State<Indexpage> {
   int indexTab = 0;
   final ScrollController _scrollController = ScrollController();
   final StopScrollController _stopScrollController = StopScrollController();
-
+int badgeCount =0;
   @override
   void initState() {
     // BlocProvider.of<PromotionBloc>(context)
@@ -125,6 +125,7 @@ class _IndexpageState extends State<Indexpage> {
                         height: SIZE_ICON_BOTTOM_BAR,
                       ),
                       text: 'Nhắn tin',
+                        badgeCount: 10
                     ),
                     FABBottomAppBarItem(
                         icon: Image.asset(
@@ -153,7 +154,7 @@ class _IndexpageState extends State<Indexpage> {
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height - 150),
                       decoration: BoxDecoration(
-                        color: Colors.white,// Color(0xffF8F2E3),
+                        color: Color(0xffFAFBFF), //Colors.white,// Color(0xffF8F2E3),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(24),
                           topRight: Radius.circular(24),

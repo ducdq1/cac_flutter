@@ -187,8 +187,8 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navKey,
         title: 'C.A.C Báo giá',
         initialRoute:
-            //(token != null && !token.isEmpty) ? ROUTER_HOME :  ROUTER_SIGNIN,
-        ROUTER_CUS_HOME_PAGE,
+            (token != null && !token.isEmpty) ? ROUTER_HOME :  ROUTER_SIGNIN,
+        // ROUTER_CUS_HOME_PAGE,
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),
           ROUTER_PAHT: (context) => Paht(),

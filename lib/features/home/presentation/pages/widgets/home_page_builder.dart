@@ -168,17 +168,17 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                               icon: '/icons/icon_search.png',
                               needRedirect: '',
                               onPress: () {
-                                Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT)
+                                Navigator.pushNamed(
+                                        context, ROUTER_SEARCH_PRODUCT)
                                     .then((value) => {
-                                  if (value != null)
-                                    {
-                                    Navigator.pushNamed(
-                                    context, ROUTER_DETAILED_PAHT,
-                                    arguments: PahtDetailArgument(
-                                        productCode: value))
-                                    }
-                                });
-
+                                          if (value != null)
+                                            {
+                                              Navigator.pushNamed(
+                                                  context, ROUTER_DETAILED_PAHT,
+                                                  arguments: PahtDetailArgument(
+                                                      productCode: value))
+                                            }
+                                        });
                               },
                             ),
                           ],

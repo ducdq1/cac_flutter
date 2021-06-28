@@ -6,6 +6,7 @@ import 'package:citizen_app/core/utils/form_tools/form_tools.dart';
 import 'package:citizen_app/core/utils/validate/empty_validate.dart';
 import 'package:citizen_app/core/utils/validate/password_validate.dart';
 import 'package:citizen_app/core/utils/validate/email_validate.dart';
+import 'package:citizen_app/core/utils/validate/phone_validate.dart';
 import 'package:citizen_app/features/authentication/forgot_password/presentation/forgot_password_page.dart';
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_bloc.dart';
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_event.dart';
@@ -78,14 +79,14 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                 label: isCustomer ? 'Số điện thoại' :trans(LABEL_LOGIN_USER_NAME),
                 limitLength: 200,
                 focusNode: _phoneFocusNode,
-                textInputType: TextInputType.text,
+                textInputType: isCustomer? TextInputType.phone: TextInputType.text,
                 controller: _phoneController,
                 focusAction: () => FormTools.requestFocus(
                     currentFocusNode: _phoneFocusNode,
                     context: context,
                     nextFocusNode: _passFocusNode),
                 validates: [
-                  EmptyValidate(),
+                  isCustomer ? PhoneValidate() : EmptyValidate(), EmptyValidate(),
                 ],
               ),
               SizedBox(height: 8),

@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       onBackgroundMessage: myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-          if(userType ==3){
+        if(userType ==3){
           Navigator.pushNamed(context, ROUTER_APROVE_PAHT);
         }else{
           Navigator.pushNamed(context, ROUTER_HOME);

@@ -55,7 +55,7 @@ class PromotionItemWidget extends StatelessWidget {
                       children: [
                         Container(
                             width: MediaQuery.of(context).size.width,
-                            //height: 120,
+                            height: 170,
                             //padding: EdgeInsets.all( 20),
                             //color: Colors.red,
                             child: ClipRRect(
@@ -110,19 +110,17 @@ class PromotionItemWidget extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                        left: 20,
-                                          bottom: 8.0, top: 0),
-                                      child: Row(children: [
+                                        left: 20, right: 20, bottom: 8.0, top: 10),
+                                      child: Row(crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
                                         Image.asset(
                                           ICONS_ASSETS + 'hot_deal1.png',
-                                          width: 29,
-                                          height: 29,
+                                          width: 32,
+                                          height: 32,
                                         ),
                                         SizedBox(
                                           width: 5,
@@ -131,14 +129,14 @@ class PromotionItemWidget extends StatelessWidget {
                                           child: Text(
                                             model.name == null ? '' : model.name,
                                             style: GoogleFonts.inter(
-                                              fontSize: FONT_MIDDLE,
+                                              fontSize: FONT_EX_MIDDLE,
                                               color: DESCRIPTION_COLOR,
                                               //Colors.white,
                                               fontWeight: FontWeight.bold,
                                             ),
                                             softWrap: true,
                                            // maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
+                                           // overflow: TextOverflow.ellipsis,
                                           ),
                                         )
                                       ]),
@@ -158,7 +156,6 @@ class PromotionItemWidget extends StatelessWidget {
                                                   height: 1.5),
                                               softWrap: true,
                                               //maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           )
                                         ],
@@ -191,14 +188,14 @@ class PromotionItemWidget extends StatelessWidget {
                 )),
             Positioned(
                 top: 25,
-                left: 8,
+                left: 5,
                 child: Image.asset(
                   IMAGE_ASSETS_PATH + 'icon_hot.png',
                   height: 35,
                 )),
             Positioned(
               top: 25,
-              right: 13,
+              right: 11,
                 child: Text(model.numberSaleOff !=null ? model.numberSaleOff.toString() : '',
                   style: GoogleFonts.inter(
                       color: Colors.white,

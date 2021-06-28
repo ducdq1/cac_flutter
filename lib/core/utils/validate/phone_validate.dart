@@ -7,7 +7,7 @@ class PhoneValidate extends Validate<String> {
   String validate(String value) {
     Pattern pattern = r'^0[1-9][0-9]+[0-9]{7,8}$';
     RegExp regex = new RegExp(pattern);
-    if (value.trim().isNotEmpty && !regex.hasMatch(value)) {
+    if (value.trim().isNotEmpty && !regex.hasMatch(value) || (value.trim().length!=10)) {
       return trans(PHONE_VALIDATE_WRONG_FORMAT);
     } else
       return null;

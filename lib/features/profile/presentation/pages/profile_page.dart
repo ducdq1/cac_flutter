@@ -29,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String avartarPath;
   String fullName = "";
   String userName = "";
+  bool isCustomer = true;
   @override
   void initState() {
     SharedPreferences prefs = singleton<SharedPreferences>();
@@ -36,7 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
       avartarPath = prefs.getString("avartarPath");
       avartarPath = '$baseUrl' + (avartarPath == null ? '' : avartarPath);
       fullName = prefs.getString("fullName");
-      userName= prefs.getString("userName");
+      userName = prefs.getString("userName");
+      isCustomer = prefs.getBool("isCustomer");
     }
     isAuthViettel().then((isAuthViettel) {
       setState(() {
@@ -123,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 50),
                 ],
               )),
-
+              isCustomer ? SizedBox():
               OptionItemWidget(
                   icon: 'icon_settings.png',
                   label: 'Cài đặt',

@@ -23,7 +23,8 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
           const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.shade300,//(0xff0F8E70).withOpacity(0.4),
+          color: Color(0xffF0F2FC),//Colors.grey.shade300,//(0xff0F8E70).withOpacity(0.4),
+          border: Border.all(color: Color(0xffE6EAFF),width: 1),
           borderRadius: BorderRadius.all(Radius.circular(24)),
         ),
         child: Column(
