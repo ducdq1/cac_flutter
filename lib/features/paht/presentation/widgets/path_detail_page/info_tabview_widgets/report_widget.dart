@@ -180,7 +180,7 @@ class ReportWidget extends StatelessWidget {
                 )
               ])  : SizedBox(),
           SizedBox(height: 10),
-          userType != null && userType == 3
+          userType != null && (userType == 3 || userType == 4)
               ? //cho xem gia
               Center(
                   child: Container(
@@ -200,7 +200,8 @@ class ReportWidget extends StatelessWidget {
                                 giaNhap: productModel.price != null
                                     ? productModel.price.toString()
                                     : "Chưa có giá",
-                                ngayCapNhat: productModel.createDate);
+                                ngayCapNhat: productModel.createDate,
+                            model: productModel);
                           },
                           child: AutoSizeText(
                             'Xem giá',

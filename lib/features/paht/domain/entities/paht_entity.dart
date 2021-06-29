@@ -20,6 +20,7 @@ class PahtEntity extends Equatable {
   String fileName;
   String saledDate;
   String note;
+
   PahtEntity(
       {this.quotationID,
       this.quotationNumber,

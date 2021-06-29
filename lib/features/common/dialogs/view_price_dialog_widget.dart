@@ -4,6 +4,9 @@ import 'package:citizen_app/core/resources/font_sizes.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:citizen_app/core/functions/handle_time.dart';
+import 'package:citizen_app/features/paht/data/models/paht_model.dart';
+
+import 'package:citizen_app/features/paht/data/models/product_model.dart';
 
 class ViewPriceDialog extends StatefulWidget {
   final String giaNhap;
@@ -11,9 +14,15 @@ class ViewPriceDialog extends StatefulWidget {
   final String giaBan;
   final String ngayCapNhat;
   final Icon icon;
+  final ProductModel model;
 
   ViewPriceDialog(
-      {this.onSubmit, this.giaBan, this.icon, this.giaNhap, this.ngayCapNhat});
+      {this.onSubmit,
+      this.giaBan,
+      this.icon,
+      this.giaNhap,
+      this.ngayCapNhat,
+      this.model});
 
   @override
   _ViewPiceDialogState createState() => _ViewPiceDialogState();
@@ -39,12 +48,13 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
 
   @override
   Widget build(BuildContext context) {
+    int userType = pref.getInt('userType');
     return Center(
       child: Material(
         color: Colors.transparent,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 20),
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(top: 20.0, bottom: 20),
           decoration: ShapeDecoration(
             color: Colors.white,
             shape: RoundedRectangleBorder(
@@ -70,53 +80,103 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
                 height: 40,
                 thickness: 2,
               ),
-              SizedBox(height: 30),
-              Row(mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                Text(
-                  'Giá nhập: ',
-                  softWrap: true,
-                  style: TextStyle(
-                      fontSize: FONT_EX_LARGE,
-                      color: Color(0xffff8000),
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.orange.shade50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Giá nhập: ',
+                            softWrap: true,
+                            style: TextStyle(
+                                fontSize: FONT_EX_LARGE,
+                                color: Colors.orange,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.left,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            widget.giaNhap ?? '',
+                            style: TextStyle(
+                              fontSize: FONT_EX_MIDDLE,
+                              color: Colors.orange,
+                            ),
+                            textAlign: TextAlign.left,
+                          )
+                        ]),
+                  )),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.lightBlue.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Giá bán lẽ:  ',
+                          style: TextStyle(
+                              fontSize: FONT_EX_LARGE,
+                              color: Colors.lightBlue,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.left,
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          widget.giaBan ?? '',
+                          style: TextStyle(
+                            fontSize: FONT_EX_MIDDLE,
+                            color: Colors.lightBlue,
+                          ),
+                          textAlign: TextAlign.left,
+                        )
+                      ]),
                 ),
-                Expanded(
-                  child: Text(
-                    widget.giaNhap ?? '',
-                    style: TextStyle(
-                      fontSize: FONT_EX_LARGE,
-                      color: Color(0xffff8000),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                )
-              ]),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Giá bán lẽ:  ',
-                    style: TextStyle(
-                        fontSize: FONT_EX_MIDDLE,
-                        color: Colors.lightBlue,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left,
-                  ),
-                  Expanded(
-                    child: Text(
-                     widget.giaBan ?? '',
-                      style: TextStyle(
-                        fontSize: FONT_EX_MIDDLE,
-                        color: Colors.lightBlue,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  )
-                ],
               ),
+              userType == 3
+                  ? SizedBox()
+                  : Container(
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.green.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                'Giá khuyến mãi:  ',
+                                style: TextStyle(
+                                    fontSize: FONT_EX_LARGE,
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),Image.asset(
+                                  ICONS_ASSETS + 'hot_deal1.png',
+                                  width: 32,
+                                  height: 32,
+                                ),
+                            ]),
+                            SizedBox(height: 10),
+                            Text(
+                              widget.model.priceKM ?? 'Chưa có giá',
+                              style: TextStyle(
+                                fontSize: FONT_EX_MIDDLE,
+                                color: Colors.green,
+                              ),
+                              textAlign: TextAlign.left,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
               SizedBox(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

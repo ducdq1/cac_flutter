@@ -22,7 +22,8 @@ class ProductEntity extends Equatable {
   String color;
   String createDate;
   List<ImageEntity> images;
-
+  String priceKM;
+  String maDaiLy;
   @override
   // TODO: implement props
   List<Object> get props => throw UnimplementedError();
@@ -43,5 +44,7 @@ class ProductEntity extends Equatable {
       this.productType,
       this.color,
       this.images,
-      this.createDate});
+      this.createDate,
+      this.priceKM,
+      this.maDaiLy});
 }

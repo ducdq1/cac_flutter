@@ -161,7 +161,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                     isCustomer ? 'Đăng nhập dành cho nhân viên' : 'Đăng nhập dành cho khách hàng',
                     style: GoogleFonts.inter(
                       fontSize: FONT_MIDDLE,
-                      color: PRIMARY_COLOR,
+                      color: isCustomer ? PRIMARY_COLOR : Colors.blue,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

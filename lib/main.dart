@@ -108,6 +108,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     String token = pref.get('userName');
+    bool isCustomer =  pref.get('isCustomer');
     //token ='hard code';
     int loginTime = pref.get('loginTime');
     if(loginTime != null){
@@ -187,7 +188,8 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navKey,
         title: 'C.A.C Báo giá',
         initialRoute:
-            (token != null && !token.isEmpty) ? ROUTER_HOME :  ROUTER_SIGNIN,
+            (token != null && !token.isEmpty) ?
+            isCustomer ? ROUTER_CUS_HOME_PAGE : ROUTER_HOME :  ROUTER_SIGNIN,
         // ROUTER_CUS_HOME_PAGE,
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),

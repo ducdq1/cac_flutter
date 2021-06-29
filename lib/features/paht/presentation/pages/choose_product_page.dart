@@ -340,7 +340,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                                     ),
                                                   ])))
                                             ]),
-                                        userType != null && userType == 3
+                                        userType != null && (userType == 3 || userType == 4)
                                             ? //cho xem gia
                                         Center(
                                           child: Container(
@@ -354,7 +354,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                                   onPressed: () {
                                                     showViewPriceDialog(context: context, giaBan: productModel.salePrice!=null ? productModel.salePrice.toString(): "Chưa có giá",
                                                         giaNhap: productModel.price!=null ? productModel.price.toString(): "Chưa có giá",
-                                                        ngayCapNhat: productModel.createDate);
+                                                        ngayCapNhat: productModel.createDate,model: productModel);
                                                   },
                                                   child: AutoSizeText(
                                                     'Xem giá',

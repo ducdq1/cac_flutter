@@ -44,7 +44,7 @@ class _ProductSearchState extends State<ProductSearch>
   bool isSaled = false;
   bool isApproveAble = false;
   bool fromCategory = false;
-  int type =-1;
+  int type = null;
   @override
   void initState() {
     super.initState();

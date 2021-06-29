@@ -18,7 +18,8 @@ class PahtModel extends PahtEntity {
     String fileName,
     String note,
   String quotationDate,
-    String saledDate,})
+    String saledDate,
+  })
       : super(
       quotationID: quotationID,
       quotationNumber: quotationNumber,
