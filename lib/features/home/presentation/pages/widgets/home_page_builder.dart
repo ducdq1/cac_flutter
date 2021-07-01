@@ -52,7 +52,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    _controller?.dispose();
   }
 
   @override

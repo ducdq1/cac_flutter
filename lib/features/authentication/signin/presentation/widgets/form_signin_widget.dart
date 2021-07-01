@@ -74,6 +74,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
           key: widget.formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize : MainAxisSize.min,
             children: [
               InputValidateWidget(
                 label: isCustomer ? 'Số điện thoại' :trans(LABEL_LOGIN_USER_NAME),

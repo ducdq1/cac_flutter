@@ -162,6 +162,7 @@ class _SignInPageState extends State<SignInPage> {
                           top:
                               MediaQuery.of(context).size.height < 650 ? 00 : 10),
                       child: Column(
+                        mainAxisSize : MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           LogoWidget(),

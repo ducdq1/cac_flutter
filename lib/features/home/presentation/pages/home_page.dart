@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // }
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     final state = BlocProvider.of<AuthBloc>(context).state;
     if (state is AuthenticatedState) {
@@ -72,7 +72,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if(userType !=null && userType == 3){
         _firebaseMessaging.subscribeToTopic('create');
       }
-    _firebaseMessaging.subscribeToTopic(userName);
+      if(userName !=null){
+        _firebaseMessaging.subscribeToTopic(userName);
+      }
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> msg) async {
