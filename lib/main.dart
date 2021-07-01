@@ -71,8 +71,8 @@ void main() async {
   final pref = singleton<SharedPreferences>();
   WidgetsFlutterBinding.ensureInitialized();
   //if(pref.get('token') == null || pref.get('token').toString().isEmpty || pref.get("useProxy") == true) {
-    HttpProxy httpProxy = await HttpProxy.createHttpProxy("10.61.11.42", "3128");
-    HttpOverrides.global = httpProxy;
+  //   HttpProxy httpProxy = await HttpProxy.createHttpProxy("10.61.11.42", "3128");
+  //   HttpOverrides.global = httpProxy;
   //   pref.setBool("useProxy", true);
 //  }
   runApp(MyApp());
