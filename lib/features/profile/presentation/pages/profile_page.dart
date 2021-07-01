@@ -64,9 +64,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    // print(sharedPreferences.getString('isViettelAuth'));
-    final auth =
-        (BlocProvider.of<AuthBloc>(context).state as AuthenticatedState).auth;
     return BaseLayoutWidget(
       title: transWithContext(TITLE_PROFILE_SCREEN, context),
       centerTitle: true,
@@ -82,11 +79,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
                       //color: const Color(0xff7c94b6),
-                      borderRadius: new BorderRadius.all(new Radius.circular(80)),
+                      borderRadius:
+                          new BorderRadius.all(new Radius.circular(80)),
                       border: new Border.all(
                         color: Color(0xff7c94b6),
                         width: 2.0,
@@ -116,39 +115,40 @@ class _ProfilePageState extends State<ProfilePage> {
                     fullName,
                     textScaleFactor: 1.5,
                     style: GoogleFonts.inter(
-                      color: SECONDARY_TEXT_COLOR,
-                      fontSize: FONT_SMALL,
-                      fontWeight: FontWeight.bold
-                    ),
-
+                        color: SECONDARY_TEXT_COLOR,
+                        fontSize: FONT_SMALL,
+                        fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 50),
                 ],
               )),
-              isCustomer ? SizedBox():
-              OptionItemWidget(
-                  icon: 'icon_settings.png',
-                  label: 'Cài đặt',
-                  // route: ROUTER_CHANGE_PASSWORD_PAGE,
-                  page: SettingsPage(),
-                ),
+              isCustomer
+                  ? SizedBox()
+                  : OptionItemWidget(
+                      icon: 'icon_settings.png',
+                      label: 'Cài đặt',
+                      // route: ROUTER_CHANGE_PASSWORD_PAGE,
+                      page: SettingsPage(),
+                    ),
               OptionItemWidget(
                 icon: 'icon_info.png',
                 label: 'Cập nhật ứng dụng',
                 // route: ROUTER_INFO_PAGE,
                 page: null,
-                callback: () async{
-                  String url ;
+                callback: () async {
+                  String url;
                   if (Platform.isAndroid) {
-                    url = 'https://install.appcenter.ms/users/duc.doanquang-gmail.com/apps/c.a.c/distribution_groups/all%20public' ;
+                    url =
+                        'https://install.appcenter.ms/users/duc.doanquang-gmail.com/apps/c.a.c/distribution_groups/all%20public';
                   } else if (Platform.isIOS) {
-                    url = 'https://install.appcenter.ms/users/duc.doanquang-gmail.com/apps/c.a.c-1/distribution_groups/all%20public' ;
+                    url =
+                        'https://install.appcenter.ms/users/duc.doanquang-gmail.com/apps/c.a.c-1/distribution_groups/all%20public';
                   }
 
                   if (await canLaunch(url)) {
-                  await launch(url);
+                    await launch(url);
                   } else {
-                  throw 'Could not launch $url';
+                    throw 'Could not launch $url';
                   }
                 },
               ),

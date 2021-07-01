@@ -108,12 +108,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     String token = pref.get('userName');
-    bool isCustomer =  pref.get('isCustomer');
+    bool isCustomer = pref.get('isCustomer');
     //token ='hard code';
     int loginTime = pref.get('loginTime');
-    if(loginTime != null){
-      int now =  DateTime.now().millisecondsSinceEpoch;
-      if(now - loginTime> (1000 * 7 * 24 * 60 * 60) ){
+    if (loginTime != null) {
+      int now = DateTime.now().millisecondsSinceEpoch;
+      if (now - loginTime > (1000 * 7 * 24 * 60 * 60)) {
         //token = null;
       }
     }
@@ -152,9 +152,7 @@ class _MyAppState extends State<MyApp> {
             create: (BuildContext context) => singleton<HomePageBloc>()),
         BlocProvider<DetailedPahtBloc>(
           create: (BuildContext context) => singleton<DetailedPahtBloc>(),
-
         ),
-
       ],
       child: MaterialApp(
         locale: _locale,
@@ -187,9 +185,11 @@ class _MyAppState extends State<MyApp> {
         },
         navigatorKey: navKey,
         title: 'C.A.C Báo giá',
-        initialRoute:
-            (token != null && !token.isEmpty) ?
-            isCustomer ? ROUTER_CUS_HOME_PAGE : ROUTER_HOME :  ROUTER_SIGNIN,
+        initialRoute: (token != null && !token.isEmpty)
+            ? isCustomer
+                ? ROUTER_CUS_HOME_PAGE
+                : ROUTER_HOME
+            : ROUTER_SIGNIN,
         // ROUTER_CUS_HOME_PAGE,
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),
@@ -212,10 +212,10 @@ class _MyAppState extends State<MyApp> {
           ROUTER_BUSINESS_HOUR_PAGE: (context) => BusinessHourPage(),
           ROUTER_QRCODE_SCANER: (context) => QRSCaner(),
           ROUTER_APROVE_PAHT: (context) => ApproveQuotation(),
-          ROUTER_APPROVE_QUOTATION_PAGE : (context) => ApproveQuotationPage(),
-          ROUTER_SALED_QUOTATION : (context) => SaledQuotation(),
-          ROUTER_SEARCH_PRODUCT :(context) => ProductSearch(),
-          ROUTER_CUS_HOME_PAGE: (context) => Indexpage()  ,
+          ROUTER_APPROVE_QUOTATION_PAGE: (context) => ApproveQuotationPage(),
+          ROUTER_SALED_QUOTATION: (context) => SaledQuotation(),
+          ROUTER_SEARCH_PRODUCT: (context) => ProductSearch(),
+          ROUTER_CUS_HOME_PAGE: (context) => Indexpage(),
         },
         debugShowCheckedModeBanner: false,
       ),

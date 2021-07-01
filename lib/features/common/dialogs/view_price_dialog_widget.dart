@@ -38,7 +38,7 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
   void initState() {
     super.initState();
     int userType = pref.getInt('userType');
-    _controller = new TabController(length:  userType == 3 ? 2 : 1, vsync: this);
+    _controller = new TabController(length: userType == 3 ? 2 : 1, vsync: this);
     // controller =
     //     AnimationController(vsync: this, duration: Duration(milliseconds: 450));
     // controller.addListener(() {
@@ -54,7 +54,7 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
       child: Material(
         color: Colors.transparent,
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20,vertical: 30),
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           padding: const EdgeInsets.only(top: 00.0, bottom: 10),
           decoration: ShapeDecoration(
             color: Colors.white,
@@ -102,30 +102,35 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
                   indicatorColor: Colors.white,
                   indicatorWeight: 2,
                   controller: _controller,
-                  tabs: userType == 3 ?  [
-                    new Tab(
-                      icon: const Icon(Icons.person_pin),
-                      text: 'Giá Bán lẽ',
-                    ),
-                    new Tab(
-                      icon: const Icon(Icons.home_work),
-                      text: 'Giá Đại lý',
-                    ),
-                  ] : [new Tab(
-                    icon: const Icon(Icons.home_work),
-                    text: 'Đại lý',
-                  ),],
+                  tabs: userType == 3
+                      ? [
+                          new Tab(
+                            icon: const Icon(Icons.person_pin),
+                            text: 'Giá Bán lẽ',
+                          ),
+                          new Tab(
+                            icon: const Icon(Icons.home_work),
+                            text: 'Giá Đại lý',
+                          ),
+                        ]
+                      : [
+                          new Tab(
+                            icon: const Icon(Icons.home_work),
+                            text: 'Đại lý',
+                          ),
+                        ],
                 ),
               ),
               Expanded(
                 child: Container(
                   child: new TabBarView(
                     controller: _controller,
-                    children:  userType == 3? [
-                      SingleChildScrollView(child: viewBanLe()),
-                      SingleChildScrollView(child:viewDaiLy())
-                    ] :
-                    [ SingleChildScrollView(child:viewDaiLy())],
+                    children: userType == 3
+                        ? [
+                            SingleChildScrollView(child: viewBanLe()),
+                            SingleChildScrollView(child: viewDaiLy())
+                          ]
+                        : [SingleChildScrollView(child: viewDaiLy())],
                   ),
                 ),
               ),
@@ -161,215 +166,10 @@ class _ViewPiceDialogState extends State<ViewPriceDialog>
       ),
     );
   }
-  Widget viewBanLe(){
-return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Container(
-          width: MediaQuery.of(context).size.width,
-          color: Colors.orange.shade50,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Giá nhập: ',
-                    softWrap: true,
-                    style: TextStyle(
-                        fontSize: FONT_EX_LARGE,
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    widget.model.price ?? '',
-                    style: TextStyle(
-                      fontSize: FONT_EX_MIDDLE,
-                      color: Colors.orange,
-                    ),
-                    textAlign: TextAlign.left,
-                  )
-                ]),
-          )),
-      Container(
-        width: MediaQuery.of(context).size.width,
-        color: Colors.lightBlue.shade50,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Giá bán lẽ:  ',
-                  style: TextStyle(
-                      fontSize: FONT_EX_LARGE,
-                      color: Colors.lightBlue,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  widget.model.salePrice ?? '',
-                  style: TextStyle(
-                    fontSize: FONT_EX_MIDDLE,
-                    color: Colors.lightBlue,
-                  ),
-                  textAlign: TextAlign.left,
-                )
-              ]),
-        ),
-      ),
-      Container(
-        width: MediaQuery.of(context).size.width,
-        color: Colors.green.shade50,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment:
-            MainAxisAlignment.start,
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
-            children: [
-              Row(children: [
-                Text(
-                  'Giá bán đại lý:  ',
-                  style: TextStyle(
-                      fontSize: FONT_EX_LARGE,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ),
-              ]),
-              SizedBox(height: 10),
-              Text(
-                widget.model.priceDL ?? 'Chưa có giá',
-                style: TextStyle(
-                  fontSize: FONT_EX_MIDDLE,
-                  color: Colors.green,
-                ),
-                textAlign: TextAlign.left,
-              )
-            ],
-          ),
-        ),
-      ),
-      Container(
-          width: MediaQuery.of(context).size.width,
-          color: Colors.orange.shade50,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Giá nhập khuyến mãi:  ',
-                    softWrap: true,
-                    style: TextStyle(
-                        fontSize: FONT_EX_LARGE,
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    widget.model.priceNHAPKM ?? '',
-                    style: TextStyle(
-                      fontSize: FONT_EX_MIDDLE,
-                      color: Colors.orange,
-                    ),
-                    textAlign: TextAlign.left,
-                  )
-                ]),
-          )),
-      Container(
-        width: MediaQuery.of(context).size.width,
-        color: Colors.lightBlue.shade50,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(children: [
-                  Text(
-                    'Giá khuyến mãi bán lẽ:  ',
-                    style: TextStyle(
-                        fontSize: FONT_EX_LARGE,
-                        color: Colors.lightBlue,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left,
-                  ),
-                  Image.asset(
-                    ICONS_ASSETS + 'hot_deal1.png',
-                    width: 32,
-                    height: 32,
-                  ),
-                ]),
-                SizedBox(height: 10),
-                Text(
-                  widget.model.priceBLKM ?? '',
-                  style: TextStyle(
-                    fontSize: FONT_EX_MIDDLE,
-                    color: Colors.lightBlue,
-                  ),
-                  textAlign: TextAlign.left,
-                )
-              ]),
-        ),
-      ),
-      Container(
-        width: MediaQuery.of(context).size.width,
-        color: Colors.green.shade50,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment:
-            MainAxisAlignment.start,
-            crossAxisAlignment:
-            CrossAxisAlignment.start,
-            children: [
-              Row(children: [
-                Text(
-                  'Giá khuyến mãi đại lý :  ',
-                  style: TextStyle(
-                      fontSize: FONT_EX_LARGE,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ),
-                Image.asset(
-                  ICONS_ASSETS + 'hot_deal1.png',
-                  width: 32,
-                  height: 32,
-                ),
-              ]),
-              SizedBox(height: 5),
-              Text(
-                widget.model.priceDLKM ?? 'Chưa có giá',
-                style: TextStyle(
-                  fontSize: FONT_EX_MIDDLE,
-                  color: Colors.green,
-                ),
-                textAlign: TextAlign.left,
-              )
-            ],
-          ),
-        ),
-      ),
-    ]);
-  }
 
-  Widget viewDaiLy(){
+  Widget viewBanLe() {
     return Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
@@ -379,11 +179,10 @@ return Column(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Giá bán lẽ: ',
+                        'Giá nhập: ',
                         softWrap: true,
                         style: TextStyle(
                             fontSize: FONT_EX_LARGE,
@@ -393,7 +192,97 @@ return Column(
                       ),
                       SizedBox(height: 10),
                       Text(
-                        widget.model.salePrice ?? '',
+                        widget.model.price ?? 'Chưa có giá',
+                        style: TextStyle(
+                          fontSize: FONT_EX_MIDDLE,
+                          color: Colors.orange,
+                        ),
+                        textAlign: TextAlign.left,
+                      )
+                    ]),
+              )),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.lightBlue.shade50,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Giá bán lẽ:  ',
+                      style: TextStyle(
+                          fontSize: FONT_EX_LARGE,
+                          color: Colors.lightBlue,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      widget.model.salePrice ?? 'Chưa có giá',
+                      style: TextStyle(
+                        fontSize: FONT_EX_MIDDLE,
+                        color: Colors.lightBlue,
+                      ),
+                      textAlign: TextAlign.left,
+                    )
+                  ]),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.green.shade50,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(children: [
+                    Text(
+                      'Giá bán đại lý:  ',
+                      style: TextStyle(
+                          fontSize: FONT_EX_LARGE,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                  ]),
+                  SizedBox(height: 10),
+                  Text(
+                    widget.model.priceDL ?? 'Chưa có giá',
+                    style: TextStyle(
+                      fontSize: FONT_EX_MIDDLE,
+                      color: Colors.green,
+                    ),
+                    textAlign: TextAlign.left,
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.orange.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Giá nhập khuyến mãi:  ',
+                        softWrap: true,
+                        style: TextStyle(
+                            fontSize: FONT_EX_LARGE,
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.left,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        widget.model.priceNHAPKM ?? 'Chưa có giá',
                         style: TextStyle(
                           fontSize: FONT_EX_MIDDLE,
                           color: Colors.orange,
@@ -428,7 +317,7 @@ return Column(
                     ]),
                     SizedBox(height: 10),
                     Text(
-                      widget.model.priceBLKM ?? '',
+                      widget.model.priceBLKM ?? 'Chưa có giá',
                       style: TextStyle(
                         fontSize: FONT_EX_MIDDLE,
                         color: Colors.lightBlue,
@@ -444,14 +333,122 @@ return Column(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                mainAxisAlignment:
-                MainAxisAlignment.start,
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
                     Text(
-                        'Giá bán đại lý:  ',
+                      'Giá khuyến mãi đại lý :  ',
+                      style: TextStyle(
+                          fontSize: FONT_EX_LARGE,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                    Image.asset(
+                      ICONS_ASSETS + 'hot_deal1.png',
+                      width: 32,
+                      height: 32,
+                    ),
+                  ]),
+                  SizedBox(height: 5),
+                  Text(
+                    widget.model.priceDLKM ?? 'Chưa có giá',
+                    style: TextStyle(
+                      fontSize: FONT_EX_MIDDLE,
+                      color: Colors.green,
+                    ),
+                    textAlign: TextAlign.left,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ]);
+  }
+
+  Widget viewDaiLy() {
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.orange.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Giá bán lẽ: ',
+                        softWrap: true,
+                        style: TextStyle(
+                            fontSize: FONT_EX_LARGE,
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.left,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        widget.model.salePrice ?? 'Chưa có giá',
+                        style: TextStyle(
+                          fontSize: FONT_EX_MIDDLE,
+                          color: Colors.orange,
+                        ),
+                        textAlign: TextAlign.left,
+                      )
+                    ]),
+              )),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.lightBlue.shade50,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      Text(
+                        'Giá khuyến mãi bán lẽ:  ',
+                        style: TextStyle(
+                            fontSize: FONT_EX_LARGE,
+                            color: Colors.lightBlue,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.left,
+                      ),
+                      Image.asset(
+                        ICONS_ASSETS + 'hot_deal1.png',
+                        width: 32,
+                        height: 32,
+                      ),
+                    ]),
+                    SizedBox(height: 10),
+                    Text(
+                      widget.model.priceBLKM ?? 'Chưa có giá',
+                      style: TextStyle(
+                        fontSize: FONT_EX_MIDDLE,
+                        color: Colors.lightBlue,
+                      ),
+                      textAlign: TextAlign.left,
+                    )
+                  ]),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.green.shade50,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(children: [
+                    Text(
+                      'Giá bán đại lý:  ',
                       style: TextStyle(
                           fontSize: FONT_EX_LARGE,
                           color: Colors.green,
@@ -478,10 +475,8 @@ return Column(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
-                mainAxisAlignment:
-                MainAxisAlignment.start,
-                crossAxisAlignment:
-                CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
                     Text(
@@ -511,7 +506,6 @@ return Column(
               ),
             ),
           ),
-
         ]);
   }
 }
