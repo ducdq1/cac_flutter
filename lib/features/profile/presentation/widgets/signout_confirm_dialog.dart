@@ -110,8 +110,10 @@ class _SignOutConfirmDialogState extends State<SignOutConfirmDialog>
                       //     .add(SignInClearEvent());
                       try{
                         final pref = singleton<SharedPreferences>();
-                        await FirebaseMessaging().unsubscribeFromTopic(pref.getString('userName'));
-                        await FirebaseMessaging().unsubscribeFromTopic(pref.getString('create'));
+                        if(pref.getString('userName') !=null){
+                          await FirebaseMessaging().unsubscribeFromTopic(pref.getString('userName'));
+                          await FirebaseMessaging().unsubscribeFromTopic(pref.getString('create'));
+                        }
                       }catch(e){
 
                       }
