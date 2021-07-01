@@ -114,7 +114,7 @@ class _MyAppState extends State<MyApp> {
     if(loginTime != null){
       int now =  DateTime.now().millisecondsSinceEpoch;
       if(now - loginTime> (1000 * 7 * 24 * 60 * 60) ){
-        token = null;
+        //token = null;
       }
     }
     return MultiBlocProvider(

@@ -12,6 +12,15 @@ import 'package:citizen_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:citizen_app/core/functions/trans.dart';
+import 'package:citizen_app/core/resources/colors.dart';
+import 'package:citizen_app/core/resources/font_sizes.dart';
+import 'package:citizen_app/core/resources/resources.dart';
+import 'package:flutter/material.dart';
+import 'package:citizen_app/core/functions/handle_time.dart';
+import 'package:citizen_app/features/paht/data/models/paht_model.dart';
+
+import 'package:citizen_app/features/paht/data/models/product_model.dart';
 
 class SearchArgument {
   final bool isSaled;
@@ -51,6 +60,7 @@ class _PahtSearchState extends State<PahtSearch>
       isSaled = args.isSaled;
       isApproveAble = args.isApproveAble;
     }
+
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());

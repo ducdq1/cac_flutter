@@ -45,6 +45,7 @@ class _ProductSearchState extends State<ProductSearch>
   bool isApproveAble = false;
   bool fromCategory = false;
   int type = null;
+  bool isAgent = false;
   @override
   void initState() {
     super.initState();
@@ -60,14 +61,15 @@ class _ProductSearchState extends State<ProductSearch>
       fromCategory = args.fromCategoryPage;
       type = args.type;
     }
-
+    int userType = pref.getInt('userType');
+    isAgent = userType == 4 ? true : false ;
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: BlocProvider<PublicPahtBloc>(
             create: (context) => singleton<PublicPahtBloc>()
-              ..add(ListProductFetchingEvent(offset: 0, limit: 10,type: type)),
+              ..add(ListProductFetchingEvent(offset: 0, limit: 10,type: type,isAgent: isAgent)),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                 listener: (context, state) {
               if (state is PublicPahtFailure) {
@@ -89,7 +91,7 @@ class _ProductSearchState extends State<ProductSearch>
                                 search: searchController.text.trim(),
                                 offset: 0,
                                 limit: 10,
-                            type: type));
+                            type: type, isAgent: isAgent));
                       }
                       if (value.isNotEmpty) {
                         setState(() {
@@ -103,7 +105,7 @@ class _ProductSearchState extends State<ProductSearch>
                               search: searchController.text.trim(),
                               offset: 0,
                               limit: 10,
-                              type: type));
+                              type: type, isAgent: isAgent));
                     },
                     isSearch: isSearch,
                     isShowClearSearch: isShowClearSearch,
@@ -139,7 +141,7 @@ class _ProductSearchState extends State<ProductSearch>
                                       search: searchController.text.trim(),
                                       offset: 0,
                                       limit: 10,
-                                      type: type),
+                                      type: type, isAgent: isAgent),
                                 );
                               })
                           : SkeletonPahtWidget());

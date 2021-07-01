@@ -15,13 +15,13 @@ Future showViewPriceDialog({
 }) async {
   return await showDialog(
     context: context,
-    builder: (_) => ViewPriceDialog(
-      icon: icon,
-      giaNhap: giaNhap,
-      onSubmit: onSubmit,
-      giaBan: giaBan,
-      ngayCapNhat: ngayCapNhat,
-      model: model,
+    builder: (_) =>  ViewPriceDialog(
+        icon: icon,
+        giaNhap: giaNhap,
+        onSubmit: onSubmit,
+        giaBan: giaBan,
+        ngayCapNhat: ngayCapNhat,
+        model: model,
     ),
   );
 }

@@ -56,7 +56,9 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
                 productCode: event.search,
                 limit: 500,
                 offset: 0,
-                type: event.type
+                type: event.type,
+              isAgent: event.isAgent
+
             ));
         yield SearchProductSuccess(
             lstProduct: listPublicPaht.lstProduct,
