@@ -188,8 +188,8 @@ class _MyAppState extends State<MyApp> {
         initialRoute: (token != null && !token.isEmpty)
             ? isCustomer
                 ? ROUTER_CUS_HOME_PAGE
-                : ROUTER_HOME
-            : ROUTER_SIGNIN,
+                : ROUTER_CUS_HOME_PAGE : ROUTER_CUS_HOME_PAGE,
+            //: ROUTER_SIGNIN,
         // ROUTER_CUS_HOME_PAGE,
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),
