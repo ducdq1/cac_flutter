@@ -33,6 +33,7 @@ import 'package:citizen_app/features/profile/presentation/pages/update_profile_p
 import 'package:citizen_app/features/profile/presentation/pages/view_info_page.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:citizen_app/simple_bloc_observer.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -62,7 +63,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp();
   Bloc.observer = SimpleBlocObserver();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: PRIMARY_COLOR,
@@ -71,8 +72,8 @@ void main() async {
   final pref = singleton<SharedPreferences>();
   WidgetsFlutterBinding.ensureInitialized();
   //if(pref.get('token') == null || pref.get('token').toString().isEmpty || pref.get("useProxy") == true) {
-  //   HttpProxy httpProxy = await HttpProxy.createHttpProxy("10.61.11.42", "3128");
-  //   HttpOverrides.global = httpProxy;
+    HttpProxy httpProxy = await HttpProxy.createHttpProxy("10.61.11.42", "3128");
+    HttpOverrides.global = httpProxy;
   //   pref.setBool("useProxy", true);
 //  }
   runApp(MyApp());
@@ -108,7 +109,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     String token = pref.get('userName');
-    bool isCustomer = pref.get('isCustomer');
+    bool isCustomer = pref.get('isCustomer') ?? false;
     //token ='hard code';
     int loginTime = pref.get('loginTime');
     if (loginTime != null) {
@@ -188,7 +189,7 @@ class _MyAppState extends State<MyApp> {
         initialRoute: (token != null && !token.isEmpty)
             ? isCustomer
                 ? ROUTER_CUS_HOME_PAGE
-                : ROUTER_CUS_HOME_PAGE : ROUTER_CUS_HOME_PAGE,
+                : ROUTER_HOME : ROUTER_SIGNIN,
             //: ROUTER_SIGNIN,
         // ROUTER_CUS_HOME_PAGE,
         routes: {

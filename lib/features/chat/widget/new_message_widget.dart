@@ -1,12 +1,14 @@
+import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class NewMessageWidget extends StatefulWidget {
   final String idUser;
-
+  final myUser;
   const NewMessageWidget({
     @required this.idUser,
+    this.myUser,
     Key key,
   }) : super(key: key);
 
@@ -20,9 +22,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
 
   void sendMessage() async {
     FocusScope.of(context).unfocus();
-
-    await FirebaseApi.uploadMessage(widget.idUser, message);
-
+    await FirebaseApi.uploadMessage(widget.idUser, message,widget.myUser);
     _controller.clear();
   }
 
@@ -41,7 +41,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.grey[100],
-                  labelText: 'Type your message',
+                  labelText: 'Nhập tin nhắn',
                   border: OutlineInputBorder(
                     borderSide: BorderSide(width: 0),
                     gapPadding: 10,
@@ -60,7 +60,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.blue,
+                  color: PRIMARY_COLOR,
                 ),
                 child: Icon(Icons.send, color: Colors.white),
               ),

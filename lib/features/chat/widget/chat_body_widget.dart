@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/page/chat_page.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +40,26 @@ class ChatBodyWidget extends StatelessWidget {
                   builder: (context) => ChatPage(user: user),
                 ));
               },
-              leading: CircleAvatar(
-                radius: 25,
-                backgroundImage: NetworkImage(user.urlAvatar),
+              leading: ClipOval(
+                child: Container(
+                  width: 45.0,
+                  height: 45.0,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: user.urlAvatar,
+                    placeholder: (context, url) =>
+                        new CircularProgressIndicator(strokeWidth: 2.0),
+                    height: 15,
+                    width: 15,
+                    errorWidget: (context, url, error) => Image.asset(
+                      ICONS_ASSETS + 'default-avatar.png',
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                ),
               ),
-              title: Text(user.name ),
+              title: Text(user.name),
             ),
           );
         },

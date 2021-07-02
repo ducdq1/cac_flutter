@@ -4,6 +4,7 @@ import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
+import 'package:citizen_app/features/chat/page/chats_page.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
 import 'package:citizen_app/features/profile/presentation/pages/change_password_page.dart';
 import 'package:citizen_app/features/profile/presentation/pages/settings_page.dart';
@@ -122,6 +123,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 50),
                 ],
               )),
+              OptionItemWidget(
+                icon: 'icon_info.png',
+                label: 'Nhắn tin',
+                // route: ROUTER_INFO_PAGE,
+                page: ChatsPage(),
+              ),
               isCustomer
                   ? SizedBox()
                   : OptionItemWidget(

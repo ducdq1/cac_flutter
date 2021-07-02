@@ -1,40 +1,56 @@
+import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:flutter/material.dart';
 
 class ProfileHeaderWidget extends StatelessWidget {
   final String name;
+  final User user;
 
   const ProfileHeaderWidget({
     @required this.name,
+    this.user,
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Container(
         height: 80,
-        padding: EdgeInsets.all(16).copyWith(left: 0),
+        padding: EdgeInsets.all(10).copyWith(left: 0),
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 BackButton(color: Colors.white),
                 Expanded(
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                  child: Column(mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                    Text(
+                      user.phone,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        //fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ]),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     buildIcon(Icons.call),
-                    SizedBox(width: 12),
-                    buildIcon(Icons.videocam),
+                    //SizedBox(width: 12),
+                    //buildIcon(Icons.videocam),
                   ],
                 ),
                 SizedBox(width: 4),

@@ -1,5 +1,10 @@
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/strings.dart';
+import 'package:citizen_app/features/chat/api/firebase_api.dart';
+import 'package:citizen_app/features/chat/data.dart';
+import 'package:citizen_app/features/chat/model/user.dart';
+import 'package:citizen_app/features/chat/page/chat_page.dart';
+import 'package:citizen_app/features/chat/page/chats_page.dart';
 import 'package:citizen_app/features/common/blocs/blocs.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
@@ -31,12 +36,16 @@ class _IndexpageState extends State<Indexpage> {
   int indexTab = 0;
   final ScrollController _scrollController = ScrollController();
   final StopScrollController _stopScrollController = StopScrollController();
-int badgeCount =0;
+  int badgeCount =0;
   @override
   void initState() {
-    // BlocProvider.of<PromotionBloc>(context)
-    //     .add(ListPromotionFetching());
+    initFirebaseData();
     super.initState();
+  }
+
+   void initFirebaseData() async {
+    await FirebaseApi.getAdminUser();
+    await FirebaseApi.getMyUser();
   }
 
   void handleRefresh(context, {int indexTab}) {}
@@ -171,7 +180,11 @@ int badgeCount =0;
                                   BottomNavigationState>(
                                 builder: (BuildContext context,
                                     BottomNavigationState state) {
-                                  _scrollController.jumpTo(0);
+                                  try {
+                                    _scrollController.jumpTo(0);
+                                  }catch(e){
+                                    print('---- LOI');
+                                  }
                                   if (state is BottomNavigationInitial || state is FirstTabLoaded) {
                                     print('PromotionPage');
                                     BlocProvider.of<PromotionBloc>(context)
@@ -184,7 +197,7 @@ int badgeCount =0;
                                   }
 
                                   if (state is Tab3Loaded) {
-
+                                    return ChatsPage();
                                   }
 
                                   if (state is Tab4Loaded) {

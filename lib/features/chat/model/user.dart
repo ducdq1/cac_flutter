@@ -9,6 +9,8 @@ class UserField {
 class User {
   final String idUser;
   final String name;
+  final String phone;
+  final String role;
   final String urlAvatar;
   final DateTime lastMessageTime;
 
@@ -16,6 +18,8 @@ class User {
     this.idUser,
     @required this.name,
     @required this.urlAvatar,
+    this.role,
+    this.phone,
     @required this.lastMessageTime,
   });
 
@@ -23,6 +27,8 @@ class User {
     String idUser,
     String name,
     String urlAvatar,
+    String phone,
+    String role,
     String lastMessageTime,
   }) =>
       User(
@@ -30,12 +36,16 @@ class User {
         name: name ?? this.name,
         urlAvatar: urlAvatar ?? this.urlAvatar,
         lastMessageTime: lastMessageTime ?? this.lastMessageTime,
+        role: this.role,
+        phone: this.phone
       );
 
   static User fromJson(Map<String, dynamic> json) => User(
         idUser: json['idUser'],
         name: json['name'],
         urlAvatar: json['urlAvatar'],
+        phone: json['phone'],
+        role: json['role'],
         lastMessageTime: Utils.toDateTime(json['lastMessageTime']),
       );
 
@@ -43,6 +53,8 @@ class User {
         'idUser': idUser,
         'name': name,
         'urlAvatar': urlAvatar,
+        'phone' : phone,
+        'role' : role,
         'lastMessageTime': Utils.fromDateTimeToJson(lastMessageTime),
       };
 }

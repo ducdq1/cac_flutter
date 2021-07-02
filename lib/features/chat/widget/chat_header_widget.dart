@@ -1,6 +1,9 @@
+import 'package:citizen_app/core/resources/strings.dart';
+import 'package:citizen_app/features/authentication/signin/presentation/signin_page.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/page/chat_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ChatHeaderWidget extends StatelessWidget {
   final List<User> users;
@@ -12,24 +15,36 @@ class ChatHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.75,
-              child: Text(
-                'ChatsApp',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+            Row(children: [
+              IconButton(
+                icon: SvgPicture.asset(
+                  SVG_ASSETS_PATH + 'icon_arrow_back.svg',
+                  width: SIZE_ARROW_BACK_ICON,
+                  height: SIZE_ARROW_BACK_ICON,
                 ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-            ),
-            SizedBox(height: 12),
-            Container(
+              Container(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: Text(
+                  'Nhắn tin',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ]),
+            //SizedBox(height: 12),
+            1==1? SizedBox() : Container(
               height: 60,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
