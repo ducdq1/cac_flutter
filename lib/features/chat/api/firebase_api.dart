@@ -27,7 +27,9 @@ class FirebaseApi {
       }
     }
     return User(
-        idUser: firebaseAdminUserId, name: firebaseAdminUserName, urlAvatar: firebaseAdminUserAvatar);
+        idUser: firebaseAdminUserId,
+        name: firebaseAdminUserName,
+        urlAvatar: firebaseAdminUserAvatar);
   }
 
   static Future<User> getUserByPhone(String phone) async {
@@ -46,7 +48,7 @@ class FirebaseApi {
 
   static Future<User> getMyUser() async {
     bool isCustomer = await pref.getBool('isCustomer');
-
+    print('get MY USER');
     if (!isCustomer) {
       return getAdminUser();
     }
@@ -54,18 +56,20 @@ class FirebaseApi {
     String idUser = pref.getString('myFirebaseUserId');
     String name = pref.getString('myFirebaseUserFullName');
     String avartar = pref.getString('myFirebaseUserAvatar');
-
     if (idUser == null) {
       String phone = pref.getString('userName');
       User myUser = await FirebaseApi.getUserByPhone(phone);
+      print('get MY USER ' + (myUser!=null ? myUser.name : 'NULLLLLL'));
+      if (myUser == null) {
+        String fullName = pref.getString('fullName');
+        String avartarPath = pref.getString('avartarPath');
 
-      String fullName = pref.getString('fullName');
-      String avartarPath = pref.getString('avartarPath');
-      await FirebaseApi.createUser(User(
-          phone: phone,
-          name: fullName,
-          urlAvatar: avartarPath != null ? '$baseUrl' + avartarPath : ''));
-      myUser = await FirebaseApi.getUserByPhone(phone);
+        await FirebaseApi.createUser(User(role: 'user',
+            phone: phone,
+            name: fullName,
+            urlAvatar: avartarPath != null ? '$baseUrl' + avartarPath : ''));
+        myUser = await FirebaseApi.getUserByPhone(phone);
+      }
       await pref.setString('myFirebaseUserId', myUser.idUser);
       await pref.setString('myFirebaseUserFullName', myUser.name);
       await pref.setString('myFirebaseUserAvatar', myUser.urlAvatar);
@@ -76,12 +80,12 @@ class FirebaseApi {
   }
 
   static Future<String> getMyUserId() async {
-    String myId =  pref.getString('myFirebaseUserId');
+    String myId = pref.getString('myFirebaseUserId');
     if (myId == null) {
-      String phone =  pref.getString('userName');
-      String fullName =  pref.getString('fullName');
+      String phone = pref.getString('userName');
+      String fullName = pref.getString('fullName');
       User myUser = await getUserByPhone(phone);
-      String avartarPath =  pref.getString('avartarPath');
+      String avartarPath = pref.getString('avartarPath');
       if (myUser == null) {
         await FirebaseApi.createUser(User(
             role: 'user',

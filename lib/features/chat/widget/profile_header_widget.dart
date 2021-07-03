@@ -1,3 +1,4 @@
+import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class ProfileHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         height: 80,
+        color: PRIMARY_COLOR,
         padding: EdgeInsets.all(10).copyWith(left: 0),
         child: Column(
           children: [

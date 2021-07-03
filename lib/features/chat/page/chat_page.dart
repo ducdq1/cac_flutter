@@ -36,7 +36,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         extendBodyBehindAppBar: true,
-        backgroundColor: PRIMARY_COLOR,
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Column(
             children: [
@@ -59,9 +59,9 @@ class _ChatPageState extends State<ChatPage> {
                     builder: (_, snap) {
                       if (snap.hasData) {
                         return MessagesWidget(
-                            idUser: widget.user.idUser,
+                            chatsId: widget.user.idUser,
                             toUser: widget.user,
-                            myUserId: snap.data.idUser);
+                            fromUser: myUser);
                       } else {
                         return  Center(child: CircularProgressIndicator());
                       }

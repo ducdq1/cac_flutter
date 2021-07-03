@@ -3,7 +3,7 @@ import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:citizen_app/features/chat/data.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
-import 'package:citizen_app/features/chat/page/chat_page.dart';
+import 'package:citizen_app/features/chat/page/my_chat_page.dart';
 import 'package:citizen_app/features/chat/page/chats_page.dart';
 import 'package:citizen_app/features/common/blocs/blocs.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
@@ -155,6 +155,7 @@ class _IndexpageState extends State<Indexpage> {
             body: Stack(children: [
               SingleChildScrollView(
                 controller: _scrollController,
+                physics:   AlwaysScrollableScrollPhysics(),
                 child: Stack(
                   children: [
                     Container(
@@ -197,7 +198,7 @@ class _IndexpageState extends State<Indexpage> {
                                   }
 
                                   if (state is Tab3Loaded) {
-                                    return ChatsPage();
+                                    return MyChatPage();
                                   }
 
                                   if (state is Tab4Loaded) {

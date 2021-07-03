@@ -7,19 +7,19 @@ import 'package:flutter/material.dart';
 import '../data.dart';
 
 class MessagesWidget extends StatelessWidget {
-  final String idUser;
+  final String chatsId;
   final User toUser;
-  final String myUserId;
+  final User fromUser;
   const MessagesWidget({
-    @required this.idUser,
+    @required this.chatsId,
     this.toUser,
-    this.myUserId,
+    this.fromUser,
     Key key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => StreamBuilder<List<Message>>(
-        stream: FirebaseApi.getMessages(idUser),
+        stream: FirebaseApi.getMessages(chatsId),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -35,12 +35,13 @@ class MessagesWidget extends StatelessWidget {
                     : ListView.builder(
                         physics: BouncingScrollPhysics(),
                         reverse: true,
+                        shrinkWrap: true,
                         itemCount: messages.length,
                         itemBuilder: (context, index) {
                           final message = messages[index];
                           return MessageWidget(
                             message: message,
-                            isMe: message.idUser == myUserId,
+                            isMe: message.idUser == fromUser.idUser,
                             toUser: toUser,
                           );
                         },
