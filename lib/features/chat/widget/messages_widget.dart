@@ -43,6 +43,7 @@ class MessagesWidget extends StatelessWidget {
                             message: message,
                             isMe: message.idUser == fromUser.idUser,
                             toUser: toUser,
+                            isLastMessage: isLastMessage(messages, index ),
                           );
                         },
                       );
@@ -51,6 +52,17 @@ class MessagesWidget extends StatelessWidget {
         },
       );
 
+  bool isLastMessage(List<Message> messages,int index){
+    int indexOf = -1;
+    for(int i =messages.length -1 ; i >=0;i--){
+      if(messages[i].idUser == toUser.idUser){
+        indexOf = i;
+        break;
+      }
+    }
+    return index == indexOf;
+
+  }
   Widget buildText(String text) => Center(
         child: Text(
           text,

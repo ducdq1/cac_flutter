@@ -9,9 +9,9 @@ class MessageWidget extends StatelessWidget {
   final Message message;
   final bool isMe;
   final User toUser;
-
+  final bool isLastMessage;
   const MessageWidget(
-      {@required this.message, @required this.isMe, this.toUser});
+      {@required this.message, @required this.isMe, this.toUser,this.isLastMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class MessageWidget extends StatelessWidget {
             ),
           ],
         ),
-        !isMe
+        (!isMe && isLastMessage)
             ? Padding(
               padding: const EdgeInsets.only(left: 30),
               child: Text(
