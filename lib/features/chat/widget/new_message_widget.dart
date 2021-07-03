@@ -1,13 +1,15 @@
 import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/core/resources/font_sizes.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
+import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:math' as math;
 
 class NewMessageWidget extends StatefulWidget {
   final String idUser;
-  final myUser;
+  final User myUser;
 
   const NewMessageWidget({
     @required this.idUser,
@@ -19,18 +21,29 @@ class NewMessageWidget extends StatefulWidget {
   _NewMessageWidgetState createState() => _NewMessageWidgetState();
 }
 
-class _NewMessageWidgetState extends State<NewMessageWidget> {
+class _NewMessageWidgetState extends State<NewMessageWidget>
+    with TickerProviderStateMixin {
   final _controller = TextEditingController();
   String message = '';
+  var controller;
 
   void sendMessage() async {
     print('sendMessage');
     FocusScope.of(context).unfocus();
-    if(!_controller.text.isEmpty) {
+    if (!_controller.text.isEmpty) {
       await FirebaseApi.uploadMessage(
           widget.idUser, _controller.text.trim(), widget.myUser);
       _controller.clear();
+      await FirebaseApi.sendNotification(
+          widget.idUser, widget.myUser.name, widget.myUser);
     }
+  }
+
+  @override
+  void initState() {
+    //controller = AnimationController(vsync: this,duration: Duration(milliseconds: 500));
+    super.initState();
+
   }
 
   @override
@@ -99,17 +112,22 @@ class _NewMessageWidgetState extends State<NewMessageWidget> {
             // ),
             SizedBox(width: 10),
             InkWell(
-              onTap:  sendMessage,
+              onTap: sendMessage,
               child: Container(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.blue,
                 ),
-                child: Icon(
-                  Icons.send,
-                  color: Colors.white,
-                  size: 18,
+                child: Transform.rotate(
+                  angle: 325 * math.pi / 180,
+                  child:  Icon(
+                      Icons.send,
+                      // icon: AnimatedIcons.arrow_menu,
+                      // progress: controller,
+                      color: Colors.white,
+                      size: 20,
+                  ),
                 ),
               ),
             ),

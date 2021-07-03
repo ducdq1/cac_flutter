@@ -28,8 +28,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<User> initFirebaseData() async {
+    print('----------------1');
     myUser = await FirebaseApi.getMyUser();
-    print('-------------------- '+myUser.idUser +":  " + myUser.name);
     return myUser;
   }
 
@@ -38,50 +38,40 @@ class _ChatPageState extends State<ChatPage> {
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Column(
-            children: [
-              ProfileHeaderWidget(
-                name: widget.user.name,
-                user: widget.user,
-              ),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                    ),
-                  ),
-                  child: FutureBuilder<User>(
-                    future: initFirebaseData(),
-                    builder: (_, snap) {
-                      if (snap.hasData) {
-                        return MessagesWidget(
-                            chatsId: widget.user.idUser,
-                            toUser: widget.user,
-                            fromUser: myUser);
-                      } else {
-                        return  Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  ),
-                ),
-              ),
-              FutureBuilder<User>(
-                future: initFirebaseData(),
-                builder: (_, snap) {
-                  if (snap.hasData) {
-                    return NewMessageWidget(idUser: widget.user.idUser, myUser: snap.data);
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                },
-              ),
-
-            ],
-          ),
+          child: FutureBuilder<User>(
+              future: initFirebaseData(),
+              builder: (context, snap) {
+                if (snap.hasData) {
+                  return Column(
+                    children: [
+                      ProfileHeaderWidget(
+                        name: widget.user.name,
+                        user: widget.user,
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25),
+                              topRight: Radius.circular(25),
+                            ),
+                          ),
+                          child: MessagesWidget(
+                              chatsId: widget.user.idUser,
+                              toUser: widget.user,
+                              fromUser: myUser),
+                        ),
+                      ),
+                      NewMessageWidget(
+                          idUser: widget.user.idUser, myUser: myUser),
+                    ],
+                  );
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
         ),
       );
 }

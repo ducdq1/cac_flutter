@@ -10,8 +10,12 @@ class MessageWidget extends StatelessWidget {
   final bool isMe;
   final User toUser;
   final bool isLastMessage;
+
   const MessageWidget(
-      {@required this.message, @required this.isMe, this.toUser,this.isLastMessage});
+      {@required this.message,
+      @required this.isMe,
+      this.toUser,
+      this.isLastMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +51,7 @@ class MessageWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                             imageUrl: toUser.urlAvatar,
                             placeholder: (context, url) =>
-                                new CircularProgressIndicator(
-                                    strokeWidth: 2.0),
+                                new CircularProgressIndicator(strokeWidth: 2.0),
                             height: 24,
                             width: 24,
                             errorWidget: (context, url, error) => Image.asset(
@@ -64,11 +67,10 @@ class MessageWidget extends StatelessWidget {
                 : SizedBox(),
             Container(
               padding: EdgeInsets.all(10),
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.all(10),
               constraints: BoxConstraints(maxWidth: 500),
               decoration: BoxDecoration(
-                color:
-                    isMe ? Colors.grey[100] : Theme.of(context).accentColor,
+                color: isMe ? Colors.grey[100] : Theme.of(context).accentColor,
                 borderRadius: isMe
                     ? borderRadius
                         .subtract(BorderRadius.only(bottomRight: radius))
@@ -81,12 +83,12 @@ class MessageWidget extends StatelessWidget {
         ),
         (!isMe && isLastMessage)
             ? Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: Text(
+                padding: const EdgeInsets.only(left: 40),
+                child: Text(
                   handleTime(message.createdAt.toString()),
-                  style: TextStyle(color: Colors.grey,fontSize: 11),
+                  style: TextStyle(color: Colors.grey, fontSize: 13,fontStyle: FontStyle.italic),
                 ),
-            )
+              )
             : SizedBox(),
       ],
     );
@@ -99,7 +101,7 @@ class MessageWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             message.message,
-            style: TextStyle(color: isMe ? Colors.black : Colors.white),
+            style: TextStyle(color: isMe ? Colors.black : Colors.white,fontSize: 16),
             textAlign: isMe ? TextAlign.end : TextAlign.start,
           ),
         ],

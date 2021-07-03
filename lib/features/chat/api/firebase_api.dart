@@ -1,12 +1,55 @@
+import 'dart:convert';
+
 import 'package:citizen_app/core/resources/api.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:citizen_app/features/chat/data.dart';
 import 'package:citizen_app/features/chat/model/message.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
+import 'package:citizen_app/injection_container.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 
 import '../utils.dart';
 
 class FirebaseApi {
+
+  static Future<void> sendNotification(String to,String title,String message) async{
+     http.Client client = singleton();
+     try {
+       var url = 'https://fcm.googleapis.com/fcm/send';
+       var header = {
+         "Content-Type": "application/json",
+         "Authorization": "key=AAAAqfPZ1sQ:APA91bECNLIxhv2ZFNpVrNA_x33P7bK1el3jQBe3KbImmFjFxwRcM9vCsL7x6pf4Xx4rU0Nhi549sIAvsAtDS5ozHQRcZwlbT-nP-mCU1-vQbgihMXFydGMJxoLzzlGkPxotL3bm1nbY",
+         "Accept-Encoding": "UTF-8"
+       };
+       // String url = "https://fcm.googleapis.com/fcm/send";
+       // HttpPost request = new HttpPost(url);
+       // request.setHeader("Authorization",
+       //     "key=AAAAqfPZ1sQ:APA91bECNLIxhv2ZFNpVrNA_x33P7bK1el3jQBe3KbImmFjFxwRcM9vCsL7x6pf4Xx4rU0Nhi549sIAvsAtDS5ozHQRcZwlbT-nP-mCU1-vQbgihMXFydGMJxoLzzlGkPxotL3bm1nbY");
+       // request.setHeader("Content-type", "application/json");
+       // request.setHeader("Accept-Encoding", "UTF-8");
+
+       var request = {
+         "notification": {
+           "title": 'Có tin nhắn từ ' + title,
+           "text": message,
+           "sound": "default",
+           "color": "#990000",
+         },
+         "priority": "high",
+         "to": "/topics/" + to,
+       };
+
+     //  var client = new Client();
+       print('----> send noitify to '+to);
+       var response =
+           await client.post(url, headers: header, body: json.encode(request));
+       print('----> response '+response.body.toString());
+       return true;
+     } catch (e, s) {
+       print(e);
+       return false;
+     }
+  }
+
   static Future<User> getAdminUser() async {
     String firebaseAdminUserId = pref.getString('firebaseAdminUserId');
     String firebaseAdminUserName = pref.getString('firebaseAdminUserName');
@@ -48,7 +91,6 @@ class FirebaseApi {
 
   static Future<User> getMyUser() async {
     bool isCustomer = await pref.getBool('isCustomer');
-    print('get MY USER');
     if (!isCustomer) {
       return getAdminUser();
     }
@@ -59,7 +101,6 @@ class FirebaseApi {
     if (idUser == null) {
       String phone = pref.getString('userName');
       User myUser = await FirebaseApi.getUserByPhone(phone);
-      print('get MY USER ' + (myUser!=null ? myUser.name : 'NULLLLLL'));
       if (myUser == null) {
         String fullName = pref.getString('fullName');
         String avartarPath = pref.getString('avartarPath');

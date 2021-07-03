@@ -1,5 +1,27 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+
+import 'package:citizen_app/core/resources/resources.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
+import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
+import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
+import 'package:citizen_app/features/home/presentation/pages/widgets/home_page_builder.dart';
+import 'package:citizen_app/features/home/presentation/pages/widgets/sos_button_widget.dart';
+import 'package:citizen_app/injection_container.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/strings.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:citizen_app/features/chat/data.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
@@ -17,10 +39,14 @@ import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widg
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
 import 'package:citizen_app/features/profile/presentation/pages/view_info_page.dart';
 import 'package:citizen_app/injection_container.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+
+import '../../../../main.dart';
 
 const SIZE_ICON_BOTTOM_BAR = 28.0;
 const SIZE_ICON_FLOATING_BUTTON = 24.0;
@@ -37,10 +63,121 @@ class _IndexpageState extends State<Indexpage> {
   final ScrollController _scrollController = ScrollController();
   final StopScrollController _stopScrollController = StopScrollController();
   int badgeCount =0;
+  var _firebaseMessaging;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+  AndroidInitializationSettings initializationSettingsAndroid;
   @override
   void initState() {
     initFirebaseData();
     super.initState();
+
+    _firebaseMessaging = FirebaseMessaging();
+    initFlutterLocalNotificationsPlugin();
+    String token = _firebaseMessaging.getToken().toString();
+    print('Firebase Device Token:  '  + token);
+    String userName = pref.get('userName');
+    print(userName);
+    var isCustomer = pref.getInt('isCustomer') ?? false;
+    if(isCustomer){
+      _firebaseMessaging.subscribeToTopic('allCustomer');
+    }
+
+    if(userName !=null){
+      _firebaseMessaging.subscribeToTopic(userName);
+    }
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> msg) async {
+        print("onMessage: $msg");
+        var payload = {};
+        if (Platform.isIOS) {
+          payload = {}; //{"orderId": msg["orderId"], "type": msg["type"]};
+          print('ios message');
+          showNotification(
+            title: msg['aps']['alert']['title'],
+            body: msg['aps']['alert']['body'],
+            payload: jsonEncode(payload),
+          );
+        } else {
+          showNotification(
+            title: msg['notification']['title'],
+            body: msg['notification']['body'],
+            payload: jsonEncode(payload),
+          );
+        }
+      },
+      onBackgroundMessage: myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        Navigator.pushNamed(context, ROUTER_CUS_HOME_PAGE);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+          Navigator.pushNamed(context, ROUTER_CUS_HOME_PAGE);
+      },
+    );
+
+  }
+  void initFlutterLocalNotificationsPlugin() async {
+    final token = await _firebaseMessaging.getToken();
+    print('token: ' + token.toString());
+    initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    final IOSInitializationSettings initializationSettingsIOS =
+    IOSInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+      onDidReceiveLocalNotification:
+          (int id, String title, String body, String payload) async {},
+    );
+
+    final InitializationSettings initializationSettings =
+    InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+      // macOS: initializationSettingsMacOS,
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: (String payload) async {
+        //selectNotificationSubject.add(payload);
+      },
+    );
+
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
+  Future<void> showNotification(
+      {String title, String body, String payload}) async {
+    print(title.toString());
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+        'cac_app_id', 'cac_app_channel', 'show notification',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker');
+
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+    if (payload != null) {
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        title,
+        body,
+        platformChannelSpecifics,
+        payload: payload,
+      );
+    }
   }
 
    void initFirebaseData() async {
