@@ -102,21 +102,23 @@ class _SignOutConfirmDialogState extends State<SignOutConfirmDialog>
                   ),
                   RaisedButton(
                     onPressed: () async {
+                      try{
+                        final pref = singleton<SharedPreferences>();
+                        await unsubscribe(pref.getString('userName'));
+                        await unsubscribe(pref.getString('create'));
+                        await unsubscribe(pref.getString('allCustomer'));
+                        await unsubscribe(pref.getString('customer'));
+                      }catch(e){
+                        print('-------------------- Loi day');
+                      }
+
                       showLoaderDialog(context);
                       await Future.delayed(Duration(milliseconds: 200));
                       BlocProvider.of<AuthBloc>(context)
                           .add(UnAuthenticatedEvent());
                       // BlocProvider.of<SignInBloc>(context)
                       //     .add(SignInClearEvent());
-                      try{
-                        final pref = singleton<SharedPreferences>();
-                        if(pref.getString('userName') !=null){
-                          await FirebaseMessaging().unsubscribeFromTopic(pref.getString('userName'));
-                          await FirebaseMessaging().unsubscribeFromTopic(pref.getString('create'));
-                        }
-                      }catch(e){
 
-                      }
 
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           ROUTER_SIGNIN, (Route<dynamic> route) => false);
@@ -144,5 +146,15 @@ class _SignOutConfirmDialogState extends State<SignOutConfirmDialog>
         ),
       ),
     );
+  }
+  Future unsubscribe(String value) async {
+    try{
+      if(value== null){
+        return null;
+      }
+      await FirebaseMessaging().unsubscribeFromTopic(value);
+    }catch(e){
+      print('-------------------- Loi day');
+    }
   }
 }

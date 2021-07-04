@@ -1,6 +1,7 @@
 import 'package:citizen_app/features/customer/data/data_sources/cus_remote_data_source.dart';
 import 'package:citizen_app/features/customer/data/repositories/cus_repository.dart';
 import 'package:citizen_app/features/customer/data/repositories/cus_repository_impl.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
@@ -100,6 +101,8 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
     ),
   );
 
+  /// singleton notificatonbloc dau anh? do khong phai la singleton :D))))
+
   singleton.registerLazySingleton<CusRemoteDataSource>(
         () => CusRemoteDataSourceImpl(
         client: singleton(),
@@ -109,5 +112,10 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
 
   singleton.registerLazySingleton<PahtLocalDataSource>(
     () => PahtLocalDataSourceImpl(sharedPreferences: singleton()),
+  );
+
+  // anh chay lay thu di ok
+  singleton.registerLazySingleton(
+        () => NotificationBloc(),
   );
 }

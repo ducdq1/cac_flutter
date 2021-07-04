@@ -10,6 +10,7 @@ class MessagesWidget extends StatelessWidget {
   final String chatsId;
   final User toUser;
   final User fromUser;
+
   const MessagesWidget({
     @required this.chatsId,
     this.toUser,
@@ -30,36 +31,44 @@ class MessagesWidget extends StatelessWidget {
               } else {
                 final messages = snapshot.data;
 
-                return messages.isEmpty
-                    ? buildText('Bạn chưa có tin nhắn nào với ' + toUser.name +'\n Bắt đầu trò chuyện nào')
-                    : ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        reverse: true,
-                        shrinkWrap: true,
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) {
-                          final message = messages[index];
-                          return MessageWidget(
-                            message: message,
-                            isMe: message.idUser == fromUser.idUser,
-                            toUser: toUser,
-                            isLastMessage: message.idUser == toUser.idUser ? isLastMessage(messages, index ) : false,
-                          );
-                        },
-                      );
+                return GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    child: messages.isEmpty
+                        ? buildText('Bạn chưa có tin nhắn nào với ' +
+                            toUser.name +
+                            '\n Bắt đầu trò chuyện nào')
+                        : ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            reverse: true,
+                            shrinkWrap: true,
+                            itemCount: messages.length,
+                            itemBuilder: (context, index) {
+                              final message = messages[index];
+                              return MessageWidget(
+                                message: message,
+                                isMe: message.idUser == fromUser.idUser,
+                                toUser: toUser,
+                                isLastMessage: message.idUser == toUser.idUser
+                                    ? isLastMessage(messages, index)
+                                    : false,
+                              );
+                            },
+                          ));
               }
           }
         },
       );
 
-  bool isLastMessage(List<Message> messages,int index){
-    if(messages ==null || messages.isEmpty){
+  bool isLastMessage(List<Message> messages, int index) {
+    if (messages == null || messages.isEmpty) {
       return false;
     }
 
     int indexOf = -1;
-    for(int i =  0  ;i< messages.length ; i ++ ){
-      if(messages[i].idUser == toUser.idUser){
+    for (int i = 0; i < messages.length; i++) {
+      if (messages[i].idUser == toUser.idUser) {
         indexOf = i;
         break;
       }
@@ -71,7 +80,7 @@ class MessagesWidget extends StatelessWidget {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16,color: Colors.blue),
+          style: TextStyle(fontSize: 16, color: Colors.blue),
         ),
       );
 }

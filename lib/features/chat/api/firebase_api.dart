@@ -29,17 +29,17 @@ class FirebaseApi {
 
        var request = {
          "notification": {
-           "title": 'Có tin nhắn từ ' + title,
-           "text": message,
+           "title": 'Tin nhắn từ ' + title,
+           "body": message,
            "sound": "default",
-           "color": "#990000",
+           //"color": "#990000",
          },
          "priority": "high",
          "to": "/topics/" + to,
        };
 
      //  var client = new Client();
-       print('----> send noitify to '+to);
+       print('----> send noitify to: '+request.toString());
        var response =
            await client.post(url, headers: header, body: json.encode(request));
        print('----> response '+response.body.toString());
@@ -54,7 +54,7 @@ class FirebaseApi {
     String firebaseAdminUserId = pref.getString('firebaseAdminUserId');
     String firebaseAdminUserName = pref.getString('firebaseAdminUserName');
     String firebaseAdminUserAvatar = pref.getString('firebaseAdminUserAvatar');
-    if (firebaseAdminUserId == null) {
+   // if (firebaseAdminUserId == null) {
       QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where("role", isEqualTo: 'admin')
@@ -68,7 +68,7 @@ class FirebaseApi {
         await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
         return user;
       }
-    }
+    //}
     return User(
         idUser: firebaseAdminUserId,
         name: firebaseAdminUserName,
@@ -153,7 +153,7 @@ class FirebaseApi {
       .transform(Utils.transformer(User.fromJson));
 
   static Future uploadMessage(
-      String idUser, String message, User myUser) async {
+      String idUser, String message, User myUser,String type) async {
     final refMessages =
         FirebaseFirestore.instance.collection('chats/$idUser/messages');
 
@@ -163,6 +163,7 @@ class FirebaseApi {
       username: myUser.name,
       message: message,
       createdAt: DateTime.now(),
+      type: type
     );
     await refMessages.add(newMessage.toJson());
 
@@ -171,6 +172,8 @@ class FirebaseApi {
         .doc(idUser)
         .update({UserField.lastMessageTime: DateTime.now()});
   }
+
+
 
   static Stream<List<Message>> getMessages(String idUser) =>
       FirebaseFirestore.instance

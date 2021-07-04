@@ -43,11 +43,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/saled_quotation_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/aprove_quotation_widget.dart';
+import 'features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'features/customer/presentation/pages/index_page.dart';
 import 'features/profile/presentation/bloc/change_password_bloc.dart';
 import 'injection_container.dart' as di;
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  print('myBackgroundMessageHandler');
   if (message.containsKey('data')) {
     // Handle data message
     final dynamic data = message['data'];
@@ -109,7 +111,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     String token = pref.get('userName');
-    bool isCustomer = pref.get('isCustomer') ?? false;
+    bool isCustomer = pref.getBool('isCustomer') ?? false;
     //token ='hard code';
     int loginTime = pref.get('loginTime');
     if (loginTime != null) {
@@ -154,6 +156,8 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<DetailedPahtBloc>(
           create: (BuildContext context) => singleton<DetailedPahtBloc>(),
         ),
+        BlocProvider<NotificationBloc>(
+            create: (BuildContext context) =>  singleton<NotificationBloc>()),
       ],
       child: MaterialApp(
         locale: _locale,

@@ -1,38 +1,18 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
 
 import 'package:citizen_app/core/resources/resources.dart';
-import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
-import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
-import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
-import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
-import 'package:citizen_app/features/home/presentation/pages/widgets/home_page_builder.dart';
-import 'package:citizen_app/features/home/presentation/pages/widgets/sos_button_widget.dart';
-import 'package:citizen_app/injection_container.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/strings.dart';
-import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
-import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
-import 'package:citizen_app/features/chat/data.dart';
-import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/page/my_chat_page.dart';
-import 'package:citizen_app/features/chat/page/chats_page.dart';
 import 'package:citizen_app/features/common/blocs/blocs.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
-import 'package:citizen_app/features/customer/presentation/pages/promotions_page.dart';
 import 'package:citizen_app/features/customer/presentation/pages/product_category_page.dart';
+import 'package:citizen_app/features/customer/presentation/pages/promotions_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widget.dart';
@@ -48,6 +28,7 @@ import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../../../main.dart';
 
+import 'package:get_it/get_it.dart';
 const SIZE_ICON_BOTTOM_BAR = 28.0;
 const SIZE_ICON_FLOATING_BUTTON = 24.0;
 const SIZE_ICON_ACTIONS = 20.0;
@@ -62,34 +43,46 @@ class _IndexpageState extends State<Indexpage> {
   int indexTab = 0;
   final ScrollController _scrollController = ScrollController();
   final StopScrollController _stopScrollController = StopScrollController();
-  int badgeCount =0;
+  int badgeCount = 0;
   var _firebaseMessaging;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings initializationSettingsAndroid;
+  // var streamController = StreamController<int>()
+  //   ..sink.add(0); //cho nay sai roi, no return ve void
+  //.add(0);
+
   @override
   void initState() {
+    //badgeCountObject= getBadgeCount(0)
+    badgeCount = 0;
     initFirebaseData();
     super.initState();
+    // _addBadgeCount();
+    // Future.delayed(Duration(milliseconds: 5000), _addBadgeCount);
+    // BlocProvider.of<BottomNavigationBloc>(context)
+    //     .add(NotificationEvent(numBadge: badgeCount ++ ));
+
 
     _firebaseMessaging = FirebaseMessaging();
     initFlutterLocalNotificationsPlugin();
-    String token = _firebaseMessaging.getToken().toString();
-    print('Firebase Device Token:  '  + token);
     String userName = pref.get('userName');
     print(userName);
-    var isCustomer = pref.getInt('isCustomer') ?? false;
-    if(isCustomer){
+    var isCustomer = pref.getBool('isCustomer') ?? false;
+    if (isCustomer) {
       _firebaseMessaging.subscribeToTopic('allCustomer');
     }
 
-    if(userName !=null){
+    if (userName != null) {
       _firebaseMessaging.subscribeToTopic(userName);
     }
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> msg) async {
-        print("onMessage: $msg");
+        print("customer onMessage1: $msg");
+        print('badgeCount ' + badgeCount.toString());
+        badgeCount ++;
+        updateBadgeData(badgeCount);
         var payload = {};
         if (Platform.isIOS) {
           payload = {}; //{"orderId": msg["orderId"], "type": msg["type"]};
@@ -114,17 +107,22 @@ class _IndexpageState extends State<Indexpage> {
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
-          Navigator.pushNamed(context, ROUTER_CUS_HOME_PAGE);
+        Navigator.pushNamed(context, ROUTER_CUS_HOME_PAGE);
       },
     );
-
   }
+
+  void updateBadgeData(int vaue){
+    singleton<NotificationBloc>()
+        .add(NotificationEvent(vaue));
+  }
+
   void initFlutterLocalNotificationsPlugin() async {
     final token = await _firebaseMessaging.getToken();
     print('token: ' + token.toString());
     initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
     final IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings(
+        IOSInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
@@ -133,7 +131,7 @@ class _IndexpageState extends State<Indexpage> {
     );
 
     final InitializationSettings initializationSettings =
-    InitializationSettings(
+        InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
       // macOS: initializationSettingsMacOS,
@@ -148,23 +146,28 @@ class _IndexpageState extends State<Indexpage> {
 
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>()
+            IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+          alert: true,
+          badge: true,
+          sound: true,
+        );
   }
 
   Future<void> showNotification(
       {String title, String body, String payload}) async {
+    var isCustomer = pref.getBool('isCustomer') ?? false;
+    if (!isCustomer) {
+      return;
+    }
+
     print(title.toString());
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-        'cac_app_id', 'cac_app_channel', 'show notification',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker');
+        AndroidNotificationDetails(
+            'cac_app_id', 'cac_app_channel', 'show notification',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
 
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
@@ -180,8 +183,8 @@ class _IndexpageState extends State<Indexpage> {
     }
   }
 
-   void initFirebaseData() async {
-    await FirebaseApi.getAdminUser();
+  void initFirebaseData() async {
+    //await FirebaseApi.getAdminUser();
     await FirebaseApi.getMyUser();
   }
 
@@ -189,10 +192,14 @@ class _IndexpageState extends State<Indexpage> {
 
   @override
   Widget build(BuildContext context) {
+    // lam sao han goi y code anh he?
     return MultiBlocProvider(
       providers: [
         BlocProvider<BottomNavigationBloc>(
-            create: (context) => BottomNavigationBloc()..add(TabStarted())),
+            create: (context) => BottomNavigationBloc()..add(TabStarted(),)),
+        BlocProvider<NotificationBloc>(
+            create: (context) =>
+            singleton<NotificationBloc>()..add(NotificationEvent(0))),
         BlocProvider<PromotionBloc>(
             create: (context) =>
                 singleton<PromotionBloc>()..add(ListPromotionFetching())),
@@ -213,22 +220,28 @@ class _IndexpageState extends State<Indexpage> {
               builder: (BuildContext context, BottomNavigationState state) {
                 return FABBottomAppBarWidget(
                   color: Color(0xff606060),
-                 // backgroundColor: Colors.white,
+                  // backgroundColor: Colors.white,
                   //selectedColor: COLOR_BACKGROUND,
                   // notchedShape: CircularNotchedRectangle(),
                   onTabSelected: (index) {
+
                     BlocProvider.of<BottomNavigationBloc>(context)
                         .add(TabTapped(index: index));
-                    if(indexTab == index){
+                    if (indexTab == index) {
                       return;
                     }
                     setState(() {
                       indexTab = index;
                     });
-                    if(indexTab ==0) {
+                    if (indexTab == 2) {
+                      badgeCount =0;
+                      print('badgeCount ' + badgeCount.toString());
+                      updateBadgeData(badgeCount);
+                    }
+                    if (indexTab == 0) {
                       BlocProvider.of<PromotionBloc>(context)
                           .add(ListPromotionFetching());
-                    }else if(indexTab == 1){
+                    } else if (indexTab == 1) {
                       BlocProvider.of<ProductCategoryBloc>(context)
                           .add(ListProductCategoriesFetching());
                     }
@@ -260,19 +273,18 @@ class _IndexpageState extends State<Indexpage> {
                         ),
                         text: 'Sản phẩm'),
                     FABBottomAppBarItem(
-                      icon: Image.asset(
-                        ICONS_ASSETS + 'ic_message.png',
-                        width: SIZE_ICON_BOTTOM_BAR,
-                        height: SIZE_ICON_BOTTOM_BAR,
-                      ),
-                      iconActive: Image.asset(
-                        ICONS_ASSETS + 'ic_message_active.png',
-                        width: SIZE_ICON_BOTTOM_BAR,
-                        height: SIZE_ICON_BOTTOM_BAR,
-                      ),
-                      text: 'Nhắn tin',
-                        badgeCount: 10
-                    ),
+                        icon: Image.asset(
+                          ICONS_ASSETS + 'ic_message.png',
+                          width: SIZE_ICON_BOTTOM_BAR,
+                          height: SIZE_ICON_BOTTOM_BAR,
+                        ),
+                        iconActive: Image.asset(
+                          ICONS_ASSETS + 'ic_message_active.png',
+                          width: SIZE_ICON_BOTTOM_BAR,
+                          height: SIZE_ICON_BOTTOM_BAR,
+                        ),
+                        text: 'Nhắn tin',
+                        badgeCount: 0),
                     FABBottomAppBarItem(
                         icon: Image.asset(
                           ICONS_ASSETS + 'ic_lienhe.png',
@@ -292,7 +304,7 @@ class _IndexpageState extends State<Indexpage> {
             body: Stack(children: [
               SingleChildScrollView(
                 controller: _scrollController,
-                physics:   AlwaysScrollableScrollPhysics(),
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Stack(
                   children: [
                     Container(
@@ -301,7 +313,8 @@ class _IndexpageState extends State<Indexpage> {
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height - 150),
                       decoration: BoxDecoration(
-                        color: Color(0xffFAFBFF), //Colors.white,// Color(0xffF8F2E3),
+                        color: Color(0xffFAFBFF),
+                        //Colors.white,// Color(0xffF8F2E3),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(24),
                           topRight: Radius.circular(24),
@@ -312,18 +325,18 @@ class _IndexpageState extends State<Indexpage> {
                           Container(
                             //color: Color(0xffFFF1CE),//,
                             child: Padding(
-                              padding: EdgeInsets.only(
-                                  top:  0),
+                              padding: EdgeInsets.only(top: 0),
                               child: BlocBuilder<BottomNavigationBloc,
                                   BottomNavigationState>(
                                 builder: (BuildContext context,
                                     BottomNavigationState state) {
                                   try {
                                     _scrollController.jumpTo(0);
-                                  }catch(e){
+                                  } catch (e) {
                                     print('---- LOI');
                                   }
-                                  if (state is BottomNavigationInitial || state is FirstTabLoaded) {
+                                  if (state is BottomNavigationInitial ||
+                                      state is FirstTabLoaded) {
                                     print('PromotionPage');
                                     BlocProvider.of<PromotionBloc>(context)
                                         .add(ListPromotionFetching());
@@ -381,4 +394,10 @@ class _IndexpageState extends State<Indexpage> {
       ),
     );
   }
+}
+
+class BadgeCount {
+  int value;
+
+  BadgeCount(this.value);
 }

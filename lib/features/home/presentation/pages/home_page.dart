@@ -71,6 +71,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       int userType = pref.getInt('userType');
       if(userType !=null && userType == 3){
         _firebaseMessaging.subscribeToTopic('create');
+        _firebaseMessaging.subscribeToTopic('customer');
       }
       if(userName !=null){
         _firebaseMessaging.subscribeToTopic(userName);
@@ -78,7 +79,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> msg) async {
-        print("onMessage: $msg");
+        print("home_page onMessage: $msg");
         var payload = {};
         if (Platform.isIOS) {
           payload = {}; //{"orderId": msg["orderId"], "type": msg["type"]};
@@ -155,6 +156,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Future<void> showNotification(
       {String title, String body, String payload}) async {
+    var isCustomer = pref.getBool('isCustomer') ?? false;
+    if(isCustomer){
+      return;
+    }
+
     print(title.toString());
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(

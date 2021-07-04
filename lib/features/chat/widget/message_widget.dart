@@ -3,6 +3,8 @@ import 'package:citizen_app/core/functions/functions.dart';
 import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/chat/model/message.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
+
+import 'package:citizen_app/features/customer/presentation/widgets/full_photo.dart';
 import 'package:flutter/material.dart';
 
 class MessageWidget extends StatelessWidget {
@@ -65,6 +67,72 @@ class MessageWidget extends StatelessWidget {
                     ),
                   )
                 : SizedBox(),
+            message.type == '1' ?
+            Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.all(10),
+              child: Container(
+                width: 200.0,
+                height: 200.0,
+                child: InkWell(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    child: Image.network(
+                      message.message,
+                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                          ),
+                          width: 200.0,
+                          height: 200.0,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null &&
+                                  loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, object, stackTrace) {
+                        return Container(
+                          width: 60.0,
+                          child: Image.asset(
+                            IMAGE_ASSETS_PATH + 'icon_none.png',
+                            width: 60.0,
+                            height: 60.0,
+                            //fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                      width: 200.0,
+                      height: 200.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  onTap:  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullPhoto(
+                          url: message.message,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                //borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                //clipBehavior: Clip.hardEdge,
+              ),
+              //margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20.0 : 10.0, right: 10.0),
+            ) :
             Container(
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.all(10),
@@ -103,6 +171,7 @@ class MessageWidget extends StatelessWidget {
             message.message,
             style: TextStyle(color: isMe ? Colors.black : Colors.white,fontSize: 16),
             textAlign: isMe ? TextAlign.end : TextAlign.start,
+            softWrap: true,
           ),
         ],
       );

@@ -65,7 +65,7 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                       ),
                       NewMessageWidget(
-                          idUser: widget.user.idUser, myUser: myUser),
+                          idUser: widget.user.idUser, myUser: myUser,toUser: widget.user),
                     ],
                   );
                 } else {
