@@ -52,7 +52,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
     }
   }
 
-  Future sendNotification(String message) async{
+  Future sendNotification(String message) async {
     String topic;
     var isCustomer = pref.getBool('isCustomer') ?? false;
     if (isCustomer) {
@@ -60,26 +60,21 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
     } else {
       topic = widget.toUser.phone;
     }
-    await FirebaseApi.sendNotification(
-        topic, widget.myUser.name, message);
+    await FirebaseApi.sendNotification(topic, widget.myUser.name, message);
   }
 
   Future uploadFile() async {
     if (imageFile == null) {
       return null;
     }
-    String fileName = DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString();
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     Reference reference = FirebaseStorage.instance.ref().child(fileName);
     UploadTask uploadTask = reference.putFile(imageFile);
 
     try {
       TaskSnapshot snapshot = await uploadTask;
       var imageUrl = await snapshot.ref.getDownloadURL();
-      FirebaseApi.uploadMessage(
-          widget.idUser, imageUrl, widget.myUser, '1');
+      FirebaseApi.uploadMessage(widget.idUser, imageUrl, widget.myUser, '1');
       sendNotification('Hình ảnh');
       setState(() {
         isLoading = false;
@@ -93,8 +88,8 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
   }
 
   Future getImage() async {
-    io.File pickedFile = await ImagePicker.pickImage(
-        source: ImageSource.gallery);
+    io.File pickedFile =
+        await ImagePicker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       imageFile = pickedFile;
       if (imageFile != null) {
@@ -113,8 +108,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Container(
+  Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
           color: Color(0xffF3F6FB),
           borderRadius: BorderRadius.circular(10),
@@ -124,21 +118,25 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
           children: <Widget>[
             InkWell(
               onTap: getImage,
-              child:
-              SvgPicture.asset(
+              child: SvgPicture.asset(
                 SVG_ASSETS_PATH + 'icon_image_pick.svg',
                 color: Colors.blue,
-                height: 28,
-                width: 28,
+                height: 25,
+                width: 25,
               ),
             ),
-              SizedBox(
+            SizedBox(
               width: isLoading ? 10 : 0,
-            ) , isLoading ?   Container(padding: EdgeInsets.all(00),
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 1,))  :
-            SizedBox(),
+            ),
+            isLoading
+                ? Container(
+                    padding: EdgeInsets.all(00),
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                    ))
+                : SizedBox(),
             SizedBox(
               width: 10,
             ),
@@ -149,19 +147,19 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
                     onTap: () {},
                     controller: _controller,
                     style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: FONT_SMALL,
-                        ),
+                      color: Colors.white,
+                      fontSize: FONT_EX_SMALL,
+                    ),
                     decoration: InputDecoration(
                       hintStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: FONT_SMALL,
-                          ),
+                        color: Colors.white,
+                        fontSize: FONT_EX_SMALL,
+                      ),
                       hintText: 'Nhập nội dung...',
                       focusColor: Colors.blue,
                       filled: true,
-                      fillColor: Colors.blue,
-                      contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      fillColor:  Color(0xFF42A5F5),
+                      contentPadding: EdgeInsets.fromLTRB(10, 10, 50, 0),
                       labelStyle: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: FONT_SMALL,
@@ -177,6 +175,29 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
                     )),
               ),
             ),
+            InkWell(
+              onTap: sendMessage,
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Container(
+                  padding: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.transparent,
+                  ),
+                  //child: Transform.rotate(
+                   // angle: 325 * math.pi / 180,
+                    child: Icon(
+                      Icons.send,
+                      // icon: AnimatedIcons.arrow_menu,
+                      // progress: controller,
+                      color: Colors.blue,
+                      size: 28,
+                    ),
+               //   ),
+                ),
+              ),
+            ),
             // Expanded(
             //   child: TextField(
             //     controller: _controller,
@@ -189,27 +210,6 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
             //     }),
             //   ),
             // ),
-            SizedBox(width: 10),
-            InkWell(
-              onTap: sendMessage,
-              child: Container(
-                padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.transparent,
-                ),
-                child: Transform.rotate(
-                  angle: 325 * math.pi / 180,
-                  child: Icon(
-                    Icons.send,
-                    // icon: AnimatedIcons.arrow_menu,
-                    // progress: controller,
-                    color: Colors.blue,
-                    size: 28,
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       );

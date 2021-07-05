@@ -199,7 +199,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),
           ROUTER_PAHT: (context) => Paht(),
-          ROUTER_HOME: (context) => HomePage(),
+          ROUTER_HOME: (context) =>  HomePage() ,
           ROUTER_SEARCH_PERSONAL_PAHT: (context) => PahtSearch(
                 searchPahtType: 1,
               ),

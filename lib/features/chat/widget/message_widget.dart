@@ -136,7 +136,8 @@ class MessageWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.all(10),
-              constraints: BoxConstraints(maxWidth: 500),
+              //width: 500,
+               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 100),
               decoration: BoxDecoration(
                 color: isMe ? Colors.grey[100] : Theme.of(context).accentColor,
                 borderRadius: isMe
@@ -145,7 +146,21 @@ class MessageWidget extends StatelessWidget {
                     : borderRadius
                         .subtract(BorderRadius.only(bottomLeft: radius)),
               ),
-              child: buildMessage(),
+              child:  Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment:
+                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      message.message,
+                      style: TextStyle(color: isMe ? Colors.black : Colors.white,fontSize: 16),
+                      textAlign: isMe ? TextAlign.end : TextAlign.start,
+                      softWrap: true,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -167,11 +182,17 @@ class MessageWidget extends StatelessWidget {
         crossAxisAlignment:
             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            message.message,
-            style: TextStyle(color: isMe ? Colors.black : Colors.white,fontSize: 16),
-            textAlign: isMe ? TextAlign.end : TextAlign.start,
-            softWrap: true,
+          Container(
+            width: 500,
+            child: Container(
+              child: Text(
+                message.message,
+                style: TextStyle(color: isMe ? Colors.black : Colors.white,fontSize: 16),
+                textAlign: isMe ? TextAlign.end : TextAlign.start,
+                softWrap: true,
+                //overflow: E,
+              ),
+            ),
           ),
         ],
       );

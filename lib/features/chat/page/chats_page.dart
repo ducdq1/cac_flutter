@@ -17,7 +17,7 @@ class ChatsPage extends StatelessWidget {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
-                  return SkeletonPahtWidget();//Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 default:
                   if (snapshot.hasError) {
                     print(snapshot.error);

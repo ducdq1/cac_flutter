@@ -78,11 +78,14 @@ class _HomepageState extends State<Homepage> {
         builder: (BuildContext context, BottomNavigationState state) {
           return BaseLayoutWidget(
             title: 'Danh sách Báo giá',
-            centerTitle: true,           
+            centerTitle: true,
+            floatingActionButtonLocation:
+            FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar:
                 BlocBuilder<BottomNavigationBloc, BottomNavigationState>(
               builder: (BuildContext context, BottomNavigationState state) {
                 return FABBottomAppBarWidget(
+                  isBuildCenterButton: true,
                   color: Color(0xff606060),
                   backgroundColor: Colors.white,
                   selectedColor: COLOR_BACKGROUND,

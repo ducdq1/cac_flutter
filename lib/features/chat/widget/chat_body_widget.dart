@@ -35,6 +35,12 @@ class ChatBodyWidget extends StatelessWidget {
           return Container(
             height: 75,
             child: ListTile(
+              //isThreeLine: true,
+              subtitle: Text(user.phone,style: new TextStyle(
+                  color: Color(0xff353739)  ,
+                fontSize: 14,
+                fontWeight: FontWeight.w400
+            ),),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ChatPage(user: user),
@@ -59,7 +65,12 @@ class ChatBodyWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              title: Text(user.name),
+              //trailing: Divider(height: 1, color: Colors.green),
+              title: Text(user.name,style: new TextStyle(
+                color: Color(0xff353739)  ,
+                fontSize: 17,
+                fontWeight: FontWeight.w500
+              ),),
             ),
           );
         },

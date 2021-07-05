@@ -127,6 +127,7 @@ class _PahtState extends State<Paht> {
                 BlocBuilder<BottomNavigationBloc, BottomNavigationState>(
               builder: (BuildContext context, BottomNavigationState state) {
                 return FABBottomAppBarWidget(
+                  isBuildCenterButton: true,
                   color: Color(0xff606060),
                   backgroundColor: Colors.white,
                   selectedColor: COLOR_BACKGROUND,
@@ -158,7 +159,7 @@ class _PahtState extends State<Paht> {
                         width: SIZE_ICON_BOTTOM_BAR,
                         height: SIZE_ICON_BOTTOM_BAR,
                       ),
-                      text: trans(LABEL_PAHT_CONG_DONG),
+                      text: 'Chưa báo giá',
                     ),
                     FABBottomAppBarItem(
                       icon: SvgPicture.asset(
@@ -171,7 +172,7 @@ class _PahtState extends State<Paht> {
                         width: SIZE_ICON_BOTTOM_BAR,
                         height: SIZE_ICON_BOTTOM_BAR,
                       ),
-                      text: trans(LABEL_PAHT_CA_NHAN),
+                      text: 'Đã báo giá',
                     ),
                   ],
                 );
