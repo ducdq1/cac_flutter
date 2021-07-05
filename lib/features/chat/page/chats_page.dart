@@ -7,36 +7,35 @@ import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleto
 import 'package:flutter/material.dart';
 
 class ChatsPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: PRIMARY_COLOR,
+        backgroundColor: Colors.white,
         body: SafeArea(
-          child: StreamBuilder<List<User>>(
-            stream: FirebaseApi.getUsers(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Center(child: CircularProgressIndicator());
-                default:
-                  if (snapshot.hasError) {
-                    print(snapshot.error);
-                    return buildText('Something Went Wrong Try later');
-                  } else {
-                    final users = snapshot.data;
+          child: Column(
+            children: [
+              Container(color: PRIMARY_COLOR,
+              child: ChatHeaderWidget(users: [])),
+              StreamBuilder<List<User>>(
+                  stream: FirebaseApi.getUsers(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return Container(height:400,child: Center(child: CircularProgressIndicator()));
+                      default:
+                        if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return buildText('Something Went Wrong Try later');
+                        } else {
+                          final users = snapshot.data;
 
-                    if (users.isEmpty) {
-                      return buildText('No Users Found');
-                    } else
-                      return Column(
-                        children: [
-                          ChatHeaderWidget(users: users),
-                          ChatBodyWidget(users: users)
-                        ],
-                      );
-                  }
-              }
-            },
+                          if (users.isEmpty) {
+                            return buildText('No Users Found');
+                          }
+                        return ChatBodyWidget(users: users);
+                        }
+                    }
+                  }),
+            ],
           ),
         ),
       );

@@ -1,7 +1,7 @@
 import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:flutter/material.dart';
-
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 class ProfileHeaderWidget extends StatelessWidget {
   final String name;
   final User user;
@@ -50,7 +50,11 @@ class ProfileHeaderWidget extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    buildIcon(Icons.call),
+                    InkWell(child: buildIcon(Icons.call),onTap: () async {
+                      if(await UrlLauncher.canLaunch("tel://"+user.phone)) {
+                        UrlLauncher.launch("tel://"+user.phone);
+                      }
+                    },),
                     //SizedBox(width: 12),
                     //buildIcon(Icons.videocam),
                   ],
@@ -66,7 +70,7 @@ class ProfileHeaderWidget extends StatelessWidget {
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.white54,
+          //color: Colors.white54,
         ),
         child: Icon(icon, size: 25, color: Colors.white),
       );

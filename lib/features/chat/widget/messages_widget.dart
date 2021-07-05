@@ -66,14 +66,20 @@ class MessagesWidget extends StatelessWidget {
       return false;
     }
 
-    int indexOf = -1;
-    for (int i = 0; i < messages.length; i++) {
-      if (messages[i].idUser == toUser.idUser) {
-        indexOf = i;
-        break;
-      }
+    // for (int i = 0; i < messages.length; i++) {
+    //   if (messages[i].idUser == toUser.idUser) {
+    //     if(index == i){
+    //       return true;
+    //     }
+    //     break;
+    //   }
+    // }
+
+    if(index==0 || messages[index-1].idUser != toUser.idUser){
+      return true;
     }
-    return index == indexOf;
+
+    return false;
   }
 
   Widget buildText(String text) => Center(

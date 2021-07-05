@@ -9,6 +9,7 @@ Future showInputDialog({
   String value,
   Icon icon,
   Function onSubmit,
+  String submitTitle,
 }) async {
   return await showDialog(
     context: context,
@@ -17,6 +18,7 @@ Future showInputDialog({
       value: value,
       onSubmit: onSubmit,
       title: title,
+      submitTitle: submitTitle,
     ),
   );
 }

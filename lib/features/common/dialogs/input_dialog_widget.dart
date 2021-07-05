@@ -9,8 +9,8 @@ class InputDialog extends StatefulWidget {
   final Function onSubmit;
   final String title;
   final Icon icon;
-
-  InputDialog({this.onSubmit, this.value, this.icon, this.title});
+  final String submitTitle;
+  InputDialog({this.onSubmit, this.value, this.icon, this.title,this.submitTitle = null });
 
   @override
   _InputDialogState createState() => _InputDialogState();
@@ -126,7 +126,7 @@ class _InputDialogState extends State<InputDialog>
                       ),
                       child: Center(
                         child: Text(
-                          "Lưu thông tin",
+                          widget.submitTitle ?? "Lưu thông tin",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: FONT_EX_SMALL,
