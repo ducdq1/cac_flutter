@@ -5,7 +5,7 @@ import 'package:citizen_app/features/chat/page/chat_page.dart';
 import 'package:citizen_app/features/common/dialogs/input_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:citizen_app/features/chat/api/firebase_api.dart';
 class ChatHeaderWidget extends StatelessWidget {
   final List<User> users;
 
@@ -70,13 +70,16 @@ class ChatHeaderWidget extends StatelessWidget {
                 ),
                 onTap: () {
                   showInputDialog(
+                    isWaitingLoading: true,
                       context: context,
                       title: "Gửi tin nhắn cho mọi người",
                       value: '',
                       submitTitle: 'Gửi tin nhắn',
-                      onSubmit: (value) {
-                        if (value != null) {
-
+                      onSubmit: (value) async{
+                        if (value != null && value.toString().isNotEmpty) {
+                          User myUser = await FirebaseApi.getMyUser();
+                          await FirebaseApi.sendMessageToAllUser(users, value, '0', myUser);
+                          Navigator.of(context).pop();
                         }
                       });
                 },

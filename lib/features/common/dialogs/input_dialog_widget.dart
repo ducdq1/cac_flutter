@@ -10,7 +10,15 @@ class InputDialog extends StatefulWidget {
   final String title;
   final Icon icon;
   final String submitTitle;
-  InputDialog({this.onSubmit, this.value, this.icon, this.title,this.submitTitle = null });
+  final bool isWaitingLoadding;
+
+  InputDialog(
+      {this.onSubmit,
+      this.value,
+      this.icon,
+      this.title,
+      this.submitTitle = null,
+      this.isWaitingLoadding = false});
 
   @override
   _InputDialogState createState() => _InputDialogState();
@@ -21,6 +29,8 @@ class _InputDialogState extends State<InputDialog>
   AnimationController controller;
   Animation<double> scaleAnimation;
   TextEditingController textEditingController;
+  bool isSubmitting = false;
+
   @override
   void initState() {
     super.initState();
@@ -69,10 +79,9 @@ class _InputDialogState extends State<InputDialog>
                 Text(
                   widget.title,
                   style: TextStyle(
-                    fontSize: FONT_LARGE,
-                    color: PRIMARY_COLOR,
-                    fontWeight: FontWeight.bold
-                  ),
+                      fontSize: FONT_LARGE,
+                      color: PRIMARY_COLOR,
+                      fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 40),
@@ -105,7 +114,7 @@ class _InputDialogState extends State<InputDialog>
                       ),
                       child: Center(
                         child: Text(
-                         "Hủy bỏ",
+                          "Hủy bỏ",
                           style: TextStyle(
                             color: PRIMARY_COLOR,
                             fontSize: FONT_EX_SMALL,
@@ -114,8 +123,18 @@ class _InputDialogState extends State<InputDialog>
                       ),
                     ),
                     RaisedButton(
-                      onPressed: () async {
-                        Navigator.of(context).pop();
+                      onPressed: () {
+                        if (isSubmitting) {
+                          return;
+                        }
+
+                        setState(() {
+                          isSubmitting = true;
+                        });
+
+                        if (!widget.isWaitingLoadding) {
+                          Navigator.of(context).pop();
+                        }
                         widget.onSubmit(textEditingController.text);
                       },
                       elevation: 0,
@@ -125,12 +144,30 @@ class _InputDialogState extends State<InputDialog>
                         side: BorderSide(color: PRIMARY_COLOR),
                       ),
                       child: Center(
-                        child: Text(
-                          widget.submitTitle ?? "Lưu thông tin",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: FONT_EX_SMALL,
-                          ),
+                        child: Row(
+                          children: [
+                            isSubmitting
+                                ? Row(
+                                  children:[ Container(
+                                      height: 18,
+                                      width: 18,
+                                      padding: EdgeInsets.only(right: 0),
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 1,
+                                      ),
+                                    ), SizedBox(width: 10,),],
+                                )
+                                : SizedBox(),
+                            Text(
+                              isSubmitting
+                                  ? 'Đang gửi'
+                                  : widget.submitTitle ?? "Lưu thông tin",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: FONT_EX_SMALL,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     )

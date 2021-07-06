@@ -10,6 +10,7 @@ Future showInputDialog({
   Icon icon,
   Function onSubmit,
   String submitTitle,
+  bool isWaitingLoading = false,
 }) async {
   return await showDialog(
     context: context,
@@ -19,6 +20,7 @@ Future showInputDialog({
       onSubmit: onSubmit,
       title: title,
       submitTitle: submitTitle,
+      isWaitingLoadding: isWaitingLoading,
     ),
   );
 }

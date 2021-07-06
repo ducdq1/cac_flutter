@@ -11,16 +11,21 @@ class ChatsPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Column(
-            children: [
-              Container(color: PRIMARY_COLOR,
-              child: ChatHeaderWidget(users: [])),
+          child:
               StreamBuilder<List<User>>(
                   stream: FirebaseApi.getUsers(),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
-                        return Container(height:400,child: Center(child: CircularProgressIndicator()));
+                        return Column(children: [
+                          Container(
+                              color: PRIMARY_COLOR,
+                              child: ChatHeaderWidget(users: [])),
+                          Container(
+                            height: 400,
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        ]);
                       default:
                         if (snapshot.hasError) {
                           print(snapshot.error);
@@ -31,12 +36,15 @@ class ChatsPage extends StatelessWidget {
                           if (users.isEmpty) {
                             return buildText('No Users Found');
                           }
-                        return ChatBodyWidget(users: users);
+                          return Column(children: [
+                            Container(
+                                color: PRIMARY_COLOR,
+                                child: ChatHeaderWidget(users: users)),
+                            ChatBodyWidget(users: users)
+                          ]);
                         }
                     }
                   }),
-            ],
-          ),
         ),
       );
 

@@ -1,4 +1,3 @@
-import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/widget/messages_widget.dart';

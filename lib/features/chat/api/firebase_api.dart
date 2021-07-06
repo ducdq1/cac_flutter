@@ -11,6 +11,21 @@ import '../utils.dart';
 
 class FirebaseApi {
 
+  static Future sendMessageToAllUser(List<User> users,String message,String type, User senderUser) async {
+
+  for(int i =0; i< users.length;i++) {
+      try {
+        print('send massage to ' + users[i].name);
+        await uploadMessage(
+            users[i].idUser, message, senderUser, type);
+      }catch(e){
+        print('Loi send massage to ' + users[i].name);
+      }
+        print('send massage thanh cong to ' + users[i].name);
+    }
+    await sendNotification('allCustomer','Tin nhắn từ '+ senderUser.name,message);
+  }
+
   static Future<void> sendNotification(String to,String title,String message) async{
      http.Client client = singleton();
      try {
@@ -20,13 +35,6 @@ class FirebaseApi {
          "Authorization": "key=AAAAqfPZ1sQ:APA91bECNLIxhv2ZFNpVrNA_x33P7bK1el3jQBe3KbImmFjFxwRcM9vCsL7x6pf4Xx4rU0Nhi549sIAvsAtDS5ozHQRcZwlbT-nP-mCU1-vQbgihMXFydGMJxoLzzlGkPxotL3bm1nbY",
          "Accept-Encoding": "UTF-8"
        };
-       // String url = "https://fcm.googleapis.com/fcm/send";
-       // HttpPost request = new HttpPost(url);
-       // request.setHeader("Authorization",
-       //     "key=AAAAqfPZ1sQ:APA91bECNLIxhv2ZFNpVrNA_x33P7bK1el3jQBe3KbImmFjFxwRcM9vCsL7x6pf4Xx4rU0Nhi549sIAvsAtDS5ozHQRcZwlbT-nP-mCU1-vQbgihMXFydGMJxoLzzlGkPxotL3bm1nbY");
-       // request.setHeader("Content-type", "application/json");
-       // request.setHeader("Accept-Encoding", "UTF-8");
-
        var request = {
          "notification": {
            "title": 'Tin nhắn từ ' + title,
@@ -66,6 +74,7 @@ class FirebaseApi {
         await pref.setString('firebaseAdminUserId', user.idUser);
         await pref.setString('firebaseAdminUserName', user.name);
         await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
+        //await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
         return user;
       }
     //}
@@ -74,6 +83,7 @@ class FirebaseApi {
         name: firebaseAdminUserName,
         urlAvatar: firebaseAdminUserAvatar);
   }
+
 
   static Future<User> getUserByPhone(String phone) async {
     QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
