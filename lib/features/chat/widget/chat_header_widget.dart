@@ -76,11 +76,6 @@ class ChatHeaderWidget extends StatelessWidget {
                       value: '',
                       submitTitle: 'Gửi tin nhắn',
                       onSubmit: (value) async{
-                        if (value != null && value.toString().isNotEmpty) {
-                          User myUser = await FirebaseApi.getMyUser();
-                          await FirebaseApi.sendMessageToAllUser(users, value, '0', myUser);
-                          Navigator.of(context).pop();
-                        }
                       });
                 },
               ),

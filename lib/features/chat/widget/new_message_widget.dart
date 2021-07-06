@@ -45,10 +45,17 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
     FocusScope.of(context).unfocus();
     if (_controller.text.isNotEmpty) {
       String message = _controller.text.trim();
-      await FirebaseApi.uploadMessage(
-          widget.idUser, message, widget.myUser, '0');
-      _controller.clear();
-      sendNotification(message);
+      if (widget.toUser.role == 'all-user') {
+        _controller.clear();
+        await FirebaseApi.sendMessageToAllUser(message, '0', widget.myUser);
+      } else {
+        await FirebaseApi.uploadMessage(
+            widget.idUser, message, widget.myUser, '0');
+        _controller.clear();
+        sendNotification(message);
+      }
+
+
     }
   }
 
@@ -158,7 +165,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
                       hintText: 'Nhập nội dung...',
                       focusColor: Colors.blue,
                       filled: true,
-                      fillColor:  Color(0xFF42A5F5),
+                      fillColor: Color(0xFF42A5F5),
                       contentPadding: EdgeInsets.fromLTRB(10, 10, 50, 0),
                       labelStyle: GoogleFonts.inter(
                           color: Colors.white,
@@ -186,15 +193,15 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
                     color: Colors.transparent,
                   ),
                   //child: Transform.rotate(
-                   // angle: 325 * math.pi / 180,
-                    child: Icon(
-                      Icons.send,
-                      // icon: AnimatedIcons.arrow_menu,
-                      // progress: controller,
-                      color: Colors.blue,
-                      size: 28,
-                    ),
-               //   ),
+                  // angle: 325 * math.pi / 180,
+                  child: Icon(
+                    Icons.send,
+                    // icon: AnimatedIcons.arrow_menu,
+                    // progress: controller,
+                    color: Colors.blue,
+                    size: 28,
+                  ),
+                  //   ),
                 ),
               ),
             ),

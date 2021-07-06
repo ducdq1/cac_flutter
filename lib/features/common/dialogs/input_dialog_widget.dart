@@ -124,17 +124,7 @@ class _InputDialogState extends State<InputDialog>
                     ),
                     RaisedButton(
                       onPressed: () {
-                        if (isSubmitting) {
-                          return;
-                        }
-
-                        setState(() {
-                          isSubmitting = true;
-                        });
-
-                        if (!widget.isWaitingLoadding) {
-                          Navigator.of(context).pop();
-                        }
+                        Navigator.of(context).pop();
                         widget.onSubmit(textEditingController.text);
                       },
                       elevation: 0,
@@ -158,10 +148,7 @@ class _InputDialogState extends State<InputDialog>
                                     ), SizedBox(width: 10,),],
                                 )
                                 : SizedBox(),
-                            Text(
-                              isSubmitting
-                                  ? 'Đang gửi'
-                                  : widget.submitTitle ?? "Lưu thông tin",
+                            Text( "Lưu thông tin",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: FONT_EX_SMALL,
