@@ -75,7 +75,8 @@ class PAHTITemWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: pahtModel.status == 0
+                color:
+                  pahtModel.status == 0
                     ? Colors.amber.shade100
                     : Colors.green.shade100,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -262,22 +263,28 @@ class PAHTITemWidget extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SvgPicture.asset(getIcon(pahtModel.status)),
+                                1==1 || pahtModel.isInvalid != null && pahtModel.isInvalid ?  SvgPicture.asset(SVG_ASSETS_PATH + 'icon_denied.svg')
+                                    : SvgPicture.asset(getIcon(pahtModel.status)),
                                 SizedBox(width: 5),
                                 Text(
-                                  getStatus(pahtModel.status),
+                                  1==1 || pahtModel.isInvalid != null && pahtModel.isInvalid ? 'Hết hiệu lực'
+                                      : getStatus(pahtModel.status),
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(
                                       fontSize: FONT_SMALL,
-                                      color: getColor(pahtModel.status)),
+                                      color: 1==1 || pahtModel.isInvalid != null && pahtModel.isInvalid ? Colors.red:
+                                      getColor(pahtModel.status)),
                                 )
                               ],
                             )
                           ],
                         ),
-                        pahtModel.status == 1 && pahtModel.saledDate == null && pahtModel.note != null ?
-                        Padding(
-                                padding: const EdgeInsets.only(bottom: 10,top: 5),
+                        pahtModel.status == 1 &&
+                                pahtModel.saledDate == null &&
+                                pahtModel.note != null
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 10, top: 5),
                                 child: Row(
                                   children: [
                                     // SizedBox(
@@ -286,34 +293,34 @@ class PAHTITemWidget extends StatelessWidget {
                                     // ),
                                     Expanded(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                                'Tiến độ: ',
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Tiến độ: ',
+                                              style: GoogleFonts.inter(
+                                                  color: Colors.red,
+                                                  fontSize: FONT_MIDDLE,
+                                                  fontWeight: FontWeight.bold)),
+                                          Expanded(
+                                            child: Text(
+                                                pahtModel.note == null
+                                                    ? ''
+                                                    : pahtModel.note,
                                                 style: GoogleFonts.inter(
                                                   color: Colors.red,
                                                   fontSize: FONT_MIDDLE,
-                                                  fontWeight: FontWeight.bold
                                                 )),
-                                            Expanded(
-                                              child: Text(
-                                              pahtModel.note == null
-                                                  ? ''
-                                                  : pahtModel.note,
-                                              style: GoogleFonts.inter(
-                                                color: Colors.red,
-                                                fontSize: FONT_MIDDLE,
-                                              )),
-                                            )
-                          ],
+                                          )
+                                        ],
                                       ),
                                     )
                                   ],
                                 ),
                               )
                             : SizedBox(),
-                         SizedBox(
+                        SizedBox(
                           height: 5,
                         ),
                       ],

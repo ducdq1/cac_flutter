@@ -28,7 +28,8 @@ class QuotationParams extends Equatable {
   final List<QuotationDetailModel> lstQuotationDetail;
   final String expiredDate;
   final String quotationDate;
-  QuotationParams({this.quotation,this.lstQuotationDetail,this.isApproveAble = false,this.expiredDate,this.isPreViewApprove= false,this.quotationDate,this.updateNote = false});
+  final bool isInValid;
+  QuotationParams({this.quotation,this.lstQuotationDetail,this.isApproveAble = false,this.expiredDate,this.isPreViewApprove= false,this.quotationDate,this.updateNote = false,this.isInValid=false});
   @override
   List<Object> get props => throw UnimplementedError();
 

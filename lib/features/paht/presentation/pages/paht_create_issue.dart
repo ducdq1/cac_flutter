@@ -776,6 +776,22 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         SizedBox(
           height: 20,
         ),
+        pahtModel.saledDate == null
+            ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          Expanded(
+            child: Container(
+              width: 142,
+              child: PrimaryButton(
+                  label: 'Đánh dấu hết hiệu lực',
+                  ctx: this,
+                  id: 'btn_invalid'),
+            ),
+          )
+        ])
+            : SizedBox(),
+        SizedBox(
+          height: 20,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -924,7 +940,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         MaterialPageRoute(
             builder: (context) => WebViewPage(
                 title: 'Chi tiết báo giá',
-                link: '$baseUrl' + 'bao_gia/' + pahtModel.fileName)),
+                link: '$baseUrl' + 'bao_gia/' + pahtModel.fileName,model: pahtModel,)),
       );
     }
 
@@ -951,6 +967,26 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
             _showCupertinoDialog(context);
           });
     }
+
+    if(id == 'btn_invalid'){
+      showConfirmDialog(
+          context: context,
+          title: 'Bạn muốn đánh dấu hết hiệu lực cho báo giá này?',
+          label: 'Cập nhật',
+          onSubmit: () {
+            BlocProvider.of<CreateIssueBloc>(context).add(
+              CreateIssueButtonPresseEvent(
+                quotationParams: QuotationParams(
+                    quotation: PahtModel(
+                      quotationID: pahtModel.quotationID,
+                    ),
+                    isInValid: true),
+              ),
+            );
+            _showCupertinoDialog(context);
+          });
+    }
+
   }
 
   void clearFocus() {
