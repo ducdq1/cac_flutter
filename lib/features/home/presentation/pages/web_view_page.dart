@@ -133,9 +133,9 @@ class _WebViewPageState extends State<WebViewPage>
                           child: Transform.rotate(
                             angle: -math.pi / 4,
                             child: Text(
-                              '------- HẾT HIỆU LỰC ------',
+                              '--- HẾT HIỆU LỰC ---',
                               style: GoogleFonts.inter(
-                                  fontSize: 22,
+                                  fontSize: 30,
                                   color: Colors.red.withOpacity(0.5),
                                   fontWeight: FontWeight.bold),
                             ),

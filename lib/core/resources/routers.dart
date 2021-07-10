@@ -33,3 +33,4 @@ const String ROUTER_CREATE_NEWS_NOTIFICATION =
     '$ROUTER_NEWS_VERIFICATION/create';
 const String ROUTER_CUS = '/CUSTOMER';
 const String ROUTER_CUS_HOME_PAGE = '$ROUTER_CUS/homepage';
+const String ROUTER_CUS_SEARCH_PRODUCT = '$ROUTER_CUS/productSearch';

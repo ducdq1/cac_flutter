@@ -35,7 +35,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                 // width: 250,//MediaQuery.of(context).size.width,
                 //padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Color(0xffF0F2FC),//Colors.grey.shade50, //Colors.green.withOpacity(0.8),
+                  color: Color(0xffF0F2F5),//Colors.grey.shade50, //Colors.green.withOpacity(0.8),
                   borderRadius: BorderRadius.all(Radius.circular(6)),
                   boxShadow: [
                     BoxShadow(
@@ -57,7 +57,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: 85,
+                            width: 100 ,
                             //height: 90,
                             //padding: EdgeInsets.all( 20),
                             //color: Colors.red,

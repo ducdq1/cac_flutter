@@ -57,10 +57,9 @@ class ProductITemWidget extends StatelessWidget {
                         Container(
                           alignment: Alignment.topRight,
                           padding: const EdgeInsets.only(right: 0),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                          child:
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     SvgPicture.asset(
                                       SVG_ASSETS_PATH + 'icon_info.svg',
@@ -71,22 +70,23 @@ class ProductITemWidget extends StatelessWidget {
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    Text(
-                                      pahtModel.productCode == null
-                                          ? ''
-                                          : pahtModel.productCode,
-                                      style: GoogleFonts.inter(
-                                        fontSize: FONT_MIDDLE,
-                                        color: Color(0xff0F8E70),
-                                        fontWeight: FontWeight.bold,
+                                    Expanded(
+                                      child: Text(
+                                        pahtModel.productCode == null
+                                            ? ''
+                                            : pahtModel.productCode,
+                                        style: GoogleFonts.inter(
+                                          fontSize: FONT_MIDDLE,
+                                          color: Color(0xff0F8E70),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        softWrap: true,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      softWrap: true,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
-                              ]),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 8.0, top: 10),

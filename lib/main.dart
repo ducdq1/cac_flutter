@@ -45,6 +45,7 @@ import 'package:citizen_app/features/paht/presentation/widgets/paht_page/saled_q
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/aprove_quotation_widget.dart';
 import 'features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'features/customer/presentation/pages/index_page.dart';
+import 'features/customer/presentation/pages/cus_product_search.dart';
 import 'features/profile/presentation/bloc/change_password_bloc.dart';
 import 'injection_container.dart' as di;
 
@@ -221,6 +222,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_SALED_QUOTATION: (context) => SaledQuotation(),
           ROUTER_SEARCH_PRODUCT: (context) => ProductSearch(),
           ROUTER_CUS_HOME_PAGE: (context) => Indexpage(),
+          ROUTER_CUS_SEARCH_PRODUCT: (context) => CusProductSearch()
         },
         debugShowCheckedModeBanner: false,
       ),

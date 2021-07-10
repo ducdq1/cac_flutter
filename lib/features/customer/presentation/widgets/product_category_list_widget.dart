@@ -3,8 +3,8 @@ import 'package:citizen_app/features/common/widgets/failure_widget/failure_widge
 import 'package:citizen_app/features/customer/data/models/product_category_model.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/widgets/product_category_item_widget.dart';
-import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
-import 'package:citizen_app/features/paht/presentation/pages/product_search.dart' as productSearch;
+import 'package:citizen_app/features/paht/presentation/pages/pages.dart' ;
+import 'package:citizen_app/features/customer/presentation/pages/cus_product_search.dart' as productSearch;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +49,7 @@ class _ListViewProductCategoryWidgetState
                               model: widget.categories[index],
                               onTap: () {
                                 Navigator.pushNamed(
-                                        context, ROUTER_SEARCH_PRODUCT,
+                                        context, ROUTER_CUS_SEARCH_PRODUCT,
                                         arguments: productSearch.SearchArgument(
                                     fromCategoryPage: true,
                                         type:  widget.categories[index].type ))

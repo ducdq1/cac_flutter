@@ -31,7 +31,14 @@ class ChatHeaderWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-              )
+              ),Text(
+                'Nhắn tin',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ]),
             //SizedBox(height: 12),
             1 == 1
