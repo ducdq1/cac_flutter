@@ -32,6 +32,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                 height: 10,
               ),
              !showHeader? SizedBox() : Container(
+
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -53,8 +54,8 @@ class ProductCategoryItemWidget extends StatelessWidget {
                         ],
                       ),
                       Divider(
-                        color: Color(0xffE0E0E0),
-                        height: 10,
+                        color: Colors.blue,
+                        thickness: 1,
                       ),
                       SizedBox(
                         height: 10,
@@ -142,7 +143,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                             child: Text(
                               model.name == null ? '' : model.name,
                               style: GoogleFonts.inter(
-                                fontSize: FONT_LARGE,
+                                fontSize: FONT_HUGE,
                                 color: DESCRIPTION_COLOR,
                                 fontWeight: FontWeight.bold,
                               ),

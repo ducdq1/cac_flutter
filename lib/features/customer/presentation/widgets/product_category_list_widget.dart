@@ -54,7 +54,7 @@ class _ListViewProductCategoryWidgetState
                                         context, ROUTER_CUS_SEARCH_PRODUCT,
                                         arguments: productSearch.SearchArgument(
                                     fromCategoryPage: true,
-                                        type:  widget.categories[index].type ))
+                                        type:  widget.categories[index].type ,code: widget.categories[index].code))
                                     .then((value) => {});
                               },
                             ),

@@ -55,7 +55,7 @@ class _CusProductSearchState extends State<CusProductSearch>
   bool fromCategory = false;
   int type = null;
   bool isAgent = false;
-
+  String code;
   @override
   void initState() {
     super.initState();
@@ -76,6 +76,7 @@ class _CusProductSearchState extends State<CusProductSearch>
       isApproveAble = args.isApproveAble;
       fromCategory = args.fromCategoryPage;
       type = args.type;
+      code = args.code;
     }
     int userType = pref.getInt('userType');
     isAgent = userType == 4 ? true : false;
@@ -86,7 +87,7 @@ class _CusProductSearchState extends State<CusProductSearch>
         child: BlocProvider<PublicPahtBloc>(
             create: (context) => singleton<PublicPahtBloc>()
               ..add(ListProductFetchingEvent(
-                  offset: 0, limit: 10, type: type, isAgent: isAgent)),
+                  offset: 0, limit: 10, type: type, isAgent: isAgent,code: code)),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                 listener: (context, state) {
               if (state is PublicPahtFailure) {
@@ -109,7 +110,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                 offset: 0,
                                 limit: 10,
                                 type: type,
-                                isAgent: isAgent));
+                                isAgent: isAgent,code: code));
                       }
                       if (value.isNotEmpty) {
                         setState(() {
@@ -124,7 +125,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                               offset: 0,
                               limit: 10,
                               type: type,
-                              isAgent: isAgent));
+                              isAgent: isAgent,code: code));
                     },
                     isSearch: isSearch,
                     isShowClearSearch: isShowClearSearch,
@@ -175,7 +176,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                       offset: 0,
                                       limit: 10,
                                       type: type,
-                                      isAgent: isAgent),
+                                      isAgent: isAgent,code: code),
                                 );
                               })
                           : SkeletonPahtWidget());
@@ -229,15 +230,24 @@ class _CusProductSearchState extends State<CusProductSearch>
                           imageUrl:
                               baseUrl + model.image,
                           placeholder: (context, url) =>
-                              Center(child: Container(height: 40,width: 40,child: new CircularProgressIndicator(strokeWidth: 1.0))),
+                              Center(child: Container(height: 40,width: 40,child: new CircularProgressIndicator(strokeWidth: 1.50))),
                           height: 15,
                           width: 15,
                           errorWidget: (context, url, error) =>
-                              new Icon(Icons.error),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Image.asset(
+                                  'assets/images/cac_logo.png',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
                         ) :
-                    Image.asset(
-                      'assets/images/cac_logo.png',
-                      fit: BoxFit.contain,
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Image.asset(
+                        'assets/images/cac_logo.png',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
