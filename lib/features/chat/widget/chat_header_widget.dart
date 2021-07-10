@@ -31,54 +31,7 @@ class ChatHeaderWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-              ),
-              Expanded(
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.75,
-                  child: Text(
-                    'Nhắn tin',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                child: Row(
-                  children: [
-                    Text(
-                      'Tất cả',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Icon(
-                      Icons.send,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  showInputDialog(
-                    isWaitingLoading: true,
-                      context: context,
-                      title: "Gửi tin nhắn cho mọi người",
-                      value: '',
-                      submitTitle: 'Gửi tin nhắn',
-                      onSubmit: (value) async{
-                      });
-                },
-              ),
+              )
             ]),
             //SizedBox(height: 12),
             1 == 1

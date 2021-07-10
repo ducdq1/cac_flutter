@@ -57,7 +57,7 @@ class PahtModel extends PahtEntity {
         quotationDate: json['quotationDate'],
         saledDate: json['saledDate'],
         note : json['note'],
-        isInvalid: json['isInvalid']);
+        isInvalid: json['isInvalid'] !=null && json['isInvalid'] == 1 ? true : false);
   }
 
   Map<String, dynamic> toJson() {

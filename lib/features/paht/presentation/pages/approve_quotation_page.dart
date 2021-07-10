@@ -212,7 +212,7 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
                   MaterialPageRoute(
                       builder: (context) => WebViewPage(
                           title: 'Chi tiết báo giá',
-                          link: '$baseUrl' + 'bao_gia/' + state.fileName)),
+                          link: '$baseUrl' + 'bao_gia/' + state.fileName,model: pahtModel,)),
                 );
               }
             }
@@ -729,7 +729,7 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
         MaterialPageRoute(
             builder: (context) => WebViewPage(
                 title: 'Bảng báo giá',
-                link: '$baseUrl' + 'bao_gia/' + pahtModel.fileName)),
+                link: '$baseUrl' + 'bao_gia/' + pahtModel.fileName,model:  pahtModel,)),
       );
     }
   }

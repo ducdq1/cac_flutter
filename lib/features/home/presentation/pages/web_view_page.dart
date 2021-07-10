@@ -128,14 +128,17 @@ class _WebViewPageState extends State<WebViewPage>
                 ? Positioned(
                     child: Align(
                         alignment: Alignment.center,
-                        child: Transform.rotate(
-                          angle: -math.pi / 4,
-                          child: Text(
-                            '------- HẾT HIỆU LỰC ------',
-                            style: GoogleFonts.inter(
-                                fontSize: 22,
-                                color: Colors.red.withOpacity(0.5),
-                                fontWeight: FontWeight.bold),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom:150.0),
+                          child: Transform.rotate(
+                            angle: -math.pi / 4,
+                            child: Text(
+                              '------- HẾT HIỆU LỰC ------',
+                              style: GoogleFonts.inter(
+                                  fontSize: 22,
+                                  color: Colors.red.withOpacity(0.5),
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         )))
                 : SizedBox(),

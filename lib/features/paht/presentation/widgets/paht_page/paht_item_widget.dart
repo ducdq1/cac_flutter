@@ -263,16 +263,16 @@ class PAHTITemWidget extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                1==1 || pahtModel.isInvalid != null && pahtModel.isInvalid ?  SvgPicture.asset(SVG_ASSETS_PATH + 'icon_denied.svg')
+                                pahtModel.isInvalid != null && pahtModel.isInvalid ?  SvgPicture.asset(SVG_ASSETS_PATH + 'icon_denied.svg')
                                     : SvgPicture.asset(getIcon(pahtModel.status)),
                                 SizedBox(width: 5),
                                 Text(
-                                  1==1 || pahtModel.isInvalid != null && pahtModel.isInvalid ? 'Hết hiệu lực'
+                                 pahtModel.isInvalid != null && pahtModel.isInvalid ? 'Hết hiệu lực'
                                       : getStatus(pahtModel.status),
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(
                                       fontSize: FONT_SMALL,
-                                      color: 1==1 || pahtModel.isInvalid != null && pahtModel.isInvalid ? Colors.red:
+                                      color: pahtModel.isInvalid != null && pahtModel.isInvalid ? Colors.red:
                                       getColor(pahtModel.status)),
                                 )
                               ],

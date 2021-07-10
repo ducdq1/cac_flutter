@@ -11,11 +11,12 @@ import '../utils.dart';
 
 class FirebaseApi {
 
-  static Future sendMessageToAllUser(String message,String type, User senderUser) async {
+  static Future sendMessageToAllUser(String message,String type, User senderUser,Function callback) async {
     List<User> users = await getUsers().first;
   for(int i =0; i< users.length;i++) {
       try {
         print('send massage to ' + users[i].name);
+        callback((i+1).toString()+'/'+users.length.toString());
         await uploadMessage(
             users[i].idUser, message, senderUser, type);
       }catch(e){
@@ -108,6 +109,8 @@ class FirebaseApi {
     String idUser = pref.getString('myFirebaseUserId');
     String name = pref.getString('myFirebaseUserFullName');
     String avartar = pref.getString('myFirebaseUserAvatar');
+    String role = pref.getString('myFirebaseUserRole');
+    String phone = pref.getString('myFirebaseUserPhone');
     if (idUser == null) {
       String phone = pref.getString('userName');
       User myUser = await FirebaseApi.getUserByPhone(phone);
@@ -124,10 +127,12 @@ class FirebaseApi {
       await pref.setString('myFirebaseUserId', myUser.idUser);
       await pref.setString('myFirebaseUserFullName', myUser.name);
       await pref.setString('myFirebaseUserAvatar', myUser.urlAvatar);
+      await pref.setString('myFirebaseUserRole',myUser.role);
+      await pref.setString('myFirebaseUserPhone',myUser.phone);
       return myUser;
     }
 
-    return User(idUser: idUser, name: name, urlAvatar: avartar);
+    return User(idUser: idUser, name: name, urlAvatar: avartar,role:  role,phone: phone);
   }
 
   static Future<String> getMyUserId() async {

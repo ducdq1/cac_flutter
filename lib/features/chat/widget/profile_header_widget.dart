@@ -36,7 +36,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
+                        user.phone !=null && user.phone.isNotEmpty ?  Text(
                       user.phone,
                       style: TextStyle(
                         fontSize: 18,
@@ -44,10 +44,10 @@ class ProfileHeaderWidget extends StatelessWidget {
                         //fontWeight: FontWeight.bold,
                       ),
                       overflow: TextOverflow.ellipsis,
-                    ),
+                    ):SizedBox(width: 4),
                   ]),
                 ),
-                Row(
+                user.phone !=null && user.phone.isNotEmpty ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     InkWell(child: buildIcon(Icons.call),onTap: () async {
@@ -58,7 +58,7 @@ class ProfileHeaderWidget extends StatelessWidget {
                     //SizedBox(width: 12),
                     //buildIcon(Icons.videocam),
                   ],
-                ),
+                ): SizedBox(width: 0),
                 SizedBox(width: 4),
               ],
             )

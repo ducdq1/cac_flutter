@@ -26,9 +26,16 @@ class _MyChatPageState extends State<MyChatPage> {
   }
 
   Future<User> initFirebaseData() async {
-    myUser = await FirebaseApi.getMyUser();
-    toUser = await FirebaseApi.getAdminUser();
-    return myUser;
+    if(myUser !=null){
+      return myUser;
+    }
+   var tempMyUser = await FirebaseApi.getMyUser();
+   var tempToUser = await FirebaseApi.getAdminUser();
+    setState(() {
+      myUser = tempMyUser;
+      toUser =tempToUser;
+    });
+    return tempMyUser;
   }
 
   @override
@@ -57,7 +64,7 @@ class _MyChatPageState extends State<MyChatPage> {
                         fromUser: myUser),
                   ),
                 ),
-                NewMessageWidget(idUser: myUser.idUser, myUser: snap.data),
+                NewMessageWidget(idUser: myUser.idUser, myUser: myUser,toUser: toUser),
               ],
             );
           } else {

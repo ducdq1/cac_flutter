@@ -27,7 +27,6 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<User> initFirebaseData() async {
-    print('----------------1');
     if(myUser !=null){
       return myUser;
     }

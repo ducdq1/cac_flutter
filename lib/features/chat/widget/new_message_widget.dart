@@ -39,23 +39,38 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
   var pref = singleton<SharedPreferences>();
   io.File imageFile;
   bool isLoading = false;
+  bool isSending = false;
+  String sendingText;
 
   void sendMessage() async {
     print('sendMessage');
     FocusScope.of(context).unfocus();
     if (_controller.text.isNotEmpty) {
       String message = _controller.text.trim();
-      if (widget.toUser.role == 'all-user') {
-        _controller.clear();
-        await FirebaseApi.sendMessageToAllUser(message, '0', widget.myUser);
-      } else {
-        await FirebaseApi.uploadMessage(
-            widget.idUser, message, widget.myUser, '0');
-        _controller.clear();
-        sendNotification(message);
+      setState(() {
+        sendingText = "";
+        isSending = true;
+      });
+      try {
+        if (widget.toUser.role == 'all-user') {
+          await FirebaseApi.sendMessageToAllUser(message, '0', widget.myUser,(value){
+            setState(() {
+              sendingText = value.toString();
+            });
+          });
+        } else {
+          await FirebaseApi.uploadMessage(
+              widget.idUser, message, widget.myUser, '0');
+
+          sendNotification(message);
+        }
+      } catch (e) {
+
       }
-
-
+      _controller.clear();
+      setState(() {
+        isSending = false;
+      });
     }
   }
 
@@ -81,17 +96,22 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
     try {
       TaskSnapshot snapshot = await uploadTask;
       var imageUrl = await snapshot.ref.getDownloadURL();
-      FirebaseApi.uploadMessage(widget.idUser, imageUrl, widget.myUser, '1');
-      sendNotification('Hình ảnh');
-      setState(() {
-        isLoading = false;
-      });
+      if (widget.toUser.role ?? '' == 'all-user') {
+        await FirebaseApi.sendMessageToAllUser(imageUrl, '1', widget.myUser,(value){
+          setState(() {
+            sendingText = value.toString();
+          });
+        });
+      } else {
+        FirebaseApi.uploadMessage(widget.idUser, imageUrl, widget.myUser, '1');
+        sendNotification('Hình ảnh');
+      }
     } on FirebaseException catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       Fluttertoast.showToast(msg: e.message ?? e.toString());
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future getImage() async {
@@ -101,6 +121,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
       imageFile = pickedFile;
       if (imageFile != null) {
         setState(() {
+          sendingText = "";
           isLoading = true;
         });
         uploadFile();
@@ -111,6 +132,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
   @override
   void initState() {
     //controller = AnimationController(vsync: this,duration: Duration(milliseconds: 500));
+    print(widget.toUser == null? 'nu;;;;;;;;;;;' :'not nulllllllllllllllllll');
     super.initState();
   }
 
@@ -121,103 +143,135 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
           borderRadius: BorderRadius.circular(10),
         ),
         padding: EdgeInsets.all(10),
-        child: Row(
-          children: <Widget>[
-            InkWell(
-              onTap: getImage,
-              child: SvgPicture.asset(
-                SVG_ASSETS_PATH + 'icon_image_pick.svg',
-                color: Colors.blue,
-                height: 25,
-                width: 25,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              (widget.toUser.role  == 'all-user') && (isLoading || isSending) ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              'Đang gửi tin nhắn đến mọi người... ' +sendingText,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.blue, fontStyle: FontStyle.italic),
+            ),
+          ): SizedBox(),
+          Row(
+            children: <Widget>[
+              InkWell(
+                onTap: getImage,
+                child: SvgPicture.asset(
+                  SVG_ASSETS_PATH + 'icon_image_pick.svg',
+                  color: Colors.blue,
+                  height: 25,
+                  width: 25,
+                ),
               ),
-            ),
-            SizedBox(
-              width: isLoading ? 10 : 0,
-            ),
-            isLoading
-                ? Container(
-                    padding: EdgeInsets.all(00),
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1,
-                    ))
-                : SizedBox(),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Container(
-                height: 40,
-                child: TextFormField(
-                    onTap: () {},
-                    controller: _controller,
-                    style: GoogleFonts.inter(
-                      color: Colors.white,
-                      fontSize: FONT_EX_SMALL,
-                    ),
-                    decoration: InputDecoration(
-                      hintStyle: TextStyle(
+              SizedBox(
+                width: isLoading ? 10 : 0,
+              ),
+              isLoading
+                  ? Container(
+                      padding: EdgeInsets.all(00),
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1,
+                      ))
+                  : SizedBox(),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Container(
+                  height: 40,
+                  child: TextFormField(
+                      onTap: () {},
+                      controller: _controller,
+                      style: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: FONT_EX_SMALL,
                       ),
-                      hintText: 'Nhập nội dung...',
-                      focusColor: Colors.blue,
-                      filled: true,
-                      fillColor: Color(0xFF42A5F5),
-                      contentPadding: EdgeInsets.fromLTRB(10, 10, 50, 0),
-                      labelStyle: GoogleFonts.inter(
+                      decoration: InputDecoration(
+                        hintStyle: TextStyle(
                           color: Colors.white,
-                          fontSize: FONT_SMALL,
-                          fontWeight: FontWeight.w600),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(36.0),
-                          borderSide: BorderSide(
-                              color: Color.fromRGBO(0, 0, 0, 0.25), width: 0)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(26.0),
-                          borderSide: BorderSide(
-                              color: Color.fromRGBO(0, 0, 0, 0.25), width: 0)),
-                    )),
-              ),
-            ),
-            InkWell(
-              onTap: sendMessage,
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Container(
-                  padding: EdgeInsets.all(0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.transparent,
-                  ),
-                  //child: Transform.rotate(
-                  // angle: 325 * math.pi / 180,
-                  child: Icon(
-                    Icons.send,
-                    // icon: AnimatedIcons.arrow_menu,
-                    // progress: controller,
-                    color: Colors.blue,
-                    size: 28,
-                  ),
-                  //   ),
+                          fontSize: FONT_EX_SMALL,
+                        ),
+                        hintText: 'Nhập nội dung...',
+                        focusColor: Colors.blue,
+                        filled: true,
+                        fillColor: Color(0xFF42A5F5),
+                        contentPadding: EdgeInsets.fromLTRB(10, 10, 50, 0),
+                        labelStyle: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: FONT_SMALL,
+                            fontWeight: FontWeight.w600),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(36.0),
+                            borderSide: BorderSide(
+                                color: Color.fromRGBO(0, 0, 0, 0.25),
+                                width: 0)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(26.0),
+                            borderSide: BorderSide(
+                                color: Color.fromRGBO(0, 0, 0, 0.25),
+                                width: 0)),
+                      )),
                 ),
               ),
-            ),
-            // Expanded(
-            //   child: TextField(
-            //     controller: _controller,
-            //     textCapitalization: TextCapitalization.sentences,
-            //     autocorrect: true,
-            //     enableSuggestions: true,
-            //
-            //     onChanged: (value) => setState(() {
-            //       message = value;
-            //     }),
-            //   ),
-            // ),
-          ],
-        ),
+              isSending
+                  ? Row(children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(00),
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                    ])
+                  : InkWell(
+                      onTap: sendMessage,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Container(
+                          padding: EdgeInsets.all(0),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.transparent,
+                          ),
+                          //child: Transform.rotate(
+                          // angle: 325 * math.pi / 180,
+                          child: Icon(
+                            Icons.send,
+                            // icon: AnimatedIcons.arrow_menu,
+                            // progress: controller,
+                            color: Colors.blue,
+                            size: 28,
+                          ),
+                          //   ),
+                        ),
+                      ),
+                    ),
+              // Expanded(
+              //   child: TextField(
+              //     controller: _controller,
+              //     textCapitalization: TextCapitalization.sentences,
+              //     autocorrect: true,
+              //     enableSuggestions: true,
+              //
+              //     onChanged: (value) => setState(() {
+              //       message = value;
+              //     }),
+              //   ),
+              // ),
+            ],
+          ),
+        ]),
       );
 }

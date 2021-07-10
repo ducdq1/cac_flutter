@@ -50,8 +50,8 @@ class ChatBodyWidget extends StatelessWidget {
                 child: Container(
                   width: 45.0,
                   height: 45.0,
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
+                  child: (user.urlAvatar !=null && user.urlAvatar.isNotEmpty) ?
+                  CachedNetworkImage( fit: BoxFit.cover,
                     imageUrl: user.urlAvatar,
                     placeholder: (context, url) =>
                         new CircularProgressIndicator(strokeWidth: 2.0),
@@ -62,6 +62,10 @@ class ChatBodyWidget extends StatelessWidget {
                       height: 100,
                       width: 100,
                     ),
+                  ) : Image.asset(
+                    ICONS_ASSETS + 'default-avatar.png',
+                    height: 100,
+                    width: 100,
                   ),
                 ),
               ),

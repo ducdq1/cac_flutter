@@ -105,9 +105,9 @@ class _SignOutConfirmDialogState extends State<SignOutConfirmDialog>
                       try{
                         final pref = singleton<SharedPreferences>();
                         await unsubscribe(pref.getString('userName'));
-                        await unsubscribe(pref.getString('create'));
-                        await unsubscribe(pref.getString('allCustomer'));
-                        await unsubscribe(pref.getString('customer'));
+                        await unsubscribe('create');
+                        await unsubscribe('allCustomer');
+                        await unsubscribe('customer');
                       }catch(e){
                         print('-------------------- Loi day');
                       }

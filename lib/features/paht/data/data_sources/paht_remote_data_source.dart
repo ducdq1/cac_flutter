@@ -68,7 +68,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       print('create or update QUOTATION ');
 
       String url = '$baseUrl_api/quotation';
-      if (issueParams.updateNote || (issueParams.quotationDate != null &&
+      if (issueParams.isInvalid || issueParams.updateNote || (issueParams.quotationDate != null &&
           issueParams.quotationDate.isNotEmpty &&
           issueParams.lstQuotationDetail == null)) {
         url = '$baseUrl_api/quotation/update-saledate';

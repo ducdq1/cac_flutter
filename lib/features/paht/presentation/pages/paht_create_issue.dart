@@ -701,66 +701,65 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Column(children: [
-        pahtModel.saledDate == null ? Padding(
-          padding:   EdgeInsets.only(bottom: 10.0),
-          child: InkWell(
-            onTap: () {
-              showInputDialog(
-                  context: context,
-                  title: "Cập nhật tiến độ",
-                  value: pahtModel.note,
-                  onSubmit: (value) {
-                    if (value != null) {
-                      pahtModel.note = value;
-                      BlocProvider.of<CreateIssueBloc>(context).add(
-                        CreateIssueButtonPresseEvent(
-                          quotationParams: QuotationParams(
-                            updateNote: true,
-                              quotation: PahtModel(
-                                quotationID: pahtModel.quotationID,
-                                note: pahtModel.note
+        pahtModel.saledDate == null &&   pahtModel.isInvalid == false
+      ? Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: InkWell(
+                  onTap: () {
+                    showInputDialog(
+                        context: context,
+                        title: "Cập nhật tiến độ",
+                        value: pahtModel.note,
+                        onSubmit: (value) {
+                          if (value != null) {
+                            pahtModel.note = value;
+                            BlocProvider.of<CreateIssueBloc>(context).add(
+                              CreateIssueButtonPresseEvent(
+                                quotationParams: QuotationParams(
+                                  updateNote: true,
+                                  quotation: PahtModel(
+                                      quotationID: pahtModel.quotationID,
+                                      note: pahtModel.note),
+                                ),
                               ),
-                             ),
-                        ),
-                      );
-                      _showCupertinoDialog(context);
-                    }
-                  });
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'Cập nhật Tiến độ',
-                  style: GoogleFonts.inter(
-                    color: Colors.blue,
-                    fontSize: FONT_SMALL,
-                    fontWeight: FontWeight.bold
+                            );
+                            _showCupertinoDialog(context);
+                          }
+                        });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Cập nhật Tiến độ',
+                        style: GoogleFonts.inter(
+                            color: Colors.blue,
+                            fontSize: FONT_SMALL,
+                            fontWeight: FontWeight.bold),
+                        softWrap: true,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Image.asset(
+                        'assets/icons/icon_marker_line.png',
+                        width: 22,
+                        height: 22,
+                        filterQuality: FilterQuality.high,
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ],
                   ),
-                  softWrap: true,
                 ),
-                SizedBox(
-                  width: 5,
-                ),
-                Image.asset(
-                  'assets/icons/icon_marker_line.png',
-                  width: 22,
-                  height: 22,
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.scaleDown,
-                ),
-              ],
-            ),
-          ),
-        )  : SizedBox(),
-
-        InputDatetimeWidget(
+              )
+            : SizedBox(),
+    pahtModel.isInvalid == false ? InputDatetimeWidget(
           scrollPadding: 200,
           hintText: 'Ngày bán hàng',
           controller: saledDateController,
           validates: [EmptyValidate()],
-        ),
-        pahtModel.saledDate == null
+        ) : SizedBox(),
+        pahtModel.saledDate == null  && pahtModel.isInvalid == false
             ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 Expanded(
                   child: Container(
@@ -776,22 +775,22 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         SizedBox(
           height: 20,
         ),
-        pahtModel.saledDate == null
+        pahtModel.saledDate == null && pahtModel.isInvalid == false
             ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          Expanded(
-            child: Container(
-              width: 142,
-              child: PrimaryButton(
-                  label: 'Đánh dấu hết hiệu lực',
-                  ctx: this,
-                  id: 'btn_invalid'),
-            ),
-          )
-        ])
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom:20.0),
+                    child: Container(
+                      width: 142,
+                      child: PrimaryButton(
+                          label: 'Đánh dấu hết hiệu lực',
+                          ctx: this,
+                          id: 'btn_invalid'),
+                    ),
+                  ),
+                )
+              ])
             : SizedBox(),
-        SizedBox(
-          height: 20,
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -939,8 +938,10 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
         context,
         MaterialPageRoute(
             builder: (context) => WebViewPage(
-                title: 'Chi tiết báo giá',
-                link: '$baseUrl' + 'bao_gia/' + pahtModel.fileName,model: pahtModel,)),
+                  title: 'Chi tiết báo giá',
+                  link: '$baseUrl' + 'bao_gia/' + pahtModel.fileName,
+                  model: pahtModel,
+                )),
       );
     }
 
@@ -968,7 +969,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
           });
     }
 
-    if(id == 'btn_invalid'){
+    if (id == 'btn_invalid') {
       showConfirmDialog(
           context: context,
           title: 'Bạn muốn đánh dấu hết hiệu lực cho báo giá này?',
@@ -980,13 +981,12 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                     quotation: PahtModel(
                       quotationID: pahtModel.quotationID,
                     ),
-                    isInValid: true),
+                    isInvalid: true),
               ),
             );
             _showCupertinoDialog(context);
           });
     }
-
   }
 
   void clearFocus() {
