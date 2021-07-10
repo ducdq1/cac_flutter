@@ -7,12 +7,14 @@ class ProductCategoryModel extends ProductCategoryEntity {
     String imageUrl,
     String description,
     int type,
+    String code
     }) : super(
       id :id,
       name: name,
       description: description,
       imageUrl: imageUrl,
-      type: type
+      type: type,
+      code : code
       );
 
   factory ProductCategoryModel.fromJson(Map json) {
@@ -23,6 +25,7 @@ class ProductCategoryModel extends ProductCategoryEntity {
         description: json['description'] !=null ? json['description'] : null,
         imageUrl: json['imageUrl'] !=null ? json['imageUrl'] : null,
         type: json['type'],
+        code: json['code']
     );
   }
 
@@ -32,7 +35,8 @@ class ProductCategoryModel extends ProductCategoryEntity {
       "name": name,
       "imageUrl": imageUrl,
       "description": description,
-      "type" : type
+      "type" : type,
+      "code" : code
     };
   }
 

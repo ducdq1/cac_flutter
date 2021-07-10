@@ -110,7 +110,7 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
           children: items,
         ),
       ),
-      color: Color(0xffFAFBFF),
+      color: Colors.white,
       //Colors.white,//Color(0xffF8F2E3),
       elevation: 0,
     );

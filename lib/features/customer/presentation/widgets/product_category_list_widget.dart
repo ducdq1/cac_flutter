@@ -46,6 +46,8 @@ class _ListViewProductCategoryWidgetState
                           verticalOffset: 50.0,
                           child: FadeInAnimation(
                             child: ProductCategoryItemWidget(
+                              header: widget.categories[index].type==0 ? 'Thiết bị' :'Gạch men',
+                              showHeader: (index == 0 || widget.categories[index].type != widget.categories[index-1].type) ? true : false,
                               model: widget.categories[index],
                               onTap: () {
                                 Navigator.pushNamed(

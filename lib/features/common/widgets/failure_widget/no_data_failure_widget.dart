@@ -15,7 +15,7 @@ class NoDataFailureWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FailureWidget(
       message: message,
-      body: Text(text ?? trans(NO_DATA),
+      body: Text(text ?? 'Không tìm thấy dữ liệu',
           style:
               GoogleFonts.inter(color: PRIMARY_COLOR, fontSize: FONT_MIDDLE)),
     );

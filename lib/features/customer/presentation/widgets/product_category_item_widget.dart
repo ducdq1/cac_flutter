@@ -9,8 +9,9 @@ const DESCRIPTION_COLOR = Color(0xff353739);
 class ProductCategoryItemWidget extends StatelessWidget {
   final ProductCategoryModel model;
   final Function onTap;
-
-  ProductCategoryItemWidget({@required this.model, @required this.onTap});
+  final String header;
+  final bool showHeader;
+  ProductCategoryItemWidget({@required this.model, @required this.onTap,this.header='Thiết bị',this.showHeader=true});
 
   @override
   Widget build(BuildContext context) {
@@ -30,24 +31,51 @@ class ProductCategoryItemWidget extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
+             !showHeader? SizedBox() : Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Image.asset( ICONS_ASSETS + 'icon_da_ban.png',
+                            width: 40,
+                            height: 40),
+                          SizedBox(width: 10,),
+                          Text(
+                          header,
+                          style: GoogleFonts.inter(
+                            fontSize: FONT_HUGE,
+                            color: Color(0xff34A052),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          softWrap: true,
+                        )
+                        ],
+                      ),
+                      Divider(
+                        color: Color(0xffE0E0E0),
+                        height: 10,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ]),
+              ),
               Container(
-                // height: 150,
-                // width: 250,//MediaQuery.of(context).size.width,
-                //padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Color(0xffF0F2F5),//Colors.grey.shade50, //Colors.green.withOpacity(0.8),
+                  color: model.type== 0 ? Color(0xff39B65C).withOpacity(0.4): Color(0xffFFC59B).withOpacity(0.4),
                   borderRadius: BorderRadius.all(Radius.circular(6)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
+                      color: Colors.grey.withOpacity(0.2),
                       spreadRadius: 3,
                       blurRadius: 3,
-                      offset: Offset(3, 3), // changes position of shadow
+                      offset: Offset(2, 2), // changes position of shadow
                     ),
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -57,12 +85,9 @@ class ProductCategoryItemWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            width: 100 ,
-                            //height: 90,
-                            //padding: EdgeInsets.all( 20),
-                            //color: Colors.red,
+                            width: 100,
                             child: ClipRRect(
-                               borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(3),
                               child: Image.network(
                                 model.imageUrl ?? '',
                                 fit: BoxFit.cover,
@@ -72,7 +97,6 @@ class ProductCategoryItemWidget extends StatelessWidget {
                                   return Image.asset(
                                     IMAGE_ASSETS_PATH + 'supper_sale.png',
                                     fit: BoxFit.cover,
-                                    // height: 120,
                                   );
                                 },
                                 loadingBuilder: (BuildContext context,
@@ -170,13 +194,13 @@ class ProductCategoryItemWidget extends StatelessWidget {
               )
             ]),
           ),
-          Positioned(
-              top: 15,
-              left: 15,
-              child: Image.asset(
-                IMAGE_ASSETS_PATH + 'images.png',
-                height: 30,
-              )),
+          // Positioned(
+          //     top: 15,
+          //     left: 15,
+          //     child: Image.asset(
+          //       IMAGE_ASSETS_PATH + 'images.png',
+          //       height: 30,
+          //     )),
         ]),
       ),
     );

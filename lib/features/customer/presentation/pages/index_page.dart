@@ -347,7 +347,7 @@ class _IndexpageState extends State<Indexpage> {
                         constraints: BoxConstraints(
                             minHeight: MediaQuery.of(context).size.height - 150),
                         decoration: BoxDecoration(
-                          color: Color(0xffFAFBFF),
+                          color: Colors.white,
                           //Colors.white,// Color(0xffF8F2E3),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(24),

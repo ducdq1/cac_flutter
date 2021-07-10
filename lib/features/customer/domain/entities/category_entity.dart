@@ -10,7 +10,8 @@ class ProductCategoryEntity extends Equatable {
   String description;
   String imageUrl;
   int type;
-  ProductCategoryEntity({this.id, this.name, this.description, this.imageUrl,this.type});
+  String code;
+  ProductCategoryEntity({this.id, this.name, this.description, this.imageUrl,this.type,this.code});
 
   Map<String, dynamic> toJson() {
     return {};

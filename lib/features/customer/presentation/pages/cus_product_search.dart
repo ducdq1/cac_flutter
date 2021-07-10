@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
@@ -26,12 +28,13 @@ class SearchArgument {
   final bool isApproveAble;
   final bool fromCategoryPage;
   final int type;
-
+final String code;
   SearchArgument(
       {this.isSaled = false,
       this.isApproveAble,
       this.fromCategoryPage = false,
-      this.type = -1});
+      this.type = -1,
+      this.code});
 }
 
 class CusProductSearch extends StatefulWidget {
@@ -129,10 +132,10 @@ class _CusProductSearchState extends State<CusProductSearch>
                     searchFocus: searchFocus,
                   ),
                   body: state is SearchProductSuccess
-                      ? Container(
+                      ? state.lstProduct == null || state.lstProduct.length == 0 ? NoDataFailureWidget()
+                      : Container(
                         color: Color(0xffF0F2F5),
                         child: GridView.count(
-
                             // shrinkWrap: true,
                             // physics: NeverScrollableScrollPhysics(),
                             crossAxisCount: 2,
@@ -252,15 +255,16 @@ class _CusProductSearchState extends State<CusProductSearch>
                       bottomRight: Radius.circular(6)),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5,horizontal: 8),
+                  padding: EdgeInsets.only(bottom: 5,right: 8,left: 8,top:8),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                     Text(
                       model.productName ,
                       style: GoogleFonts.inter(
-                          color: Color(0xff272727),
-                          fontSize: 16,
+                         // color: Color(0xff272727),
+                          color: Color(0xFF2E7D32),
+                          fontSize: 15,
                           fontWeight: FontWeight.w500),
                       softWrap: true,
                       maxLines: 3,
@@ -268,9 +272,9 @@ class _CusProductSearchState extends State<CusProductSearch>
                     ),
                     Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                       Text(
-                        'Đã bán: 500+',
+                        'Đã bán: ' + new Random().nextInt(5000).toString(),
                         style: GoogleFonts.inter(
-                            color: Colors.green,
+                            color: Colors.orange,
                             fontSize: 12,
                             fontWeight: FontWeight.w400),
                         softWrap: true,
