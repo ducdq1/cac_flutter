@@ -16,7 +16,8 @@ class SearchFormFieldWidget extends StatefulWidget {
       @required this.searchController,
       @required this.searchFocus,
       @required this.onChanged,
-      @required this.onEditingComplete});
+      @required this.onEditingComplete,
+        this.onClear});
 
   bool isSearch;
   bool isShowClearSearch;
@@ -24,7 +25,7 @@ class SearchFormFieldWidget extends StatefulWidget {
   FocusNode searchFocus;
   Function onChanged;
   Function onEditingComplete;
-
+  Function onClear;
   @override
   State<SearchFormFieldWidget> createState() => _SearchFormFieldWidgetState();
 }
@@ -92,6 +93,7 @@ class _SearchFormFieldWidgetState extends State<SearchFormFieldWidget> {
                   child: InkWell(
                     onTap: () {
                       widget.searchController.clear();
+                      widget.onClear();
                       setState(() {
                         widget.isShowClearSearch = false;
                       });

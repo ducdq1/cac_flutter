@@ -60,7 +60,6 @@ class CusRemoteDataSourceImpl implements CusRemoteDataSource {
 
       final response = await networkRequest.postRequest(
           url: '$base_cus_url_api/productCategory/search', body: body.toString());
-      print('$vtmaps_baseUrl/place/v1/categories');
 
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       if (response.statusCode == 200) {
