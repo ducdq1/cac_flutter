@@ -6,6 +6,7 @@ import 'package:citizen_app/features/authentication/signin/domain/usecases/signi
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_event.dart';
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_state.dart';
 import 'package:citizen_app/injection_container.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -94,7 +95,6 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         await prefs.setInt('userType', auth.userType);
         await prefs.setBool('isCustomer', event.isCustomer);
         await prefs.setInt('loginTime', DateTime.now().millisecondsSinceEpoch);
-
         yield SignInSucceedState(auth: auth,isCustomer: event.isCustomer);
         // yield SignInAccountSucceedState();
       }

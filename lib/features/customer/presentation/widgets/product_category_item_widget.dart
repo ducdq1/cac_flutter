@@ -11,7 +11,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
   final Function onTap;
   final String header;
   final bool showHeader;
-  ProductCategoryItemWidget({@required this.model, @required this.onTap,this.header='Thiết bị',this.showHeader=true});
+  ProductCategoryItemWidget({@required this.model, @required this.onTap,this.header='THIẾT BỊ',this.showHeader=true});
 
   @override
   Widget build(BuildContext context) {

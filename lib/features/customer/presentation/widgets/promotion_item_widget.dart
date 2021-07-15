@@ -119,8 +119,8 @@ class PromotionItemWidget extends StatelessWidget {
                                           children: [
                                         Image.asset(
                                           ICONS_ASSETS + 'hot_deal1.png',
-                                          width: 32,
-                                          height: 32,
+                                          width: 40,
+                                          height: 40,
                                         ),
                                         SizedBox(
                                           width: 5,
@@ -191,7 +191,7 @@ class PromotionItemWidget extends StatelessWidget {
                 left: 5,
                 child: Image.asset(
                   IMAGE_ASSETS_PATH + 'icon_hot.png',
-                  height: 35,
+                  height: 40,
                 )),
             Positioned(
               top: 25,

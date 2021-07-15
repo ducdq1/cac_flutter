@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
+import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/page/my_chat_page.dart';
 import 'package:citizen_app/features/common/blocs/blocs.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
@@ -19,6 +20,7 @@ import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widg
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
 import 'package:citizen_app/features/profile/presentation/pages/view_info_page.dart';
 import 'package:citizen_app/injection_container.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,7 @@ class _IndexpageState extends State<Indexpage> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings initializationSettingsAndroid;
-
+  User myUser;
   // var streamController = StreamController<int>()
   //   ..sink.add(0); //cho nay sai roi, no return ve void
   //.add(0);
@@ -114,7 +116,12 @@ class _IndexpageState extends State<Indexpage> {
   }
 
   Future<bool> _onBackPressed() async{
-    print('Onback-----');
+    if(myUser !=null) {
+      await FirebaseFirestore.instance.collection('users')
+          .doc(myUser.idUser)
+          .update({"lastOnlineTime": DateTime.now(),
+        "status": "offline"});
+    }
     exit(0);
     return false;
   }
@@ -215,7 +222,7 @@ class _IndexpageState extends State<Indexpage> {
 
   void initFirebaseData() async {
     //await FirebaseApi.getAdminUser();
-    await FirebaseApi.getMyUser();
+    myUser = await FirebaseApi.getMyUser();
   }
 
   void handleRefresh(context, {int indexTab}) {}

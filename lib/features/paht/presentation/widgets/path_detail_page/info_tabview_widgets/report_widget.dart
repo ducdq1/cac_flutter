@@ -306,8 +306,7 @@ class ReportWidget extends StatelessWidget {
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
                 imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
-                placeholder: (context, url) =>
-                    new CircularProgressIndicator(strokeWidth: 2.0),
+
                 height: 15,
                 width: 15,
                 errorWidget: (context, url, error) => new Icon(Icons.error),

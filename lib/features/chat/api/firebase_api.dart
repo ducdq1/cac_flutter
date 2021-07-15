@@ -111,6 +111,7 @@ class FirebaseApi {
     String avartar = pref.getString('myFirebaseUserAvatar');
     String role = pref.getString('myFirebaseUserRole');
     String phone = pref.getString('myFirebaseUserPhone');
+    final refUsers = FirebaseFirestore.instance.collection('users');
     if (idUser == null) {
       String phone = pref.getString('userName');
       User myUser = await FirebaseApi.getUserByPhone(phone);
@@ -121,7 +122,8 @@ class FirebaseApi {
         await FirebaseApi.createUser(User(role: 'user',
             phone: phone,
             name: fullName,
-            urlAvatar: avartarPath != null ? '$baseUrl' + avartarPath : ''));
+            urlAvatar: avartarPath != null ? '$baseUrl' + avartarPath : '',
+        status: 'online'));
         myUser = await FirebaseApi.getUserByPhone(phone);
       }
       await pref.setString('myFirebaseUserId', myUser.idUser);
@@ -129,9 +131,19 @@ class FirebaseApi {
       await pref.setString('myFirebaseUserAvatar', myUser.urlAvatar);
       await pref.setString('myFirebaseUserRole',myUser.role);
       await pref.setString('myFirebaseUserPhone',myUser.phone);
+
+      await refUsers
+          .doc(idUser)
+          .update({"lastOnlineTime": DateTime.now(),
+                  "status" : "online"});
+
       return myUser;
     }
 
+    await refUsers
+        .doc(idUser)
+        .update({"lastOnlineTime": DateTime.now(),
+      "status" : "online"});
     return User(idUser: idUser, name: name, urlAvatar: avartar,role:  role,phone: phone);
   }
 
@@ -181,10 +193,6 @@ class FirebaseApi {
     );
     await refMessages.add(newMessage.toJson());
 
-    final refUsers = FirebaseFirestore.instance.collection('users');
-    await refUsers
-        .doc(idUser)
-        .update({UserField.lastMessageTime: DateTime.now()});
   }
 
 

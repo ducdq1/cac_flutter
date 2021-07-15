@@ -9,6 +9,7 @@ import 'package:citizen_app/features/authentication/signin/presentation/bloc/sig
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_event.dart';
 import 'package:citizen_app/features/profile/presentation/widgets/loader_dialog.dart';
 import 'package:citizen_app/injection_container.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -103,16 +104,23 @@ class _SignOutConfirmDialogState extends State<SignOutConfirmDialog>
                   RaisedButton(
                     onPressed: () async {
                       try{
+                        showLoaderDialog(context);
                         final pref = singleton<SharedPreferences>();
                         await unsubscribe(pref.getString('userName'));
                         await unsubscribe('create');
                         await unsubscribe('allCustomer');
                         await unsubscribe('customer');
+                        if(pref.getString('myFirebaseUserId') !=null ) {
+                          await FirebaseFirestore.instance.collection('users')
+                              .doc(pref.getString('myFirebaseUserId'))
+                              .update({"lastOnlineTime": DateTime.now(),
+                            "status": "offline"});
+                        }
                       }catch(e){
                         print('-------------------- Loi day');
                       }
 
-                      showLoaderDialog(context);
+
                       await Future.delayed(Duration(milliseconds: 200));
                       BlocProvider.of<AuthBloc>(context)
                           .add(UnAuthenticatedEvent());
