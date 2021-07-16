@@ -82,115 +82,117 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
     final args = ModalRoute.of(context).settings.arguments;
-    return WillPopScope(
-      onWillPop: _onWillPop,
-          child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 20,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            centerTitle: true,
-          ),
-          body: BlocListener<SignInBloc, SignInState>(
-            listener: (_, state) {
-              if (state is SignInSucceedState) {
-                BlocProvider.of<AuthBloc>(context)
-                    .add(AuthenticatedEvent(auth: state.auth));
-                if (args != null) {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil(args, (route) => false);
-                } else {
-                  if(state.isCustomer){
+    return  WillPopScope(
+        onWillPop: _onWillPop,
+            child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 20,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              centerTitle: true,
+            ),
+            body: BlocListener<SignInBloc, SignInState>(
+              listener: (_, state) {
+                if (state is SignInSucceedState) {
+                  BlocProvider.of<AuthBloc>(context)
+                      .add(AuthenticatedEvent(auth: state.auth));
+                  if (args != null) {
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil(ROUTER_CUS_HOME_PAGE, (route) => false);
-                  }else {
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/', (route) => false);
+                        .pushNamedAndRemoveUntil(args, (route) => false);
+                  } else {
+                    if(state.isCustomer){
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil(ROUTER_CUS_HOME_PAGE, (route) => false);
+                    }else {
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil('/', (route) => false);
+                    }
                   }
+                } else if (state is SignInSsoState ||
+                    state is SignInOtpConfirmState ||
+                    state is SignInAccountConfirmState) {
+                  showLoadingDialog(context, trans(SIGNING_IN));
+                } else if (state is SignInFaildState) {
+                  Navigator.pop(context);
+                  Fluttertoast.showToast(
+                    msg: state.message,
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.black87,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 }
-              } else if (state is SignInSsoState ||
-                  state is SignInOtpConfirmState ||
-                  state is SignInAccountConfirmState) {
-                showLoadingDialog(context, trans(SIGNING_IN));
-              } else if (state is SignInFaildState) {
-                Navigator.pop(context);
-                Fluttertoast.showToast(
-                  msg: state.message,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black87,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
-              }
-            },
-            child: SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height - 20,
-                child: Stack(
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        SvgPicture.asset(
-                          SVG_ASSETS_PATH + 'bottom_wave_auth_bg.svg',
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.bottomCenter,
-                          width: MediaQuery.of(context).size.width,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: FooterWidget(),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(
-                          left: 30,
-                          right: 30,
-                          top:
-                              MediaQuery.of(context).size.height < 650 ? 00 : 10),
-                      child: Column(
-                        mainAxisSize : MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+              },
+              child: SingleChildScrollView(
+                child:  Container(
+                  height: MediaQuery.of(context).size.height - 20,
+                  child: Stack(
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomCenter,
                         children: [
-                          LogoWidget(),
-                          SizedBox(height: 30),
-                          Text(
-                            trans(TITLE_LOGIN_SCREEN),
-                            style: GoogleFonts.inter(
-                              fontSize: FONT_EX_HUGE,
-                              color: PRIMARY_TEXT_COLOR,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          SvgPicture.asset(
+                            SVG_ASSETS_PATH + 'bottom_wave_auth_bg.svg',
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.bottomCenter,
+                            width: MediaQuery.of(context).size.width,
                           ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height < 650
-                                ? 50
-                                : 60,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                          SafeArea(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: FooterWidget(),
+                                ),
+                              ),
+                            ],
                           ),
-                            FormSignInWidget(formKey: _formKey),
                         ],
                       ),
-                    ),
-                  ],
+                      Container(
+                        padding: EdgeInsets.only(
+                            left: 30,
+                            right: 30,
+                            top:
+                                MediaQuery.of(context).size.height < 650 ? 00 : 10),
+                        child: Column(
+                          mainAxisSize : MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            LogoWidget(),
+                            SizedBox(height: 30),
+                            Text(
+                              trans(TITLE_LOGIN_SCREEN),
+                              style: GoogleFonts.inter(
+                                fontSize: FONT_EX_HUGE,
+                                color: PRIMARY_TEXT_COLOR,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height < 650
+                                  ? 50
+                                  : 60,
+                            ),
+                              FormSignInWidget(formKey: _formKey),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      ),
     );
   }
 

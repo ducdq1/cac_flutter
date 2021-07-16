@@ -85,8 +85,7 @@ class ChatBodyWidget extends StatelessWidget {
                           ),
                   ),
                 ),
-                user.status == 'online'
-                    ? Positioned(
+                 Positioned(
                         bottom: 0,
                         right: 0,
                         child: Container(
@@ -94,15 +93,16 @@ class ChatBodyWidget extends StatelessWidget {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
                               border:
-                                  Border.all(width: 0.9, color: Colors.white)),
+                                  Border.all(width: 1, color: Colors.white)),
                           child: Container(
-                            width: 12,
-                            height: 12,
+                            width: 10,
+                            height: 10,
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.green),
+                                shape: BoxShape.circle, color: user.status == 'online' &&  !handleTime(user.lastOnlineTime.toString()).contains('-')
+                                ? Colors.green : Colors.grey),
                           ),
                         ))
-                    : SizedBox(),
+
               ]),
               //trailing: Divider(height: 1, color: Colors.green),
               title: Text(
