@@ -89,6 +89,7 @@ class _SignInPageState extends State<SignInPage> {
             FocusScope.of(context).unfocus();
           },
           child: Scaffold(
+          resizeToAvoidBottomInset: true,
             appBar: AppBar(
               toolbarHeight: 20,
               backgroundColor: Colors.white,

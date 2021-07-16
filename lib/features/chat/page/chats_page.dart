@@ -9,43 +9,47 @@ import 'package:flutter/material.dart';
 class ChatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child:
-              StreamBuilder<List<User>>(
-                  stream: FirebaseApi.getUsers(),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return Column(children: [
-                          Container(
-                              color: PRIMARY_COLOR,
-                              child: ChatHeaderWidget(users: [])),
-                          Container(
-                            height: 400,
-                            child: Center(child: CircularProgressIndicator()),
-                          )
-                        ]);
-                      default:
-                        if (snapshot.hasError) {
-                          print(snapshot.error);
-                          return buildText('Something Went Wrong Try later');
-                        } else {
-                          final users = snapshot.data;
+    resizeToAvoidBottomInset: true,
+    //resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
+        backgroundColor: PRIMARY_COLOR,
+        body: StreamBuilder<List<User>>(
+            stream: FirebaseApi.getUsers(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Column(children: [
+                    Container(
+                        padding: EdgeInsets.only(top: 30,bottom: 10),
+                        color: PRIMARY_COLOR,
+                        child: ChatHeaderWidget(users: [])),
+                    Expanded(
+                      child: Container(
+                        color: Colors.white,
+                        //height: 900,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                    )
+                  ]);
+                default:
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return buildText('Something Went Wrong Try later');
+                  } else {
+                    final users = snapshot.data;
 
-                          if (users.isEmpty) {
-                            return buildText('No Users Found');
-                          }
-                          return Column(children: [
-                            Container(
-                                color: PRIMARY_COLOR,
-                                child: ChatHeaderWidget(users: users)),
-                            ChatBodyWidget(users: users)
-                          ]);
-                        }
+                    if (users.isEmpty) {
+                      return buildText('No Users Found');
                     }
-                  }),
-        ),
+                    return Column(children: [
+                      Container(
+                          padding: EdgeInsets.only(top: 30,bottom: 10),
+                          color: PRIMARY_COLOR,
+                          child: ChatHeaderWidget(users: users)),
+                      ChatBodyWidget(users: users)
+                    ]);
+                  }
+              }
+            }),
       );
 
   Widget buildText(String text) => Center(

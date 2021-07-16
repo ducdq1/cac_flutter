@@ -6,6 +6,7 @@ import 'package:citizen_app/features/common/dialogs/input_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
+
 class ChatHeaderWidget extends StatelessWidget {
   final List<User> users;
 
@@ -16,9 +17,9 @@ class ChatHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15),
         width: double.infinity,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
@@ -31,7 +32,8 @@ class ChatHeaderWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-              ),Text(
+              ),
+              Text(
                 'Nhắn tin',
                 style: TextStyle(
                   color: Colors.white,

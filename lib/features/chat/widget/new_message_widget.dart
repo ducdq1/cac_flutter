@@ -138,140 +138,143 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
 
   @override
   Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: Color(0xffF3F6FB),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              (widget.toUser.role  == 'all-user') && (isLoading || isSending) ? Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              'Đang gửi tin nhắn đến mọi người... ' +sendingText,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.blue, fontStyle: FontStyle.italic),
-            ),
-          ): SizedBox(),
-          Row(
-            children: <Widget>[
-              InkWell(
-                onTap: getImage,
-                child: SvgPicture.asset(
-                  SVG_ASSETS_PATH + 'icon_image_pick.svg',
-                  color: Colors.blue,
-                  height: 25,
-                  width: 25,
+    color: Colors.white,
+    child: Container(
+          decoration: BoxDecoration(
+            color: Color(0xffF3F6FB),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                (widget.toUser.role  == 'all-user') && (isLoading || isSending) ? Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                'Đang gửi tin nhắn đến mọi người... ' +sendingText,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.blue, fontStyle: FontStyle.italic),
+              ),
+            ): SizedBox(),
+            Row(
+              children: <Widget>[
+                InkWell(
+                  onTap: getImage,
+                  child: SvgPicture.asset(
+                    SVG_ASSETS_PATH + 'icon_image_pick.svg',
+                    color: Colors.blue,
+                    height: 25,
+                    width: 25,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: isLoading ? 10 : 0,
-              ),
-              isLoading
-                  ? Container(
-                      padding: EdgeInsets.all(00),
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 1,
-                      ))
-                  : SizedBox(),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Container(
-                  height: 40,
-                  child: TextFormField(
-                      onTap: () {},
-                      controller: _controller,
-                      style: GoogleFonts.inter(
-                        color: Colors.white,
-                        fontSize: FONT_EX_SMALL,
-                      ),
-                      decoration: InputDecoration(
-                        hintStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: FONT_EX_SMALL,
-                        ),
-                        hintText: 'Nhập nội dung...',
-                        focusColor: Colors.blue,
-                        filled: true,
-                        fillColor: Color(0xFF42A5F5),
-                        contentPadding: EdgeInsets.fromLTRB(10, 10, 50, 0),
-                        labelStyle: GoogleFonts.inter(
-                            color: Colors.white,
-                            fontSize: FONT_SMALL,
-                            fontWeight: FontWeight.w600),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(36.0),
-                            borderSide: BorderSide(
-                                color: Color.fromRGBO(0, 0, 0, 0.25),
-                                width: 0)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(26.0),
-                            borderSide: BorderSide(
-                                color: Color.fromRGBO(0, 0, 0, 0.25),
-                                width: 0)),
-                      )),
+                SizedBox(
+                  width: isLoading ? 10 : 0,
                 ),
-              ),
-              isSending
-                  ? Row(children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
+                isLoading
+                    ? Container(
                         padding: EdgeInsets.all(00),
                         width: 20,
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 1,
+                        ))
+                    : SizedBox(),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 40,
+                    child: TextFormField(
+                        onTap: () {},
+                        controller: _controller,
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: FONT_EX_SMALL,
+                        ),
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: FONT_EX_SMALL,
+                          ),
+                          hintText: 'Nhập nội dung...',
+                          focusColor: Colors.blue,
+                          filled: true,
+                          fillColor: Color(0xFF42A5F5),
+                          contentPadding: EdgeInsets.fromLTRB(10, 10, 50, 0),
+                          labelStyle: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: FONT_SMALL,
+                              fontWeight: FontWeight.w600),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(36.0),
+                              borderSide: BorderSide(
+                                  color: Color.fromRGBO(0, 0, 0, 0.25),
+                                  width: 0)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(26.0),
+                              borderSide: BorderSide(
+                                  color: Color.fromRGBO(0, 0, 0, 0.25),
+                                  width: 0)),
+                        )),
+                  ),
+                ),
+                isSending
+                    ? Row(children: [
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(00),
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                      ])
+                    : InkWell(
+                        onTap: sendMessage,
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Container(
+                            padding: EdgeInsets.all(0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.transparent,
+                            ),
+                            //child: Transform.rotate(
+                            // angle: 325 * math.pi / 180,
+                            child: Icon(
+                              Icons.send,
+                              // icon: AnimatedIcons.arrow_menu,
+                              // progress: controller,
+                              color: Colors.blue,
+                              size: 28,
+                            ),
+                            //   ),
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                    ])
-                  : InkWell(
-                      onTap: sendMessage,
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Container(
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.transparent,
-                          ),
-                          //child: Transform.rotate(
-                          // angle: 325 * math.pi / 180,
-                          child: Icon(
-                            Icons.send,
-                            // icon: AnimatedIcons.arrow_menu,
-                            // progress: controller,
-                            color: Colors.blue,
-                            size: 28,
-                          ),
-                          //   ),
-                        ),
-                      ),
-                    ),
-              // Expanded(
-              //   child: TextField(
-              //     controller: _controller,
-              //     textCapitalization: TextCapitalization.sentences,
-              //     autocorrect: true,
-              //     enableSuggestions: true,
-              //
-              //     onChanged: (value) => setState(() {
-              //       message = value;
-              //     }),
-              //   ),
-              // ),
-            ],
-          ),
-        ]),
-      );
+                // Expanded(
+                //   child: TextField(
+                //     controller: _controller,
+                //     textCapitalization: TextCapitalization.sentences,
+                //     autocorrect: true,
+                //     enableSuggestions: true,
+                //
+                //     onChanged: (value) => setState(() {
+                //       message = value;
+                //     }),
+                //   ),
+                // ),
+              ],
+            ),
+          ]),
+        ),
+  );
 }
