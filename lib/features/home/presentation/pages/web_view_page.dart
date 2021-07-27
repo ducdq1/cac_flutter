@@ -126,21 +126,32 @@ class _WebViewPageState extends State<WebViewPage>
                         ))),
             widget.model.isInvalid != null && widget.model.isInvalid
                 ? Positioned(
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom:150.0),
-                          child: Transform.rotate(
-                            angle: -math.pi / 4,
-                            child: Text(
-                              'HỦY   BÁO   GIÁ',
-                              style: GoogleFonts.inter(
-                                  fontSize: 30,
-                                  color: Colors.red.withOpacity(0.5),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        )))
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.asset(
+                        IMAGE_ASSETS_PATH + 'huy_bg2.png',
+                        fit: BoxFit.cover,
+                        // height: 120,
+                      ),
+                    ),
+                    // Align(
+                    //     alignment: Alignment.center,
+                    //     child:
+                    //     Padding(
+                    //       //padding: const EdgeInsets.only(bottom: 150.0),
+                    //       child: Transform.rotate(
+                    //         //angle: -math.pi / 4,
+                    //         child: Text(
+                    //           'HỦY   BÁO   GIÁ',
+                    //           style: GoogleFonts.inter(
+                    //               fontSize: 30,
+                    //               color: Colors.red.withOpacity(0.5),
+                    //               fontWeight: FontWeight.bold),
+                    //         ),
+                    //       ),
+                    //     )),
+                  )
                 : SizedBox(),
           ],
         ),
