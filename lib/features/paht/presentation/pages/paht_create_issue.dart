@@ -783,7 +783,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                     child: Container(
                       width: 142,
                       child: PrimaryButton(
-                          label: 'Đánh dấu hết hiệu lực',
+                          label: 'Hủy báo giá',
                           ctx: this,
                           id: 'btn_invalid'),
                     ),
@@ -972,7 +972,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     if (id == 'btn_invalid') {
       showConfirmDialog(
           context: context,
-          title: 'Bạn muốn đánh dấu hết hiệu lực cho báo giá này?',
+          title: 'Bạn muốn hủy báo giá này?',
           label: 'Cập nhật',
           onSubmit: () {
             BlocProvider.of<CreateIssueBloc>(context).add(

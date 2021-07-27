@@ -133,7 +133,7 @@ class _WebViewPageState extends State<WebViewPage>
                           child: Transform.rotate(
                             angle: -math.pi / 4,
                             child: Text(
-                              '--- HẾT HIỆU LỰC ---',
+                              'HỦY   BÁO   GIÁ',
                               style: GoogleFonts.inter(
                                   fontSize: 30,
                                   color: Colors.red.withOpacity(0.5),

@@ -267,7 +267,7 @@ class PAHTITemWidget extends StatelessWidget {
                                     : SvgPicture.asset(getIcon(pahtModel.status)),
                                 SizedBox(width: 5),
                                 Text(
-                                 pahtModel.isInvalid != null && pahtModel.isInvalid ? 'Hết hiệu lực'
+                                 pahtModel.isInvalid != null && pahtModel.isInvalid ? 'Hủy báo giá'
                                       : getStatus(pahtModel.status),
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(
