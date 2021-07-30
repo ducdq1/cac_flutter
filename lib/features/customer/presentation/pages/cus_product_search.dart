@@ -315,7 +315,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                model.productName,
+                                model.productName?? '',
                                 style: GoogleFonts.inter(
                                     // color: Color(0xff272727),
                                     color: Color(0xFF2E7D32),

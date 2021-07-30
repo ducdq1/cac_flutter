@@ -16,10 +16,10 @@ class CusRepositoryImpl implements CusRepository {
 
 
   @override
-  Future<List<ProductCategoryModel>> getListProductCategory(String name) async{
+  Future<List<ProductCategoryModel>> getListProductCategory(int type) async{
     try {
       final remoteCreateIssuePaht =
-          await remoteDataSource.fetchListProductCategory(name);
+          await remoteDataSource.fetchListProductCategory(type);
       return remoteCreateIssuePaht;
     } catch (error) {
       throw error;

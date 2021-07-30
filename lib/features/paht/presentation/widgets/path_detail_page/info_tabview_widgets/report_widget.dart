@@ -139,6 +139,39 @@ class ReportWidget extends StatelessWidget {
             ],
           ),
           SizedBox(height: 18),
+          Row(
+            children: [
+              SizedBox(width: 30),
+              Image.asset(
+                ICONS_ASSETS + 'icon_money.png',
+                width: 20,
+                height: 20,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                  child: Container(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Giá bán",
+                                style: GoogleFonts.inter(
+                                  fontSize: FONT_MIDDLE,
+                                  color: PRIMARY_TEXT_COLOR,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                            SizedBox(height: 10),
+                            Text(
+                              productModel.salePrice ?? '',
+                              style: GoogleFonts.inter(
+                                fontSize: FONT_MIDDLE,
+                                color: Colors.amber.shade900,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ]))),
+            ],
+          ),
+          SizedBox(height: 18),
     isViewTonKho
     ? Row(
               mainAxisAlignment: MainAxisAlignment.start,

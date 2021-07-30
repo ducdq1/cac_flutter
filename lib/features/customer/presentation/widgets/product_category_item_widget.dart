@@ -46,7 +46,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                           header,
                           style: GoogleFonts.inter(
                             fontSize: FONT_HUGE,
-                            color: Color(0xff34A052),
+                            color: Colors.indigoAccent,
                             fontWeight: FontWeight.bold,
                           ),
                           softWrap: true,
@@ -54,7 +54,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                         ],
                       ),
                       Divider(
-                        color: Colors.blue,
+                        color: Colors.indigoAccent,
                         thickness: 1,
                       ),
                       SizedBox(
@@ -64,7 +64,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: model.type== 0 ? Color(0xff39B65C).withOpacity(0.4): Color(0xffFFC59B).withOpacity(0.4),
+                  color: model.type== 0 ? Colors.indigoAccent.withOpacity(0.3): Color(0xffFFC59B).withOpacity(0.4),
                   borderRadius: BorderRadius.all(Radius.circular(6)),
                   boxShadow: [
                     BoxShadow(

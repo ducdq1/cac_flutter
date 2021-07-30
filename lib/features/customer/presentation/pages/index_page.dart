@@ -13,6 +13,7 @@ import 'package:citizen_app/features/customer/presentation/bloc/notification/not
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/pages/product_category_page.dart';
+import 'package:citizen_app/features/customer/presentation/pages/products_page.dart';
 import 'package:citizen_app/features/customer/presentation/pages/promotions_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
@@ -243,12 +244,12 @@ class _IndexpageState extends State<Indexpage> {
         BlocProvider<PromotionBloc>(
             create: (context) =>
                 singleton<PromotionBloc>()..add(ListPromotionFetching())),
-        BlocProvider<ProductCategoryBloc>(
-          create: (context) => singleton<ProductCategoryBloc>()
-            ..add(
-              ListProductCategoriesFetching(),
-            ),
-        ),
+        // BlocProvider<ProductCategoryBloc>(
+        //   create: (context) => singleton<ProductCategoryBloc>()
+        //     ..add(
+        //       ListProductCategoriesFetching(),
+        //     ),
+        // ),
       ],
       child: BlocBuilder<BottomNavigationBloc, BottomNavigationState>(
         builder: (BuildContext context, BottomNavigationState state) {
@@ -283,8 +284,8 @@ class _IndexpageState extends State<Indexpage> {
                         BlocProvider.of<PromotionBloc>(context)
                             .add(ListPromotionFetching());
                       } else if (indexTab == 1) {
-                        BlocProvider.of<ProductCategoryBloc>(context)
-                            .add(ListProductCategoriesFetching());
+                        // BlocProvider.of<ProductCategoryBloc>(context)
+                        //     .add(ListProductCategoriesFetching());
                       }
                     },
                     items: [
@@ -385,7 +386,7 @@ class _IndexpageState extends State<Indexpage> {
                                     }
                                     if (state is SecondTabLoaded) {
                                       print('ProductCategoryPage');
-                                      return ProductCategoryPage();
+                                      return ProductsPage();
                                     }
 
                                     if (state is Tab3Loaded) {

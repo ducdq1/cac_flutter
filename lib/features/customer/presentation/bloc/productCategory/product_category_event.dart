@@ -7,4 +7,7 @@ abstract class ProductCategoryEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ListProductCategoriesFetching extends ProductCategoryEvent {}
+class ListProductCategoriesFetching extends ProductCategoryEvent {
+  final int type;
+  ListProductCategoriesFetching({ @required this.type});
+}

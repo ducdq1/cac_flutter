@@ -3,5 +3,5 @@ import 'package:citizen_app/features/customer/domain/entities/promotion_entity.d
 
 abstract class CusRepository {
   Future<List<PromotionEntity>> getListPromotion(String name);
-  Future<List<ProductCategoryEntity>> getListProductCategory(String name);
+  Future<List<ProductCategoryEntity>> getListProductCategory(String name,int type);
 }

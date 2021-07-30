@@ -12,6 +12,7 @@ import 'package:citizen_app/features/authentication/signin/presentation/signin_p
 import 'package:citizen_app/features/authentication/signup/presentation/bloc/active_account_bloc.dart';
 import 'package:citizen_app/features/authentication/signup/presentation/bloc/signup_bloc.dart';
 import 'package:citizen_app/features/common/http_proxy.dart';
+import 'package:citizen_app/features/customer/presentation/pages/product_category_page.dart';
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/paht/domain/usecases/get_detailed_paht.dart';
@@ -222,7 +223,8 @@ class _MyAppState extends State<MyApp> {
           ROUTER_SALED_QUOTATION: (context) => SaledQuotation(),
           ROUTER_SEARCH_PRODUCT: (context) => ProductSearch(),
           ROUTER_CUS_HOME_PAGE: (context) => Indexpage(),
-          ROUTER_CUS_SEARCH_PRODUCT: (context) => CusProductSearch()
+          ROUTER_CUS_SEARCH_PRODUCT: (context) => CusProductSearch(),
+          ROUTER_CUS_PRODUCT_CATEGORY: (context) => ProductCategoryPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

@@ -22,7 +22,7 @@ class ProductCategoryBloc extends Bloc<ProductCategoryEvent, ProductCategoryStat
       try {
         yield ProductCategoryLoading();
         List<ProductCategoryModel> listCategories =
-            await getListProductCategory('');
+            await getListProductCategory(event.type);
         yield ProductCategorySuccess(listCategories: listCategories);
       } catch (error) {
         print(error);

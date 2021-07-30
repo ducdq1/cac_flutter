@@ -20,7 +20,7 @@ class _ListViewProductCategoryWidgetState
 
   handleRefresh(context) {
     BlocProvider.of<ProductCategoryBloc>(context).add(
-      ListProductCategoriesFetching(),
+      ListProductCategoriesFetching(type: widget.type),
     );
   }
 
@@ -79,9 +79,10 @@ class _ListViewProductCategoryWidgetState
 class ListViewProductCategoryWidget extends StatefulWidget {
   final List<ProductCategoryModel> categories;
   final ScrollController scrollController;
+  final int type;
 
   ListViewProductCategoryWidget(
-      {@required this.categories, @required this.scrollController});
+      {@required this.categories, @required this.scrollController, @required this.type});
 
   @override
   _ListViewProductCategoryWidgetState createState() =>

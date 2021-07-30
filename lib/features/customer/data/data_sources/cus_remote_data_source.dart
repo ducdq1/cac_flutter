@@ -24,7 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citizen_app/features/customer/data/models/promotion_model.dart';
 abstract class CusRemoteDataSource {
   Future<List<PromotionModel>> fetchListPromotions(String name);
-  Future<List<ProductCategoryModel>> fetchListProductCategory(String name);
+  Future<List<ProductCategoryModel>> fetchListProductCategory(int type);
 
 }
 
@@ -39,7 +39,7 @@ class CusRemoteDataSourceImpl implements CusRemoteDataSource {
       @required this.sharedPreferences});
 
   @override
-  Future<List<ProductCategoryModel>> fetchListProductCategory(String name) async{
+  Future<List<ProductCategoryModel>> fetchListProductCategory(type) async{
     try {
       // List<ProductCategoryModel> pros =[];
       // pros.add(ProductCategoryModel(id: 1,
@@ -56,7 +56,7 @@ class CusRemoteDataSourceImpl implements CusRemoteDataSource {
       //
       // return pros;
       var body = jsonEncode({
-      'name': name});
+      'type' : type});
 
       final response = await networkRequest.postRequest(
           url: '$base_cus_url_api/productCategory/search', body: body.toString());
