@@ -44,13 +44,14 @@ class SearchArgument {
   final bool fromCategoryPage;
   final int type;
   final String code;
-
+  final int selectType;
   SearchArgument(
       {this.isSaled = false,
       this.isApproveAble,
       this.fromCategoryPage = false,
       this.type = -1,
-      this.code});
+      this.code,
+  this.selectType = 0 });
 }
 
 class CusProductSearch extends StatefulWidget {
@@ -72,7 +73,7 @@ class _CusProductSearchState extends State<CusProductSearch>
   int type = null;
   bool isAgent = false;
   String code;
-
+  int selectType ;
   @override
   void initState() {
     super.initState();
@@ -94,6 +95,7 @@ class _CusProductSearchState extends State<CusProductSearch>
       fromCategory = args.fromCategoryPage;
       type = args.type;
       code = args.code;
+      selectType = args.selectType;
     }
     int userType = pref.getInt('userType');
     isAgent = userType == 4 ? true : false;
@@ -108,7 +110,8 @@ class _CusProductSearchState extends State<CusProductSearch>
                   limit: 10,
                   type: type,
                   isAgent: isAgent,
-                  code: code)),
+                  code: code,
+                  selectType: selectType  )),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                 listener: (context, state) {
               if (state is PublicPahtFailure) {
@@ -128,7 +131,8 @@ class _CusProductSearchState extends State<CusProductSearch>
                               limit: 300,
                               type: type,
                               isAgent: false,
-                              code: code));
+                              code: code,
+                              selectType: selectType ));
                     },
                     onChanged: (value) {
                         // setState(() {
@@ -141,7 +145,8 @@ class _CusProductSearchState extends State<CusProductSearch>
                                 limit: 300,
                                 type: type,
                                 isAgent: false,
-                                code: code));
+                                code: code,
+                                selectType: selectType ));
                       // if (value.isNotEmpty) {
                         setState(() {
                           isShowClearSearch = value.isNotEmpty;
@@ -156,7 +161,8 @@ class _CusProductSearchState extends State<CusProductSearch>
                               limit: 300,
                               type: type,
                               isAgent: false,
-                              code: code));
+                              code: code,
+                              selectType: selectType ));
                     },
                     isSearch: isSearch,
                     isShowClearSearch: isShowClearSearch,
@@ -212,7 +218,8 @@ class _CusProductSearchState extends State<CusProductSearch>
                                       limit: 10,
                                       type: type,
                                       isAgent: isAgent,
-                                      code: code),
+                                      code: code,
+                                      selectType: selectType ),
                                 );
                               })
                           : SkeletonPahtWidget());
