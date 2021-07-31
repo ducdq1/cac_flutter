@@ -44,6 +44,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/saled_quotation_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/aprove_quotation_widget.dart';
+import 'features/chat/page/chats_page.dart';
 import 'features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'features/customer/presentation/pages/index_page.dart';
 import 'features/customer/presentation/pages/cus_product_search.dart';
@@ -225,6 +226,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_CUS_HOME_PAGE: (context) => Indexpage(),
           ROUTER_CUS_SEARCH_PRODUCT: (context) => CusProductSearch(),
           ROUTER_CUS_PRODUCT_CATEGORY: (context) => ProductCategoryPage(),
+          ROUTER_CUS_CHAT_PAGE: (context) => ChatsPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

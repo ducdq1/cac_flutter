@@ -231,11 +231,23 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                       height: 140,
                                       width: 140,
                                     ),
-                              SizedBox(
+                              userType != null &&
+                                  userType ==
+                                      3 //quan ly ban hang  co them module duyet bao gia
+                                  ? CitizensMenuItemWidget(
+                                label: 'Nhắn tin',
+                                icon: '/icons/icon_ds_bao_gia.png',
+                                needRedirect: '',
+                                onPress: () {
+                                  Navigator.pushNamed(
+                                      context, ROUTER_CUS_CHAT_PAGE);
+                                },
+                              )
+                                  : SizedBox(
                                 height: 140,
                                 width: 140,
                               )
-                            ])
+                            ]),
                       ]),
                 );
               },

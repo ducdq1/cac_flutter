@@ -45,13 +45,14 @@ class SearchArgument {
   final int type;
   final String code;
   final int selectType;
+
   SearchArgument(
       {this.isSaled = false,
       this.isApproveAble,
       this.fromCategoryPage = false,
       this.type = -1,
       this.code,
-  this.selectType = 0 });
+      this.selectType = 0});
 }
 
 class CusProductSearch extends StatefulWidget {
@@ -73,7 +74,8 @@ class _CusProductSearchState extends State<CusProductSearch>
   int type = null;
   bool isAgent = false;
   String code;
-  int selectType ;
+  int selectType;
+
   @override
   void initState() {
     super.initState();
@@ -111,7 +113,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                   type: type,
                   isAgent: isAgent,
                   code: code,
-                  selectType: selectType  )),
+                  selectType: selectType)),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                 listener: (context, state) {
               if (state is PublicPahtFailure) {
@@ -123,7 +125,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                   title: '',
                   isTitleHeaderWidget: true,
                   titleHeaderWidget: SearchFormFieldWidget(
-                    onClear: (){
+                    onClear: () {
                       BlocProvider.of<PublicPahtBloc>(context).add(
                           ListProductFetchingEvent(
                               search: searchController.text.trim(),
@@ -132,25 +134,25 @@ class _CusProductSearchState extends State<CusProductSearch>
                               type: type,
                               isAgent: false,
                               code: code,
-                              selectType: selectType ));
+                              selectType: selectType));
                     },
                     onChanged: (value) {
-                        // setState(() {
-                        //   isShowClearSearch = false;
-                        // });
-                        BlocProvider.of<PublicPahtBloc>(context).add(
-                            ListProductFetchingEvent(
-                                search: searchController.text.trim(),
-                                offset: 0,
-                                limit: 300,
-                                type: type,
-                                isAgent: false,
-                                code: code,
-                                selectType: selectType ));
+                      // setState(() {
+                      //   isShowClearSearch = false;
+                      // });
+                      BlocProvider.of<PublicPahtBloc>(context).add(
+                          ListProductFetchingEvent(
+                              search: searchController.text.trim(),
+                              offset: 0,
+                              limit: 300,
+                              type: type,
+                              isAgent: false,
+                              code: code,
+                              selectType: selectType));
                       // if (value.isNotEmpty) {
-                        setState(() {
-                          isShowClearSearch = value.isNotEmpty;
-                        });
+                      setState(() {
+                        isShowClearSearch = value.isNotEmpty;
+                      });
                       // }
                     },
                     onEditingComplete: () {
@@ -162,7 +164,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                               type: type,
                               isAgent: false,
                               code: code,
-                              selectType: selectType ));
+                              selectType: selectType));
                     },
                     isSearch: isSearch,
                     isShowClearSearch: isShowClearSearch,
@@ -219,7 +221,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                       type: type,
                                       isAgent: isAgent,
                                       code: code,
-                                      selectType: selectType ),
+                                      selectType: selectType),
                                 );
                               })
                           : SkeletonPahtWidget());
@@ -266,8 +268,9 @@ class _CusProductSearchState extends State<CusProductSearch>
                         width: itemWidth,
                         //height: 200,
                         child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.only(topRight:Radius.circular(6),topLeft: Radius.circular(6)),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(6),
+                              topLeft: Radius.circular(6)),
                           child:
                               //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
                               model.image != null
@@ -280,15 +283,12 @@ class _CusProductSearchState extends State<CusProductSearch>
                                               width: 40,
                                               child:
                                                   new CircularProgressIndicator(
-                                                      strokeWidth:
-                                                          1.50))),
+                                                      strokeWidth: 1.50))),
                                       height: 15,
                                       width: 15,
-                                      errorWidget:
-                                          (context, url, error) =>
-                                              Padding(
-                                        padding:
-                                            const EdgeInsets.all(20.0),
+                                      errorWidget: (context, url, error) =>
+                                          Padding(
+                                        padding: const EdgeInsets.all(20.0),
                                         child: Image.asset(
                                           'assets/images/cac_logo.png',
                                           fit: BoxFit.contain,
@@ -296,8 +296,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                       ),
                                     )
                                   : Padding(
-                                      padding:
-                                          const EdgeInsets.all(20.0),
+                                      padding: const EdgeInsets.all(20.0),
                                       child: Image.asset(
                                         'assets/images/cac_logo.png',
                                         fit: BoxFit.contain,
@@ -322,7 +321,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                model.productName?? '',
+                                model.productName ?? '',
                                 style: GoogleFonts.inter(
                                     // color: Color(0xff272727),
                                     color: Color(0xFF2E7D32),
@@ -353,10 +352,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                       child: Container(
                                         alignment: Alignment.topRight,
                                         child: Text(
-                                          'Đã bán: ' +
-                                              new Random()
-                                                  .nextInt(5000)
-                                                  .toString(),
+                                          model.madeIn ?? '',
                                           style: GoogleFonts.inter(
                                               color: Colors.orange,
                                               fontSize: 12,

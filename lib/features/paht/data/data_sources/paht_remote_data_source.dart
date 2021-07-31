@@ -399,7 +399,6 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   @override
   Future<SearchProductModel> searchProduct(SearchProductParam param)async {
     try {
-
       final body = jsonEncode(param.toJson());
       print(body);
       String url = '$baseUrl_api/search-product';

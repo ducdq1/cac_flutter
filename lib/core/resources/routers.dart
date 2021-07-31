@@ -35,3 +35,4 @@ const String ROUTER_CUS = '/CUSTOMER';
 const String ROUTER_CUS_HOME_PAGE = '$ROUTER_CUS/homepage';
 const String ROUTER_CUS_SEARCH_PRODUCT = '$ROUTER_CUS/productSearch';
 const String ROUTER_CUS_PRODUCT_CATEGORY = '$ROUTER_CUS/productCategoryPage';
+const String ROUTER_CUS_CHAT_PAGE = '$ROUTER_CUS/chatPage';
