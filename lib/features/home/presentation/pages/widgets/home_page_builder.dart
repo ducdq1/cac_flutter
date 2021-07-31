@@ -169,7 +169,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                               needRedirect: '',
                               onPress: () {
                                 Navigator.pushNamed(
-                                        context, ROUTER_SEARCH_PRODUCT)
+                                        context, ROUTER_PRODUCTS_TYPE_PAGE)
                                     .then((value) => {
                                           if (value != null)
                                             {
@@ -236,7 +236,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                       3 //quan ly ban hang  co them module duyet bao gia
                                   ? CitizensMenuItemWidget(
                                 label: 'Nhắn tin',
-                                icon: '/icons/icon_ds_bao_gia.png',
+                                icon: '/icons/icon_message.png',
                                 needRedirect: '',
                                 onPress: () {
                                   Navigator.pushNamed(

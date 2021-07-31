@@ -36,7 +36,7 @@ class _SearchFormFieldWidgetState extends State<SearchFormFieldWidget> {
     return Stack(
       children: [
         Container(
-          height: 35,
+          height: 40,
           child: TextFormField(
               onTap: () {
                 setState(() {
@@ -61,7 +61,7 @@ class _SearchFormFieldWidgetState extends State<SearchFormFieldWidget> {
                     color: Color.fromRGBO(255, 255, 255, 0.6),
                     fontSize: FONT_EX_SMALL,
                     fontWeight: FontWeight.w600),
-                hintText: 'Bạn cần tìm gì nào?' ,
+                hintText: 'Bạn cần tìm gì nào ?' ,
                 focusColor: Color.fromRGBO(0, 0, 0, 0.25),
                 filled: true,
                 fillColor: Color.fromRGBO(0, 0, 0, 0.25),

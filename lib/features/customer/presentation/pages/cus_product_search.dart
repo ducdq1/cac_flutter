@@ -319,18 +319,35 @@ class _CusProductSearchState extends State<CusProductSearch>
                             bottom: 5, right: 8, left: 8, top: 8),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  model.productCode ?? '',
+                                  style: GoogleFonts.inter(
+                                    // color: Color(0xff272727),
+                                      color: Colors.red,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500),
+                                  softWrap: true,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              SizedBox(height: 8,),
                               Text(
                                 model.productName ?? '',
                                 style: GoogleFonts.inter(
                                     // color: Color(0xff272727),
                                     color: Color(0xFF2E7D32),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700),
                                 softWrap: true,
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),
+                              SizedBox(height: 10,),
                               Row(
                                   mainAxisAlignment: model.productType > 1
                                       ? MainAxisAlignment.spaceBetween
@@ -341,7 +358,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                           ? ''
                                           : model.size ?? '',
                                       style: GoogleFonts.inter(
-                                          color: Colors.orange,
+                                          color: Colors.indigo,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400),
                                       softWrap: true,
@@ -354,7 +371,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                         child: Text(
                                           model.madeIn ?? '',
                                           style: GoogleFonts.inter(
-                                              color: Colors.orange,
+                                              color: Colors.indigo,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w400),
                                           softWrap: true,
