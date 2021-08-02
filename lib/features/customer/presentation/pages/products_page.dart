@@ -46,7 +46,7 @@ class _ProductsPageState extends State<ProductsPage> {
             children: [
               Padding(
                   padding: EdgeInsets.only(
-                      top: 80, right: 30, left: 30, bottom: 50),
+                      top: 80, right: 50, left: 50, bottom: 50),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -54,11 +54,11 @@ class _ProductsPageState extends State<ProductsPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(ICONS_ASSETS + 'icon_da_ban.png',
-                                width: 40, height: 40),
-                            SizedBox(
-                              width: 10,
-                            ),
+                            // Image.asset(ICONS_ASSETS + 'icon_da_ban.png',
+                            //     width: 40, height: 40),
+                            // SizedBox(
+                            //   width: 10,
+                            // ),
                             Text(
                               'CHÚNG TÔI CUNG CẤP',
                               style: GoogleFonts.inter(

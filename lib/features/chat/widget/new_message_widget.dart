@@ -96,7 +96,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
     try {
       TaskSnapshot snapshot = await uploadTask;
       var imageUrl = await snapshot.ref.getDownloadURL();
-      if (widget.toUser.role ?? '' == 'all-user') {
+      if (widget.toUser.role  == 'all-user') {
         await FirebaseApi.sendMessageToAllUser(imageUrl, '1', widget.myUser,(value){
           setState(() {
             sendingText = value.toString();

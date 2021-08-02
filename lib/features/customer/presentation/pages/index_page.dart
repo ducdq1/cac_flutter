@@ -61,7 +61,7 @@ class _IndexpageState extends State<Indexpage> {
   void initState() {
 
     badgeCount = 0;
-     initFirebaseData();
+    initFirebaseData();
     super.initState();
     // _addBadgeCount();
     // Future.delayed(Duration(milliseconds: 5000), _addBadgeCount);
@@ -224,6 +224,10 @@ class _IndexpageState extends State<Indexpage> {
   void initFirebaseData() async {
     //await FirebaseApi.getAdminUser();
     myUser = await FirebaseApi.getMyUser();
+    bool isCustomer =  pref.getBool('isCustomer');
+    if (isCustomer) {
+      await FirebaseApi.checkHasMessage(myUser.idUser, myUser);
+    }
   }
 
   void handleRefresh(context, {int indexTab}) {}
