@@ -161,7 +161,7 @@ class ReportWidget extends StatelessWidget {
                                 )),
                             SizedBox(height: 10),
                             Text(
-                              productModel.salePrice ?? '',
+                              productModel.salePrice ?? 'Chưa có giá bán',
                               style: GoogleFonts.inter(
                                 fontSize: FONT_MIDDLE,
                                 color: Colors.amber.shade900,
