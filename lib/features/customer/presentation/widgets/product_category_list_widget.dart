@@ -27,50 +27,54 @@ class _ListViewProductCategoryWidgetState
   @override
   Widget build(BuildContext context) {
     return AnimationLimiter(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: widget.categories.length != 0
-            ? LazyLoadScrollView(
-                onEndOfPage: () => {},
-                isLoading: isLoadingVertical,
-                child: RefreshIndicator(
-                  onRefresh: () async => {handleRefresh(context)},
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(bottom: 0),
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return AnimationConfiguration.staggeredList(
-                        position: index,
-                        duration: const Duration(milliseconds: 375),
-                        child: SlideAnimation(
-                          verticalOffset: 50.0,
-                          child: FadeInAnimation(
-                            child: ProductCategoryItemWidget(
-                              header: widget.categories[index].type==0 ? 'THIẾT BỊ NỘI THẤT' :'GẠCH MEN CAO CẤP',
-                              showHeader: (index == 0 || widget.categories[index].type != widget.categories[index-1].type) ? true : false,
-                              model: widget.categories[index],
-                              onTap: () {
-                                Navigator.pushNamed(
-                                        context, ROUTER_CUS_SEARCH_PRODUCT,
-                                        arguments: productSearch.SearchArgument(
-                                    fromCategoryPage: true,
-                                        type:  widget.categories[index].type ,code: widget.categories[index].code))
-                                    .then((value) => {});
-                              },
+      child: Container(
+        color: Colors.white70,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: widget.categories.length != 0
+              ? LazyLoadScrollView(
+                  onEndOfPage: () => {},
+                  isLoading: isLoadingVertical,
+                  child: RefreshIndicator(
+                    onRefresh: () async => {handleRefresh(context)},
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(bottom: 0),
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 375),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: ProductCategoryItemWidget(
+                                header: widget.categories[index].type==0 ? 'THIẾT BỊ NỘI THẤT' :'GẠCH MEN CAO CẤP',
+                                showHeader: (index == 0 || widget.categories[index].type != widget.categories[index-1].type) ? true : false,
+                                model: widget.categories[index],
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                          context, ROUTER_CUS_SEARCH_PRODUCT,
+                                          arguments: productSearch.SearchArgument(
+                                      fromCategoryPage: true,
+                                          type:  widget.categories[index].type ,code: widget.categories[index].code,
+                                         selectType:  widget.categories[index].selectType ))
+                                      .then((value) => {});
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    // itemCount: widget.hasReachedMax
-                    //     ? widget.pahts.length
-                    //     : widget.pahts.length + 1,
-                    itemCount: widget.categories.length,
-                    controller: widget.scrollController,
+                        );
+                      },
+                      // itemCount: widget.hasReachedMax
+                      //     ? widget.pahts.length
+                      //     : widget.pahts.length + 1,
+                      itemCount: widget.categories.length,
+                      controller: widget.scrollController,
+                    ),
                   ),
-                ),
-              )
-            : NoDataFailureWidget(),
+                )
+              : NoDataFailureWidget(),
+        ),
       ),
     );
   }

@@ -18,7 +18,7 @@ import 'package:citizen_app/core/functions/trans.dart';
 abstract class AccountDataSource {
   Future<AuthEntity> auth({String otpCode, String phone, String password});
 
-  Future<AuthEntity> authNonOtp({String phone, String password,bool isCustomer});
+  Future<AuthEntity> authNonOtp({String phone, String password,bool isCustomer,String inviter});
 
   Future<UserEntity> getUserInfo();
 
@@ -99,14 +99,15 @@ class AccountDataSourceImpl implements AccountDataSource {
   }
 
   @override
-  Future<AuthEntity> authNonOtp({String phone, String password,bool isCustomer}) async {
+  Future<AuthEntity> authNonOtp({String phone, String password,bool isCustomer,String inviter}) async {
     try {
       var body;
       if (isCustomer) {
         body  = jsonEncode(
           <String, String>{
             "phone": phone,
-            "name": password
+            "name": password,
+            "inviterName" :inviter
           },
         );
       } else {
@@ -118,6 +119,7 @@ class AccountDataSourceImpl implements AccountDataSource {
         );
       }
 
+      print(body);
       final response = await client
           .post(isCustomer? '$base_cus_url_api/workers/login' : '$baseUrl_api/login',
             headers: {

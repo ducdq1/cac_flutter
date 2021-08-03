@@ -42,8 +42,8 @@ class AccountRepositoryImpl implements AccountRepository {
   String password;
 
   @override
-  Future<AuthEntity> signInWithAccount({String password, String phone,bool isCustomer}) async {
-    return await remoteDataSource.authNonOtp(phone: phone, password: password, isCustomer: isCustomer);
+  Future<AuthEntity> signInWithAccount({String password, String phone,bool isCustomer,String inviter}) async {
+    return await remoteDataSource.authNonOtp(phone: phone, password: password, isCustomer: isCustomer,inviter: inviter);
   }
 
   @override

@@ -124,12 +124,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 50),
                 ],
               )),
-              userType != 3 ?  SizedBox() : OptionItemWidget(
-                icon: 'icon_info.png',
-                label: 'Nhắn tin',
-                // route: ROUTER_INFO_PAGE,
-                page: ChatsPage(),
-              ),
+              //userType != 3 ?
+              SizedBox(),
+              //     : OptionItemWidget(
+              //   icon: 'icon_info.png',
+              //   label: 'Nhắn tin',
+              //   // route: ROUTER_INFO_PAGE,
+              //   page: ChatsPage(),
+              // ),
               isCustomer
                   ? SizedBox()
                   : OptionItemWidget(

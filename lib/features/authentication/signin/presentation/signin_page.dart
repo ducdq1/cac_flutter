@@ -180,8 +180,8 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                             SizedBox(
                               height: MediaQuery.of(context).size.height < 650
-                                  ? 50
-                                  : 60,
+                                  ? 40
+                                  : 50,
                             ),
                               FormSignInWidget(formKey: _formKey),
                           ],

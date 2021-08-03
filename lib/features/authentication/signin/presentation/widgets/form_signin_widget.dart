@@ -33,8 +33,11 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
     implements OnLoadingDialogPopListener {
   FocusNode _passFocusNode;
   FocusNode _phoneFocusNode;
+  FocusNode _inviterFocusNode;
   TextEditingController _phoneController;
   TextEditingController _passController;
+  TextEditingController _inviterController;
+
   bool _isButtonDisabled = false;
   SignInBloc _signInBloc;
   bool isCustomer = true;
@@ -43,8 +46,10 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
   void initState() {
     _passFocusNode = FocusNode();
     _phoneFocusNode = FocusNode();
+    _inviterFocusNode = FocusNode();
     _phoneController = TextEditingController();
     _passController = TextEditingController();
+    _inviterController = TextEditingController();
     _signInBloc = BlocProvider.of<SignInBloc>(context);
     super.initState();
   }
@@ -97,15 +102,29 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                 controller: _passController,
                 obscureText: !isCustomer,
                 focusAction: () => _passFocusNode.unfocus(),
-                textInputAction: TextInputAction.done,
-
+                textInputAction: isCustomer ? TextInputAction.next : TextInputAction.done,
                 validates: [
                   EmptyValidate(),
                   //PasswordValidate(),
                 ],
               ),
+             isCustomer ? Padding(
+                padding: const EdgeInsets.only(top:8.0),
+                child: InputValidateWidget(
+                  label:   'Người giới thiệu',
+                  focusNode: _inviterFocusNode,
+                  controller: _inviterController,
+                  focusAction: () => _inviterFocusNode.unfocus(),
+                  textInputAction: TextInputAction.done,
+                  obscureText: !isCustomer,
+                  validates: [
+                    EmptyValidate(),
+                    //PasswordValidate(),
+                  ],
+                ),
+              ) : SizedBox(),
               SizedBox(
-                height: MediaQuery.of(context).size.height <= 650 ? 10 : 30,
+                height: MediaQuery.of(context).size.height <= 650 ? 10 : 20,
               ),
               GroupButtonWidget(
                 primaryLabel: trans(TITLE_LOGIN_SCREEN),
@@ -122,7 +141,8 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                     _signInBloc.add(SignInAccountEvent(
                       password: _passController.text.trim(),
                       phone: _phoneController.text.trim(),
-                        isCustomer : isCustomer
+                        isCustomer : isCustomer,
+                      inveter: _inviterController.text.trim()
                     ));
                     // await showOtpDialog(
                     //   context,
@@ -135,7 +155,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                 },
               ),
               SizedBox(
-                height:20,
+                height:10,
               ),
               Center(
                 child: Text(
@@ -148,7 +168,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                 ),
               ),
               SizedBox(
-                height:20,
+                height:10,
               ),
 
               Center(

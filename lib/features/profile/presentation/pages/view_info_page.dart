@@ -122,37 +122,37 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(ICONS_ASSETS + 'ic_gmail.png',
-                              width: 24, height: 24),
-                          SizedBox(width: 10),
-                          RichText(
-                            text: TextSpan(
-                              text: 'Email: ',
-                              style: GoogleFonts.inter(
-                                color: PRIMARY_TEXT_COLOR,
-                                fontSize: FONT_MIDDLE,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: 'cac_cskh@gmail.com',
-                                  style: GoogleFonts.inter(
-                                    color: PRIMARY_TEXT_COLOR,
-                                    fontSize: FONT_MIDDLE,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                      // SizedBox(
+                      //   height: 15,
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     Image.asset(ICONS_ASSETS + 'ic_gmail.png',
+                      //         width: 24, height: 24),
+                      //     SizedBox(width: 10),
+                      //     RichText(
+                      //       text: TextSpan(
+                      //         text: 'Email: ',
+                      //         style: GoogleFonts.inter(
+                      //           color: PRIMARY_TEXT_COLOR,
+                      //           fontSize: FONT_MIDDLE,
+                      //           fontWeight: FontWeight.bold,
+                      //         ),
+                      //         children: <TextSpan>[
+                      //           TextSpan(
+                      //             text: 'cac_cskh@gmail.com',
+                      //             style: GoogleFonts.inter(
+                      //               color: PRIMARY_TEXT_COLOR,
+                      //               fontSize: FONT_MIDDLE,
+                      //               fontWeight: FontWeight.normal,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       SizedBox(
                         height: 15,
                       ),

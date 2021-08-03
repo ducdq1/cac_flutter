@@ -13,6 +13,7 @@ import 'package:citizen_app/features/authentication/signup/presentation/bloc/act
 import 'package:citizen_app/features/authentication/signup/presentation/bloc/signup_bloc.dart';
 import 'package:citizen_app/features/common/http_proxy.dart';
 import 'package:citizen_app/features/customer/presentation/pages/product_category_page.dart';
+import 'package:citizen_app/features/customer/presentation/pages/products_page.dart';
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/paht/domain/usecases/get_detailed_paht.dart';
@@ -44,6 +45,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/saled_quotation_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/aprove_quotation_widget.dart';
+import 'package:citizen_app/features/paht/presentation/pages/products_type_page.dart';
+import 'features/chat/page/chats_page.dart';
 import 'features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'features/customer/presentation/pages/index_page.dart';
 import 'features/customer/presentation/pages/cus_product_search.dart';
@@ -191,7 +194,7 @@ class _MyAppState extends State<MyApp> {
           return supportedLocales.first;
         },
         navigatorKey: navKey,
-        title: 'C.A.C Báo giá',
+        title: 'Nội thất C.A.C',
         initialRoute: (token != null && !token.isEmpty)
             ? isCustomer
                 ? ROUTER_CUS_HOME_PAGE
@@ -225,6 +228,9 @@ class _MyAppState extends State<MyApp> {
           ROUTER_CUS_HOME_PAGE: (context) => Indexpage(),
           ROUTER_CUS_SEARCH_PRODUCT: (context) => CusProductSearch(),
           ROUTER_CUS_PRODUCT_CATEGORY: (context) => ProductCategoryPage(),
+          ROUTER_CUS_CHAT_PAGE: (context) => ChatsPage(),
+          ROUTER_CUS_PRODUCTS_PAGE: (context) => ProductsPage(),
+          ROUTER_PRODUCTS_TYPE_PAGE: (context) => ProductsTypePage(),
         },
         debugShowCheckedModeBanner: false,
       ),

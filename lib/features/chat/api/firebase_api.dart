@@ -125,6 +125,11 @@ class FirebaseApi {
             urlAvatar: avartarPath != null ? '$baseUrl' + avartarPath : '',
         status: 'online'));
         myUser = await FirebaseApi.getUserByPhone(phone);
+      }else{
+        await refUsers
+            .doc(idUser)
+            .update({"lastOnlineTime": DateTime.now(),
+          "status" : "online"});
       }
       await pref.setString('myFirebaseUserId', myUser.idUser);
       await pref.setString('myFirebaseUserFullName', myUser.name);
@@ -132,10 +137,6 @@ class FirebaseApi {
       await pref.setString('myFirebaseUserRole',myUser.role);
       await pref.setString('myFirebaseUserPhone',myUser.phone);
 
-      await refUsers
-          .doc(idUser)
-          .update({"lastOnlineTime": DateTime.now(),
-                  "status" : "online"});
 
       return myUser;
     }
@@ -195,14 +196,24 @@ class FirebaseApi {
 
   }
 
-
-
   static Stream<List<Message>> getMessages(String idUser) =>
       FirebaseFirestore.instance
           .collection('chats/$idUser/messages')
           .orderBy(MessageField.createdAt, descending: true)
           .snapshots()
           .transform(Utils.transformer(Message.fromJson));
+
+  static Future<bool> checkHasMessage(String idUser,User myUser) async {
+   final refUsers =  FirebaseFirestore.instance
+        .collection('chats/$idUser/messages');
+   final messages = await refUsers.get();
+    if(messages.size == 0){
+       uploadMessage(
+           idUser,  'Xin chào, tôi vừa đăng nhập...',  myUser, '0');
+       return true;
+    }
+    return false;
+  }
 
   static Future addRandomUsers(List<User> users) async {
     final refUsers = FirebaseFirestore.instance.collection('users');

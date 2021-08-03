@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:citizen_app/core/resources/colors.dart';
+import 'package:citizen_app/core/resources/font_sizes.dart';
 import 'package:citizen_app/core/resources/routers.dart';
+import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/no_network_failure_widget.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/pages/product_category_page.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'cus_product_search.dart';
 
@@ -37,30 +40,67 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        padding: EdgeInsets.only(top: 100),
         alignment: Alignment.center,
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              getItem(
-                label: 'Thiết bị',
-                icon: '/images/tb_noi_that.jpg',
-                onPress: () {
-                  Navigator.pushNamed(context, ROUTER_CUS_PRODUCT_CATEGORY,
-                      arguments: ProductCategoryArgument(type:0));
-                },
+              Padding(
+                  padding: EdgeInsets.only(
+                      top: 80, right: 50, left: 50, bottom: 50),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Image.asset(ICONS_ASSETS + 'icon_da_ban.png',
+                            //     width: 40, height: 40),
+                            // SizedBox(
+                            //   width: 10,
+                            // ),
+                            Text(
+                              'CHÚNG TÔI CUNG CẤP',
+                              style: GoogleFonts.inter(
+                                fontSize: FONT_HUGE,
+                                color: Colors.indigo,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              softWrap: true,
+                            )
+                          ],
+                        ),
+                        Divider(
+                          color: Colors.indigo,
+                          thickness: 1,
+                        ),
+                      ])),
+              SizedBox(
+                height: 10,
               ),
-              getItem(
-                label: 'Gạch men',
-                icon: '/images/gach_men.jpg',
-                onPress: () {
-                  Navigator.pushNamed(context, ROUTER_CUS_PRODUCT_CATEGORY,
-                  arguments: ProductCategoryArgument(type:1))
-                      .then((value) => {});
-                },
-              ),
-            ]),
+              Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                getItem(
+                  label: 'Thiết bị',
+                  icon: '/images/tb_noi_that.jpg',
+                  onPress: () {
+                    Navigator.pushNamed(context, ROUTER_CUS_PRODUCT_CATEGORY,
+                        arguments: ProductCategoryArgument(type:0));
+                  },
+                ),
+                getItem(
+                  label: 'Gạch men',
+                  icon: '/images/gach_men.jpg',
+                  onPress: () {
+                    Navigator.pushNamed(context, ROUTER_CUS_PRODUCT_CATEGORY,
+                    arguments: ProductCategoryArgument(type:1))
+                        .then((value) => {});
+                  },
+                ),
+              ])
+      ]),
       ),
     );
   }

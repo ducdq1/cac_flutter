@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".Application"
-        android:label="C.A.C Báo giá"
+        android:label="Nội thất C.A.C"
         android:icon="@drawable/icon_app"
         android:usesCleartextTraffic="true">
 

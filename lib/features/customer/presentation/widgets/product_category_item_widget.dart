@@ -46,7 +46,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                           header,
                           style: GoogleFonts.inter(
                             fontSize: FONT_HUGE,
-                            color: Colors.indigoAccent,
+                            color: Colors.indigo,
                             fontWeight: FontWeight.bold,
                           ),
                           softWrap: true,
@@ -54,7 +54,7 @@ class ProductCategoryItemWidget extends StatelessWidget {
                         ],
                       ),
                       Divider(
-                        color: Colors.indigoAccent,
+                        color: Colors.indigo,
                         thickness: 1,
                       ),
                       SizedBox(

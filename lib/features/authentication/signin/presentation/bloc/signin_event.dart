@@ -13,7 +13,8 @@ class SignInAccountEvent extends SignInEvent {
   String phone;
   String password;
   bool isCustomer;
-  SignInAccountEvent({this.phone, this.password,this.isCustomer =true});
+  String inveter;
+  SignInAccountEvent({this.phone, this.password,this.isCustomer =true,this.inveter});
 }
 
 class SignInOtpEvent extends SignInEvent {
