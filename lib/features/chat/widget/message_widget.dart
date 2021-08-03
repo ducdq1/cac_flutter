@@ -51,7 +51,7 @@ class MessageWidget extends StatelessWidget {
                           height: 28.0,
                           child: CachedNetworkImage(
                             fit: BoxFit.cover,
-                            imageUrl: toUser.urlAvatar,
+                            imageUrl: toUser.urlAvatar ?? '',
                             placeholder: (context, url) =>
                                 new CircularProgressIndicator(strokeWidth: 2.0),
                             height: 24,
@@ -67,101 +67,113 @@ class MessageWidget extends StatelessWidget {
                     ),
                   )
                 : SizedBox(),
-            message.type == '1' ?
-            Container(
-              color: Colors.transparent,
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.all(10),
-              child: Container(
-                width: 200.0,
-                height: 200.0,
-                child: InkWell(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    child: Image.network(
-                      message.message,
-                      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8.0),
-                            ),
-                          ),
-                          width: 200.0,
-                          height: 200.0,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null &&
-                                  loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                                  : null,
-                            ),
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, object, stackTrace) {
-                        return Container(
-                          width: 60.0,
-                          child: Image.asset(
-                            IMAGE_ASSETS_PATH + 'icon_none.png',
-                            width: 60.0,
-                            height: 60.0,
-                            //fit: BoxFit.cover,
-                          ),
-                        );
-                      },
+            message.type == '1'
+                ? Container(
+                    color: Colors.transparent,
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(10),
+                    child: Container(
                       width: 200.0,
                       height: 200.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  onTap:  () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FullPhoto(
-                          url: message.message,
+                      child: InkWell(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          child: Image.network(
+                            message.message,
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                width: 200.0,
+                                height: 200.0,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                                null &&
+                                            loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, object, stackTrace) {
+                              return Container(
+                                width: 60.0,
+                                child: Image.asset(
+                                  IMAGE_ASSETS_PATH + 'icon_none.png',
+                                  width: 60.0,
+                                  height: 60.0,
+                                  //fit: BoxFit.cover,
+                                ),
+                              );
+                            },
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FullPhoto(
+                                url: message.message,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-                //borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                //clipBehavior: Clip.hardEdge,
-              ),
-              //margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20.0 : 10.0, right: 10.0),
-            ) :
-            Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.all(10),
-              //width: 500,
-               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 150),
-              decoration: BoxDecoration(
-                color: isMe ? Colors.grey[100] : Theme.of(context).accentColor,
-                borderRadius: isMe
-                    ? borderRadius
-                        .subtract(BorderRadius.only(bottomRight: radius))
-                    : borderRadius
-                        .subtract(BorderRadius.only(bottomLeft: radius)),
-              ),
-              child:  Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment:
-                isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      message.message,
-                      style: TextStyle(color: isMe ? Colors.black : Colors.white,fontSize: 16),
-                      textAlign: isMe ? TextAlign.end : TextAlign.start,
-                      softWrap: true,
+                      //borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      //clipBehavior: Clip.hardEdge,
+                    ),
+                    //margin: EdgeInsets.only(bottom: isLastMessageRight(index) ? 20.0 : 10.0, right: 10.0),
+                  )
+                : Container(
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(10),
+                    //width: 500,
+                    constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width - 150),
+                    decoration: BoxDecoration(
+                      color: isMe
+                          ? Colors.grey[100]
+                          : Theme.of(context).accentColor,
+                      borderRadius: isMe
+                          ? borderRadius
+                              .subtract(BorderRadius.only(bottomRight: radius))
+                          : borderRadius
+                              .subtract(BorderRadius.only(bottomLeft: radius)),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: isMe
+                          ? CrossAxisAlignment.end
+                          : CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                            message.message,
+                            style: TextStyle(
+                                color: isMe ? Colors.black : Colors.white,
+                                fontSize: 16),
+                            textAlign: isMe ? TextAlign.end : TextAlign.start,
+                            softWrap: true,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
           ],
         ),
         (!isMe && isLastMessage)
@@ -169,7 +181,10 @@ class MessageWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 40),
                 child: Text(
                   handleTime(message.createdAt.toString()),
-                  style: TextStyle(color: Colors.grey, fontSize: 13,fontStyle: FontStyle.italic),
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 13,
+                      fontStyle: FontStyle.italic),
                 ),
               )
             : SizedBox(),
@@ -187,7 +202,8 @@ class MessageWidget extends StatelessWidget {
             child: Container(
               child: Text(
                 message.message,
-                style: TextStyle(color: isMe ? Colors.black : Colors.white,fontSize: 16),
+                style: TextStyle(
+                    color: isMe ? Colors.black : Colors.white, fontSize: 16),
                 textAlign: isMe ? TextAlign.end : TextAlign.start,
                 softWrap: true,
                 //overflow: E,

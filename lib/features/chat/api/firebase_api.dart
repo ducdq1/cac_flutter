@@ -64,20 +64,20 @@ class FirebaseApi {
     String firebaseAdminUserName = pref.getString('firebaseAdminUserName');
     String firebaseAdminUserAvatar = pref.getString('firebaseAdminUserAvatar');
    // if (firebaseAdminUserId == null) {
-      QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where("role", isEqualTo: 'admin')
-          .get();
-      if (documentSnapshot != null &&
-          documentSnapshot.docs != null &&
-          documentSnapshot.docs.length > 0) {
-        User user = User.fromJson(documentSnapshot.docs.first.data());
-        await pref.setString('firebaseAdminUserId', user.idUser);
-        await pref.setString('firebaseAdminUserName', user.name);
-        await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
-        //await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
-        return user;
-      }
+    QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where("role", isEqualTo: 'admin')
+        .get();
+    if (documentSnapshot != null &&
+        documentSnapshot.docs != null &&
+        documentSnapshot.docs.isNotEmpty) {
+      User user = User.fromJson(documentSnapshot.docs.first.data());
+      await pref.setString('firebaseAdminUserId', user.idUser);
+      await pref.setString('firebaseAdminUserName', user.name);
+      await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
+      //await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
+      return user;
+    }
     //}
     return User(
         idUser: firebaseAdminUserId,
@@ -111,14 +111,12 @@ class FirebaseApi {
     String avartar = pref.getString('myFirebaseUserAvatar');
     String role = pref.getString('myFirebaseUserRole');
     String phone = pref.getString('myFirebaseUserPhone');
-    final refUsers = FirebaseFirestore.instance.collection('users');
     if (idUser == null) {
       String phone = pref.getString('userName');
       User myUser = await FirebaseApi.getUserByPhone(phone);
       if (myUser == null) {
         String fullName = pref.getString('fullName');
         String avartarPath = pref.getString('avartarPath');
-
         await FirebaseApi.createUser(User(role: 'user',
             phone: phone,
             name: fullName,
@@ -126,10 +124,7 @@ class FirebaseApi {
         status: 'online'));
         myUser = await FirebaseApi.getUserByPhone(phone);
       }else{
-        await refUsers
-            .doc(idUser)
-            .update({"lastOnlineTime": DateTime.now(),
-          "status" : "online"});
+        updateUserStatus(idUser,"online");
       }
       await pref.setString('myFirebaseUserId', myUser.idUser);
       await pref.setString('myFirebaseUserFullName', myUser.name);
@@ -141,13 +136,23 @@ class FirebaseApi {
       return myUser;
     }
 
-    await refUsers
-        .doc(idUser)
-        .update({"lastOnlineTime": DateTime.now(),
-      "status" : "online"});
+    updateUserStatus(idUser,"online");
+
     return User(idUser: idUser, name: name, urlAvatar: avartar,role:  role,phone: phone);
   }
 
+  static updateUserStatus(String userId,String status) async{
+    try{
+      final refUsers = FirebaseFirestore.instance.collection('users');
+      refUsers
+          .doc(userId)
+          .update({"lastOnlineTime": DateTime.now(),
+        "status" : status});
+    }catch(e){
+
+    }
+
+  }
   static Future<String> getMyUserId() async {
     String myId = pref.getString('myFirebaseUserId');
     if (myId == null) {
