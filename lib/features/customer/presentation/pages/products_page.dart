@@ -60,7 +60,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             //   width: 10,
                             // ),
                             Text(
-                              'CHÚNG TÔI CUNG CẤP',
+                              'CÔNG TY CHÚNG TÔI CUNG CẤP',
                               style: GoogleFonts.inter(
                                 fontSize: FONT_HUGE,
                                 color: Colors.indigo,
