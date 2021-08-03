@@ -9,8 +9,8 @@ abstract class DetailedPahtEvent extends Equatable {
 
 class DetailedPahtFetching extends DetailedPahtEvent {
   final String pahtId;
-
-  DetailedPahtFetching({@required this.pahtId});
+  final int productId;
+  DetailedPahtFetching({@required this.pahtId,this.productId});
 
   @override
   List<Object> get props => [pahtId];

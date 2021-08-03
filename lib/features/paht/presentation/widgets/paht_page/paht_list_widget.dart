@@ -55,8 +55,11 @@ class PahtDetailArgument {
   final bool isUpdateAble;
   final bool isApproveAble;
   final bool fromCategoryPage;
+  final productId;
    PahtDetailArgument(
-      {this.id,
+      {
+        this.productId,
+        this.id,
       this.title,
       this.poiDetail,
       this.productCode,

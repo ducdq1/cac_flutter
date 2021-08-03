@@ -245,6 +245,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                   Navigator.pushNamed(context, ROUTER_DETAILED_PAHT,
                       arguments: paht_list_widget.PahtDetailArgument(
                           productCode: model.productCode,
+                          productId: model.productId,
                           fromCategoryPage: true));
                 },
                 child: Container(

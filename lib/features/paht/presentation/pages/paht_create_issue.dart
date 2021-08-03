@@ -221,7 +221,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                             Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
                                 .then((value) => {
                                       if (value != null)
-                                        {gotoDetailProductPage(value)}
+                                        {gotoDetailProductPage(value,null)}
                                     });
 
                             break;
@@ -238,7 +238,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                                         context, ROUTER_QRCODE_SCANER)
                                     .then((value) => {
                                           if (value != null)
-                                            {gotoDetailProductPage(value)}
+                                            {gotoDetailProductPage(value,null)}
                                         });
                             }
                             break;
@@ -272,7 +272,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                         Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT)
                             .then((value) => {
                                   if (value != null)
-                                    {gotoDetailProductPage(value)}
+                                    {gotoDetailProductPage(null,value)}
                                 });
                       },
                     ),
@@ -993,9 +993,9 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  void gotoDetailProductPage(String cameraScanResult) {
+  void gotoDetailProductPage(String cameraScanResult,int productId) {
     Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
-            arguments: PahtDetailArgument(productCode: cameraScanResult))
+            arguments: PahtDetailArgument(productCode: cameraScanResult,productId: productId))
         .then((value) => {
               if (value != null)
                 {

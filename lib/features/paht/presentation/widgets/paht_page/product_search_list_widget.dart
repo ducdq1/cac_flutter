@@ -153,7 +153,7 @@ class _ListViewProductsWidgetState extends State<ListViewProductsWidget> {
                                       pahtModel: widget.pahts[index],
                                       onTap: () {
                                         widget.onTap(
-                                            widget.pahts[index].productCode);
+                                            widget.pahts[index].productId);
                                       },
                                     )),
                         ),

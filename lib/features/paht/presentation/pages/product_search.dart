@@ -123,7 +123,7 @@ class _ProductSearchState extends State<ProductSearch>
                               Navigator.pushNamed(context, ROUTER_DETAILED_PAHT,
                                   arguments:
                                       paht_list_widget.PahtDetailArgument(
-                                          productCode: value,
+                                          productId: value,
                                           fromCategoryPage: true));
                             } else {
                               Navigator.pop(context, value);

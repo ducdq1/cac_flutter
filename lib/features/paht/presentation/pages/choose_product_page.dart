@@ -73,6 +73,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   int _index;
   PahtDetailArgument arg;
   String productCode;
+  int productId;
   ProductModel productModel;
   TonKhoModel tonKhoModel;
   bool firstLoad = true;
@@ -119,6 +120,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
       firstLoad = false;
       arg = ModalRoute.of(context).settings.arguments as PahtDetailArgument;
       productCode = arg.productCode;
+      productId = arg.productId;
       quotationDetailModel = arg.quotationDetailModel;
       if (quotationDetailModel != null) {
         _passController.text = quotationDetailModel.amount.toString();
@@ -135,7 +137,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
         }
       }
       BlocProvider.of<DetailedPahtBloc>(context).add(
-        DetailedPahtFetching(pahtId: productCode),
+        DetailedPahtFetching(pahtId: productCode,productId: productId),
       );
     }
     return BaseLayoutWidget(
@@ -470,7 +472,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                       : state.error.toString(),
                   onPressed: () {
                     BlocProvider.of<DetailedPahtBloc>(context)
-                        .add(DetailedPahtFetching(pahtId: productCode));
+                        .add(DetailedPahtFetching(pahtId: productCode,productId: productId));
                   });
             }
             return Container(
