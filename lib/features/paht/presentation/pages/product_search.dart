@@ -69,7 +69,7 @@ class _ProductSearchState extends State<ProductSearch>
         },
         child: BlocProvider<PublicPahtBloc>(
             create: (context) => singleton<PublicPahtBloc>()
-              ..add(ListProductFetchingEvent(offset: 0, limit: 10,type: type,isAgent: isAgent)),
+              ..add(ListProductFetchingEvent(offset: 0, limit: 100,type: type,isAgent: isAgent)),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                 listener: (context, state) {
               if (state is PublicPahtFailure) {
@@ -90,7 +90,7 @@ class _ProductSearchState extends State<ProductSearch>
                             ListProductFetchingEvent(
                                 search: searchController.text.trim(),
                                 offset: 0,
-                                limit: 10,
+                                limit: 100,
                             type: type, isAgent: isAgent));
                       }
                       if (value.isNotEmpty) {
@@ -104,7 +104,7 @@ class _ProductSearchState extends State<ProductSearch>
                           ListProductFetchingEvent(
                               search: searchController.text.trim(),
                               offset: 0,
-                              limit: 10,
+                              limit: 100,
                               type: type, isAgent: isAgent));
                     },
                     isSearch: isSearch,
@@ -140,7 +140,7 @@ class _ProductSearchState extends State<ProductSearch>
                                   ListProductFetchingEvent(
                                       search: searchController.text.trim(),
                                       offset: 0,
-                                      limit: 10,
+                                      limit: 100,
                                       type: type, isAgent: isAgent),
                                 );
                               })

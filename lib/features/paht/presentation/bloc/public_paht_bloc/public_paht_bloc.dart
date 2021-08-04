@@ -54,7 +54,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         SearchProductModel listPublicPaht = await searchProduct(
             SearchProductParam(
                 productCode: event.search,
-                limit: 300,
+                limit: event.limit,
                 offset: 0,
                 type: event.type,
                 isAgent: event.isAgent,

@@ -109,7 +109,7 @@ class _CusProductSearchState extends State<CusProductSearch>
             create: (context) => singleton<PublicPahtBloc>()
               ..add(ListProductFetchingEvent(
                   offset: 0,
-                  limit: 10,
+                  limit: -1,
                   type: type,
                   isAgent: isAgent,
                   code: code,
@@ -130,7 +130,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                           ListProductFetchingEvent(
                               search: searchController.text.trim(),
                               offset: 0,
-                              limit: 300,
+                              limit: -1,
                               type: type,
                               isAgent: false,
                               code: code,
@@ -144,7 +144,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                           ListProductFetchingEvent(
                               search: searchController.text.trim(),
                               offset: 0,
-                              limit: 300,
+                              limit: -1,
                               type: type,
                               isAgent: false,
                               code: code,
@@ -160,7 +160,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                           ListProductFetchingEvent(
                               search: searchController.text.trim(),
                               offset: 0,
-                              limit: 300,
+                              limit: -1,
                               type: type,
                               isAgent: false,
                               code: code,
@@ -217,7 +217,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                   ListProductFetchingEvent(
                                       search: searchController.text.trim(),
                                       offset: 0,
-                                      limit: 10,
+                                      limit: -1,
                                       type: type,
                                       isAgent: isAgent,
                                       code: code,
