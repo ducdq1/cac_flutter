@@ -3,7 +3,7 @@ import 'package:citizen_app/core/resources/resources.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 class FailureWidget extends StatelessWidget {
   final String message;
   final Function onPressed;
@@ -22,10 +22,16 @@ class FailureWidget extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            Image.asset(
-              IMAGE_ASSETS_PATH + "icon_none.png",
-              height: 128,
-              width: 160,
+            // Image.asset(
+            //   IMAGE_ASSETS_PATH + "icon_none.png",
+            //   height: 128,
+            //   width: 160,
+            // ),
+            SvgPicture.asset(
+              SVG_ASSETS_PATH + 'icon_none.svg',
+              fit: BoxFit.scaleDown,
+              // width: 24,
+              // height: 24,
             ),
             SizedBox(
               height: 25,

@@ -49,7 +49,7 @@ class _ProductsTypePageState extends State<ProductsTypePage> {
                 children: [
                   Padding(
                       padding: EdgeInsets.only(
-                          top: 80, right: 20, left: 20, bottom: 80),
+                          top: 80, right: 50, left: 50, bottom: 80),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,

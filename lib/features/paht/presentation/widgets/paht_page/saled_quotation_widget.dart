@@ -118,6 +118,19 @@ class _SaledQuotationState extends State<SaledQuotation> {
                             isSaled: true,
                           );
                         }
+
+                        if (state is PersonalPahtLoadmore) {
+                          return ListViewPahtsWidget(
+                            hasReachedMax: state.hasReachedMax,
+                            pahts: state.paht,
+                            isPersonal: true,
+                            scrollController: scrollController,
+                            loadmore: state.hasReachedMax ? false : true,
+                            isApproveAble: false,
+                            isSaled: true,
+                          );
+                        }
+
                         return SkeletonPahtWidget();
                       }))));
         },
