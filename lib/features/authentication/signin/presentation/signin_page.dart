@@ -162,26 +162,23 @@ class _SignInPageState extends State<SignInPage> {
                         padding: EdgeInsets.only(
                             left: 30,
                             right: 30,
-                            top:
-                                MediaQuery.of(context).size.height < 650 ? 00 : 10),
+                            top: 0),
                         child: Column(
                           mainAxisSize : MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             LogoWidget(),
-                            SizedBox(height: 30),
+                            SizedBox(height: 10),
                             Text(
                               trans(TITLE_LOGIN_SCREEN),
                               style: GoogleFonts.inter(
                                 fontSize: FONT_EX_HUGE,
-                                color: PRIMARY_TEXT_COLOR,
+                                color: PRIMARY_COLOR,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(
-                              height: MediaQuery.of(context).size.height < 650
-                                  ? 40
-                                  : 50,
+                              height: 30,
                             ),
                               FormSignInWidget(formKey: _formKey),
                           ],

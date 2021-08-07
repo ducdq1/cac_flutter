@@ -7,6 +7,6 @@ abstract class AccountRepository implements ISignInRepository {
   String password;
 
   Future<String> getOtpCode({String password, String phone});
-  Future<AuthEntity> signInWithAccount({String password, String phone,bool isCustomer,String inviter});
+  Future<AuthEntity> signInWithAccount({String password, String phone,bool isCustomer,String inviter,int cusGroup});
   Future<UserEntity> getUserInfo();
 }

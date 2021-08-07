@@ -14,7 +14,8 @@ class SignInAccountEvent extends SignInEvent {
   String password;
   bool isCustomer;
   String inveter;
-  SignInAccountEvent({this.phone, this.password,this.isCustomer =true,this.inveter});
+  int cusGroup;
+  SignInAccountEvent({this.phone, this.password,this.isCustomer =true,this.inveter,this.cusGroup});
 }
 
 class SignInOtpEvent extends SignInEvent {

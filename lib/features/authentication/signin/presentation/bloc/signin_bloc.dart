@@ -78,7 +78,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         }
 
         final auth = await accountRepository.signInWithAccount(
-            phone: event.phone, password: event.password, isCustomer: event.isCustomer,inviter: event.inveter);
+            phone: event.phone, password: event.password, isCustomer: event.isCustomer,inviter: event.inveter,cusGroup: event.cusGroup);
 
         if( auth ==null || auth.userName == null || auth.userName.isEmpty){
           yield SignInFaildState(message: 'Tên đăng nhập hoặc mật khẩu không đúng');

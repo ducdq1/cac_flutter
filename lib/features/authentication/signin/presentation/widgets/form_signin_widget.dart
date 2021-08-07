@@ -16,9 +16,11 @@ import 'package:citizen_app/features/common/dialogs/loading_dialog.dart';
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:route_transitions/route_transitions.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:citizen_app/features/authentication/signin/presentation/widgets/cus_group_widget.dart';
 
 import 'group_button_widget.dart';
 
@@ -41,7 +43,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
   bool _isButtonDisabled = false;
   SignInBloc _signInBloc;
   bool isCustomer = true;
-
+  int cusGroup = -1;
   @override
   void initState() {
     _passFocusNode = FocusNode();
@@ -95,9 +97,9 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                   isCustomer ? PhoneValidate() : EmptyValidate(), EmptyValidate(),
                 ],
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 0),
               InputValidateWidget(
-                label:  isCustomer ? 'Họ tên' : trans(LABEL_LOGIN_PASSWORD),
+                label:  isCustomer ? 'Họ và tên' : trans(LABEL_LOGIN_PASSWORD),
                 focusNode: _passFocusNode,
                 controller: _passController,
                 obscureText: !isCustomer,
@@ -109,7 +111,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                 ],
               ),
              isCustomer ? Padding(
-                padding: const EdgeInsets.only(top:8.0),
+                padding: const EdgeInsets.only(top:0.0),
                 child: InputValidateWidget(
                   label:   'Người giới thiệu',
                   focusNode: _inviterFocusNode,
@@ -123,8 +125,13 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                   ],
                 ),
               ) : SizedBox(),
+
+              isCustomer ?
+                  CusGroupWidget(onChange: (value) {
+                    cusGroup = value;
+                  }) : SizedBox(),
               SizedBox(
-                height: MediaQuery.of(context).size.height <= 650 ? 10 : 20,
+                height:   10 ,
               ),
               GroupButtonWidget(
                 primaryLabel: trans(TITLE_LOGIN_SCREEN),
@@ -138,11 +145,17 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                   if (_isButtonDisabled == false) {
                     _isButtonDisabled = true;
                     FocusScope.of(context).unfocus();
+                    if(cusGroup == -1){
+                      Fluttertoast.showToast(msg: 'Bạn chưa chọn nhóm Khách Hàng');
+                      return;
+                    }
+
                     _signInBloc.add(SignInAccountEvent(
                       password: _passController.text.trim(),
                       phone: _phoneController.text.trim(),
                         isCustomer : isCustomer,
-                      inveter: _inviterController.text.trim()
+                      inveter: _inviterController.text.trim(),
+                      cusGroup: cusGroup
                     ));
                     // await showOtpDialog(
                     //   context,
@@ -182,7 +195,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                     isCustomer ? 'Đăng nhập dành cho nhân viên' : 'Đăng nhập dành cho khách hàng',
                     style: GoogleFonts.inter(
                       fontSize: FONT_MIDDLE,
-                      color: isCustomer ? PRIMARY_COLOR : Colors.blue,
+                      color: isCustomer ? Colors.indigoAccent : Colors.blue,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
