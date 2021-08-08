@@ -75,13 +75,10 @@ class _CusProductSearchState extends State<CusProductSearch>
   }
 
   Future _loadMoreVertical(BuildContext ctx) async {
-    if (hasReachedMax) {
+    if (hasReachedMax || isLoading) {
       return;
     }
 
-    if (isLoading) {
-      return;
-    }
     isLoading = true;
     setState(() {
       isLoadingVertical = true;

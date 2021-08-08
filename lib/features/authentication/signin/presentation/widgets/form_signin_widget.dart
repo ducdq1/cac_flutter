@@ -145,10 +145,6 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                   if (_isButtonDisabled == false) {
                     _isButtonDisabled = true;
                     FocusScope.of(context).unfocus();
-                    if(cusGroup == -1){
-                      Fluttertoast.showToast(msg: 'Bạn chưa chọn nhóm Khách Hàng');
-                      return;
-                    }
 
                     _signInBloc.add(SignInAccountEvent(
                       password: _passController.text.trim(),
