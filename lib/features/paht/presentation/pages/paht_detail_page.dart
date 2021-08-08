@@ -38,7 +38,8 @@ class SearchProductParam extends Equatable {
   final bool isAgent;
   final String code;
   final int searchType;
-  SearchProductParam({this.productCode, this.productName, this.userName,this.limit, this.offset, this.type = null,this.isAgent = false,this.code,this.searchType,this.productId});
+  final bool isGetPromotionProduct;
+  SearchProductParam({this.productCode, this.productName, this.userName,this.limit, this.offset, this.type = null,this.isAgent = false,this.code,this.searchType,this.productId,this.isGetPromotionProduct});
 
   @override
   // TODO: implement props
@@ -55,7 +56,8 @@ class SearchProductParam extends Equatable {
       'isAgent': isAgent,
       'code' : code,
       'searchType' : searchType,
-      'productId': productId
+      'productId': productId,
+      'isGetPromotionProduct' : isGetPromotionProduct
     };
   }
 }

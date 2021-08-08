@@ -1,40 +1,18 @@
-import 'package:citizen_app/app_localizations.dart';
-import 'package:citizen_app/core/functions/trans.dart';
-import 'package:citizen_app/core/resources/resources.dart';
-import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
-import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
-import 'package:citizen_app/features/customer/presentation/widgets/promotion_list_widget.dart';
-import 'package:citizen_app/features/home/presentation/pages/widgets/sos_button_widget.dart';
-import 'package:citizen_app/injection_container.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:package_info/package_info.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:citizen_app/core/functions/trans.dart';
-import 'package:citizen_app/core/resources/resources.dart';
-import 'package:citizen_app/core/resources/routers.dart';
-import 'package:citizen_app/features/common/widgets/failure_widget/no_network_failure_widget.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/widgets.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 
-import 'package:citizen_app/core/functions/trans.dart';
-import 'package:citizen_app/core/resources/resources.dart';
+import 'package:citizen_app/core/resources/font_sizes.dart';
 import 'package:citizen_app/core/resources/routers.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/no_network_failure_widget.dart';
+import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
+import 'package:citizen_app/features/customer/presentation/widgets/promotion_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'cus_product_search.dart';
 
 
 class PromotionPage extends StatefulWidget {
@@ -67,36 +45,135 @@ class _PromotionPageState extends State<PromotionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20.0, left: 0, right: 0, bottom: 20),
+    return  Center(
       child: Container(
-        child: RefreshIndicator(
-          onRefresh: () async => handleRefresh(context),
-          child: BlocConsumer<PromotionBloc, PromotionState>(
-            listener: (context, state) {
-              _refreshCompleter?.complete();
-              _refreshCompleter = Completer();
-            },
-            builder: (context, state) {
-              if (state is PromotionFailure) {
-                return NoNetworkFailureWidget(
-                    message:  state.error.message,
-                    onPressed: () {
-                      BlocProvider.of<PromotionBloc>(context).add(
-                          ListPromotionFetching()
-                      );
-                    });
-              }
-              if (state is PromotionSuccess) {
-                return ListViewPromotionWidget(
-                  promotions:  state.listPromotion,
-                  scrollController: scrollController,
-                );
-              }
+        alignment: Alignment.center,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(
+                      top: 80, right: 10, left: 10, bottom: 50),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/icons/hot_deal1.png',
+                                width: 40, height: 40),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Text(
+                                'CHƯƠNG TRÌNH KHUYẾN MÃI',
+                                style: GoogleFonts.inter(
+                                  fontSize: FONT_HUGE,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                softWrap: true,
+                              ),
+                            )
+                          ],
+                        ),
+                        Divider(
+                          color: Colors.red,
+                          thickness: 0.5,
+                        ),
+                      ])),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    getItem(
+                      label: 'THIẾT BỊ',
+                      icon: '/images/tb_noi_that.jpg',
+                      onPress: () {
+                        Navigator.pushNamed(
+                            context, ROUTER_CUS_SEARCH_PRODUCT,
+                            arguments: SearchArgument(
+                                fromCategoryPage: true,
+                                type:  0 ,
+                                isGetPromotionProduct: true) );
+                      },
+                    ),
+                    getItem(
+                      label: 'GẠCH MEN',
+                      icon: '/images/gach_men.jpg',
+                      onPress: () {
+                        Navigator.pushNamed(
+                            context, ROUTER_CUS_SEARCH_PRODUCT,
+                            arguments: SearchArgument(
+                                fromCategoryPage: true,
+                                type:  2 ,
+                                isGetPromotionProduct: true) );
+                      }),
+                  ])
+            ]),
+      ),
+    );
+  }
 
-              return SkeletonPahtWidget();
-            },
-          ),
+  Widget getItem({String label, Function onPress, String icon}) {
+    return Card(
+      shape:  RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(17.0),
+      ),
+      elevation: 20,
+      shadowColor: Colors.redAccent.withOpacity(0.3),
+      child: InkWell(
+        onTap: () {
+          onPress();
+        },
+        child: Column(
+          //mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 200,
+              width: 150,
+              decoration: BoxDecoration(
+                color: Color(0xffE6EFF3).withOpacity(0.6),
+                borderRadius: BorderRadius.circular(17),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 140,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
+                      child: Image.asset(
+                        'assets${icon}',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  SizedBox(
+                    child: Text(
+                      label.replaceAll("\n", "\n").replaceAll("/n", "\n"),
+                      style: TextStyle(
+                        fontSize: 19,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2
+                      ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

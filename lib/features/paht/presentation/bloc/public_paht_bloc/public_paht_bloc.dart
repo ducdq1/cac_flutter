@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
+
 part 'public_paht_event.dart';
 
 part 'public_paht_state.dart';
@@ -23,7 +24,10 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
   final SearchProduct searchProduct;
   final DeletePaht deletePaht;
 
-  PublicPahtBloc({@required this.getListPublicPaht, @required this.deletePaht,@required this.searchProduct})
+  PublicPahtBloc(
+      {@required this.getListPublicPaht,
+      @required this.deletePaht,
+      @required this.searchProduct})
       : super(PublicPahtInitial());
 
   bool _hasReachedMax(PublicPahtState state) =>
@@ -49,8 +53,12 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
     final userName = prefs.get('token').toString();
 
     if (event is ListProductFetchingEvent) {
-      yield PublicPahtLoading();
+
       try {
+        if (event.offset == 0 || currentState is SearchProducttFailure ||
+          currentState is PublicPahtInitial ) {
+          yield PublicPahtLoading();
+        await Future.delayed(Duration(milliseconds: 1000));
         SearchProductModel listPublicPaht = await searchProduct(
             SearchProductParam(
                 productCode: event.search,
@@ -59,15 +67,64 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
                 type: event.type,
                 isAgent: event.isAgent,
                 code: event.code,
-                searchType: event.selectType
-            ));
+                searchType: event.selectType,
+                isGetPromotionProduct: event.isGetPromotionProduct));
         yield SearchProductSuccess(
-            lstProduct: listPublicPaht.lstProduct,
-            offset: 0,
-            hasReachedMax: true);
-      }catch (error) {
-        yield SearchProducttFailure(error: error.message);
-    }
+          lstProduct: listPublicPaht.lstProduct,
+          offset: 0,
+          hasReachedMax: listPublicPaht.lstProduct.length  < event.limit ? true : false,
+        );
+        return;
+      } else if (currentState is SearchProductSuccess &&
+            !currentState.hasReachedMax) {
+        //load more
+          yield SearchProductLoadMore(
+            lstProduct: currentState.lstProduct,
+            offset: currentState.offset,
+            hasReachedMax: false,
+          );
+        int nextOffset = currentState.offset + 1;
+        await Future.delayed(Duration(milliseconds: 1000));
+        SearchProductModel listPublicPaht = await searchProduct(
+            SearchProductParam(
+                productCode: event.search,
+                limit: event.limit,
+                offset: nextOffset,
+                type: event.type,
+                isAgent: event.isAgent,
+                code: event.code,
+                searchType: event.selectType,
+                isGetPromotionProduct: event.isGetPromotionProduct));
+
+          yield listPublicPaht.lstProduct.isEmpty
+              ? currentState.copyWith(
+                  hasReachedMax: true, offset: currentState.offset)
+              : SearchProductSuccess(
+            lstProduct: currentState.lstProduct + listPublicPaht.lstProduct ,
+                  offset: nextOffset,
+                  hasReachedMax: listPublicPaht.lstProduct.length  < event.limit ? true : false,
+              );
+        } else if (currentState is SearchProductSuccess &&
+              currentState.hasReachedMax) {
+            yield SearchProductSuccess(
+              lstProduct: currentState.lstProduct,
+              offset: currentState.offset,
+              hasReachedMax:true,
+            );
+          return;
+        }
+      } catch (error) {
+        if(currentState is SearchProductSuccess){
+          yield SearchProductSuccess(
+            lstProduct: currentState.lstProduct,
+            offset: currentState.offset,
+            hasReachedMax: false,
+          );
+
+        }else {
+          yield SearchProducttFailure(error: error.message);
+        }
+      }
       return;
     }
 
@@ -80,8 +137,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           status: 0,
           userName: userName,
           search: event.search,
-          isApproveAble: event.isApproveAble
-         ));
+          isApproveAble: event.isApproveAble));
       yield PublicPahtSuccess(
           paht: listPublicPaht, offset: 0, hasReachedMax: true);
       return;
@@ -112,12 +168,14 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
             currentState is DeletePersonalPahtFailure ||
             currentState is PublicPahtInitial &&
                 !_hasReachedMax(currentState)) {
-          print('delay.....');
           await Future.delayed(Duration(milliseconds: 500));
-          print('loading.....');
           getListPublicPaht(PahtParams(
-                  limit: 10, offset: 0, status: 0, userName: userName,
-              isApproveAble: event.isApproveAble, isSaled: event.isSaled))
+                  limit: 10,
+                  offset: 0,
+                  status: 0,
+                  userName: userName,
+                  isApproveAble: event.isApproveAble,
+                  isSaled: event.isSaled))
               .then((value) {
             add(ListPublicPahtFetchedEvent(offset: 0, paht: value));
           }).catchError((err) {
@@ -128,8 +186,12 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
             !_hasReachedMax(currentState)) {
           int nextOffset = currentState.offset + 1;
           List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
-              limit: 10, offset: nextOffset, status: 0, userName: userName,
-          isApproveAble: event.isApproveAble, isSaled: event.isSaled));
+              limit: 10,
+              offset: nextOffset,
+              status: 0,
+              userName: userName,
+              isApproveAble: event.isApproveAble,
+              isSaled: event.isSaled));
 
           yield listPublicPaht.isEmpty
               ? currentState.copyWith(
@@ -177,8 +239,13 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       }
 
       try {
-        List<PahtModel> listPublicPaht = await getListPublicPaht(
-            PahtParams(limit: 10, offset: 0, status: 0, userName: userName,isApproveAble: event.isApproveAble, isSaled: event.isSaled));
+        List<PahtModel> listPublicPaht = await getListPublicPaht(PahtParams(
+            limit: 10,
+            offset: 0,
+            status: 0,
+            userName: userName,
+            isApproveAble: event.isApproveAble,
+            isSaled: event.isSaled));
 
         yield PublicPahtRefreshSuccess(
             paht: listPublicPaht,
@@ -229,8 +296,13 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
     if (event is ReloadListEvent) {
       try {
         yield DeletePersonalPahtSuccess();
-        List<PahtModel> results = await getListPublicPaht(
-            PahtParams(offset: 0, limit: 10, status: 0, userName: userName,isApproveAble: event.isApproveAble, isSaled: event.isSaled));
+        List<PahtModel> results = await getListPublicPaht(PahtParams(
+            offset: 0,
+            limit: 10,
+            status: 0,
+            userName: userName,
+            isApproveAble: event.isApproveAble,
+            isSaled: event.isSaled));
 
         yield PublicPahtSuccess(
             offset: 0,

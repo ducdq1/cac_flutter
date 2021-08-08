@@ -35,9 +35,10 @@ class ListProductFetchingEvent extends PublicPahtEvent {
   final bool isAgent;
   final String code;
   final int selectType;
+  final bool isGetPromotionProduct;
   ListProductFetchingEvent(
       {this.offset, this.search , this.limit = 10,this.type =-1,this.isAgent = false,this.code,
-        this.selectType = 0 });
+        this.selectType = 0, this.isGetPromotionProduct });
 
   @override
   List<Object> get props => [offset, search];

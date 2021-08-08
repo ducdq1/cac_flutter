@@ -11,11 +11,29 @@ class PublicPahtInitial extends PublicPahtState {}
 
 class PublicPahtLoading extends PublicPahtState {}
 
+class SearchProductLoadMore extends PublicPahtState {
+  final List<ProductModel> lstProduct;
+  final bool hasReachedMax;
+  final int offset;
+  final String error;
+
+  SearchProductLoadMore(
+      {@required this.lstProduct, this.hasReachedMax, this.offset, this.error});
+}
+
 class SearchProductSuccess extends PublicPahtState {
   final List<ProductModel> lstProduct;
   final bool hasReachedMax;
   final int offset;
   final String error;
+
+  SearchProductSuccess copyWith(
+      {List<ProductModel> lstProduct, bool hasReachedMax, int offset}) {
+    return SearchProductSuccess(
+        lstProduct: lstProduct ?? this.lstProduct,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+        offset: offset);
+  }
 
   SearchProductSuccess(
       {@required this.lstProduct, this.hasReachedMax, this.offset, this.error});

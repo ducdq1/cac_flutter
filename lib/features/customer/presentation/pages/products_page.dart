@@ -46,7 +46,7 @@ class _ProductsPageState extends State<ProductsPage> {
             children: [
               Padding(
                   padding: EdgeInsets.only(
-                      top: 80, right: 50, left: 50, bottom: 50),
+                      top: 80, right: 30, left: 30, bottom: 50),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -59,14 +59,21 @@ class _ProductsPageState extends State<ProductsPage> {
                             // SizedBox(
                             //   width: 10,
                             // ),
-                            Text(
-                              'CHÚNG TÔI CUNG CẤP',
-                              style: GoogleFonts.inter(
-                                fontSize: FONT_HUGE,
-                                color: Colors.indigo,
-                                fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  'CHÚNG TÔI CUNG CẤP',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 20,
+                                    color: Colors.indigo,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 3,
+                                    shadows: [Shadow(color:Colors.grey)]
+
+                                  ),
+                                  softWrap: true,
+                                ),
                               ),
-                              softWrap: true,
                             )
                           ],
                         ),
@@ -83,7 +90,7 @@ class _ProductsPageState extends State<ProductsPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 getItem(
-                  label: 'Thiết bị',
+                  label: 'THIẾT BỊ',
                   icon: '/images/tb_noi_that.jpg',
                   onPress: () {
                     Navigator.pushNamed(context, ROUTER_CUS_PRODUCT_CATEGORY,
@@ -91,7 +98,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   },
                 ),
                 getItem(
-                  label: 'Gạch men',
+                  label: 'GẠCH MEN',
                   icon: '/images/gach_men.jpg',
                   onPress: () {
                     Navigator.pushNamed(context, ROUTER_CUS_PRODUCT_CATEGORY,
@@ -110,6 +117,7 @@ class _ProductsPageState extends State<ProductsPage> {
       shape:  RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(17.0),
       ),
+      shadowColor: Colors.indigoAccent.withOpacity(0.3),
       elevation: 20,
       child: InkWell(
         onTap: () {
@@ -145,7 +153,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     child: Text(
                       label.replaceAll("\n", "\n").replaceAll("/n", "\n"),
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         color: Colors.indigo,
                         fontWeight: FontWeight.bold,
                       ),

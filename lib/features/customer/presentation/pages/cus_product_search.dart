@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
@@ -10,32 +8,19 @@ import 'package:citizen_app/features/common/widgets/failure_widget/failure_widge
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/bottom_loader_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart'
     as paht_list_widget;
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/product_search_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/widgets.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:citizen_app/core/resources/resources.dart';
-import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
-import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
-import 'package:citizen_app/features/paht/data/models/models.dart';
-import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
-import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/bottom_loader_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/widgets.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 class SearchArgument {
@@ -45,6 +30,7 @@ class SearchArgument {
   final int type;
   final String code;
   final int selectType;
+  final bool isGetPromotionProduct;
 
   SearchArgument(
       {this.isSaled = false,
@@ -52,7 +38,8 @@ class SearchArgument {
       this.fromCategoryPage = false,
       this.type = -1,
       this.code,
-      this.selectType = 0});
+      this.selectType = 0,
+      this.isGetPromotionProduct = false});
 }
 
 class CusProductSearch extends StatefulWidget {
@@ -75,10 +62,61 @@ class _CusProductSearchState extends State<CusProductSearch>
   bool isAgent = false;
   String code;
   int selectType;
+  bool isRefresh = false;
+  bool hasReachedMax = false;
+  bool isLoadingVertical = false;
+  bool isLoading = false;
+  bool isGetPromotionProduct = false;
+  final int LIMIT = 200;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future _loadMoreVertical(BuildContext ctx) async {
+    if (hasReachedMax) {
+      return;
+    }
+
+    if (isLoading) {
+      return;
+    }
+    isLoading = true;
+    setState(() {
+      isLoadingVertical = true;
+    });
+
+    print('-------_loadMoreVertical');
+    // Add in an artificial delay
+    BlocProvider.of<PublicPahtBloc>(ctx).add(ListProductFetchingEvent(
+        search: searchController.text.trim(),
+        limit: LIMIT,
+        type: type,
+        isAgent: false,
+        code: code,
+        selectType: selectType,
+        isGetPromotionProduct: isGetPromotionProduct));
+
+    setState(() {
+      isLoadingVertical = false;
+    });
+  }
+
+  void handleRefresh(BuildContext ctx) {
+    isLoading = true;
+    setState(() {
+      isRefresh = !isRefresh;
+    });
+    BlocProvider.of<PublicPahtBloc>(ctx).add(ListProductFetchingEvent(
+        search: searchController.text.trim(),
+        offset: 0,
+        limit: LIMIT,
+        type: type,
+        isAgent: false,
+        code: code,
+        selectType: selectType,
+        isGetPromotionProduct: isGetPromotionProduct));
   }
 
   @override
@@ -98,6 +136,7 @@ class _CusProductSearchState extends State<CusProductSearch>
       type = args.type;
       code = args.code;
       selectType = args.selectType;
+      isGetPromotionProduct = args.isGetPromotionProduct;
     }
     int userType = pref.getInt('userType');
     isAgent = userType == 4 ? true : false;
@@ -107,20 +146,31 @@ class _CusProductSearchState extends State<CusProductSearch>
         },
         child: BlocProvider<PublicPahtBloc>(
             create: (context) => singleton<PublicPahtBloc>()
-              ..add(ListProductFetchingEvent(
+              ..add(
+                  ListProductFetchingEvent(
                   offset: 0,
-                  limit: -1,
+                  limit: LIMIT,
                   type: type,
                   isAgent: isAgent,
                   code: code,
                   selectType: selectType)),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                 listener: (context, state) {
+              isLoading = false;
               if (state is PublicPahtFailure) {
-                // Fluttertoast.showToast(
-                //     msg: state.error.toString()  );
+                Fluttertoast.showToast(msg: state.error.toString());
+              } else if (state is SearchProductSuccess &&
+                  !state.hasReachedMax) {
+                if (state.lstProduct.length > 0) {
+                  //Fluttertoast.showToast( msg: "Kéo xuống để xem thêm sản phẩm");
+                }
               }
             }, builder: (context, state) {
+              if (state is SearchProductSuccess) {
+                hasReachedMax = state.hasReachedMax;
+              } else {
+                hasReachedMax = false;
+              }
               return BaseLayoutWidget(
                   title: '',
                   isTitleHeaderWidget: true,
@@ -130,25 +180,29 @@ class _CusProductSearchState extends State<CusProductSearch>
                           ListProductFetchingEvent(
                               search: searchController.text.trim(),
                               offset: 0,
-                              limit: -1,
+                              limit: LIMIT,
                               type: type,
                               isAgent: false,
                               code: code,
-                              selectType: selectType));
+                              selectType: selectType,
+                              isGetPromotionProduct: isGetPromotionProduct));
+                      setState(() {
+                        isShowClearSearch = false;
+                      });
                     },
                     onChanged: (value) {
                       // setState(() {
                       //   isShowClearSearch = false;
                       // });
-                      BlocProvider.of<PublicPahtBloc>(context).add(
-                          ListProductFetchingEvent(
-                              search: searchController.text.trim(),
-                              offset: 0,
-                              limit: -1,
-                              type: type,
-                              isAgent: false,
-                              code: code,
-                              selectType: selectType));
+                      /*BlocProvider.of<PublicPahtBloc>(context).add(
+                      ListProductFetchingEvent(
+                          search: searchController.text.trim(),
+                          offset: 0,
+                          limit: 100,
+                          type: type,
+                          isAgent: false,
+                          code: code,
+                          selectType: selectType));*/
                       // if (value.isNotEmpty) {
                       setState(() {
                         isShowClearSearch = value.isNotEmpty;
@@ -160,72 +214,88 @@ class _CusProductSearchState extends State<CusProductSearch>
                           ListProductFetchingEvent(
                               search: searchController.text.trim(),
                               offset: 0,
-                              limit: -1,
+                              limit: LIMIT,
                               type: type,
                               isAgent: false,
                               code: code,
-                              selectType: selectType));
+                              selectType: selectType,
+                              isGetPromotionProduct: isGetPromotionProduct));
                     },
                     isSearch: isSearch,
                     isShowClearSearch: isShowClearSearch,
                     searchController: searchController,
                     searchFocus: searchFocus,
                   ),
-                  body: state is SearchProductSuccess
-                      ? state.lstProduct == null || state.lstProduct.length == 0
-                          ? NoDataFailureWidget()
-                          : Container(
-                              color: Color(0xffF0F2F5),
-                              child: AnimationLimiter(
-                                child: GridView.count(
-                                    // shrinkWrap: true,
-                                    // physics: NeverScrollableScrollPhysics(),
-                                    crossAxisCount: 2,
-                                    childAspectRatio:
-                                        (itemWidth / (itemHeight - 50)),
-                                    padding: const EdgeInsets.all(10.0),
-                                    mainAxisSpacing: 50.0,
-                                    crossAxisSpacing: 20.0,
-                                    children: _getTiles(state.lstProduct,
-                                        context, itemWidth, itemHeight)),
-                              ),
-                            )
-                      // ListViewProductsWidget(
-                      //             hasReachedMax: state.hasReachedMax,
-                      //             pahts: state.lstProduct,
-                      //             paddingBottom: 00,
-                      //             textSearch: searchController.text.trim(),
-                      //             onTap: (value) {
-                      //               if (fromCategory) {
-                      //                 Navigator.pushNamed(context, ROUTER_DETAILED_PAHT,
-                      //                     arguments:
-                      //                         paht_list_widget.PahtDetailArgument(
-                      //                             productCode: value,
-                      //                             fromCategoryPage: true));
-                      //               } else {
-                      //                 Navigator.pop(context, value);
-                      //               }
-                      //             },
-                      //           )
-                      : state is SearchProducttFailure
-                          ? NoNetworkFailureWidget(
-                              message: state.error.toString() == "UNAUTHORIZED"
-                                  ? trans(MESSAGE_SESSION_EXPIRED)
-                                  : state.error.toString(),
-                              onPressed: () {
-                                BlocProvider.of<PublicPahtBloc>(context).add(
-                                  ListProductFetchingEvent(
-                                      search: searchController.text.trim(),
-                                      offset: 0,
-                                      limit: -1,
-                                      type: type,
-                                      isAgent: isAgent,
-                                      code: code,
-                                      selectType: selectType),
-                                );
-                              })
-                          : SkeletonPahtWidget());
+                  body: state is SearchProductLoadMore
+                      ? Container(
+                          color: Color(0xffF0F2F5),
+                          child: listViewWidget(itemWidth, itemHeight,
+                              state.lstProduct, context, true),
+                        )
+                      : state is SearchProductSuccess
+                          ? state.lstProduct == null ||
+                                  state.lstProduct.length == 0
+                              ? NoDataFailureWidget()
+                              : Container(
+                                  color: Color(0xffF0F2F5),
+                                  child: listViewWidget(itemWidth, itemHeight,
+                                      state.lstProduct, context, false))
+                          : state is SearchProducttFailure
+                              ? NoNetworkFailureWidget(
+                                  message:
+                                      state.error.toString() == "UNAUTHORIZED"
+                                          ? trans(MESSAGE_SESSION_EXPIRED)
+                                          : state.error.toString(),
+                                  onPressed: () {
+                                    BlocProvider.of<PublicPahtBloc>(context)
+                                        .add(
+                                      ListProductFetchingEvent(
+                                          search: searchController.text.trim(),
+                                          offset: 0,
+                                          limit: LIMIT,
+                                          type: type,
+                                          isAgent: isAgent,
+                                          code: code,
+                                          selectType: selectType,
+                                          isGetPromotionProduct:
+                                              isGetPromotionProduct),
+                                    );
+                                  })
+                              : SkeletonPahtWidget());
             })));
+  }
+
+  Widget listViewWidget(double itemWidth, double itemHeight,
+      List<ProductModel> lstProduct, BuildContext context, bool isLoadMore) {
+    return Column(
+      children: [
+        Expanded(
+          child: LazyLoadScrollView(
+              isLoading: isLoadingVertical,
+              onEndOfPage: () => _loadMoreVertical(context),
+              child: RefreshIndicator(
+                  onRefresh: () async => {handleRefresh(context)},
+                  child: AnimationLimiter(
+                    child: GridView.count(
+                        // shrinkWrap: true,
+                        // physics: NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        childAspectRatio: (itemWidth / (itemHeight - 50)),
+                        padding: const EdgeInsets.all(10.0),
+                        mainAxisSpacing: 50.0,
+                        crossAxisSpacing: 20.0,
+                        children: _getTiles(
+                            lstProduct, context, itemWidth, itemHeight)),
+                  ))),
+        ),
+        isLoadMore
+            ? Container(
+                height: 80,
+                child: BottomLoaderWidget(),
+              )
+            : SizedBox()
+      ],
+    );
   }
 
   List<Widget> _getTiles(List<ProductModel> products, BuildContext context,
@@ -327,7 +397,7 @@ class _CusProductSearchState extends State<CusProductSearch>
                                 child: Text(
                                   model.productCode ?? '',
                                   style: GoogleFonts.inter(
-                                    // color: Color(0xff272727),
+                                      // color: Color(0xff272727),
                                       color: Colors.red,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
@@ -336,7 +406,9 @@ class _CusProductSearchState extends State<CusProductSearch>
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              SizedBox(height: 8,),
+                              SizedBox(
+                                height: 8,
+                              ),
                               Text(
                                 model.productName ?? '',
                                 style: GoogleFonts.inter(
@@ -348,7 +420,9 @@ class _CusProductSearchState extends State<CusProductSearch>
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(height: 10,),
+                              SizedBox(
+                                height: 10,
+                              ),
                               Row(
                                   mainAxisAlignment: model.productType > 1
                                       ? MainAxisAlignment.spaceBetween
@@ -397,10 +471,5 @@ class _CusProductSearchState extends State<CusProductSearch>
   }
 
   @override
-  onClick(String id) {
-    if (id == 'primary_btn') {
-      BlocProvider.of<PublicPahtBloc>(context).add(
-          SearchPublicButtonPressedEvent(search: searchController.text.trim()));
-    }
-  }
+  onClick(String id) {}
 }

@@ -45,7 +45,7 @@ class NetworkRequestImpl implements NetworkRequest {
           'wardId': '1',
         },
       ).timeout(
-        Duration(seconds: 20),
+        Duration(seconds: 60),
         onTimeout: () {
           throw SocketException(trans(LABEL_TRY_AGAIN));
         },
@@ -69,7 +69,7 @@ class NetworkRequestImpl implements NetworkRequest {
           },
           body: body);
     }).timeout(
-      Duration(seconds: 20),
+      Duration(seconds: 60),
       onTimeout: () {
         throw SocketException(trans(LABEL_TRY_AGAIN));
       },
@@ -87,13 +87,13 @@ class NetworkRequestImpl implements NetworkRequest {
                 'Accept-Language': handleLanguage(),
                 HttpHeaders.authorizationHeader:
                     token != null ? 'Bearer $token' : '',
-                'provinceId': '1',
-                'districtId': '1',
-                'wardId': '1',
               },
-              body: body)
+              body: body).onError((error, stackTrace) {
+                print('------ HTTP Client onError ' );
+                return error;
+      })
           .timeout(
-        Duration(seconds: 20),
+        Duration(seconds: 60),
         onTimeout: () {
           throw SocketException(trans(LABEL_TRY_AGAIN));
         },
@@ -116,7 +116,7 @@ class NetworkRequestImpl implements NetworkRequest {
           'wardId': '1',
         },
       ).timeout(
-        Duration(seconds: 10),
+        Duration(seconds: 60),
         onTimeout: () {
           throw SocketException(trans(LABEL_TRY_AGAIN));
         },

@@ -400,16 +400,17 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   Future<SearchProductModel> searchProduct(SearchProductParam param)async {
     try {
       final body = jsonEncode(param.toJson());
-      print(body);
-      String url = '$baseUrl_api/search-product';
+       print('----------------- '+body);
+
       final response = await networkRequest.postRequest(
           url: '$baseUrl_api/search-product', body: body);
-      print(url);
+     // print(url);
       var data = json.decode(utf8.decode(response.bodyBytes));
-      print(data);
+
 
       if (response.statusCode == 200) {
         SearchProductModel result = SearchProductModel.fromJson(data);
+        print('-----------------Response with items size: ' + result.lstProduct.length.toString());
         return result;
       } else {
         throw Exception(data['message']);
