@@ -169,14 +169,14 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                               needRedirect: '',
                               onPress: () {
                                 Navigator.pushNamed(
-                                        context, ROUTER_PRODUCTS_TYPE_PAGE)
+                                        context, ROUTER_SEARCH_PRODUCT)
                                     .then((value) => {
                                           if (value != null)
                                             {
                                               Navigator.pushNamed(
                                                   context, ROUTER_DETAILED_PAHT,
                                                   arguments: PahtDetailArgument(
-                                                      productCode: value))
+                                                      productId: value))
                                             }
                                         });
                               },
