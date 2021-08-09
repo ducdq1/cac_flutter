@@ -153,65 +153,83 @@ class ReportWidget extends StatelessWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Giá bán",
-                                style: GoogleFonts.inter(
-                                  fontSize: FONT_MIDDLE,
-                                  color: PRIMARY_TEXT_COLOR,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                            SizedBox(height: 10),
-                            Text(
-                              productModel.salePrice ?? 'Chưa có giá bán',
-                              style: GoogleFonts.inter(
-                                fontSize: FONT_MIDDLE,
-                                color: Colors.amber.shade900,
-                                fontWeight: FontWeight.w600,
-                              ),
+                    Text("Giá bán",
+                        style: GoogleFonts.inter(
+                          fontSize: FONT_MIDDLE,
+                          color: PRIMARY_TEXT_COLOR,
+                          fontWeight: FontWeight.w600,
+                        )),
+                    SizedBox(height: 10),
+                            productModel.salePrice !=null &&
+                                productModel.salePrice.isNotEmpty ? Text(
+                      productModel.salePrice ?? 'Chưa có giá bán',
+                      style: GoogleFonts.inter(
+                        fontSize: FONT_MIDDLE,
+                        color: productModel.priceBLKM != null &&
+                                productModel.priceBLKM.isNotEmpty
+                            ? Colors.grey
+                            : Colors.amber.shade900,
+                        fontWeight: FontWeight.w600,
+                        textStyle: productModel.priceBLKM != null &&
+                                productModel.priceBLKM.isNotEmpty
+                            ? TextStyle(decoration: TextDecoration.lineThrough)
+                            : null,
+                      ),
+                    ): SizedBox(),
+                    productModel.priceBLKM != null &&
+                            productModel.priceBLKM.isNotEmpty
+                        ? Text(
+                            productModel.priceBLKM ?? 'Chưa có giá bán',
+                            style: GoogleFonts.inter(
+                              fontSize: FONT_MIDDLE,
+                              color: Colors.amber.shade900,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ]))),
+                          )
+                        : SizedBox(),
+                  ]))),
             ],
           ),
           SizedBox(height: 18),
-    isViewTonKho
-    ? Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(width: 30),
-                Image.asset(
-                  ICONS_ASSETS + 'icon_ware_house.png',
-                  width: 20,
-                  height: 20,
-                ),
-                SizedBox(width: 12),
-                Expanded(
-                  child:Container(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Tồn kho",
-                                    style: GoogleFonts.inter(
-                                      fontSize: FONT_MIDDLE,
-                                      color: PRIMARY_TEXT_COLOR,
-                                      fontWeight: FontWeight.w600,
-                                    )),
-                                SizedBox(height: 10),
-                                Text(
-                                  tonKhoModel == null ||
-                                          tonKhoModel.so_luong == null
-                                      ? "Không có thông tin"
-                                      : tonKhoModel.so_luong.toString(),
+          isViewTonKho
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                      SizedBox(width: 30),
+                      Image.asset(
+                        ICONS_ASSETS + 'icon_ware_house.png',
+                        width: 20,
+                        height: 20,
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                          child: Container(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Tồn kho",
                                   style: GoogleFonts.inter(
-                                    color: Colors.amber.shade900,
                                     fontSize: FONT_MIDDLE,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                    color: PRIMARY_TEXT_COLOR,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                              SizedBox(height: 10),
+                              Text(
+                                tonKhoModel == null ||
+                                        tonKhoModel.so_luong == null
+                                    ? "Không có thông tin"
+                                    : tonKhoModel.so_luong.toString(),
+                                style: GoogleFonts.inter(
+                                  color: Colors.amber.shade900,
+                                  fontSize: FONT_MIDDLE,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ]),
-                        )
-
-                )
-              ])  : SizedBox(),
+                              ),
+                            ]),
+                      ))
+                    ])
+              : SizedBox(),
           SizedBox(height: 10),
           userType != null && (userType == 3 || userType == 4)
               ? //cho xem gia
@@ -234,7 +252,7 @@ class ReportWidget extends StatelessWidget {
                                     ? productModel.price.toString()
                                     : "Chưa có giá",
                                 ngayCapNhat: productModel.createDate,
-                            model: productModel);
+                                model: productModel);
                           },
                           child: AutoSizeText(
                             'Xem giá',
@@ -339,7 +357,6 @@ class ReportWidget extends StatelessWidget {
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
                 imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
-
                 height: 15,
                 width: 15,
                 errorWidget: (context, url, error) => new Icon(Icons.error),

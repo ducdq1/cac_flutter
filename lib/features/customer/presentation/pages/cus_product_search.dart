@@ -143,14 +143,14 @@ class _CusProductSearchState extends State<CusProductSearch>
         },
         child: BlocProvider<PublicPahtBloc>(
             create: (context) => singleton<PublicPahtBloc>()
-              ..add(
-                  ListProductFetchingEvent(
+              ..add(ListProductFetchingEvent(
                   offset: 0,
                   limit: LIMIT,
                   type: type,
                   isAgent: isAgent,
                   code: code,
-                  selectType: selectType)),
+                  selectType: selectType,
+                  isGetPromotionProduct: isGetPromotionProduct)),
             child: BlocConsumer<PublicPahtBloc, PublicPahtState>(
                 listener: (context, state) {
               isLoading = false;
@@ -315,149 +315,157 @@ class _CusProductSearchState extends State<CusProductSearch>
                           productId: model.productId,
                           fromCategoryPage: true));
                 },
-                child: Container(
-                  width: itemWidth,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    //Colors.grey.shade50, //Colors.green.withOpacity(0.8),
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        spreadRadius: 3,
-                        blurRadius: 3,
-                        offset: Offset(3, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(mainAxisSize: MainAxisSize.max, children: [
-                    Expanded(
-                      child: Container(
-                        width: itemWidth,
-                        //height: 200,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(6),
-                              topLeft: Radius.circular(6)),
-                          child:
-                              //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
-                              model.image != null
-                                  ? CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: baseUrl + model.image,
-                                      placeholder: (context, url) => Center(
-                                          child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              child:
-                                                  new CircularProgressIndicator(
-                                                      strokeWidth: 1.50))),
-                                      height: 15,
-                                      width: 15,
-                                      errorWidget: (context, url, error) =>
-                                          Padding(
+                child: Stack(children: [
+
+                  Container(
+                    width: itemWidth,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      //Colors.grey.shade50, //Colors.green.withOpacity(0.8),
+                      borderRadius: BorderRadius.all(Radius.circular(6)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          spreadRadius: 3,
+                          blurRadius: 3,
+                          offset: Offset(3, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Column(mainAxisSize: MainAxisSize.max, children: [
+                      Expanded(
+                        child: Container(
+                          width: itemWidth,
+                          //height: 200,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(6),
+                                topLeft: Radius.circular(6)),
+                            child:
+                                //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
+                                model.image != null
+                                    ? CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl: baseUrl + model.image,
+                                        placeholder: (context, url) => Center(
+                                            child: Container(
+                                                height: 40,
+                                                width: 40,
+                                                child:
+                                                    new CircularProgressIndicator(
+                                                        strokeWidth: 1.50))),
+                                        height: 15,
+                                        width: 15,
+                                        errorWidget: (context, url, error) =>
+                                            Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Image.asset(
+                                            'assets/images/cac_logo.png',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      )
+                                    : Padding(
                                         padding: const EdgeInsets.all(20.0),
                                         child: Image.asset(
                                           'assets/images/cac_logo.png',
                                           fit: BoxFit.contain,
                                         ),
                                       ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Image.asset(
-                                        'assets/images/cac_logo.png',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      constraints: BoxConstraints(minHeight: 70),
-                      width: itemWidth - 20,
-                      decoration: BoxDecoration(
-                        color: Color(0xffC2E591).withOpacity(0.9),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(6),
-                            bottomRight: Radius.circular(6)),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            bottom: 5, right: 8, left: 8, top: 8),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  model.productCode ?? '',
+                      Container(
+                        constraints: BoxConstraints(minHeight: 70),
+                        width: itemWidth - 20,
+                        decoration: BoxDecoration(
+                          color: Color(0xffC2E591).withOpacity(0.9),
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              bottom: 5, right: 8, left: 8, top: 8),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    model.productCode ?? '',
+                                    style: GoogleFonts.inter(
+                                        // color: Color(0xff272727),
+                                        color: Colors.red,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500),
+                                    softWrap: true,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  model.productName ?? '',
                                   style: GoogleFonts.inter(
                                       // color: Color(0xff272727),
-                                      color: Colors.red,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500),
+                                      color: Color(0xFF2E7D32),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700),
                                   softWrap: true,
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                model.productName ?? '',
-                                style: GoogleFonts.inter(
-                                    // color: Color(0xff272727),
-                                    color: Color(0xFF2E7D32),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
-                                softWrap: true,
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                  mainAxisAlignment: model.productType > 1
-                                      ? MainAxisAlignment.spaceBetween
-                                      : MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      model.productType <= 1
-                                          ? ''
-                                          : model.size ?? '',
-                                      style: GoogleFonts.inter(
-                                          color: Colors.indigo,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400),
-                                      softWrap: true,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.topRight,
-                                        child: Text(
-                                          model.madeIn ?? '',
-                                          style: GoogleFonts.inter(
-                                              color: Colors.indigo,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400),
-                                          softWrap: true,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                    mainAxisAlignment: model.productType > 1
+                                        ? MainAxisAlignment.spaceBetween
+                                        : MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        model.productType <= 1
+                                            ? ''
+                                            : model.size ?? '',
+                                        style: GoogleFonts.inter(
+                                            color: Colors.indigo,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400),
+                                        softWrap: true,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          alignment: Alignment.topRight,
+                                          child: Text(
+                                            model.madeIn ?? '',
+                                            style: GoogleFonts.inter(
+                                                color: Colors.indigo,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400),
+                                            softWrap: true,
+                                            maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ])
-                            ]),
+                                    ])
+                              ]),
+                        ),
                       ),
-                    )
-                  ]),
-                ),
+                    ]),
+                  ),
+                 isGetPromotionProduct ? Positioned(top: 0,
+                    right: 0,
+                    child: Image.asset('assets/icons/hot_deal1.png',
+                        width: 35, height: 35),
+                  ) : SizedBox(),
+                ]),
               ),
             ),
           ),
