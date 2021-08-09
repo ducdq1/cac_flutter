@@ -161,10 +161,9 @@ class _PromotionPageState extends State<PromotionPage> {
                     child: Text(
                       label.replaceAll("\n", "\n").replaceAll("/n", "\n"),
                       style: TextStyle(
-                        fontSize: 19,
+                        fontSize: 16,
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
-                        letterSpacing: 2
                       ),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,

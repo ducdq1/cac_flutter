@@ -153,7 +153,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     child: Text(
                       label.replaceAll("\n", "\n").replaceAll("/n", "\n"),
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         color: Colors.indigo,
                         fontWeight: FontWeight.bold,
                       ),
