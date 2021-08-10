@@ -323,22 +323,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
 
   @override
   Future<bool> createComment(Params commentParams) async {
-    try {
-      final body = jsonEncode({"content": commentParams.content});
 
-      final response = await networkRequest.postRequest(
-          url: '$baseUrl/issue-report/comments/issue/${commentParams.issueId}',
-          body: body);
-      var data = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        throw Exception(data['message']);
-      }
-    } catch (error) {
-      return handleException(error);
-    }
   }
 
   @override

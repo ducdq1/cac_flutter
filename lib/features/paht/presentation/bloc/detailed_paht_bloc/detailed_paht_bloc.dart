@@ -28,8 +28,9 @@ class DetailedPahtBloc extends Bloc<DetailedPahtEvent, DetailedPahtState> {
         await Future.delayed(Duration(milliseconds: 100));
         print('detail loading');
         int userType = pref.getInt('userType');
+        String userName = pref.getString('userName');
         SearchProductModel paht =
-            await getDetailedPaht(SearchProductParam(productCode: event.pahtId , isAgent: userType==4, productId: event.productId));
+            await getDetailedPaht(SearchProductParam(productCode: event.pahtId , isAgent: userType==4, productId: event.productId,userName: userName));
         yield DetailedPahtSuccess(paht: null,searchProductModel: paht);
       } catch (error) {
         print(error);

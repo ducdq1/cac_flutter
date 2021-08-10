@@ -305,9 +305,10 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
                         SizedBox(
                           height: 10,
                         ),
-                        pahtModel != null && pahtModel.status == 0
+                        pahtModel != null ? (pahtModel.status == 0
                             ? createIssueAction()
                             : viewBaoGiaFileAction()
+                        ) : SizedBox()
                       ]),
                     ),
                   ],

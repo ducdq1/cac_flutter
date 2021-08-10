@@ -104,11 +104,11 @@ class AccountDataSourceImpl implements AccountDataSource {
       var body;
       if (isCustomer) {
         body  = jsonEncode(
-          <String, String>{
+          <String, dynamic>{
             "phone": phone,
             "name": password,
             "inviterName" :inviter,
-            "cusGroup": cusGroup.toString()
+            "cusGroup": cusGroup
           },
         );
       } else {
