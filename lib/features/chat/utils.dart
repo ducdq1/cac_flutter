@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Utils {
@@ -9,6 +10,14 @@ class Utils {
         handleData: (QuerySnapshot data, EventSink<List<T>> sink) {
           final snaps = data.docs.map((doc) => doc.data()).toList();
           final users = snaps.map((json) => fromJson(json)).toList();
+          if (users.isNotEmpty && users[0] is User) {
+            users.sort((a, b) {
+              if (a is User && b is User) {
+                return a.role.compareTo(b.role);
+              }
+              return 0;
+            });
+          }
 
           sink.add(users);
         },

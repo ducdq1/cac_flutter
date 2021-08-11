@@ -63,10 +63,16 @@ class _HomePageBuilderState extends State<HomePageBuilder>
       child: Stack(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             margin: EdgeInsets.only(top: 100),
             constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height - 150),
+                minHeight: MediaQuery
+                    .of(context)
+                    .size
+                    .height - 150),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -78,7 +84,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
               builder: (context, state) {
                 return Padding(
                   padding:
-                      const EdgeInsets.only(top: 50.0, left: 20, right: 20),
+                  const EdgeInsets.only(top: 50.0, left: 20, right: 20),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,11 +101,11 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                   needRedirect: '',
                                   onPress: () async {
                                     final PermissionHandler _permissionHandler =
-                                        PermissionHandler();
+                                    PermissionHandler();
                                     var permissionStatus =
-                                        await _permissionHandler
-                                            .checkPermissionStatus(
-                                                PermissionGroup.camera);
+                                    await _permissionHandler
+                                        .checkPermissionStatus(
+                                        PermissionGroup.camera);
 
                                     switch (permissionStatus) {
                                       case PermissionStatus.granted:
@@ -118,18 +124,18 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                       case PermissionStatus.unknown:
                                         await _permissionHandler
                                             .requestPermissions(
-                                                [PermissionGroup.camera]);
+                                            [PermissionGroup.camera]);
                                         var permissionStatus =
-                                            await _permissionHandler
-                                                .checkPermissionStatus(
-                                                    PermissionGroup.camera);
+                                        await _permissionHandler
+                                            .checkPermissionStatus(
+                                            PermissionGroup.camera);
 
                                         switch (permissionStatus) {
                                           case PermissionStatus.granted:
                                             var value =
-                                                await Navigator.of(context)
-                                                    .pushNamed(
-                                                        ROUTER_QRCODE_SCANER);
+                                            await Navigator.of(context)
+                                                .pushNamed(
+                                                ROUTER_QRCODE_SCANER);
                                             if (value != null) {
                                               Navigator.pushNamed(
                                                   context, ROUTER_DETAILED_PAHT,
@@ -169,16 +175,17 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                               needRedirect: '',
                               onPress: () {
                                 Navigator.pushNamed(
-                                        context, ROUTER_SEARCH_PRODUCT)
-                                    .then((value) => {
-                                          if (value != null)
-                                            {
-                                              Navigator.pushNamed(
-                                                  context, ROUTER_DETAILED_PAHT,
-                                                  arguments: PahtDetailArgument(
-                                                      productId: value))
-                                            }
-                                        });
+                                    context, ROUTER_SEARCH_PRODUCT)
+                                    .then((value) =>
+                                {
+                                  if (value != null)
+                                    {
+                                      Navigator.pushNamed(
+                                          context, ROUTER_DETAILED_PAHT,
+                                          arguments: PahtDetailArgument(
+                                              productId: value))
+                                    }
+                                });
                               },
                             ),
                           ],
@@ -216,25 +223,22 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               userType != null &&
-                                      userType ==
-                                          3 //quan ly ban hang  co them module duyet bao gia
-                                  ? CitizensMenuItemWidget(
-                                      label: 'Duyệt báo giá',
-                                      icon: '/icons/icon_ds_bao_gia.png',
-                                      needRedirect: '',
-                                      onPress: () {
-                                        Navigator.pushNamed(
-                                            context, ROUTER_APROVE_PAHT);
-                                      },
-                                    )
-                                  : SizedBox(
-                                      height: 140,
-                                      width: 140,
-                                    ),
-                              userType != null &&
                                   userType ==
                                       3 //quan ly ban hang  co them module duyet bao gia
                                   ? CitizensMenuItemWidget(
+                                label: 'Duyệt báo giá',
+                                icon: '/icons/icon_ds_bao_gia.png',
+                                needRedirect: '',
+                                onPress: () {
+                                  Navigator.pushNamed(
+                                      context, ROUTER_APROVE_PAHT);
+                                },
+                              )
+                                  : SizedBox(
+                                height: 140,
+                                width: 140,
+                              ),
+                              CitizensMenuItemWidget(
                                 label: 'Nhắn tin',
                                 icon: '/icons/icon_message.png',
                                 needRedirect: '',
@@ -242,10 +246,6 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                   Navigator.pushNamed(
                                       context, ROUTER_CUS_CHAT_PAGE);
                                 },
-                              )
-                                  : SizedBox(
-                                height: 140,
-                                width: 140,
                               )
                             ]),
                       ]),
@@ -255,9 +255,9 @@ class _HomePageBuilderState extends State<HomePageBuilder>
           ),
           Positioned(
               child: BannerWidget(
-            scrollController: widget.scrollController,
-            stopScrollController: widget.stopScrollController,
-          )),
+                scrollController: widget.scrollController,
+                stopScrollController: widget.stopScrollController,
+              )),
         ],
       ),
     );

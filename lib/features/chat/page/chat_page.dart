@@ -5,6 +5,9 @@ import 'package:citizen_app/features/chat/widget/new_message_widget.dart';
 import 'package:citizen_app/features/chat/widget/profile_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:citizen_app/core/resources/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../injection_container.dart';
 
 class ChatPage extends StatefulWidget {
   final User user;
@@ -25,12 +28,18 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
+    final pref = singleton<SharedPreferences>();
+    String userName = pref.getString('userName');
+    if(widget.user.processor == null || widget.user.processor == "null") {
+      FirebaseApi.updateUserProcessor(widget.user.idUser, userName);
+    }
   }
 
   Future<User> initFirebaseData() async {
     if (myUser != null) {
       return myUser;
     }
+
     var temp = await FirebaseApi.getMyUser();
     setState(() {
       myUser = temp;

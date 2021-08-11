@@ -15,6 +15,7 @@ class User {
   final DateTime lastMessageTime;
   final String status;
   final DateTime lastOnlineTime;
+  final String processor;
 
   const User({
     this.idUser,
@@ -25,6 +26,7 @@ class User {
     this.lastMessageTime,
     this.lastOnlineTime,
     this.status,
+    this.processor
   });
 
   User copyWith({
@@ -35,7 +37,8 @@ class User {
     String role,
     DateTime lastMessageTime,
     String status,
-    DateTime lastOnlineTime
+    DateTime lastOnlineTime,
+    String processor
   }) =>
       User(
         idUser: idUser ?? this.idUser,
@@ -44,7 +47,8 @@ class User {
         lastMessageTime: lastMessageTime ?? this.lastMessageTime,
         role: this.role,
         phone: this.phone,
-          status: this.status
+        status: this.status,
+        processor : this.processor
       );
 
   static User fromJson(Map<String, dynamic> json) => User(
@@ -55,7 +59,8 @@ class User {
         role: json['role'],
         lastMessageTime: Utils.toDateTime(json['lastMessageTime']),
          status: json['status'],
-         lastOnlineTime:  Utils.toDateTime(json['lastOnlineTime'])
+         lastOnlineTime:  Utils.toDateTime(json['lastOnlineTime']),
+      processor: json['processor']
       );
 
   Map<String, dynamic> toJson() => {
@@ -67,5 +72,6 @@ class User {
         'lastMessageTime': Utils.fromDateTimeToJson(lastMessageTime),
     'status' : status,
     'lastOnlineTime':  Utils.fromDateTimeToJson(lastOnlineTime),
+    'processor': processor
       };
 }

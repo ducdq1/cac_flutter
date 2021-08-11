@@ -5,7 +5,7 @@ import 'package:citizen_app/features/chat/widget/message_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../data.dart';
-
+import 'package:citizen_app/core/resources/api.dart';
 class MessagesWidget extends StatelessWidget {
   final String chatsId;
   final User toUser;

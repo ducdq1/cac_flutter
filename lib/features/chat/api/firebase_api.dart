@@ -63,22 +63,22 @@ class FirebaseApi {
     String firebaseAdminUserId = pref.getString('firebaseAdminUserId');
     String firebaseAdminUserName = pref.getString('firebaseAdminUserName');
     String firebaseAdminUserAvatar = pref.getString('firebaseAdminUserAvatar');
-   // if (firebaseAdminUserId == null) {
-    QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .where("role", isEqualTo: 'admin')
-        .get();
-    if (documentSnapshot != null &&
-        documentSnapshot.docs != null &&
-        documentSnapshot.docs.isNotEmpty) {
-      User user = User.fromJson(documentSnapshot.docs.first.data());
-      await pref.setString('firebaseAdminUserId', user.idUser);
-      await pref.setString('firebaseAdminUserName', user.name);
-      await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
-      //await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
-      return user;
+    if (firebaseAdminUserId == null) {
+      QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where("role", isEqualTo: 'admin')
+          .get();
+      if (documentSnapshot != null &&
+          documentSnapshot.docs != null &&
+          documentSnapshot.docs.isNotEmpty) {
+        User user = User.fromJson(documentSnapshot.docs.first.data());
+        await pref.setString('firebaseAdminUserId', user.idUser);
+        await pref.setString('firebaseAdminUserName', user.name);
+        await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
+        //await pref.setString('firebaseAdminUserAvatar', user.urlAvatar);
+        return user;
+      }
     }
-    //}
     return User(
         idUser: firebaseAdminUserId,
         name: firebaseAdminUserName,
@@ -151,8 +151,22 @@ class FirebaseApi {
     }catch(e){
 
     }
+  }
+
+  //Cap nhat lai user sẽ xu ly
+  static updateUserProcessor(String userId,String processor) async{
+    try{
+      final refUsers = FirebaseFirestore.instance.collection('users');
+      refUsers
+          .doc(userId)
+          .update({"processor": processor});
+    }catch(e){
+
+    }
 
   }
+
+
   static Future<String> getMyUserId() async {
     String myId = pref.getString('myFirebaseUserId');
     if (myId == null) {
@@ -165,7 +179,8 @@ class FirebaseApi {
             role: 'user',
             phone: phone,
             name: fullName,
-            urlAvatar: '$baseUrl' + avartarPath));
+            urlAvatar: '$baseUrl' + avartarPath,
+            processor: 'null'));
         myUser = await FirebaseApi.getUserByPhone(phone);
         await pref.setString('myFirebaseUserId', myUser.idUser);
         await pref.setString('myFirebaseUserFullName', myUser.name);
@@ -178,8 +193,9 @@ class FirebaseApi {
   static Stream<List<User>> getUsers() => FirebaseFirestore.instance
       .collection('users')
       //.where("idUser", whereNotIn: [myId])
-      .where("role", whereNotIn: ['admin'])
-      .orderBy("role")
+  //    .where("role", whereNotIn: ['admin']).
+  .where("processor", whereIn: ['null' ,pref.get("userName")])
+        //.orderBy("role",descending:  false)
        //.orderBy(UserField.lastMessageTime, descending: true)
       .snapshots()
       .transform(Utils.transformer(User.fromJson));

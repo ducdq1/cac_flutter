@@ -48,7 +48,7 @@ class ChatBodyWidget extends StatelessWidget {
                     fontWeight: FontWeight.w400),
               ),
               subtitle: Text(
-                  user.phone,
+                  user.phone ?? '',
                   style: new TextStyle(
                       color: Color(0xff353739),
                       fontSize: 14,
