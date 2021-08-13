@@ -32,6 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await prefs.remove('auth');
         await prefs.remove('token');
         await prefs.remove('userType');
+        await prefs.remove('userRole');
         await prefs.remove('myFirebaseUserId');
         await prefs.remove('myFirebaseUserFullName');
         await prefs.remove('myFirebaseUserAvatar');

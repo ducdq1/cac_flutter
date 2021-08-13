@@ -48,6 +48,8 @@ abstract class PahtRemoteDataSource {
   Future<bool> createComment(Params commentParams);
 
   Future<bool> replyComment(Params commentParams);
+
+  Future<bool> updateProcessor(int workerId, String processor);
 }
 
 class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
@@ -68,9 +70,11 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       print('create or update QUOTATION ');
 
       String url = '$baseUrl_api/quotation';
-      if (issueParams.isInvalid || issueParams.updateNote || (issueParams.quotationDate != null &&
-          issueParams.quotationDate.isNotEmpty &&
-          issueParams.lstQuotationDetail == null)) {
+      if (issueParams.isInvalid ||
+          issueParams.updateNote ||
+          (issueParams.quotationDate != null &&
+              issueParams.quotationDate.isNotEmpty &&
+              issueParams.lstQuotationDetail == null)) {
         url = '$baseUrl_api/quotation/update-saledate';
       } else {
         url = '$baseUrl_api/quotation';
@@ -78,9 +82,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
 
       print(url);
       print(body);
-      final response = await networkRequest.postRequest(
-          url: url, body: body);
-
+      final response = await networkRequest.postRequest(url: url, body: body);
 
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -177,31 +179,29 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<List<PahtModel>> fetchListPersonalPaht(
-      PahtParams parram) async {
+  Future<List<PahtModel>> fetchListPersonalPaht(PahtParams parram) async {
     return _fetchListPahtFromUrl(parram
         //'$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus$statusIds&search$search&action=2'
         );
   }
 
   @override
-  Future<List<PahtModel>> fetchListPublicPaht(
-      PahtParams parram) async {
+  Future<List<PahtModel>> fetchListPublicPaht(PahtParams parram) async {
     return _fetchListPahtFromUrl(parram
         // '$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus=0&search$search&action=2');
-    );
+        );
   }
 
   Future<List<PahtModel>> _fetchListPahtFromUrl(PahtParams param) async {
     try {
       final body = jsonEncode(param.toJson());
 
-      String url = '$baseUrl_api/quotations?time='+  DateTime.now().millisecondsSinceEpoch.toString();
+      String url = '$baseUrl_api/quotations?time=' +
+          DateTime.now().millisecondsSinceEpoch.toString();
       print(url);
       print(body);
 
-      final response = await networkRequest.postRequest(
-          url: url, body: body);
+      final response = await networkRequest.postRequest(url: url, body: body);
 
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       //print(responseJson);
@@ -234,6 +234,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   @override
   Future<SearchProductModel> fetchDetailedPaht(SearchProductParam param) async {
     try {
+
       final body = jsonEncode(param.toJson());
       print(body);
       String url = '$baseUrl_api/search';
@@ -259,8 +260,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
     try {
       print('$baseUrl_api/quotation/delete/$id');
       final response = await networkRequest.postRequest(
-          url:
-              '$baseUrl_api/quotation/delete/$id');
+          url: '$baseUrl_api/quotation/delete/$id');
       var data = json.decode(response.body);
       if (response.statusCode == 200) {
         Fluttertoast.showToast(
@@ -322,9 +322,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<bool> createComment(Params commentParams) async {
-
-  }
+  Future<bool> createComment(Params commentParams) async {}
 
   @override
   Future<bool> replyComment(Params commentParams) async {
@@ -350,8 +348,8 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   Future<List<QuotationDetailModel>> getListQuotationDetail(int id) async {
     try {
       String url = '$baseUrl_api/quotation/$id';
-      final response = await networkRequest.postRequest(
-          url: '$baseUrl_api/quotation/$id');
+      final response =
+          await networkRequest.postRequest(url: '$baseUrl_api/quotation/$id');
       print('--> success');
       var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
       print(responseJson);
@@ -364,7 +362,8 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
         } else {
           final data = responseJson['listData'];
           if (data != null) {
-            List<QuotationDetailModel> result = data.map<QuotationDetailModel>((paht) {
+            List<QuotationDetailModel> result =
+                data.map<QuotationDetailModel>((paht) {
               return QuotationDetailModel.fromJson(paht);
             }).toList();
             return result;
@@ -382,26 +381,58 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<SearchProductModel> searchProduct(SearchProductParam param)async {
+  Future<SearchProductModel> searchProduct(SearchProductParam param) async {
     try {
       final body = jsonEncode(param.toJson());
-       print('----------------- '+body);
+      print('----------------- ' + body);
 
       final response = await networkRequest.postRequest(
           url: '$baseUrl_api/search-product', body: body);
-     // print(url);
+      // print(url);
       var data = json.decode(utf8.decode(response.bodyBytes));
-
 
       if (response.statusCode == 200) {
         SearchProductModel result = SearchProductModel.fromJson(data);
-        print('-----------------Response with items size: ' + result.lstProduct.length.toString());
+        print('-----------------Response with items size: ' +
+            result.lstProduct.length.toString());
         return result;
       } else {
         throw Exception(data['message']);
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  @override
+  Future<bool> updateProcessor(int workerId, String processor) async{
+    try {
+      var body;
+      body = jsonEncode(
+        <String, dynamic>{"workerId": workerId, "processor": processor},
+      );
+
+      print(body);
+      final response = await client
+          .post(
+            '$base_cus_url_api/workers/updateProcessor',
+            headers: {
+              'Accept-Language': 'vi',
+              'Content-Type': 'application/json'
+            },
+            body: body,
+          )
+          .timeout(Duration(seconds: 30),
+              onTimeout: () => throw Exception(
+                  "Hết thời gian yêu cầu. Kiểm tra lại kết nối"));
+
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+    } catch (error) {
+      return false;
     }
   }
 }

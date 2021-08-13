@@ -10,6 +10,7 @@ abstract class AuthEntity {
   int userId;
   String userName;
   int userType;
+  String role;
 
   AuthEntity.fromJson(Map json) {
     this.access_token = json['access_token'];
@@ -20,6 +21,7 @@ abstract class AuthEntity {
     this.userId = json['userId'];
     this.userName = json['userName'];
     this.userType = json['userType'];
+    this.role = json['role'];
   }
 
   toJson() {

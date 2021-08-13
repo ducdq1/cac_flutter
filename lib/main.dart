@@ -46,6 +46,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/saled_quotation_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/aprove_quotation_widget.dart';
 import 'package:citizen_app/features/paht/presentation/pages/products_type_page.dart';
+import 'features/chat/page/bloc/chat_bloc.dart';
 import 'features/chat/page/chats_page.dart';
 import 'features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'features/customer/presentation/pages/index_page.dart';
@@ -163,6 +164,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<NotificationBloc>(
             create: (BuildContext context) =>  singleton<NotificationBloc>()),
+        BlocProvider<ChatBloc>(
+          create: (BuildContext context) =>  ChatBloc(),
+        )
       ],
       child: MaterialApp(
         locale: _locale,

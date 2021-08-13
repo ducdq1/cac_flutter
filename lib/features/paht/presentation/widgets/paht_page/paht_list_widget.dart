@@ -267,7 +267,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                   ),
                 ),
               )
-            : NoDataFailureWidget(),
+            : NoDataFailureWidget(text: 'Bạn không có báo giá nào ',),
       ),
     );
   }

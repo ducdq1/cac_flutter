@@ -45,7 +45,7 @@ class NetworkRequestImpl implements NetworkRequest {
           'wardId': '1',
         },
       ).timeout(
-        Duration(seconds: 30),
+        Duration(seconds: 20),
         onTimeout: () {
           throw SocketException(trans(LABEL_TRY_AGAIN));
         },
@@ -69,7 +69,7 @@ class NetworkRequestImpl implements NetworkRequest {
           },
           body: body);
     }).timeout(
-      Duration(seconds: 30),
+      Duration(seconds: 20),
       onTimeout: () {
         throw SocketException(trans(LABEL_TRY_AGAIN));
       },
@@ -90,8 +90,9 @@ class NetworkRequestImpl implements NetworkRequest {
               },
               body: body)
           .timeout(
-        Duration(seconds: 30),
+        Duration(seconds: 20),
         onTimeout: () {
+          print('Request Time out');
           throw SocketException(trans(LABEL_TRY_AGAIN));
         },
       );
@@ -113,7 +114,7 @@ class NetworkRequestImpl implements NetworkRequest {
           'wardId': '1',
         },
       ).timeout(
-        Duration(seconds: 30),
+        Duration(seconds: 20),
         onTimeout: () {
           throw SocketException(trans(LABEL_TRY_AGAIN));
         },

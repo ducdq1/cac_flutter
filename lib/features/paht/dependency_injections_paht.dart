@@ -76,8 +76,6 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
   singleton.registerFactory(() => StatusPahtBloc(
       getListStatusPersonal: singleton(), getListStatusPublic: singleton()));
 
-
-
   // Repository
   singleton.registerLazySingleton<PahtRepository>(
     () => PahtRepositoryImpl(

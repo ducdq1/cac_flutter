@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:citizen_app/core/network/network_info.dart';
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
@@ -31,16 +33,14 @@ class PahtRepositoryImpl implements PahtRepository {
   });
 
   @override
-  Future<List<PahtModel>> getListPersonalPaht(
-      PahtParams parram) async {
+  Future<List<PahtModel>> getListPersonalPaht(PahtParams parram) async {
     return await _getListPaht(() {
       return remoteDataSource.fetchListPersonalPaht(parram);
     });
   }
 
   @override
-  Future<List<PahtModel>> getListPublicPaht(
-      PahtParams parram) async {
+  Future<List<PahtModel>> getListPublicPaht(PahtParams parram) async {
     return await _getListPaht(() {
       return remoteDataSource.fetchListPublicPaht(parram);
     });
@@ -49,8 +49,6 @@ class PahtRepositoryImpl implements PahtRepository {
   Future<List<PahtModel>> _getListPaht(
     _PublicOrPersonalChooser getPublicOrPersonal,
   ) async {
-
-
     try {
       final remotePaht = await getPublicOrPersonal();
       localDataSource.cachePaht(remotePaht);
@@ -153,8 +151,6 @@ class PahtRepositoryImpl implements PahtRepository {
     } catch (error) {
       throw error;
     }
-
-
   }
 
   @override
@@ -200,7 +196,7 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<List<QuotationDetailModel>> getListQuotationDetail(int id)async{
+  Future<List<QuotationDetailModel>> getListQuotationDetail(int id) async {
     try {
       final remoteCreateIssuePaht =
           await remoteDataSource.getListQuotationDetail(id);
@@ -208,14 +204,23 @@ class PahtRepositoryImpl implements PahtRepository {
     } catch (error) {
       throw error;
     }
-
   }
 
   @override
-  Future<SearchProductModel> searchProduct(SearchProductParam param) async{
+  Future<SearchProductModel> searchProduct(SearchProductParam param) async {
+    try {
+      final remoteCreateIssuePaht = await remoteDataSource.searchProduct(param);
+      return remoteCreateIssuePaht;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @override
+  Future<bool> updateProcessor(int workerId, String processor) async {
     try {
       final remoteCreateIssuePaht =
-          await remoteDataSource.searchProduct(param);
+          await remoteDataSource.updateProcessor(workerId, processor);
       return remoteCreateIssuePaht;
     } catch (error) {
       throw error;

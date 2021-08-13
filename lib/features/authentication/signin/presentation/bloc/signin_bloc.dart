@@ -94,6 +94,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         await prefs.setString('userId', auth.userId == null ? null : auth.userId.toString());
         await prefs.setInt('userType', auth.userType);
         await prefs.setBool('isCustomer', event.isCustomer);
+        await prefs.setString('userRole', auth.role);
         await prefs.setInt('loginTime', DateTime.now().millisecondsSinceEpoch);
         yield SignInSucceedState(auth: auth,isCustomer: event.isCustomer);
         // yield SignInAccountSucceedState();

@@ -31,6 +31,8 @@ abstract class PahtRepository {
   Future<bool> deletePaht({String id});
 
   Future<bool> createComment(Params commentParams);
-
   Future<bool> replyComment(Params commentParams);
+
+  Future<bool> updateProcessor(int workerId,String processor);
+
 }

@@ -7,6 +7,7 @@ import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/citizens_menu_item_widget.dart';
+import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
   AnimationController _controller;
   Animation<double> _animation;
   int userType;
+  String userRole;
   final pref = singleton<SharedPreferences>();
 
   @override
@@ -58,6 +60,8 @@ class _HomePageBuilderState extends State<HomePageBuilder>
   @override
   Widget build(BuildContext context) {
     userType = pref.getInt('userType');
+    userRole = pref.getString('userRole');
+
     return SingleChildScrollView(
       controller: widget.scrollController,
       child: Stack(
@@ -144,7 +148,6 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                             }
                                         }
                                         break;
-
                                       default:
                                     }
                                   },
@@ -175,15 +178,16 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                               needRedirect: '',
                               onPress: () {
                                 Navigator.pushNamed(
-                                    context, ROUTER_SEARCH_PRODUCT)
+                                    context, ROUTER_SEARCH_PRODUCT,
+                                    arguments: SearchArgument(fromCategoryPage: true))
                                     .then((value) =>
                                 {
                                   if (value != null)
                                     {
-                                      Navigator.pushNamed(
-                                          context, ROUTER_DETAILED_PAHT,
-                                          arguments: PahtDetailArgument(
-                                              productId: value))
+                                      // Navigator.pushNamed(
+                                      //     context, ROUTER_DETAILED_PAHT,
+                                      //     arguments: PahtDetailArgument(
+                                      //         productId: value))
                                     }
                                 });
                               },
@@ -198,7 +202,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CitizensMenuItemWidget(
-                                label: 'Báo giá',
+                                label: 'Tạo báo giá',
                                 icon: '/icons/icon_bao_gia.png',
                                 needRedirect: '',
                                 onPress: () {
@@ -238,7 +242,8 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                 height: 140,
                                 width: 140,
                               ),
-                              CitizensMenuItemWidget(
+                            1==1 ||   userRole !=null && userRole.contains('ROLE_MESSAGE')
+                              ? CitizensMenuItemWidget(
                                 label: 'Nhắn tin',
                                 icon: '/icons/icon_message.png',
                                 needRedirect: '',
@@ -246,7 +251,8 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                   Navigator.pushNamed(
                                       context, ROUTER_CUS_CHAT_PAGE);
                                 },
-                              )
+                              ) : SizedBox( height: 140,
+                                width: 140,)
                             ]),
                       ]),
                 );
