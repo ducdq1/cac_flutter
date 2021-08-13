@@ -1,4 +1,4 @@
-package com.cac.demo;
+package com.noithat.cac;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;

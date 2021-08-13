@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "729940612804",
-    "project_id": "cac-demo-new",
-    "storage_bucket": "cac-demo-new.appspot.com"
+    "project_number": "825082183334",
+    "project_id": "noi-that-cac",
+    "storage_bucket": "noi-that-cac.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:729940612804:android:46efe6addcaaf34ba6db91",
+        "mobilesdk_app_id": "1:825082183334:android:8328f93440655c4ba27e67",
         "android_client_info": {
-          "package_name": "com.cac.demo"
+          "package_name": "com.noithat.cac"
         }
       },
       "oauth_client": [
         {
-          "client_id": "729940612804-r7p7bk2ln7d8i3b58eerg8b52d7fsg75.apps.googleusercontent.com",
+          "client_id": "825082183334-s4dncs7ehl3ck8b0lr51fv99unuqg8ru.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBeUBZ6mB8Y0CrWXzm73FVUEpFslz8OwnA"
+          "current_key": "AIzaSyB02Qf6VymioJQG2OFy7Pq_-RThuyWyfL0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "729940612804-r7p7bk2ln7d8i3b58eerg8b52d7fsg75.apps.googleusercontent.com",
+              "client_id": "825082183334-s4dncs7ehl3ck8b0lr51fv99unuqg8ru.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "729940612804-c3tl2lfguvv7shnlioe22e6um4hrm5h7.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.viettel.maps"
-              }
             }
           ]
         }

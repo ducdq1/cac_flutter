@@ -1,4 +1,4 @@
-package com.cac.demo
+package com.noithat.cac
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterFragmentActivity

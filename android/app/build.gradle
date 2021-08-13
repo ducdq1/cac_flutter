@@ -17,12 +17,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 //if (flutterVersionCode == null) {
-    flutterVersionCode = '6'
+    flutterVersionCode = '3'
 //}
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 //if (flutterVersionName == null) {
-    flutterVersionName = '3.0.2'
+    flutterVersionName = '1.0.0'
 //}
 //apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.android.application'
@@ -37,7 +37,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -49,12 +49,13 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.cac.demo"
+        applicationId "com.noithat.cac"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+
    signingConfigs {
        release {
            keyAlias keystoreProperties['keyAlias']
@@ -63,19 +64,13 @@ android {
            storePassword keystoreProperties['storePassword']
        }
    }
+
    buildTypes {
        release {
            signingConfig signingConfigs.release
        }
    }
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-        }
-    }
 }
 
 

@@ -121,7 +121,8 @@ class FirebaseApi {
             phone: phone,
             name: fullName,
             urlAvatar: avartarPath != null ? '$baseUrl' + avartarPath : '',
-        status: 'online'));
+        status: 'online',
+        processor: 'null'));
         myUser = await FirebaseApi.getUserByPhone(phone);
       }else{
         updateUserStatus(idUser,"online");
