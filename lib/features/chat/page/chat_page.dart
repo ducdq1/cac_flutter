@@ -37,6 +37,8 @@ class _ChatPageState extends State<ChatPage> {
       FirebaseApi.updateUserProcessor(widget.user.idUser, userName);
     }
 
+    FirebaseApi.updateUserMessageHasRead(widget.user.idUser,true);
+
     BlocProvider.of<ChatBloc>(context).add(ChatSentEvent());
   }
 

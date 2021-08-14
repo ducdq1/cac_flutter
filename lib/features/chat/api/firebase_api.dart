@@ -10,53 +10,55 @@ import 'package:http/http.dart' as http;
 import '../utils.dart';
 
 class FirebaseApi {
-
-  static Future sendMessageToAllUser(String message,String type, User senderUser,Function callback) async {
+  static Future sendMessageToAllUser(
+      String message, String type, User senderUser, Function callback) async {
     List<User> users = await getUsers().first;
-  for(int i =0; i< users.length;i++) {
+    for (int i = 0; i < users.length; i++) {
       try {
         print('send massage to ' + users[i].name);
-        callback((i+1).toString()+'/'+users.length.toString());
-        await uploadMessage(
-            users[i].idUser, message, senderUser, type);
-      }catch(e){
+        callback((i + 1).toString() + '/' + users.length.toString());
+        await uploadMessage(users[i].idUser, message, senderUser, type);
+      } catch (e) {
         print('Loi send massage to ' + users[i].name);
       }
-        print('send massage thanh cong to ' + users[i].name);
+      print('send massage thanh cong to ' + users[i].name);
     }
-    await sendNotification('allCustomer','Tin nhắn từ '+ senderUser.name,message);
+    await sendNotification(
+        'allCustomer', 'Tin nhắn từ ' + senderUser.name, message);
   }
 
-  static Future<void> sendNotification(String to,String title,String message) async{
-     http.Client client = singleton();
-     try {
-       var url = 'https://fcm.googleapis.com/fcm/send';
-       var header = {
-         "Content-Type": "application/json",
-         "Authorization": "key=AAAAqfPZ1sQ:APA91bECNLIxhv2ZFNpVrNA_x33P7bK1el3jQBe3KbImmFjFxwRcM9vCsL7x6pf4Xx4rU0Nhi549sIAvsAtDS5ozHQRcZwlbT-nP-mCU1-vQbgihMXFydGMJxoLzzlGkPxotL3bm1nbY",
-         "Accept-Encoding": "UTF-8"
-       };
-       var request = {
-         "notification": {
-           "title": 'Tin nhắn từ ' + title,
-           "body": message,
-           "sound": "default",
-           //"color": "#990000",
-         },
-         "priority": "high",
-         "to": "/topics/" + to,
-       };
+  static Future<void> sendNotification(
+      String to, String title, String message) async {
+    http.Client client = singleton();
+    try {
+      var url = 'https://fcm.googleapis.com/fcm/send';
+      var header = {
+        "Content-Type": "application/json",
+        "Authorization":
+            "key=AAAAwBq6_qY:APA91bFM1k5zlGkyJ9oWUp6JyFqXNUz9QG3U4FvP5egddF24w9Nvs5xUwyJguQWTvjCSs1SASRZwhpeZd4SyYiedC-WZGXDYY10_AxyVd9rcxRNYYvjyCIe4-6XMvs4yW0foL4zY9QPd",
+        "Accept-Encoding": "UTF-8"
+      };
+      var request = {
+        "notification": {
+          "title": 'Tin nhắn từ ' + title,
+          "body": message,
+          "sound": "default",
+          //"color": "#990000",
+        },
+        "priority": "high",
+        "to": "/topics/" + to,
+      };
 
-     //  var client = new Client();
-       print('----> send noitify to: '+request.toString());
-       var response =
-           await client.post(url, headers: header, body: json.encode(request));
-       print('----> response '+response.body.toString());
-       return true;
-     } catch (e, s) {
-       print(e);
-       return false;
-     }
+      //  var client = new Client();
+      print('----> send noitify to: ' + request.toString());
+      var response =
+          await client.post(url, headers: header, body: json.encode(request));
+      print('----> response ' + response.body.toString());
+      return true;
+    } catch (e, s) {
+      print(e);
+      return false;
+    }
   }
 
   static Future<User> getAdminUser() async {
@@ -84,7 +86,6 @@ class FirebaseApi {
         name: firebaseAdminUserName,
         urlAvatar: firebaseAdminUserAvatar);
   }
-
 
   static Future<User> getUserByPhone(String phone) async {
     QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
@@ -117,56 +118,59 @@ class FirebaseApi {
       if (myUser == null) {
         String fullName = pref.getString('fullName');
         String avartarPath = pref.getString('avartarPath');
-        await FirebaseApi.createUser(User(role: 'user',
+        await FirebaseApi.createUser(User(
+            role: 'user',
             phone: phone,
             name: fullName,
             urlAvatar: avartarPath != null ? '$baseUrl' + avartarPath : '',
-        status: 'online',
-        processor: 'null'));
+            status: 'online',
+            processor: 'null'));
         myUser = await FirebaseApi.getUserByPhone(phone);
-      }else{
-        updateUserStatus(idUser,"online");
+      } else {
+        updateUserStatus(idUser, "online");
       }
       await pref.setString('myFirebaseUserId', myUser.idUser);
       await pref.setString('myFirebaseUserFullName', myUser.name);
       await pref.setString('myFirebaseUserAvatar', myUser.urlAvatar);
-      await pref.setString('myFirebaseUserRole',myUser.role);
-      await pref.setString('myFirebaseUserPhone',myUser.phone);
-
+      await pref.setString('myFirebaseUserRole', myUser.role);
+      await pref.setString('myFirebaseUserPhone', myUser.phone);
 
       return myUser;
     }
 
-    updateUserStatus(idUser,"online");
+    updateUserStatus(idUser, "online");
 
-    return User(idUser: idUser, name: name, urlAvatar: avartar,role:  role,phone: phone);
+    return User(
+        idUser: idUser,
+        name: name,
+        urlAvatar: avartar,
+        role: role,
+        phone: phone);
   }
 
-  static updateUserStatus(String userId,String status) async{
-    try{
+  static updateUserStatus(String userId, String status) async {
+    try {
       final refUsers = FirebaseFirestore.instance.collection('users');
       refUsers
           .doc(userId)
-          .update({"lastOnlineTime": DateTime.now(),
-        "status" : status});
-    }catch(e){
-
-    }
+          .update({"lastOnlineTime": DateTime.now(), "status": status});
+    } catch (e) {}
   }
 
   //Cap nhat lai user sẽ xu ly
-  static updateUserProcessor(String userId,String processor) async{
-    try{
+  static updateUserProcessor(String userId, String processor) async {
+    try {
       final refUsers = FirebaseFirestore.instance.collection('users');
-      refUsers
-          .doc(userId)
-          .update({"processor": processor});
-    }catch(e){
-
-    }
-
+      refUsers.doc(userId).update({"processor": processor});
+    } catch (e) {}
   }
 
+  static updateUserMessageHasRead(String userId,bool hasRead) async {
+    try {
+      final refUsers = FirebaseFirestore.instance.collection('users');
+      refUsers.doc(userId).update({"messageHasRead": hasRead});
+    } catch (e) {}
+  }
 
   static Future<String> getMyUserId() async {
     String myId = pref.getString('myFirebaseUserId');
@@ -194,28 +198,26 @@ class FirebaseApi {
   static Stream<List<User>> getUsers() => FirebaseFirestore.instance
       .collection('users')
       //.where("idUser", whereNotIn: [myId])
-  //    .where("role", whereNotIn: ['admin']).
-  .where("processor", whereIn: ['null' ,pref.get("userName")])
-        //.orderBy("role",descending:  false)
-       //.orderBy(UserField.lastMessageTime, descending: true)
+      //    .where("role", whereNotIn: ['admin']).
+      .where("processor", whereIn: ['null', pref.get("userName")])
+      //.orderBy("role",descending:  false)
+      //.orderBy(UserField.lastMessageTime, descending: true)
       .snapshots()
       .transform(Utils.transformer(User.fromJson));
 
   static Future uploadMessage(
-      String idUser, String message, User myUser,String type) async {
+      String idUser, String message, User myUser, String type) async {
     final refMessages =
         FirebaseFirestore.instance.collection('chats/$idUser/messages');
 
     final newMessage = Message(
-      idUser: myUser.idUser,
-      urlAvatar: myUser.urlAvatar,
-      username: myUser.name,
-      message: message,
-      createdAt: DateTime.now(),
-      type: type
-    );
+        idUser: myUser.idUser,
+        urlAvatar: myUser.urlAvatar,
+        username: myUser.name,
+        message: message,
+        createdAt: DateTime.now(),
+        type: type);
     await refMessages.add(newMessage.toJson());
-
   }
 
   static Stream<List<Message>> getMessages(String idUser) =>
@@ -225,14 +227,13 @@ class FirebaseApi {
           .snapshots()
           .transform(Utils.transformer(Message.fromJson));
 
-  static Future<bool> checkHasMessage(String idUser,User myUser) async {
-   final refUsers =  FirebaseFirestore.instance
-        .collection('chats/$idUser/messages');
-   final messages = await refUsers.get();
-    if(messages.size == 0){
-       uploadMessage(
-           idUser,  'Xin chào, tôi vừa đăng nhập...',  myUser, '0');
-       return true;
+  static Future<bool> checkHasMessage(String idUser, User myUser) async {
+    final refUsers =
+        FirebaseFirestore.instance.collection('chats/$idUser/messages');
+    final messages = await refUsers.get();
+    if (messages.size == 0) {
+      uploadMessage(idUser, 'Xin chào, tôi vừa đăng nhập...', myUser, '0');
+      return true;
     }
     return false;
   }

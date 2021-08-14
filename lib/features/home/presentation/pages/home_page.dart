@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
+import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/home_page_builder.dart';
@@ -69,10 +70,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     String userName = pref.get('userName');
     print(userName);
       int userType = pref.getInt('userType');
-      if(userType !=null && userType == 3){
-        _firebaseMessaging.subscribeToTopic('create');
+      String userRole = pref.get('userRole');
+
+      if(userRole !=null && userRole == UserField.ROLE_MESSAGE ){
         _firebaseMessaging.subscribeToTopic('customer');
       }
+
+      if(userType !=null && userType == 3){
+        _firebaseMessaging.subscribeToTopic('create');
+      }
+
       if(userName !=null){
         _firebaseMessaging.subscribeToTopic(userName);
       }

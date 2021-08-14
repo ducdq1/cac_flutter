@@ -4,6 +4,7 @@ import '../utils.dart';
 
 class UserField {
   static final String lastMessageTime = 'lastMessageTime';
+  static final String ROLE_MESSAGE = 'ROLE_MESSAGE';
 }
 
 class User {
@@ -16,7 +17,7 @@ class User {
   final String status;
   final DateTime lastOnlineTime;
   final String processor;
-
+  final bool messageHasRead;
   const User({
     this.idUser,
     @required this.name,
@@ -26,7 +27,8 @@ class User {
     this.lastMessageTime,
     this.lastOnlineTime,
     this.status,
-    this.processor
+    this.processor,
+    this.messageHasRead
   });
 
   User copyWith({
@@ -38,7 +40,8 @@ class User {
     DateTime lastMessageTime,
     String status,
     DateTime lastOnlineTime,
-    String processor
+    String processor,
+    bool messageHasRead
   }) =>
       User(
         idUser: idUser ?? this.idUser,
@@ -60,7 +63,8 @@ class User {
         lastMessageTime: Utils.toDateTime(json['lastMessageTime']),
          status: json['status'],
          lastOnlineTime:  Utils.toDateTime(json['lastOnlineTime']),
-      processor: json['processor']
+        processor: json['processor'],
+        messageHasRead : json['messageHasRead']
       );
 
   Map<String, dynamic> toJson() => {
@@ -72,6 +76,7 @@ class User {
         'lastMessageTime': Utils.fromDateTimeToJson(lastMessageTime),
     'status' : status,
     'lastOnlineTime':  Utils.fromDateTimeToJson(lastOnlineTime),
-    'processor': processor
+    'processor': processor,
+    'messageHasRead' : messageHasRead
       };
 }

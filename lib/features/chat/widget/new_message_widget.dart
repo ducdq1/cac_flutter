@@ -78,10 +78,17 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
     String topic;
     var isCustomer = pref.getBool('isCustomer') ?? false;
     if (isCustomer) {
-      topic = 'customer';
+      if(widget.myUser.processor !=null && widget.myUser.processor != 'null'){
+        topic =  widget.myUser.processor;
+      }else {
+        topic = 'customer';
+      }
+
+      await FirebaseApi.updateUserMessageHasRead(widget.myUser.idUser,false);
     } else {
       topic = widget.toUser.phone;
     }
+
     await FirebaseApi.sendNotification(topic, widget.myUser.name, message);
   }
 
