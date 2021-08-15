@@ -12,7 +12,7 @@ import '../utils.dart';
 class FirebaseApi {
   static Future sendMessageToAllUser(
       String message, String type, User senderUser, Function callback) async {
-    List<User> users = await getUsers().first;
+    List<User> users = await getAllUsers().first;
     for (int i = 0; i < users.length; i++) {
       try {
         print('send massage to ' + users[i].name);
@@ -199,9 +199,19 @@ class FirebaseApi {
       .collection('users')
       //.where("idUser", whereNotIn: [myId])
       //    .where("role", whereNotIn: ['admin']).
-      .where("processor", whereIn: ['null', pref.get("userName")])
+      .where("processor", whereIn: ['null',  pref.getString("userName")])
       //.orderBy("role",descending:  false)
       //.orderBy(UserField.lastMessageTime, descending: true)
+      .snapshots()
+      .transform(Utils.transformer(User.fromJson));
+
+  static Stream<List<User>> getAllUsers() => FirebaseFirestore.instance
+      .collection('users')
+  //.where("idUser", whereNotIn: [myId])
+    .where("role", whereNotIn: ['admin'])
+   //   .where("processor", whereIn: ['null',  pref.getString("userName")])
+   .orderBy("role",descending:  false)
+  //.orderBy(UserField.lastMessageTime, descending: true)
       .snapshots()
       .transform(Utils.transformer(User.fromJson));
 

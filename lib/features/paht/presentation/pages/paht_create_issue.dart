@@ -22,6 +22,7 @@ import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.d
 import 'package:citizen_app/features/paht/domain/usecases/create_issue_paht.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
+import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/quotation_detail_item_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -269,7 +270,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       splashColor: Colors.grey,
                       onPressed: () async {
                         clearFocus();
-                        Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT)
+                        Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT,
+                        arguments:  SearchArgument(fromCreateQuotationPage: true))
                             .then((value) => {
                                   if (value != null)
                                     {gotoDetailProductPage(null,value)}

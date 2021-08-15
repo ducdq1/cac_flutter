@@ -40,7 +40,8 @@ class SearchProductParam extends Equatable {
   final String code;
   final int searchType;
   final bool isGetPromotionProduct;
-  SearchProductParam({this.productCode, this.productName, this.userName,this.limit, this.offset, this.type = null,this.isAgent = false,this.code,this.searchType,this.productId,this.isGetPromotionProduct,this.userType});
+  final bool isViewTonKho;
+  SearchProductParam({this.productCode, this.productName, this.userName,this.limit, this.offset, this.type = null,this.isAgent = false,this.code,this.searchType,this.productId,this.isGetPromotionProduct,this.userType,this.isViewTonKho = false});
 
   @override
   // TODO: implement props
@@ -59,7 +60,8 @@ class SearchProductParam extends Equatable {
       'code' : code,
       'searchType' : searchType,
       'productId': productId,
-      'isGetPromotionProduct' : isGetPromotionProduct
+      'isGetPromotionProduct' : isGetPromotionProduct,
+      'isViewTonKho' : (userType == 3 || userType == 4)
     };
   }
 }
@@ -71,6 +73,7 @@ class _PahtDetailPageState extends State<PahtDetailPage>
   int _index;
   PahtDetailArgument arg;
   String productCode;
+  int productId;
   ProductModel productModel;
   TonKhoModel tonKhoModel;
   bool firstLoad = true;
@@ -95,6 +98,7 @@ class _PahtDetailPageState extends State<PahtDetailPage>
       firstLoad = false;
       arg = ModalRoute.of(context).settings.arguments as PahtDetailArgument;
       productCode = arg.productCode;
+      productId = arg.productId;
       BlocProvider.of<DetailedPahtBloc>(context).add(
         DetailedPahtFetching(pahtId: productCode,productId: arg.productId),
       );
@@ -178,7 +182,7 @@ class _PahtDetailPageState extends State<PahtDetailPage>
                       : state.error.toString(),
                   onPressed: () {
                     BlocProvider.of<DetailedPahtBloc>(context)
-                        .add(DetailedPahtFetching(pahtId: productCode));
+                        .add(DetailedPahtFetching(pahtId: productCode,productId: productId));
                   });
             }
             return Container(

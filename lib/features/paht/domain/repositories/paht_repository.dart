@@ -33,6 +33,6 @@ abstract class PahtRepository {
   Future<bool> createComment(Params commentParams);
   Future<bool> replyComment(Params commentParams);
 
-  Future<bool> updateProcessor(int workerId,String processor);
+  Future<bool> updateProcessor(String workerId,String processor);
 
 }

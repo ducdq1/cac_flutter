@@ -1,3 +1,4 @@
+import 'package:citizen_app/core/resources/api.dart';
 import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
@@ -13,7 +14,7 @@ class ChatsPage extends StatelessWidget {
     //resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
         backgroundColor: PRIMARY_COLOR,
         body: StreamBuilder<List<User>>(
-            stream: FirebaseApi.getUsers(),
+            stream:  pref.getString('userRole').contains("ADMIN") ?  FirebaseApi.getAllUsers() : FirebaseApi.getUsers(),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:

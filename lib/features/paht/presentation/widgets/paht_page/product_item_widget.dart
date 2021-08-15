@@ -25,25 +25,29 @@ class ProductITemWidget extends StatelessWidget {
   }
 
   Widget _itemWidget(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
+    return Card(
+      elevation: 6,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6),
+      ),
+      margin: EdgeInsets.all(10),
       child: InkWell(
         onTap: () => onTap(),
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.green.shade100,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                    offset: Offset(3, 3), // changes position of shadow
-                  ),
-                ],
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.grey.withOpacity(0.1),
+                //     spreadRadius: 1,
+                //     blurRadius: 1,
+                //     offset: Offset(3, 3), // changes position of shadow
+                //   ),
+                // ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -263,9 +267,6 @@ class ProductITemWidget extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 15,
-            )
           ],
         ),
       ),

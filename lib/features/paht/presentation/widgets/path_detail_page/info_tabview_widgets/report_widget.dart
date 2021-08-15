@@ -190,47 +190,49 @@ class ReportWidget extends StatelessWidget {
                   ]))),
             ],
           ),
-          SizedBox(height: 18),
           isViewTonKho
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                      SizedBox(width: 30),
-                      Image.asset(
-                        ICONS_ASSETS + 'icon_ware_house.png',
-                        width: 20,
-                        height: 20,
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                          child: Container(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Tồn kho",
+              ? Padding(
+                padding: const EdgeInsets.only(top: 18 ),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        SizedBox(width: 30),
+                        Image.asset(
+                          ICONS_ASSETS + 'icon_ware_house.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                            child: Container(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Tồn kho",
+                                    style: GoogleFonts.inter(
+                                      fontSize: FONT_MIDDLE,
+                                      color: PRIMARY_TEXT_COLOR,
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                                SizedBox(height: 10),
+                                Text(
+                                  tonKhoModel == null ||
+                                          tonKhoModel.so_luong == null
+                                      ? "Không có thông tin"
+                                      : tonKhoModel.so_luong.toString(),
                                   style: GoogleFonts.inter(
+                                    color: Colors.amber.shade900,
                                     fontSize: FONT_MIDDLE,
-                                    color: PRIMARY_TEXT_COLOR,
-                                    fontWeight: FontWeight.w600,
-                                  )),
-                              SizedBox(height: 10),
-                              Text(
-                                tonKhoModel == null ||
-                                        tonKhoModel.so_luong == null
-                                    ? "Không có thông tin"
-                                    : tonKhoModel.so_luong.toString(),
-                                style: GoogleFonts.inter(
-                                  color: Colors.amber.shade900,
-                                  fontSize: FONT_MIDDLE,
-                                  fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ]),
-                      ))
-                    ])
+                              ]),
+                        ))
+                      ]),
+              )
               : SizedBox(),
-          SizedBox(height: 10),
+          SizedBox(height: 3),
           userType != null && (userType == 3 || userType == 4)
               ? //cho xem gia
               Center(

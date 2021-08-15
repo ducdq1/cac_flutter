@@ -217,7 +217,7 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<bool> updateProcessor(int workerId, String processor) async {
+  Future<bool> updateProcessor(String workerId, String processor) async {
     try {
       final remoteCreateIssuePaht =
           await remoteDataSource.updateProcessor(workerId, processor);

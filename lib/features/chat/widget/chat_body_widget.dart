@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citizen_app/core/functions/functions.dart';
+import 'package:citizen_app/core/resources/api.dart';
 import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/page/chat_page.dart';
@@ -37,16 +38,31 @@ class ChatBodyWidget extends StatelessWidget {
             height: 75,
             child: ListTile(
               //isThreeLine: true,
-              trailing: user.status == 'online'
-                  ?  SizedBox() :
-              user.lastOnlineTime ==null ? SizedBox() : Text(
-                handleTime(user.lastOnlineTime.toString()),
-                style: new TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Color(0xff353739),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-              ),
+              trailing: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(height: 5,),
+                pref.getString('userRole').contains("ADMIN") ?
+                Text( user.processor !=null ? (user.processor == 'null' ? '' : user.processor.toUpperCase()) : '' ,
+                  style: new TextStyle(
+                      fontStyle: FontStyle.normal,
+                      color: Colors.blue,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ) : SizedBox(),
+                    user.status == 'online'
+                        ?  SizedBox() :
+                    user.lastOnlineTime ==null ? SizedBox() : Text(
+                      handleTime(user.lastOnlineTime.toString()),
+                      style: new TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Color(0xad353739),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    SizedBox(height: 5,),
+              ]),
               subtitle: Text(
                   user.phone ?? '',
                   style: new TextStyle(
@@ -98,7 +114,7 @@ class ChatBodyWidget extends StatelessWidget {
                             width: 10,
                             height: 10,
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: user.status == 'online' &&  !handleTime(user.lastOnlineTime.toString()).contains('-')
+                                shape: BoxShape.circle, color: user.role == 'all-user' || user.status == 'online' &&  !handleTime(user.lastOnlineTime.toString()).contains('-')
                                 ? Colors.green : Colors.grey),
                           ),
                         ))

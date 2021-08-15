@@ -20,12 +20,13 @@ class SearchArgument {
   final bool isSaled;
   final bool isApproveAble;
   final bool fromCategoryPage;
+  final bool fromCreateQuotationPage;
   final int type;
   SearchArgument(
       {this.isSaled = false,
       this.isApproveAble,
       this.fromCategoryPage = false,
-      this.type = -1 });
+      this.type = -1, this.fromCreateQuotationPage = false });
 }
 
 class ProductSearch extends StatefulWidget {
@@ -119,14 +120,14 @@ class _ProductSearchState extends State<ProductSearch>
                           paddingBottom: 00,
                           textSearch: searchController.text.trim(),
                           onTap: (value) {
-                            if (fromCategory) {
+                            if (args!=null && args.fromCreateQuotationPage) {
+                              Navigator.pop(context, value);
+                            } else {
                               Navigator.pushNamed(context, ROUTER_DETAILED_PAHT,
                                   arguments:
-                                      paht_list_widget.PahtDetailArgument(
-                                          productId: value,
-                                          fromCategoryPage: true));
-                            } else {
-                              Navigator.pop(context, value);
+                                  paht_list_widget.PahtDetailArgument(
+                                      productId: value,
+                                      fromCategoryPage: false));
                             }
                           },
                         )

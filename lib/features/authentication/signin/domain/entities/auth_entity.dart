@@ -21,7 +21,7 @@ abstract class AuthEntity {
     this.userId = json['userId'];
     this.userName = json['userName'];
     this.userType = json['userType'];
-    this.role = json['role'];
+    this.role = json['roles'];
   }
 
   toJson() {

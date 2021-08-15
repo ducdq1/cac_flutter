@@ -202,9 +202,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                             needRedirect: '',
                             onPress: () {
                               Navigator.pushNamed(
-                                      context, ROUTER_SEARCH_PRODUCT,
-                                      arguments: SearchArgument(
-                                          fromCategoryPage: true))
+                                      context, ROUTER_SEARCH_PRODUCT )
                                   .then((value) => {
                                         if (value != null)
                                           {
@@ -266,7 +264,6 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                     height: 140,
                                     width: 140,
                                   ),
-                            1 == 1 ||
                                     userRole != null &&
                                         userRole
                                             .contains(UserField.ROLE_MESSAGE)
@@ -315,9 +312,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                 print('on Stream get User.......');
                 for (User user in users) {
                   badgeCount += (user.messageHasRead == null ||
-                          user.messageHasRead == true)
-                      ? 0
-                      : 1;
+                          user.messageHasRead == true) ? 0 : 1;
                 }
 
                 if (badgeCount > 0) {

@@ -39,7 +39,7 @@ class _ChatPageState extends State<ChatPage> {
 
     FirebaseApi.updateUserMessageHasRead(widget.user.idUser,true);
 
-    BlocProvider.of<ChatBloc>(context).add(ChatSentEvent());
+    BlocProvider.of<ChatBloc>(context).add(ChatSentEvent(processor: userName , workerId: widget.user.phone));
   }
 
   Future<User> initFirebaseData() async {

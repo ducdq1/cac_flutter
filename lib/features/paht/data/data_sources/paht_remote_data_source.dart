@@ -49,7 +49,7 @@ abstract class PahtRemoteDataSource {
 
   Future<bool> replyComment(Params commentParams);
 
-  Future<bool> updateProcessor(int workerId, String processor);
+  Future<bool> updateProcessor(String workerId, String processor);
 }
 
 class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
@@ -405,7 +405,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<bool> updateProcessor(int workerId, String processor) async{
+  Future<bool> updateProcessor(String workerId, String processor) async{
     try {
       var body;
       body = jsonEncode(

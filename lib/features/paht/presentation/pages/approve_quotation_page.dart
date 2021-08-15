@@ -3,41 +3,33 @@ import 'dart:ui';
 
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
-import 'package:citizen_app/core/utils/form_tools/form_tools.dart';
 import 'package:citizen_app/core/utils/validate/empty_validate.dart';
 import 'package:citizen_app/features/authentication/signup/presentation/widgets/signup_personal_page/input_datetime_widget.dart';
-import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
-import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom_widget.dart';
-import 'package:citizen_app/features/common/widgets/inputs/text_field_custom.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
+import 'package:citizen_app/features/home/presentation/pages/web_view_page.dart';
 import 'package:citizen_app/features/number_trivia/presentation/widgets/widgets.dart';
-import 'package:citizen_app/features/paht/data/models/media_picker_ios_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_issue_paht.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/approve_confirm_dialog.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/quotation_detail_item_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 //import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+
 import '../../../../injection_container.dart';
-import 'package:citizen_app/features/home/presentation/pages/web_view_page.dart';
 
 const SIZE_ICON = 20.0;
 const SIZE_PICKER_LOCATION_ICON = 36.0;

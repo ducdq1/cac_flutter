@@ -92,7 +92,7 @@ class _PahtState extends State<Paht> {
                     Navigator.of(context)
                         .pushNamed(ROUTER_CREATE_PAHT)
                         .then((value) {
-                      if (value) {
+                      if (value !=null && value) {
                         BlocProvider.of<PublicPahtBloc>(context).add(
                           ReloadListEvent(),
                         );
