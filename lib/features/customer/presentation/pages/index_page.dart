@@ -229,7 +229,7 @@ class _IndexpageState extends State<Indexpage> {
     try {
       FirebaseApi.getMessages(myUser.idUser).listen((event) {
         ms.Message message = event.first;
-        if (message.idUser != myUser.idUser && indexTab != 2) {
+        if (indexTab != 2 && message.idUser != myUser.idUser && message.hasRead != true) {
           singleton<NotificationBloc>().add(NotificationEvent(1));
         }else{
           singleton<NotificationBloc>().add(NotificationEvent(0));

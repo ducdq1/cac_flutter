@@ -7,6 +7,7 @@ class MessageField {
 }
 
 class Message {
+  final String idMsg;
   final String idUser;
   final String urlAvatar;
   final String username;
@@ -15,6 +16,7 @@ class Message {
   final String type;
   final bool hasRead;
   const Message({
+    this.idMsg,
     @required this.idUser,
     @required this.urlAvatar,
     @required this.username,
@@ -25,6 +27,7 @@ class Message {
   });
 
   static Message fromJson(Map<String, dynamic> json) => Message(
+        idMsg: json['idMsg'],
         idUser: json['idUser'],
         urlAvatar: json['urlAvatar'],
         username: json['username'],
@@ -35,6 +38,7 @@ class Message {
       );
 
   Map<String, dynamic> toJson() => {
+        'idMsg' : idMsg,
         'idUser': idUser,
         'urlAvatar': urlAvatar,
         'username': username,

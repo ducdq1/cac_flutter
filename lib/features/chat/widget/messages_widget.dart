@@ -1,3 +1,4 @@
+import 'package:citizen_app/core/resources/api.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:citizen_app/features/chat/model/message.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
@@ -30,6 +31,12 @@ class MessagesWidget extends StatelessWidget {
                 return buildText('Không thể kết nối. Vui lòng thử lại sau');
               } else {
                 final messages = snapshot.data;
+                if (pref.getBool('isCustomer') ?? false) {
+                  Message ms = messages.first;
+                  if (ms.idUser != fromUser.idUser && ms.hasRead != true) {
+                       FirebaseApi.updateCustomerMessageHasRead(chatsId, ms.idMsg);
+                  }
+                }
 
                 return GestureDetector(
                     onTap: () {
@@ -75,7 +82,7 @@ class MessagesWidget extends StatelessWidget {
     //   }
     // }
 
-    if(index==0 || messages[index-1].idUser != toUser.idUser){
+    if (index == 0 || messages[index - 1].idUser != toUser.idUser) {
       return true;
     }
 

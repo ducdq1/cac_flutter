@@ -219,15 +219,16 @@ class FirebaseApi {
       String idUser, String message, User myUser, String type) async {
     final refMessages =
         FirebaseFirestore.instance.collection('chats/$idUser/messages');
-
+    final msgDoc = refMessages.doc();
     final newMessage = Message(
+          idMsg: msgDoc.id,
         idUser: myUser.idUser,
         urlAvatar: myUser.urlAvatar,
         username: myUser.name,
         message: message,
         createdAt: DateTime.now(),
         type: type);
-    await refMessages.add(newMessage.toJson());
+    await msgDoc.set(newMessage.toJson());
   }
 
   static Stream<List<Message>> getMessages(String idUser) =>
@@ -246,6 +247,14 @@ class FirebaseApi {
       return true;
     }
     return false;
+  }
+
+  static updateCustomerMessageHasRead(String userId,String idMessage) async {
+    try {
+      final refUsers =  FirebaseFirestore.instance
+          .collection('chats/$userId/messages');
+      refUsers.doc(idMessage).update({"hasRead": true});
+    } catch (e) {}
   }
 
   static Future addRandomUsers(List<User> users) async {
