@@ -13,13 +13,15 @@ class Message {
   final String message;
   final DateTime createdAt;
   final String type;
+  final bool hasRead;
   const Message({
     @required this.idUser,
     @required this.urlAvatar,
     @required this.username,
     @required this.message,
     @required this.createdAt,
-    @required this.type
+    @required this.type,
+    this.hasRead
   });
 
   static Message fromJson(Map<String, dynamic> json) => Message(
@@ -28,6 +30,7 @@ class Message {
         username: json['username'],
         message: json['message'],
         type: json['type'],
+        hasRead: json['hasRead'],
         createdAt: Utils.toDateTime(json['createdAt']),
       );
 
@@ -36,7 +39,8 @@ class Message {
         'urlAvatar': urlAvatar,
         'username': username,
         'message': message,
+        'hasRead' : hasRead,
         'createdAt': Utils.fromDateTimeToJson(createdAt),
-    'type':type
+        'type':type
       };
 }

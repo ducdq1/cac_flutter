@@ -24,22 +24,11 @@ class PromotionPage extends StatefulWidget {
 class _PromotionPageState extends State<PromotionPage> {
   Completer<void> _refreshCompleter;
   bool isRefresh = false;
-  final scrollController = ScrollController();
   final scrollThreshold = 200.0;
 
   @override
   void initState() {
-    _refreshCompleter = Completer<void>();
     super.initState();
-  }
-
-  void handleRefresh(context) {
-    setState(() {
-      isRefresh = !isRefresh;
-    });
-    BlocProvider.of<PublicPahtBloc>(context).add(
-      ListPublicPahtFetchingEvent(),
-    );
   }
 
 

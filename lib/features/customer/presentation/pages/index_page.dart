@@ -5,14 +5,12 @@ import 'dart:io';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
+import 'package:citizen_app/features/chat/model/message.dart' as ms;
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/page/my_chat_page.dart';
 import 'package:citizen_app/features/common/blocs/blocs.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/notification/notification_bloc.dart';
-import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
-import 'package:citizen_app/features/customer/presentation/bloc/promotion/promotion_bloc.dart';
-import 'package:citizen_app/features/customer/presentation/pages/product_category_page.dart';
 import 'package:citizen_app/features/customer/presentation/pages/products_page.dart';
 import 'package:citizen_app/features/customer/presentation/pages/promotions_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
@@ -30,8 +28,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../../../main.dart';
-
-import 'package:get_it/get_it.dart';
 
 const SIZE_ICON_BOTTOM_BAR = 28.0;
 const SIZE_ICON_FLOATING_BUTTON = 24.0;
@@ -53,13 +49,13 @@ class _IndexpageState extends State<Indexpage> {
       FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings initializationSettingsAndroid;
   User myUser;
+
   // var streamController = StreamController<int>()
   //   ..sink.add(0); //cho nay sai roi, no return ve void
   //.add(0);
 
   @override
   void initState() {
-
     badgeCount = 0;
     initFirebaseData();
     super.initState();
@@ -116,19 +112,20 @@ class _IndexpageState extends State<Indexpage> {
     );
   }
 
-  Future<bool> _onBackPressed() async{
-    if(myUser !=null) {
-      await FirebaseFirestore.instance.collection('users')
+  Future<bool> _onBackPressed() async {
+    if (myUser != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
           .doc(myUser.idUser)
-          .update({"lastOnlineTime": DateTime.now(),
-        "status": "offline"});
+          .update({"lastOnlineTime": DateTime.now(), "status": "offline"});
     }
     exit(0);
     return false;
   }
 
   void updateBadgeData(int vaue) {
-    singleton<NotificationBloc>().add(NotificationEvent(vaue));
+
+
   }
 
   void initFlutterLocalNotificationsPlugin() async {
@@ -224,10 +221,24 @@ class _IndexpageState extends State<Indexpage> {
   void initFirebaseData() async {
     //await FirebaseApi.getAdminUser();
     myUser = await FirebaseApi.getMyUser();
-    bool isCustomer =  pref.getBool('isCustomer');
+    bool isCustomer = pref.getBool('isCustomer');
     if (isCustomer) {
       await FirebaseApi.checkHasMessage(myUser.idUser, myUser);
     }
+
+    try {
+      FirebaseApi.getMessages(myUser.idUser).listen((event) {
+        ms.Message message = event.first;
+        if (message.idUser != myUser.idUser && indexTab != 2) {
+          singleton<NotificationBloc>().add(NotificationEvent(1));
+        }else{
+          singleton<NotificationBloc>().add(NotificationEvent(0));
+        }
+      });
+    }catch(e){
+
+    }
+
   }
 
   void handleRefresh(context, {int indexTab}) {}
@@ -245,9 +256,6 @@ class _IndexpageState extends State<Indexpage> {
         BlocProvider<NotificationBloc>(
             create: (context) =>
                 singleton<NotificationBloc>()..add(NotificationEvent(0))),
-        BlocProvider<PromotionBloc>(
-            create: (context) =>
-                singleton<PromotionBloc>()..add(ListPromotionFetching())),
         // BlocProvider<ProductCategoryBloc>(
         //   create: (context) => singleton<ProductCategoryBloc>()
         //     ..add(
@@ -279,14 +287,8 @@ class _IndexpageState extends State<Indexpage> {
                       setState(() {
                         indexTab = index;
                       });
-                      if (indexTab == 2) {
-                        badgeCount = 0;
-                        print('badgeCount ' + badgeCount.toString());
-                        updateBadgeData(badgeCount);
-                      }
                       if (indexTab == 0) {
-                        BlocProvider.of<PromotionBloc>(context)
-                            .add(ListPromotionFetching());
+
                       } else if (indexTab == 1) {
                         // BlocProvider.of<ProductCategoryBloc>(context)
                         //     .add(ListProductCategoriesFetching());
@@ -357,7 +359,8 @@ class _IndexpageState extends State<Indexpage> {
                         width: MediaQuery.of(context).size.width,
                         margin: EdgeInsets.only(top: 100),
                         constraints: BoxConstraints(
-                            minHeight: MediaQuery.of(context).size.height - 150),
+                            minHeight:
+                                MediaQuery.of(context).size.height - 150),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           //Colors.white,// Color(0xffF8F2E3),
@@ -384,8 +387,6 @@ class _IndexpageState extends State<Indexpage> {
                                     if (state is BottomNavigationInitial ||
                                         state is FirstTabLoaded) {
                                       print('PromotionPage');
-                                      BlocProvider.of<PromotionBloc>(context)
-                                          .add(ListPromotionFetching());
                                       return PromotionPage();
                                     }
                                     if (state is SecondTabLoaded) {
@@ -394,6 +395,7 @@ class _IndexpageState extends State<Indexpage> {
                                     }
 
                                     if (state is Tab3Loaded) {
+                                      singleton<NotificationBloc>().add(NotificationEvent(0));
                                       return MyChatPage();
                                     }
 

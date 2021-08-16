@@ -242,7 +242,7 @@ class FirebaseApi {
         FirebaseFirestore.instance.collection('chats/$idUser/messages');
     final messages = await refUsers.get();
     if (messages.size == 0) {
-      uploadMessage(idUser, 'Xin chào, tôi vừa đăng nhập...', myUser, '0');
+      uploadMessage(idUser, 'Xin chào...', myUser, '0');
       return true;
     }
     return false;

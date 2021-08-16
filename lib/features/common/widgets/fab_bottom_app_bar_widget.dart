@@ -63,6 +63,7 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('Selected _updateIndex ' + _selectedIndex.toString());
     List<Widget> items = List.generate(widget.items.length, (int index) {
       return BlocBuilder<NotificationBloc, NotificationState>(
           builder: (BuildContext context, NotificationState state) {
