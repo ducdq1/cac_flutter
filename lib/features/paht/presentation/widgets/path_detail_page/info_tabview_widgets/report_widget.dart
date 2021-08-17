@@ -232,7 +232,7 @@ class ReportWidget extends StatelessWidget {
                       ]),
               )
               : SizedBox(),
-          SizedBox(height: 3),
+          SizedBox(height: 15),
           userType != null && (userType == 3 || userType == 4)
               ? //cho xem gia
               Center(
