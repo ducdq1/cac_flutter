@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>729940612804-c3tl2lfguvv7shnlioe22e6um4hrm5h7.apps.googleusercontent.com</string>
+	<string>825082183334-pfh9tqel2d1idcv748dc4dqnh9eje9ec.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.729940612804-c3tl2lfguvv7shnlioe22e6um4hrm5h7</string>
+	<string>com.googleusercontent.apps.825082183334-pfh9tqel2d1idcv748dc4dqnh9eje9ec</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCVetB-2dymOnHweeo-db3eQtD8sUvVuJY</string>
+	<string>AIzaSyCPJpI4C8MQWOvldeJXmWhyb15cH9CJopw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>729940612804</string>
+	<string>825082183334</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.viettel.maps</string>
+	<string>com.noithat.cac</string>
 	<key>PROJECT_ID</key>
-	<string>cac-demo-new</string>
+	<string>noi-that-cac</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cac-demo-new.appspot.com</string>
+	<string>noi-that-cac.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:729940612804:ios:67dce95e0cef6e86a6db91</string>
+	<string>1:825082183334:ios:a2ebd68bb1152a7aa27e67</string>
 </dict>
 </plist>

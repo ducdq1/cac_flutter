@@ -4,8 +4,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>Nội thất C.A.C</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -36,9 +34,21 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Sử dụng camera để quét mã QR</string>
+	<string>Always and when in use!</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Always and when in use!</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Can I haz location always?</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Older devices need location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Need location when in use</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Can I use the mic please?</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Sử dụng bộ nhớ để lưu hình ảnh</string>
+	<string>Sử dụng bộ nhớ để lưu ảnh</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Upload images for screen background</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
