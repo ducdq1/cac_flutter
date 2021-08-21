@@ -35,10 +35,48 @@
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Sử dụng camera để quét mã QR</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Sử dụng bộ nhớ để lưu hình ảnh</string>
+	<!-- Permission options for the `location` group -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Hiển thị vị trí người dùng</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Hiển thị vị trí người dùng</string>
+    <key>NSLocationUsageDescription</key>
+    <string>Lấy vị trí người dùng cho thiết bị cũ</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Lấy vị trí người dùng cho thiết bị cũ</string>
+
+    <!-- Permission options for the `mediaLibrary` group -->
+    <key>NSAppleMusicUsageDescription</key>
+    <string>Phát nhạc khi đi bộ</string>
+    <key>kTCCServiceMediaLibrary</key>
+    <string>Phát nhạc khi đi bộ</string>
+
+    <!-- Permission options for the `calendar` group -->
+    <key>NSCalendarsUsageDescription</key>
+    <string>Để chọn ngày tháng từ lịch</string>
+
+    <!-- Permission options for the `camera` group -->
+    <key>NSCameraUsageDescription</key>
+    <string>Để quét mã QR code</string>
+
+    <!-- Permission options for the `contacts` group -->
+    <key>NSContactsUsageDescription</key>
+    <string>Xem danh sách danh bạ để thực hiện cuộc gọi</string>
+     
+
+    <!-- Permission options for the `speech` group -->
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Ghi âm giọng nói để tìm kiếm</string>
+
+    <!-- Permission options for the `sensors` group -->
+    <key>NSMotionUsageDescription</key>
+    <string>Để theo dõi hoạt động của phần cứng</string>
+
+    <!-- Permission options for the `photos` group -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Truy cập thư viện ảnh để chọn ảnh khi gửi tin nhắn</string>
+    
+
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
