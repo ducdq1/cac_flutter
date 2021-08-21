@@ -2236,7 +2236,8 @@ class _InputDecoratorState extends State<CInputDecorator>
                       style: hintStyle,
                       children: <TextSpan>[
                         TextSpan(
-                            text: decoration.border.isOutline  ? '*' : '', style: TextStyle(color: Colors.red)),
+                            text: decoration.border.isOutline ? '*' : '',
+                            style: TextStyle(color: Colors.red)),
                       ],
                     ),
                   )
@@ -3538,7 +3539,7 @@ class CInputDecoration {
       errorMaxLines: errorMaxLines ?? theme.errorMaxLines,
       // ignore: deprecated_member_use_from_same_package
       hasFloatingPlaceholder:
-          hasFloatingPlaceholder ?? theme.hasFloatingPlaceholder,
+          hasFloatingPlaceholder ?? false, //theme.hasFloatingPlaceholder,
       floatingLabelBehavior:
           floatingLabelBehavior ?? theme.floatingLabelBehavior,
       isDense: isDense ?? theme.isDense,
