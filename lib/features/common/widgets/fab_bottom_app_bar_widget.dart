@@ -1,8 +1,16 @@
+import 'package:citizen_app/core/functions/trans.dart';
+import 'package:citizen_app/core/resources/api.dart';
 import 'package:citizen_app/core/resources/colors.dart';
+import 'package:citizen_app/core/resources/strings.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
+import 'package:citizen_app/features/authentication/signin/presentation/signin_page.dart';
+import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:route_transitions/route_transitions.dart';
 
 class FABBottomAppBarItem {
   FABBottomAppBarItem({
@@ -55,10 +63,37 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
     if (_selectedIndex == index) {
       return;
     }
-    widget.onTabSelected(index);
-    setState(() {
-      _selectedIndex = index;
-    });
+
+
+    if (index == 2 && getUserName() == null)  { // chua dang nhap
+      if ( BlocProvider.of<AuthBloc>(context).state is UnAuthenticateState) {
+        showConfirmDialog(
+          context: context,
+          icon: Icon(
+            Icons.logout,
+            color: Colors.orangeAccent,
+          ),
+          title: 'Để sử dụng tính năng này bạn phải cập nhật thông tin cá nhân',
+          label: 'Cập nhật',
+          onSubmit: () {
+            Navigator.of(context).push(
+              PageRouteTransition(
+                animationType: AnimationType.slide_right,
+                builder: (context) => SignInPage(),
+              ),
+            );
+          },
+        );
+      }
+      // BlocProvider.of<ProductCategoryBloc>(context)
+      //     .add(ListProductCategoriesFetching());
+    }else {
+      widget.onTabSelected(index);
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
   }
 
   @override

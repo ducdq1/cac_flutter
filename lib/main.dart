@@ -78,6 +78,11 @@ void main() async {
   ));
   await di.init();
   final pref = singleton<SharedPreferences>();
+  final isCus = isCustomerUser();
+  if(isCus == null){
+    await pref.setBool('isCustomer', true);
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
   //if(pref.get('token') == null || pref.get('token').toString().isEmpty || pref.get("useProxy") == true) {
   //   HttpProxy httpProxy = await HttpProxy.createHttpProxy("10.61.11.42", "3128");
@@ -117,7 +122,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     String token = pref.get('userName');
-    bool isCustomer = pref.getBool('isCustomer') ?? false;
+    bool isCustomer = isCustomerUser();
     //token ='hard code';
     int loginTime = pref.get('loginTime');
     if (loginTime != null) {
@@ -199,10 +204,10 @@ class _MyAppState extends State<MyApp> {
         },
         navigatorKey: navKey,
         title: 'Nội thất C.A.C',
-        initialRoute: (token != null && !token.isEmpty)
-            ? isCustomer
+        initialRoute: //(token != null && !token.isEmpty)?
+         isCustomer
                 ? ROUTER_CUS_HOME_PAGE
-                : ROUTER_HOME : ROUTER_SIGNIN,
+                : ROUTER_HOME ,//: ROUTER_SIGNIN,
             //: ROUTER_SIGNIN,
         // ROUTER_CUS_HOME_PAGE,
         routes: {

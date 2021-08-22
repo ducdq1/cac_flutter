@@ -31,10 +31,12 @@ class _MyChatPageState extends State<MyChatPage> {
     }
    var tempMyUser = await FirebaseApi.getMyUser();
    var tempToUser = await FirebaseApi.getAdminUser();
-    setState(() {
-      myUser = tempMyUser;
-      toUser =tempToUser;
-    });
+   if(tempMyUser !=null) {
+     setState(() {
+       myUser = tempMyUser;
+       toUser = tempToUser;
+     });
+   }
     return tempMyUser;
   }
 

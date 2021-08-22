@@ -164,7 +164,9 @@ class ReportWidget extends StatelessWidget {
                                 productModel.salePrice.isNotEmpty ? Text(
                       productModel.salePrice ?? 'Chưa có giá bán',
                       style: GoogleFonts.inter(
-                        fontSize: FONT_MIDDLE,
+                        fontSize: productModel.priceBLKM != null &&
+                            productModel.priceBLKM.isNotEmpty
+                            ? FONT_SMALL : FONT_MIDDLE,
                         color: productModel.priceBLKM != null &&
                                 productModel.priceBLKM.isNotEmpty
                             ? Colors.grey

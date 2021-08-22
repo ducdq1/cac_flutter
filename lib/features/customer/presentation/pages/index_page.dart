@@ -2,13 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/strings.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
+import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
+import 'package:citizen_app/features/authentication/signin/presentation/signin_page.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:citizen_app/features/chat/model/message.dart' as ms;
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/page/my_chat_page.dart';
 import 'package:citizen_app/features/common/blocs/blocs.dart';
+import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/pages/products_page.dart';
@@ -25,6 +30,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:route_transitions/route_transitions.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 import '../../../../main.dart';
@@ -68,7 +74,7 @@ class _IndexpageState extends State<Indexpage> {
     initFlutterLocalNotificationsPlugin();
     String userName = pref.get('userName');
     print(userName);
-    var isCustomer = pref.getBool('isCustomer') ?? false;
+    var isCustomer = isCustomerUser();
     if (isCustomer) {
       _firebaseMessaging.subscribeToTopic('allCustomer');
     }
@@ -191,7 +197,7 @@ class _IndexpageState extends State<Indexpage> {
 
   Future<void> showNotification(
       {String title, String body, String payload}) async {
-    var isCustomer = pref.getBool('isCustomer') ?? false;
+    var isCustomer = isCustomerUser();
     if (!isCustomer) {
       return;
     }
@@ -221,8 +227,8 @@ class _IndexpageState extends State<Indexpage> {
   void initFirebaseData() async {
     //await FirebaseApi.getAdminUser();
     myUser = await FirebaseApi.getMyUser();
-    bool isCustomer = pref.getBool('isCustomer');
-    if (isCustomer) {
+    bool isCustomer = isCustomerUser();
+    if (isCustomer && myUser !=null) {
       await FirebaseApi.checkHasMessage(myUser.idUser, myUser);
     }
 
@@ -279,20 +285,15 @@ class _IndexpageState extends State<Indexpage> {
                     //selectedColor: COLOR_BACKGROUND,
                     // notchedShape: CircularNotchedRectangle(),
                     onTabSelected: (index) {
-                      BlocProvider.of<BottomNavigationBloc>(context)
-                          .add(TabTapped(index: index));
+
                       if (indexTab == index) {
                         return;
                       }
-                      setState(() {
-                        indexTab = index;
-                      });
-                      if (indexTab == 0) {
-
-                      } else if (indexTab == 1) {
-                        // BlocProvider.of<ProductCategoryBloc>(context)
-                        //     .add(ListProductCategoriesFetching());
-                      }
+                       setState(() {
+                         indexTab = index;
+                       });
+                       BlocProvider.of<BottomNavigationBloc>(context)
+                           .add(TabTapped(index: index));
                     },
                     items: [
                       FABBottomAppBarItem(

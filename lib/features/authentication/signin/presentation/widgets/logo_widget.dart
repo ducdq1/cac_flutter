@@ -12,10 +12,22 @@ class LogoWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-              IMAGE_ASSETS_PATH + 'cac_logo.png',
-                  width: 100,
-                  height: 100,
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            shadowColor: Colors.indigo.withOpacity(0.5),
+            elevation: 30,
+            borderOnForeground: true,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              child: Image.asset(
+                IMAGE_ASSETS_PATH + 'cac_logo_new.png',
+                fit: BoxFit.cover,
+                width: 100,
+                height: 100,
+              ),
+            ),
           )
         ],
       ),

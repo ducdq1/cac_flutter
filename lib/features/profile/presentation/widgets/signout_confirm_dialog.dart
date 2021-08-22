@@ -106,7 +106,7 @@ class _SignOutConfirmDialogState extends State<SignOutConfirmDialog>
                       try{
                         showLoaderDialog(context);
                         final pref = singleton<SharedPreferences>();
-                        await unsubscribe(pref.getString('userName'));
+                        await unsubscribe(getUserName());
                         await unsubscribe('create');
                         await unsubscribe('allCustomer');
                         await unsubscribe('customer');

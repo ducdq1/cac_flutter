@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 import 'dart:math' as math;
 
+import 'package:citizen_app/core/resources/api.dart';
 import 'package:citizen_app/core/resources/font_sizes.dart';
 import 'package:citizen_app/core/resources/strings.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
@@ -76,7 +77,7 @@ class _NewMessageWidgetState extends State<NewMessageWidget>
 
   Future sendNotification(String message) async {
     String topic;
-    var isCustomer = pref.getBool('isCustomer') ?? false;
+    var isCustomer = isCustomerUser();
     if (isCustomer) {
       if(widget.myUser.processor !=null && widget.myUser.processor != 'null'){
         topic =  widget.myUser.processor;

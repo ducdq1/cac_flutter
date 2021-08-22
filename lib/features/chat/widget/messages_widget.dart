@@ -31,7 +31,7 @@ class MessagesWidget extends StatelessWidget {
                 return buildText('Không thể kết nối. Vui lòng thử lại sau');
               } else {
                 final messages = snapshot.data;
-                if (pref.getBool('isCustomer') ?? false) {
+                if (isCustomerUser()) {
                   Message ms = messages.first;
                   if (ms.idUser != fromUser.idUser && ms.hasRead != true) {
                        FirebaseApi.updateCustomerMessageHasRead(chatsId, ms.idMsg);

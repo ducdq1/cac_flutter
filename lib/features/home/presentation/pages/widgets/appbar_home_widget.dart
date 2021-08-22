@@ -82,15 +82,15 @@ class _AppBarHomeWidgetState extends State<AppBarHomeWidget> {
                         )),
                   )),
         onPressed: () {
-          if (BlocProvider.of<AuthBloc>(context).state is UnAuthenticateState) {
+          if (getUserName() == null || BlocProvider.of<AuthBloc>(context).state is UnAuthenticateState) {
             showConfirmDialog(
               context: context,
               icon: Icon(
                 Icons.logout,
                 color: Colors.orangeAccent,
               ),
-              title: trans(LOGIN_REQUIRE),
-              label: trans(TITLE_LOGIN_SCREEN),
+              title: 'Để sử dụng tính năng này bạn phải cập nhật thông tin cá nhân',
+              label: 'Cập nhật',
               onSubmit: () {
                 Navigator.of(context).push(
                   PageRouteTransition(
@@ -112,13 +112,40 @@ class _AppBarHomeWidgetState extends State<AppBarHomeWidget> {
       ),
       centerTitle: true,
       elevation: 0,
-      title: Text(
-        // APP_NAME,
-        'Công ty TNHH C.A.C',
-        style: GoogleFonts.openSans(
-          color: Colors.white,
-          fontSize: FONT_HUGE,
-          fontWeight: FontWeight.bold,
+      title: Container(
+        padding: EdgeInsets.only(right: 30),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'THIẾT BỊ NỘI THẤT C.A.C',
+                  style: GoogleFonts.inter(
+                    fontSize: FONT_LARGE,
+                    fontWeight: FontWeight.w600,
+                      color: Colors.white
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 5,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '11 Pasteur, Hải Châu, Đà Nẵng',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    fontStyle: FontStyle.italic
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

@@ -41,6 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
       fullName = prefs.getString("fullName");
       userName = prefs.getString("userName");
       userType = prefs.getInt("userType")??0;
+      isCustomer = isCustomerUser();
     }
     isAuthViettel().then((isAuthViettel) {
       setState(() {
@@ -140,7 +141,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       // route: ROUTER_CHANGE_PASSWORD_PAGE,
                       page: SettingsPage(),
                     ),
-              OptionItemWidget(
+              isCustomer
+                  ? SizedBox()
+                  : OptionItemWidget(
                 icon: 'icon_info.png',
                 label: 'Cập nhật ứng dụng',
                 // route: ROUTER_INFO_PAGE,

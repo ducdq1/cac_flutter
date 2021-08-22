@@ -120,7 +120,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                   textInputAction: TextInputAction.done,
                   obscureText: !isCustomer,
                   validates: [
-                    EmptyValidate(),
+                    //EmptyValidate(),
                     //PasswordValidate(),
                   ],
                 ),
@@ -134,8 +134,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                 height:   10 ,
               ),
               GroupButtonWidget(
-                primaryLabel: trans(TITLE_LOGIN_SCREEN),
-                secondaryLabel: trans(LOGIN_WITH_VIETTEL_MOBILE),
+                primaryLabel: isCustomer ? 'Cập nhật' : 'Đăng nhập',
                 isViettelSignin: false,
                 primaryBtnId: 'signin_account_btn',
                 secondBtnId: 'signin_viettel_navigate_btn',
@@ -164,20 +163,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                 },
               ),
               SizedBox(
-                height:10,
-              ),
-              Center(
-                child: Text(
-                'Hoặc',
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    color: PRIMARY_COLOR,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height:10,
+                height: 20,
               ),
 
               Center(
@@ -188,10 +174,10 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                     });
                   },
                   child: Text(
-                    isCustomer ? 'Đăng nhập dành cho nhân viên' : 'Đăng nhập dành cho khách hàng',
+                    isCustomer ? 'Dành cho nhân viên' : 'Dành cho khách hàng',
                     style: GoogleFonts.inter(
                       fontSize: FONT_MIDDLE,
-                      color: isCustomer ? Colors.indigoAccent : Colors.blue,
+                      color:  Colors.indigo ,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

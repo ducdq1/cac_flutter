@@ -51,8 +51,6 @@ class ChatBodyWidget extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w500),
                 ) : SizedBox(),
-                    user.status == 'online'
-                        ?  SizedBox() :
                     user.lastOnlineTime ==null ? SizedBox() : Text(
                       handleTime(user.lastOnlineTime.toString()),
                       style: new TextStyle(
@@ -122,7 +120,7 @@ class ChatBodyWidget extends StatelessWidget {
               ]),
               //trailing: Divider(height: 1, color: Colors.green),
               title: Text(
-                user.name,
+                user.name ?? '',
                 style: new TextStyle(
                     color: Color(0xff353739),
                     fontSize: 17,

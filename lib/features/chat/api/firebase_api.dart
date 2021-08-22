@@ -88,23 +88,32 @@ class FirebaseApi {
   }
 
   static Future<User> getUserByPhone(String phone) async {
-    QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .where("phone", isEqualTo: phone)
-        .get();
-    if (documentSnapshot != null &&
-        documentSnapshot.docs != null &&
-        documentSnapshot.docs.length > 0) {
-      User user = User.fromJson(documentSnapshot.docs.first.data());
-      return user;
-    }
+    try {
+      if (phone == null || phone.isEmpty) {
+        return null;
+      }
+      QuerySnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where("phone", isEqualTo: phone)
+          .get();
+      if (documentSnapshot != null &&
+          documentSnapshot.docs != null &&
+          documentSnapshot.docs.length > 0) {
+        User user = User.fromJson(documentSnapshot.docs.first.data());
+        return user;
+      }
+    } catch (e) {}
     return null;
   }
 
   static Future<User> getMyUser() async {
-    bool isCustomer = await pref.getBool('isCustomer');
+    bool isCustomer = isCustomerUser();
     if (!isCustomer) {
       return getAdminUser();
+    }
+
+    if(getUserName() == null){ // chua dang nhap
+      return null;
     }
 
     String idUser = pref.getString('myFirebaseUserId');
@@ -113,7 +122,7 @@ class FirebaseApi {
     String role = pref.getString('myFirebaseUserRole');
     String phone = pref.getString('myFirebaseUserPhone');
     if (idUser == null) {
-      String phone = pref.getString('userName');
+      String phone = getUserName();
       User myUser = await FirebaseApi.getUserByPhone(phone);
       if (myUser == null) {
         String fullName = pref.getString('fullName');
@@ -127,8 +136,9 @@ class FirebaseApi {
             processor: 'null'));
         myUser = await FirebaseApi.getUserByPhone(phone);
       } else {
-        updateUserStatus(idUser, "online");
+        updateUserStatus(myUser.idUser, "online");
       }
+
       await pref.setString('myFirebaseUserId', myUser.idUser);
       await pref.setString('myFirebaseUserFullName', myUser.name);
       await pref.setString('myFirebaseUserAvatar', myUser.urlAvatar);
@@ -165,7 +175,7 @@ class FirebaseApi {
     } catch (e) {}
   }
 
-  static updateUserMessageHasRead(String userId,bool hasRead) async {
+  static updateUserMessageHasRead(String userId, bool hasRead) async {
     try {
       final refUsers = FirebaseFirestore.instance.collection('users');
       refUsers.doc(userId).update({"messageHasRead": hasRead});
@@ -175,7 +185,7 @@ class FirebaseApi {
   static Future<String> getMyUserId() async {
     String myId = pref.getString('myFirebaseUserId');
     if (myId == null) {
-      String phone = pref.getString('userName');
+      String phone = getUserName();
       String fullName = pref.getString('fullName');
       User myUser = await getUserByPhone(phone);
       String avartarPath = pref.getString('avartarPath');
@@ -195,23 +205,31 @@ class FirebaseApi {
     return myId;
   }
 
-  static Stream<List<User>> getUsers() => FirebaseFirestore.instance
-      .collection('users')
-      //.where("idUser", whereNotIn: [myId])
-      //    .where("role", whereNotIn: ['admin']).
-      .where("processor", whereIn: ['null',  pref.getString("userName")])
-      //.orderBy("role",descending:  false)
-      //.orderBy(UserField.lastMessageTime, descending: true)
-      .snapshots()
-      .transform(Utils.transformer(User.fromJson));
+  static Stream<List<User>> getUsers()  {
+    String userName = getUserName();
+    if (userName != null) {
+      return FirebaseFirestore.instance
+          .collection('users')
+          //.where("idUser", whereNotIn: [myId])
+          //    .where("role", whereNotIn: ['admin']).
+          .where("processor", whereIn: [
+            'null', userName
+          ])
+          //.orderBy("role",descending:  false)
+          //.orderBy(UserField.lastMessageTime, descending: true)
+          .snapshots()
+          .transform(Utils.transformer(User.fromJson));
+    }
+    return Stream.empty();
+  }
 
   static Stream<List<User>> getAllUsers() => FirebaseFirestore.instance
       .collection('users')
-  //.where("idUser", whereNotIn: [myId])
-    .where("role", whereNotIn: ['admin'])
-   //   .where("processor", whereIn: ['null',  pref.getString("userName")])
-   .orderBy("role",descending:  false)
-  //.orderBy(UserField.lastMessageTime, descending: true)
+      //.where("idUser", whereNotIn: [myId])
+      .where("role", whereNotIn: ['admin'])
+      //   .where("processor", whereIn: ['null',  pref.getString("userName")])
+      .orderBy("role", descending: false)
+      //.orderBy(UserField.lastMessageTime, descending: true)
       .snapshots()
       .transform(Utils.transformer(User.fromJson));
 
@@ -221,7 +239,7 @@ class FirebaseApi {
         FirebaseFirestore.instance.collection('chats/$idUser/messages');
     final msgDoc = refMessages.doc();
     final newMessage = Message(
-          idMsg: msgDoc.id,
+        idMsg: msgDoc.id,
         idUser: myUser.idUser,
         urlAvatar: myUser.urlAvatar,
         username: myUser.name,
@@ -249,10 +267,10 @@ class FirebaseApi {
     return false;
   }
 
-  static updateCustomerMessageHasRead(String userId,String idMessage) async {
+  static updateCustomerMessageHasRead(String userId, String idMessage) async {
     try {
-      final refUsers =  FirebaseFirestore.instance
-          .collection('chats/$userId/messages');
+      final refUsers =
+          FirebaseFirestore.instance.collection('chats/$userId/messages');
       refUsers.doc(idMessage).update({"hasRead": true});
     } catch (e) {}
   }

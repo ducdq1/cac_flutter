@@ -1,3 +1,4 @@
+import 'package:citizen_app/core/resources/api.dart';
 import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/chat/page/bloc/chat_bloc.dart';
@@ -32,7 +33,7 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     final pref = singleton<SharedPreferences>();
-    String userName = pref.getString('userName');
+    String userName = getUserName();
     if(widget.user.processor == null || widget.user.processor == "null") {
       FirebaseApi.updateUserProcessor(widget.user.idUser, userName);
     }
