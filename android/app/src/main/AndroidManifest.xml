@@ -14,7 +14,7 @@
     <application
         android:name=".Application"
         android:label="Nội thất C.A.C"
-        android:icon="@drawable/icon_app"
+        android:icon="@drawable/ic_launcher"
         android:usesCleartextTraffic="true">
 
         <provider
