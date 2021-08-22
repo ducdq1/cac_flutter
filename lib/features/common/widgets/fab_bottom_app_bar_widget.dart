@@ -66,7 +66,6 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
 
 
     if (index == 2 && getUserName() == null)  { // chua dang nhap
-      if ( BlocProvider.of<AuthBloc>(context).state is UnAuthenticateState) {
         showConfirmDialog(
           context: context,
           icon: Icon(
@@ -84,7 +83,6 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
             );
           },
         );
-      }
       // BlocProvider.of<ProductCategoryBloc>(context)
       //     .add(ListProductCategoriesFetching());
     }else {

@@ -85,7 +85,7 @@
   "const error_validate_empty_paht_media": "Ảnh không được để trống",
   "title_field_1": "Danh mục",
   "title_field_2": "Trạng thái",
-  "login_require": "Bạn phải đăng nhập để tiếp tục",
+  "login_require": "Để sử dụng tính năng này bạn phải cập nhật thông tin ",
   "login_require_to_read_notify": "Bạn phải đăng nhập để xem thông báo",
   "information": "Thông tin",
   "update_account": "Cập nhật tài khoản",
