@@ -35,48 +35,30 @@
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
 	</dict>
-	<!-- Permission options for the `location` group -->
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Hiển thị vị trí người dùng</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Hiển thị vị trí người dùng</string>
-    <key>NSLocationUsageDescription</key>
-    <string>Lấy vị trí người dùng cho thiết bị cũ</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Lấy vị trí người dùng cho thiết bị cũ</string>
-
-    <!-- Permission options for the `mediaLibrary` group -->
-    <key>NSAppleMusicUsageDescription</key>
-    <string>Phát nhạc khi đi bộ</string>
-    <key>kTCCServiceMediaLibrary</key>
-    <string>Phát nhạc khi đi bộ</string>
-
-    <!-- Permission options for the `calendar` group -->
-    <key>NSCalendarsUsageDescription</key>
-    <string>Để chọn ngày tháng từ lịch</string>
-
-    <!-- Permission options for the `camera` group -->
-    <key>NSCameraUsageDescription</key>
-    <string>Để quét mã QR code</string>
-
-    <!-- Permission options for the `contacts` group -->
-    <key>NSContactsUsageDescription</key>
-    <string>Xem danh sách danh bạ để thực hiện cuộc gọi</string>
-     
-
-    <!-- Permission options for the `speech` group -->
-    <key>NSSpeechRecognitionUsageDescription</key>
-    <string>Ghi âm giọng nói để gửi tin nhắn âm thanh</string>
-
-    <!-- Permission options for the `sensors` group -->
-    <key>NSMotionUsageDescription</key>
-    <string>Để theo dõi hoạt động của phần cứng</string>
-
-    <!-- Permission options for the `photos` group -->
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Truy cập thư viện ảnh để chọn ảnh khi gửi tin nhắn</string>
-   <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>Truy cập thư viện ảnh để lưu hình ảnh</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Phát nhạc khi đi bộ</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Để chọn ngày tháng từ lịch</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Để quét mã QR code</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Xem danh sách danh bạ để thực hiện cuộc gọi</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Hiển thị vị trí người dùng</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Lấy vị trí người dùng cho thiết bị cũ</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Lấy vị trí người dùng cho thiết bị cũ</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Hiển thị vị trí người dùng</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Để theo dõi hoạt động của phần cứng</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Truy cập thư viện ảnh để lưu hình ảnh</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Truy cập thư viện ảnh để chọn ảnh khi gửi tin nhắn</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Ghi âm giọng nói để gửi tin nhắn âm thanh</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -103,5 +85,7 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>Phát nhạc khi đi bộ</string>
 </dict>
 </plist>
