@@ -152,10 +152,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   String url;
                   if (Platform.isAndroid) {
                     url =
-                        'https://install.appcenter.ms/users/duc.doanquang-gmail.com/apps/c.a.c/distribution_groups/all%20public';
+                        'https://play.google.com/store/apps/details?id=com.noithat.cac';
                   } else if (Platform.isIOS) {
                     url =
-                        'https://install.appcenter.ms/users/duc.doanquang-gmail.com/apps/c.a.c-1/distribution_groups/all%20public';
+                        'https://play.google.com/store/apps/details?id=com.noithat.cac';
                   }
 
                   if (await canLaunch(url)) {
