@@ -141,9 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       // route: ROUTER_CHANGE_PASSWORD_PAGE,
                       page: SettingsPage(),
                     ),
-              isCustomer
-                  ? SizedBox()
-                  : OptionItemWidget(
+             OptionItemWidget(
                 icon: 'icon_info.png',
                 label: 'Cập nhật ứng dụng',
                 // route: ROUTER_INFO_PAGE,

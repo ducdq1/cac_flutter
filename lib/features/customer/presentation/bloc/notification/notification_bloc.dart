@@ -22,6 +22,7 @@ class   NotificationBloc
       Future.delayed(Duration(milliseconds: 300));
       //yield PageLoading();
       yield NotificationChange(event.value);
+      // yield NotificationChanged(event.value);
     }
 
   }

@@ -251,7 +251,7 @@ class ProductITemWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Xem chi tiết >>>',
+                              'Chi tiết >>>',
                               style: GoogleFonts.inter(
                                   color: Colors.teal,
                                   fontSize: FONT_SMALL,
