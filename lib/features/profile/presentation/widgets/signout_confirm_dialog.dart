@@ -7,6 +7,7 @@ import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_event.dart';
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_bloc.dart';
 import 'package:citizen_app/features/authentication/signin/presentation/bloc/signin_event.dart';
+import 'package:citizen_app/features/chat/api/firebase_api.dart';
 import 'package:citizen_app/features/profile/presentation/widgets/loader_dialog.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -111,10 +112,7 @@ class _SignOutConfirmDialogState extends State<SignOutConfirmDialog>
                         await unsubscribe('allCustomer');
                         await unsubscribe('customer');
                         if(pref.getString('myFirebaseUserId') !=null ) {
-                          await FirebaseFirestore.instance.collection('users')
-                              .doc(pref.getString('myFirebaseUserId'))
-                              .update({"lastOnlineTime": DateTime.now(),
-                            "status": "offline"});
+                          FirebaseApi.updateUserStatus(pref.getString('myFirebaseUserId'), "offline");
                         }
                       }catch(e){
                         print('-------------------- Loi day');

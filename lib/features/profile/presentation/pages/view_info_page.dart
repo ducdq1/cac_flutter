@@ -32,27 +32,10 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
           children: [
             SizedBox(height: 20),
             Image.asset(
-              IMAGE_ASSETS_PATH + 'icon_info.png',
-              width: 62,
-              height: 62,
+              IMAGE_ASSETS_PATH + 'cac_logo1.png',
+              width: 180,
             ),
-            SizedBox(height: 20),
-            Text("Liên hệ với Chúng tôi ",
-                style: GoogleFonts.inter(
-                  fontSize: FONT_LARGE,
-                  color: PRIMARY_TEXT_COLOR,
-                  fontWeight: FontWeight.w600,
-                )),
-            Text(
-              "để được tư vấn và báo giá tốt nhất",
-              style: GoogleFonts.inter(
-                fontSize: FONT_LARGE,
-                color: PRIMARY_TEXT_COLOR,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 10),
+
             Padding(
               padding: const EdgeInsets.only(left: 30, top: 30),
               child: Container(
@@ -64,7 +47,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset(ICONS_ASSETS + 'icon_marker_detail_address.png',
+                          Image.asset(ICONS_ASSETS + 'icon_address.png',
                               width: 24, height: 24),
                           SizedBox(width: 10),
                           Expanded(
@@ -97,7 +80,7 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Image.asset(ICONS_ASSETS + 'ic_call.png',
+                          Image.asset(ICONS_ASSETS + 'icon_phone.png',
                               width: 24, height: 24),
                           SizedBox(width: 10),
                           RichText(

@@ -120,10 +120,7 @@ class _IndexpageState extends State<Indexpage> {
 
   Future<bool> _onBackPressed() async {
     if (myUser != null) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(myUser.idUser)
-          .update({"lastOnlineTime": DateTime.now(), "status": "offline"});
+      FirebaseApi.updateUserStatus(myUser.idUser, "offline");
     }
     exit(0);
     return false;
@@ -131,8 +128,9 @@ class _IndexpageState extends State<Indexpage> {
 
   void updateBadgeData(int vaue) {
 
-
   }
+
+
 
   void initFlutterLocalNotificationsPlugin() async {
     // if (Platform.isAndroid) {
@@ -244,7 +242,6 @@ class _IndexpageState extends State<Indexpage> {
     }catch(e){
 
     }
-
   }
 
   void handleRefresh(context, {int indexTab}) {}
@@ -292,6 +289,12 @@ class _IndexpageState extends State<Indexpage> {
                        setState(() {
                          indexTab = index;
                        });
+
+                      if(indexTab == 2){
+                        singleton<NotificationBloc>().add(NotificationEvent(0));
+                        // singleton<NotificationBloc>().add(NotificationEvented(0));
+                      }
+
                        BlocProvider.of<BottomNavigationBloc>(context)
                            .add(TabTapped(index: index));
                     },

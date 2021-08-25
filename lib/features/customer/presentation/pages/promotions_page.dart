@@ -59,7 +59,7 @@ class _PromotionPageState extends State<PromotionPage> {
                               child: Text(
                                 'CHƯƠNG TRÌNH KHUYẾN MÃI',
                                 style: GoogleFonts.inter(
-                                  fontSize: FONT_HUGE,
+                                  fontSize: FONT_EX_LARGE,
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,
                                 ),

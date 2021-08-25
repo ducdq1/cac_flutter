@@ -303,6 +303,27 @@ class PAHTITemWidget extends StatelessWidget {
                             )
                           ],
                         ),
+                        pahtModel.status == 1 ? Padding(
+                          padding:
+                          const EdgeInsets.only(bottom: 10, top: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment:  CrossAxisAlignment.end,
+                            children: [
+                              Text('NV báo giá: ',
+                                  style: GoogleFonts.inter(
+                                      color:  getColor(pahtModel.status),
+                                      fontSize: FONT_MIDDLE,
+                                      fontWeight: FontWeight.bold)),
+                                Text(
+                                    pahtModel.quotationUserName != null ? pahtModel.quotationUserName.toUpperCase() : "" ,
+                                    style: GoogleFonts.inter(
+                                      color:  getColor(pahtModel.status),
+                                      fontSize: FONT_MIDDLE,
+                                    )),
+                            ],
+                          ),
+                        ) : SizedBox() ,
                         pahtModel.status == 1 &&
                                 pahtModel.saledDate == null &&
                                 pahtModel.note != null

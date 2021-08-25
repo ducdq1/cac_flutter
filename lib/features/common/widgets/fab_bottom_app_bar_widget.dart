@@ -101,11 +101,11 @@ class FABBottomAppBarWidgetState extends State<FABBottomAppBarWidget> {
       return BlocBuilder<NotificationBloc, NotificationState>(
           builder: (BuildContext context, NotificationState state) {
         int badgeCount = 0;
-        if (state is NotificationChange) {
+        if (state is NotificationChange ) {
           badgeCount = state.value;
-          print('Update badge data: ' + badgeCount.toString());
         }
 
+        print('Update badge data: ' + badgeCount.toString());
         return _buildTabItem(
             item: widget.items[index],
             index: index,
