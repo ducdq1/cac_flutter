@@ -152,8 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     url =
                         'https://play.google.com/store/apps/details?id=com.noithat.cac';
                   } else if (Platform.isIOS) {
-                    url =
-                        'https://play.google.com/store/apps/details?id=com.noithat.cac';
+                    url = 'https://apps.apple.com/us/app/id1582099464';
                   }
 
                   if (await canLaunch(url)) {

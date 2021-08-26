@@ -226,4 +226,12 @@ class PahtRepositoryImpl implements PahtRepository {
       throw error;
     }
   }
+
+  @override
+  Future<void> updateLastLogin(String workerId) async{
+    try {
+          await remoteDataSource.updateWorkerLastLogin(workerId);
+    } catch (error) {
+    }
+  }
 }
