@@ -104,12 +104,10 @@ class ProductITemWidget extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                pahtModel.productName == null
-                                    ? ''
-                                    : 'Sản phẩm: ' + pahtModel.productName,
+                                 pahtModel.productName ?? '',
                                 style: GoogleFonts.inter(
                                   fontSize: FONT_MIDDLE,
-                                  color: PRIMARY_TEXT_COLOR,
+                                  color: Colors.orange,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 softWrap: true,

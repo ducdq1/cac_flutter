@@ -70,10 +70,13 @@ class _IndexpageState extends State<Indexpage> {
     // BlocProvider.of<BottomNavigationBloc>(context)
     //     .add(NotificationEvent(numBadge: badgeCount ++ ));
 
+
     _firebaseMessaging = FirebaseMessaging();
     initFlutterLocalNotificationsPlugin();
     String userName = pref.get('userName');
     print(userName);
+    singleton<NotificationBloc>().add(LoginEvent(userName));
+
     var isCustomer = isCustomerUser();
     if (isCustomer) {
       _firebaseMessaging.subscribeToTopic('allCustomer');
@@ -129,7 +132,6 @@ class _IndexpageState extends State<Indexpage> {
   void updateBadgeData(int vaue) {
 
   }
-
 
 
   void initFlutterLocalNotificationsPlugin() async {

@@ -202,7 +202,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                             needRedirect: '',
                             onPress: () {
                               Navigator.pushNamed(
-                                      context, ROUTER_SEARCH_PRODUCT )
+                                      context, ROUTER_PRODUCTS_TYPE_PAGE )
                                   .then((value) => {
                                         if (value != null)
                                           {

@@ -20,11 +20,12 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 10),
+      const EdgeInsets.only(top: 30.0, left: 15, right: 15, bottom: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xffF0F2FC),//Colors.grey.shade300,//(0xff0F8E70).withOpacity(0.4),
-          border: Border.all(color: Color(0xffE6EAFF),width: 1),
+          color: Color(0xffF0F2FC),
+          //Colors.grey.shade300,//(0xff0F8E70).withOpacity(0.4),
+          border: Border.all(color: Color(0xffE6EAFF), width: 1),
           borderRadius: BorderRadius.all(Radius.circular(24)),
         ),
         child: Column(
@@ -139,12 +140,16 @@ class _ViewInfoPageState extends State<ViewInfoPage> {
                       SizedBox(
                         height: 15,
                       ),
-                       InkWell(
+                      InkWell(
                         splashColor: Color(0xffF1FBEE),
                         highlightColor: Color(0xffF1FBEF),
-                        onTap: () async{
+                        onTap: () async {
                           print('ok ok ok ');
-                       await canLaunch('https://www.facebook.com/Gạch-và-Thiết-Bị-Nội-Thất-CAC-Đà-Nẵng-104247451488013') ? await launch('https://www.facebook.com/Gạch-và-Thiết-Bị-Nội-Thất-CAC-Đà-Nẵng-104247451488013') : throw 'Could not launch' ;
+                          await canLaunch(
+                              'https://www.facebook.com/Gạch-và-Thiết-Bị-Nội-Thất-CAC-Đà-Nẵng-104247451488013')
+                              ? await launch(
+                              'https://www.facebook.com/Gạch-và-Thiết-Bị-Nội-Thất-CAC-Đà-Nẵng-104247451488013')
+                              : throw 'Could not launch';
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
