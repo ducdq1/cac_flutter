@@ -26,7 +26,8 @@ class SearchArgument {
       {this.isSaled = false,
       this.isApproveAble,
       this.fromCategoryPage = false,
-      this.type = -1, this.fromCreateQuotationPage = false });
+      this.type = -1,
+      this.fromCreateQuotationPage = false });
 }
 
 class ProductSearch extends StatefulWidget {
@@ -82,23 +83,22 @@ class _ProductSearchState extends State<ProductSearch>
                   title: '',
                   isTitleHeaderWidget: true,
                   titleHeaderWidget: SearchFormFieldWidget(
+                    onClear:  () {
+                      BlocProvider.of<PublicPahtBloc>(context).add(
+                          ListProductFetchingEvent(
+                              search: searchController.text.trim(),
+                              offset: 0,
+                              limit: 100,
+                              type: type,
+                              isAgent: isAgent));
+                      setState(() {
+                        isShowClearSearch = false;
+                      });
+                    },
                     onChanged: (value) {
-                      if (value.trim().isEmpty) {
-                        setState(() {
-                          isShowClearSearch = false;
-                        });
-                        BlocProvider.of<PublicPahtBloc>(context).add(
-                            ListProductFetchingEvent(
-                                search: searchController.text.trim(),
-                                offset: 0,
-                                limit: 100,
-                            type: type, isAgent: isAgent));
-                      }
-                      if (value.isNotEmpty) {
-                        setState(() {
-                          isShowClearSearch = true;
-                        });
-                      }
+                      setState(() {
+                        isShowClearSearch = value.isNotEmpty;
+                      });
                     },
                     onEditingComplete: () {
                       BlocProvider.of<PublicPahtBloc>(context).add(

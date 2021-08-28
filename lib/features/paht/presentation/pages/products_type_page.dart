@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
 
 class ProductsTypePage extends StatefulWidget {
   @override
@@ -49,7 +50,7 @@ class _ProductsTypePageState extends State<ProductsTypePage> {
                 children: [
                   Padding(
                       padding: EdgeInsets.only(
-                          top: 80, right: 50, left: 50, bottom: 80),
+                          top: 80, right: 30, left: 30, bottom: 60),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -63,7 +64,7 @@ class _ProductsTypePageState extends State<ProductsTypePage> {
                                 //   width: 10,
                                 // ),
                                 Text(
-                                  'CHÚNG TÔI CUNG CẤP',
+                                  'CHỌN DANH MỤC SẢN PHẨM',
                                   style: GoogleFonts.inter(
                                     fontSize: FONT_HUGE,
                                     color: Colors.indigo,
@@ -87,21 +88,21 @@ class _ProductsTypePageState extends State<ProductsTypePage> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         getItem(
-                          label: 'Thiết bị',
+                          label: 'THIẾT BỊ',
                           icon: '/images/tb_noi_that.jpg',
                           onPress: () {
                             Navigator.pushNamed(
-                                context, ROUTER_CUS_PRODUCT_CATEGORY,
-                                arguments: ProductCategoryArgument(type: 0));
+                                context, ROUTER_SEARCH_PRODUCT,
+                                arguments:     SearchArgument(type: 0));
                           },
                         ),
                         getItem(
-                          label: 'Gạch men',
+                          label: 'GẠCH MEN',
                           icon: '/images/gach_men.jpg',
                           onPress: () {
                             Navigator.pushNamed(
-                                    context, ROUTER_CUS_PRODUCT_CATEGORY,
-                                    arguments: ProductCategoryArgument(type: 1))
+                                    context, ROUTER_SEARCH_PRODUCT,
+                                arguments:  SearchArgument(type: 1))
                                 .then((value) => {});
                           },
                         ),

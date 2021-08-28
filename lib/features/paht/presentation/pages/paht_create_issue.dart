@@ -15,12 +15,10 @@ import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom
 import 'package:citizen_app/features/common/widgets/inputs/text_field_custom.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/number_trivia/presentation/widgets/widgets.dart';
-import 'package:citizen_app/features/paht/data/models/media_picker_ios_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_issue_paht.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
@@ -34,7 +32,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-//import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
