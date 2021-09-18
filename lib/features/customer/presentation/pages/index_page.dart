@@ -21,6 +21,7 @@ import 'package:citizen_app/features/customer/presentation/pages/promotions_page
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/banner_widget.dart';
+import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
 import 'package:citizen_app/features/profile/presentation/pages/view_info_page.dart';
 import 'package:citizen_app/injection_container.dart';
@@ -70,12 +71,39 @@ class _IndexpageState extends State<Indexpage> {
     // BlocProvider.of<BottomNavigationBloc>(context)
     //     .add(NotificationEvent(numBadge: badgeCount ++ ));
 
-
     _firebaseMessaging = FirebaseMessaging();
     initFlutterLocalNotificationsPlugin();
     String userName = pref.get('userName');
+    bool isLoginRequired = pref.getBool("isLoginRequired");
     print(userName);
-    singleton<NotificationBloc>().add(LoginEvent(userName));
+
+    if (userName == null &&
+        isLoginRequired != null &&
+        isLoginRequired == true) {
+      Future.delayed(Duration.zero, () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteTransition(
+            animationType: AnimationType.slide_right,
+            builder: (context) => SignInPage(),
+          ),
+              (route) => false,
+        );
+      });
+    }
+
+    singleton<NotificationBloc>().listen((updateLastLoginState) {
+      if (updateLastLoginState is UpdateLastLoginState) {
+        if (updateLastLoginState.value != null) {
+          print("========= updateLastLoginState " +
+              updateLastLoginState.value.toString());
+        }
+      }
+    });
+
+    //singleton<NotificationBloc>().add(LoginEvent(userName));
+
+    updateLastLogin(userName);
 
     var isCustomer = isCustomerUser();
     if (isCustomer) {
@@ -129,10 +157,28 @@ class _IndexpageState extends State<Indexpage> {
     return false;
   }
 
-  void updateBadgeData(int vaue) {
+  void updateBadgeData(int vaue) {}
 
+  void updateLastLogin(String userName) async{
+    PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
+      networkInfo: singleton(),
+      remoteDataSource: singleton(),);
+    bool isRequiredLogin = await repo.updateLastLogin(userName);
+    pref.setBool("isLoginRequired", isRequiredLogin);
+
+    if (userName == null && isRequiredLogin == true) {
+      Future.delayed(Duration.zero, () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteTransition(
+            animationType: AnimationType.slide_right,
+            builder: (context) => SignInPage(),
+          ),
+              (route) => false,
+        );
+      });
+    }
   }
-
 
   void initFlutterLocalNotificationsPlugin() async {
     // if (Platform.isAndroid) {
@@ -228,22 +274,22 @@ class _IndexpageState extends State<Indexpage> {
     //await FirebaseApi.getAdminUser();
     myUser = await FirebaseApi.getMyUser();
     bool isCustomer = isCustomerUser();
-    if (isCustomer && myUser !=null) {
+    if (isCustomer && myUser != null) {
       await FirebaseApi.checkHasMessage(myUser.idUser, myUser);
     }
 
     try {
       FirebaseApi.getMessages(myUser.idUser).listen((event) {
         ms.Message message = event.first;
-        if (indexTab != 2 && message.idUser != myUser.idUser && message.hasRead != true) {
+        if (indexTab != 2 &&
+            message.idUser != myUser.idUser &&
+            message.hasRead != true) {
           singleton<NotificationBloc>().add(NotificationEvent(1));
-        }else{
+        } else {
           singleton<NotificationBloc>().add(NotificationEvent(0));
         }
       });
-    }catch(e){
-
-    }
+    } catch (e) {}
   }
 
   void handleRefresh(context, {int indexTab}) {}
@@ -284,21 +330,20 @@ class _IndexpageState extends State<Indexpage> {
                     //selectedColor: COLOR_BACKGROUND,
                     // notchedShape: CircularNotchedRectangle(),
                     onTabSelected: (index) {
-
                       if (indexTab == index) {
                         return;
                       }
-                       setState(() {
-                         indexTab = index;
-                       });
+                      setState(() {
+                        indexTab = index;
+                      });
 
-                      if(indexTab == 2){
+                      if (indexTab == 2) {
                         singleton<NotificationBloc>().add(NotificationEvent(0));
                         // singleton<NotificationBloc>().add(NotificationEvented(0));
                       }
 
-                       BlocProvider.of<BottomNavigationBloc>(context)
-                           .add(TabTapped(index: index));
+                      BlocProvider.of<BottomNavigationBloc>(context)
+                          .add(TabTapped(index: index));
                     },
                     items: [
                       FABBottomAppBarItem(
@@ -401,7 +446,8 @@ class _IndexpageState extends State<Indexpage> {
                                     }
 
                                     if (state is Tab3Loaded) {
-                                      singleton<NotificationBloc>().add(NotificationEvent(0));
+                                      singleton<NotificationBloc>()
+                                          .add(NotificationEvent(0));
                                       return MyChatPage();
                                     }
 

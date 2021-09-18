@@ -50,7 +50,7 @@ abstract class PahtRemoteDataSource {
   Future<bool> replyComment(Params commentParams);
 
   Future<bool> updateProcessor(String workerId, String processor);
-  Future<void> updateWorkerLastLogin(String workerId);
+  Future<bool> updateWorkerLastLogin(String workerId);
 }
 
 class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
@@ -438,12 +438,12 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<void> updateWorkerLastLogin(String workerId) async{
+  Future<bool> updateWorkerLastLogin(String workerId) async{
     try {
-      print('$base_cus_url_api/workers/updateLastLogin?workerId='+workerId);
+      print('$base_cus_url_api/workers/updateLastLogin?workerId='+ (workerId ?? 'null'));
       final response = await client
           .get(
-        '$base_cus_url_api/workers/updateLastLogin?workerId='+workerId,
+        '$base_cus_url_api/workers/updateLastLogin?workerId='+ (workerId ?? 'null'),
         headers: {
           'Accept-Language': 'vi',
           'Content-Type': 'application/json'
@@ -454,10 +454,12 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
               "Hết thời gian yêu cầu. Kiểm tra lại kết nối"));
 
       if (response.statusCode == 200) {
-        return ;
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        return data['isLoginRequired'];
       }
     } catch (error) {
-
+      return false;
     }
+
   }
 }

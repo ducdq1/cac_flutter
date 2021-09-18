@@ -87,6 +87,13 @@ class _SignInPageState extends State<SignInPage> {
     return BaseLayoutWidget(
         title: 'Cập nhật thông tin cá nhân',
         onPop: (){
+          bool isLoginRequired = pref.getBool("isLoginRequired");
+
+          if (isLoginRequired != null &&
+              isLoginRequired == true) {
+            Fluttertoast.showToast(msg: "Bạn phải đăng nhập để tiếp tục");
+            return;
+          }
           Navigator.of(context).pushNamedAndRemoveUntil(
               ROUTER_CUS_HOME_PAGE, (route) => false);
         },

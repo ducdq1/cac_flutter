@@ -228,9 +228,9 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<void> updateLastLogin(String workerId) async{
+  Future<bool> updateLastLogin(String workerId) async{
     try {
-          await remoteDataSource.updateWorkerLastLogin(workerId);
+          return await remoteDataSource.updateWorkerLastLogin(workerId);
     } catch (error) {
     }
   }
