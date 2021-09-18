@@ -92,15 +92,6 @@ class _IndexpageState extends State<Indexpage> {
       });
     }
 
-    singleton<NotificationBloc>().listen((updateLastLoginState) {
-      if (updateLastLoginState is UpdateLastLoginState) {
-        if (updateLastLoginState.value != null) {
-          print("========= updateLastLoginState " +
-              updateLastLoginState.value.toString());
-        }
-      }
-    });
-
     //singleton<NotificationBloc>().add(LoginEvent(userName));
 
     updateLastLogin(userName);
