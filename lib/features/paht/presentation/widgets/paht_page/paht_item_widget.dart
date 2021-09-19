@@ -303,23 +303,23 @@ class PAHTITemWidget extends StatelessWidget {
                             )
                           ],
                         ),
-                        pahtModel.status == 1 ? Padding(
+                        (pahtModel.status == 1 && pahtModel.quotationUserName != null) ? Padding(
                           padding:
                           const EdgeInsets.only(bottom: 10, top: 5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment:  CrossAxisAlignment.end,
                             children: [
-                              Text('NV báo giá: ',
+                              Text('NV BG: ',
                                   style: GoogleFonts.inter(
                                       color:  getColor(pahtModel.status),
-                                      fontSize: FONT_MIDDLE,
+                                      fontSize: FONT_SMALL,
                                       fontWeight: FontWeight.bold)),
                                 Text(
                                     pahtModel.quotationUserName != null ? pahtModel.quotationUserName.toUpperCase() : "" ,
                                     style: GoogleFonts.inter(
                                       color:  getColor(pahtModel.status),
-                                      fontSize: FONT_MIDDLE,
+                                      fontSize: FONT_SMALL,
                                     )),
                             ],
                           ),

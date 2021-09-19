@@ -127,9 +127,13 @@ class _MyAppState extends State<MyApp> {
     int loginTime = pref.get('loginTime');
     if (loginTime != null) {
       int now = DateTime.now().millisecondsSinceEpoch;
-      if (now - loginTime > (1000 * 7 * 24 * 60 * 60)) {
-        //token = null;
+      if (now - loginTime > (1000 * 10 * 24 * 60 * 60)) {
+        token = null;
+        if(!isCustomer){
+          pref.setString('userName',null);
+        }
       }
+       pref.setInt('loginTime', DateTime.now().millisecondsSinceEpoch);
     }
     return MultiBlocProvider(
       providers: [
@@ -204,11 +208,11 @@ class _MyAppState extends State<MyApp> {
         },
         navigatorKey: navKey,
         title: 'Nội thất C.A.C',
-        initialRoute: //(token != null && !token.isEmpty)?
+        initialRoute:  (token != null && !token.isEmpty) ?
          isCustomer
                 ? ROUTER_CUS_HOME_PAGE
-                : ROUTER_HOME ,//: ROUTER_SIGNIN,
-            //: ROUTER_SIGNIN,
+                : ROUTER_HOME  //: ROUTER_SIGNIN,
+            : ROUTER_SIGNIN,
         // ROUTER_CUS_HOME_PAGE,
         routes: {
           ROUTER_SIGNIN: (context) => SignInPage(),

@@ -689,6 +689,7 @@ class _ApproveQuotationPageState extends State<ApproveQuotationPage>
                             isApproveAble: true,
                             isPreViewApprove: isPreview,
                             quotation: pahtModel,
+                            userName: getUserName(),
                             lstQuotationDetail: listQuotationDetailModel)));
                 _showCupertinoDialog(context);
               },
