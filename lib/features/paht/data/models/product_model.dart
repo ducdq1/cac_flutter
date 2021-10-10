@@ -25,7 +25,9 @@ class ProductModel extends ProductEntity {
       String priceDLKM,
       String priceNHAPKM,
       String maDaiLy,
-        String image,
+      String thongSoKT,
+      String warranty,
+      String image,
       TonKhoModel tonKhoModel})
       : super(
             productId: productId,
@@ -49,7 +51,9 @@ class ProductModel extends ProductEntity {
             priceDLKM: priceDLKM,
             priceNHAPKM: priceNHAPKM,
             maDaiLy: maDaiLy,
-          image: image);
+      thongSoKT: thongSoKT,
+      warranty: warranty,
+            image: image);
 
   factory ProductModel.fromJson(Map json) {
     //MediaModel mediaJson = MediaModel.fromJson(json['mediaUrls']);
@@ -75,6 +79,8 @@ class ProductModel extends ProductEntity {
         priceNHAPKM: json['priceNHAPKM'],
         maDaiLy: json['maDaiLy'],
         image: json['image'],
+        thongSoKT: json['thongSoKT'],
+        warranty: json['warranty'],
         images: json['images'] == null
             ? []
             : json['images'].map<ImageModel>((item) {

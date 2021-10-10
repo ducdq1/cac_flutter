@@ -21,6 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'dart:math';
+import 'package:citizen_app/features/common/dialogs/view_feature_product_dialog.dart';
 import 'package:citizen_app/features/common/dialogs/view_price_dialog.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/paht/data/models/place_images_model.dart';
@@ -158,26 +159,31 @@ class ReportWidget extends StatelessWidget {
                           fontSize: FONT_MIDDLE,
                           color: PRIMARY_TEXT_COLOR,
                           fontWeight: FontWeight.w600,
-                        )),
+                        ),
+                    ),
                     SizedBox(height: 10),
-                            productModel.salePrice !=null &&
-                                productModel.salePrice.isNotEmpty ? Text(
-                      productModel.salePrice ?? 'Chưa có giá bán',
-                      style: GoogleFonts.inter(
-                        fontSize: productModel.priceBLKM != null &&
-                            productModel.priceBLKM.isNotEmpty
-                            ? FONT_SMALL : FONT_MIDDLE,
-                        color: productModel.priceBLKM != null &&
-                                productModel.priceBLKM.isNotEmpty
-                            ? Colors.grey
-                            : Colors.amber.shade900,
-                        fontWeight: FontWeight.w600,
-                        textStyle: productModel.priceBLKM != null &&
-                                productModel.priceBLKM.isNotEmpty
-                            ? TextStyle(decoration: TextDecoration.lineThrough)
-                            : null,
-                      ),
-                    ): SizedBox(),
+                    productModel.salePrice != null &&
+                            productModel.salePrice.isNotEmpty
+                        ? Text(
+                            productModel.salePrice ?? 'Chưa có giá bán',
+                            style: GoogleFonts.inter(
+                              fontSize: productModel.priceBLKM != null &&
+                                      productModel.priceBLKM.isNotEmpty
+                                  ? FONT_SMALL
+                                  : FONT_MIDDLE,
+                              color: productModel.priceBLKM != null &&
+                                      productModel.priceBLKM.isNotEmpty
+                                  ? Colors.grey
+                                  : Colors.amber.shade900,
+                              fontWeight: FontWeight.w600,
+                              textStyle: productModel.priceBLKM != null &&
+                                      productModel.priceBLKM.isNotEmpty
+                                  ? TextStyle(
+                                      decoration: TextDecoration.lineThrough)
+                                  : null,
+                            ),
+                          )
+                        : SizedBox(),
                     productModel.priceBLKM != null &&
                             productModel.priceBLKM.isNotEmpty
                         ? Text(
@@ -194,11 +200,11 @@ class ReportWidget extends StatelessWidget {
           ),
           isViewTonKho
               ? Padding(
-                padding: const EdgeInsets.only(top: 18 ),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                  padding: const EdgeInsets.only(top: 18),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
                         SizedBox(width: 30),
                         Image.asset(
                           ICONS_ASSETS + 'icon_ware_house.png',
@@ -232,45 +238,76 @@ class ReportWidget extends StatelessWidget {
                               ]),
                         ))
                       ]),
-              )
-              : SizedBox(),
-          SizedBox(height: 15),
-          userType != null && (userType == 3 || userType == 4)
-              ? //cho xem gia
-              Center(
-                  child: Container(
-                      width: 150,
-                      padding: const EdgeInsets.only(bottom: 5.0),
-                      child: RaisedButton(
-                          color: PRIMARY_COLOR,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(36),
-                          ),
-                          onPressed: () {
-                            showViewPriceDialog(
-                                context: context,
-                                giaBan: productModel.salePrice != null
-                                    ? productModel.salePrice.toString()
-                                    : "Chưa có giá",
-                                giaNhap: productModel.price != null
-                                    ? productModel.price.toString()
-                                    : "Chưa có giá",
-                                ngayCapNhat: productModel.createDate,
-                                model: productModel);
-                          },
-                          child: AutoSizeText(
-                            'Xem giá',
-                            style: GoogleFonts.inter(
-                              fontSize: FONT_EX_SMALL,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            minFontSize: FONT_EX_SMALL,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ))),
                 )
               : SizedBox(),
+          SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Container(
+                    width: 150,
+                    padding: const EdgeInsets.only(bottom: 5.0),
+                    child: RaisedButton(
+                        color: PRIMARY_COLOR,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(36),
+                        ),
+                        onPressed: () {
+                          showViewFeatureProductDialog(
+                              context: context,
+                              model: productModel);
+                        },
+                        child: AutoSizeText(
+                          'Xem thông tin',
+                          style: GoogleFonts.inter(
+                            fontSize: FONT_EX_SMALL,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          minFontSize: FONT_EX_SMALL,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ))),
+              ),
+              userType != null && (userType == 3 || userType == 4)
+                  ? //cho xem gia
+                  Center(
+                      child: Container(
+                          width: 150,
+                          padding: const EdgeInsets.only(bottom: 5.0,left: 7),
+                          child: RaisedButton(
+                              color: PRIMARY_COLOR,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(36),
+                              ),
+                              onPressed: () {
+                                showViewPriceDialog(
+                                    context: context,
+                                    giaBan: productModel.salePrice != null
+                                        ? productModel.salePrice.toString()
+                                        : "Chưa có giá",
+                                    giaNhap: productModel.price != null
+                                        ? productModel.price.toString()
+                                        : "Chưa có giá",
+                                    ngayCapNhat: productModel.createDate,
+                                    model: productModel);
+                              },
+                              child: AutoSizeText(
+                                'Xem giá',
+                                style: GoogleFonts.inter(
+                                  fontSize: FONT_EX_SMALL,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                minFontSize: FONT_EX_SMALL,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ))),
+                    )
+                  : SizedBox(),
+            ],
+          ),
           Container(
               // color: Color(0xfff1e3c0),
               padding: EdgeInsets.all(5),
