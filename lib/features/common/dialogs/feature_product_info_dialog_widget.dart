@@ -132,7 +132,7 @@ class _ViewFeatureProductDialogState extends State<ViewFeatureProductDialog>
         customTitle("Đóng gói:"),
         customText(widget.model.dongGoi),
         customTitle("Nơi sản xuất:"),
-        customText(widget.model.madeIn),
+        customText(widget.model.noiSanXuat),
       ]),
     );
   }
@@ -146,7 +146,7 @@ class _ViewFeatureProductDialogState extends State<ViewFeatureProductDialog>
         customTitle("Thông số kỹ thuật:"),
         customText(widget.model.thongSoKT),
         customTitle("Nơi sản xuất:"),
-        customText(widget.model.madeIn),
+        customText(widget.model.noiSanXuat),
         customTitle("Bảo hành:"),
         customText(widget.model.warranty)
       ]),
