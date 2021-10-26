@@ -46,6 +46,28 @@ class SearchProducttFailure extends PublicPahtState {
   String toString() => 'PublicPahtFailure';
 }
 
+class ListCKBGSuccess extends PublicPahtState {
+  final List<CKBGModel> paht;
+  final bool hasReachedMax;
+  final int offset;
+  final String error;
+  ListCKBGSuccess(
+      {@required this.paht, this.hasReachedMax, this.offset, this.error});
+
+  ListCKBGSuccess copyWith(
+      {List<CKBGModel> paht, bool hasReachedMax, int offset}) {
+    return ListCKBGSuccess(
+        paht: paht ?? this.paht,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+        offset: offset);
+  }
+
+  @override
+  List<Object> get props => [paht, offset, hasReachedMax];
+  @override
+  String toString() => 'PublicPahtSuccess';
+}
+
 class PublicPahtSuccess extends PublicPahtState {
   final List<PahtModel> paht;
   final bool hasReachedMax;

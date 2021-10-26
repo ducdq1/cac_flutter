@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:citizen_app/core/network/network_info.dart';
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/comment_entity.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
+import 'package:citizen_app/features/paht/domain/usecases/create_ckbg.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:meta/meta.dart';
@@ -233,5 +235,17 @@ class PahtRepositoryImpl implements PahtRepository {
           return await remoteDataSource.updateWorkerLastLogin(workerId);
     } catch (error) {
     }
+  }
+
+  @override
+  Future<String> createCKBG(CreateCKBGParams issueParams) {
+    // TODO: implement createCKBG
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<CKBGDetailModel>> getListCKBGDetail(int id) {
+    // TODO: implement getListCKBGDetail
+    throw UnimplementedError();
   }
 }

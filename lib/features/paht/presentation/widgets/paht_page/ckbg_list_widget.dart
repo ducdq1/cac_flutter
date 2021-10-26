@@ -16,6 +16,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
+import 'ckbg_item_widget.dart';
+
 class UpdateCKBGArgument {
   final String content;
   final String address;
@@ -26,11 +28,8 @@ class UpdateCKBGArgument {
   final String pahtId;
   final String hyperlink;
   final String phone;
-  final List<BusinessHourEntity> BUSINESS_HOUR;
-  final PahtModel pahtModel;
+  final CKBGModel pahtModel;
   final bool isUpdateAble;
-  final bool isApproveAble;
-  final bool isSaled;
 
   UpdateCKBGArgument(
       {this.content,
@@ -42,11 +41,8 @@ class UpdateCKBGArgument {
       this.poiType,
       this.hyperlink,
       this.phone,
-      this.BUSINESS_HOUR,
       this.pahtModel,
-      this.isUpdateAble = true,
-      this.isApproveAble = false,
-      this.isSaled = false});
+      this.isUpdateAble = true, });
 }
 
 class CKGBDetailArgument {
@@ -54,7 +50,7 @@ class CKGBDetailArgument {
   final CKBGModel ckbgDetail;
   final String id;
   final String title;
-  String productCode;
+  final String productCode;
   final bool isUpdateAble;
   final bool isApproveAble;
   final bool fromCategoryPage;
@@ -93,10 +89,10 @@ class ListViewCKBGWidget extends StatefulWidget {
       this.isSaled = false});
 
   @override
-  _ListViewPahtsWidgetState createState() => _ListViewPahtsWidgetState();
+  _ListViewCKBGWidgetState createState() => _ListViewCKBGWidgetState();
 }
 
-class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
+class _ListViewCKBGWidgetState extends State<ListViewCKBGWidget> {
   bool isLoadingVertical = false;
   bool loadmore = false;
   bool isApproveAble = false;
@@ -174,7 +170,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                       padding: const EdgeInsets.only(top: 8.0),
                                       child: BottomLoaderWidget(),
                                     )
-                                  : PAHTITemWidget(
+                                  : CKBGItemWidget(
                                       onDelete: () {
                                         showDeleteConfirmDialog(
                                             context: context,
@@ -184,7 +180,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                                   .add(
                                                 DeleteButtonEvent(
                                                     id: widget.pahts[index]
-                                                        .quotationID
+                                                        .ckbgId
                                                         .toString()),
                                               );
                                               Navigator.pop(context);
@@ -196,7 +192,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                       onEdit: () {
                                         Navigator.pushNamed(
                                                 context, ROUTER_CREATE_PAHT,
-                                                arguments: UpdatePahtArgument(
+                                                arguments: UpdateCKBGArgument(
                                                     pahtModel:
                                                         widget.pahts[index]))
                                             .then((value) {
@@ -209,14 +205,12 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                           }
                                         });
                                       },
-                                      isPersonal: widget.isPersonal,
                                       pahtModel: widget.pahts[index],
                                       onTap: () {
-                                        if (!widget.isApproveAble &&
-                                            !widget.isSaled) {
+
                                           Navigator.pushNamed(
                                                   context, ROUTER_CREATE_PAHT,
-                                                  arguments: UpdatePahtArgument(
+                                                  arguments: UpdateCKBGArgument(
                                                       pahtModel:
                                                           widget.pahts[index],
                                                       isUpdateAble: widget
@@ -242,32 +236,7 @@ class _ListViewPahtsWidgetState extends State<ListViewPahtsWidget> {
                                               }
                                             }
                                           });
-                                        } else {
-                                          // qua man hinh phe duyet bao gia
 
-                                          Navigator.pushNamed(context,
-                                                  ROUTER_APPROVE_QUOTATION_PAGE,
-                                                  arguments: UpdatePahtArgument(
-                                                      pahtModel:
-                                                          widget.pahts[index],
-                                                      isUpdateAble: false,
-                                                      isSaled:
-                                                          isSaled //moi tao moi duoc phep cap nhat
-                                                      ))
-                                              .then((value) {
-                                            if (value != null) {
-                                              BlocProvider.of<PublicPahtBloc>(
-                                                      context)
-                                                  .add(
-                                                ReloadListEvent(
-                                                    isApproveAble:
-                                                        isApproveAble,
-                                                    isSaled:
-                                                        isSaled), //ListPublicPahtFetchingEvent(isReload: true),
-                                              );
-                                            }
-                                          });
-                                        }
                                       },
                                     )),
                         ),

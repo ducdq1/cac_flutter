@@ -202,7 +202,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                             needRedirect: '',
                             onPress: () {
                               Navigator.pushNamed(
-                                      context, ROUTER_PRODUCTS_TYPE_PAGE )
+                                      context, ROUTER_PRODUCTS_TYPE_PAGE)
                                   .then((value) => {
                                         if (value != null)
                                           {
@@ -264,9 +264,8 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                                     height: 140,
                                     width: 140,
                                   ),
-                                    userRole != null &&
-                                        userRole
-                                            .contains(UserField.ROLE_MESSAGE)
+                            userRole != null &&
+                                    userRole.contains(UserField.ROLE_MESSAGE)
                                 ? Stack(children: [
                                     CitizensMenuItemWidget(
                                       label: 'Nhắn tin',
@@ -312,7 +311,9 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                 print('on Stream get User.......');
                 for (User user in users) {
                   badgeCount += (user.messageHasRead == null ||
-                          user.messageHasRead == true) ? 0 : 1;
+                          user.messageHasRead == true)
+                      ? 0
+                      : 1;
                 }
 
                 if (badgeCount > 0) {

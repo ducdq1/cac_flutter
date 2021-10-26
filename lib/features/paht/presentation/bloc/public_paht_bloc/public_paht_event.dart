@@ -48,6 +48,23 @@ class ListProductFetchingEvent extends PublicPahtEvent {
 }
 
 
+class ListCKBGFetchingEvent extends PublicPahtEvent {
+  final int offset;
+  final int limit;
+  final String search;
+  final List<String> categoryIds;
+  final List<String> statusIds;
+  ListCKBGFetchingEvent(
+      {this.offset, this.search, this.categoryIds, this.statusIds, this.limit});
+
+  @override
+  List<Object> get props => [offset, search, categoryIds, statusIds];
+
+  @override
+  String toString() => 'ListPublicPahtFetched { offset: $offset}';
+}
+
+
 class ListPublicPahtFetchingEvent extends PublicPahtEvent {
   final int offset;
   final int limit;

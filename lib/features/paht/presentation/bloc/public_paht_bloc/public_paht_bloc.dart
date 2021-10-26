@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
 import 'package:citizen_app/features/paht/data/models/paht_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
@@ -32,17 +33,6 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
 
   bool _hasReachedMax(PublicPahtState state) =>
       state is PublicPahtSuccess && state.hasReachedMax;
-
-  // @override
-  // Stream<Transition<PublicPahtEvent, PublicPahtState>> transformEvents(
-  //     Stream<PublicPahtEvent> events,
-  //     TransitionFunction<PublicPahtEvent, PublicPahtState> transitionFn,
-  //     ) {
-  //   return super.transformEvents(
-  //     events.distinct(),
-  //     transitionFn,
-  //   );
-  // }
 
   @override
   Stream<PublicPahtState> mapEventToState(
