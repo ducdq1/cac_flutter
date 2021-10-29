@@ -13,13 +13,13 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-#  intl: ^0.16.1
-#  flutter_svg: ^0.18.0
-#  pattern_formatter: ^1.0.2
+  intl: ^0.16.1
+  flutter_svg: ^0.18.0
+  pattern_formatter: ^1.0.2
 
-  intl: ^0.17.0
-  pattern_formatter: ^2.0.0
-  flutter_svg: ^0.19.3
+#  intl: ^0.17.0
+#  pattern_formatter: ^2.0.0
+#  flutter_svg: ^0.19.3
 
   #animated_bottom_navigation_bar: ^0.2.1
   #flutter_appavailability: ^0.0.21

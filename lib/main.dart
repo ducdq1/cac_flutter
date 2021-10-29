@@ -53,7 +53,7 @@ import 'features/customer/presentation/pages/index_page.dart';
 import 'features/customer/presentation/pages/cus_product_search.dart';
 import 'features/profile/presentation/bloc/change_password_bloc.dart';
 import 'injection_container.dart' as di;
-
+import 'package:citizen_app/features/paht/presentation/pages/create_ckbg_page.dart';
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   print('myBackgroundMessageHandler');
   if (message.containsKey('data')) {
@@ -243,6 +243,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_CUS_CHAT_PAGE: (context) => ChatsPage(),
           ROUTER_CUS_PRODUCTS_PAGE: (context) => ProductsPage(),
           ROUTER_PRODUCTS_TYPE_PAGE: (context) => ProductsTypePage(),
+          ROUTER_CREATE_CKBG_PAGE: (context) => CreateCKBGPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

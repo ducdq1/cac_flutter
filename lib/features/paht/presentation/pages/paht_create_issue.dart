@@ -15,12 +15,16 @@ import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom
 import 'package:citizen_app/features/common/widgets/inputs/text_field_custom.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/number_trivia/presentation/widgets/widgets.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_issue_paht.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
+import 'package:citizen_app/features/paht/presentation/pages/create_ckbg_page.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/ckbg_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/quotation_detail_item_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -219,7 +223,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                             Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
                                 .then((value) => {
                                       if (value != null)
-                                        {gotoDetailProductPage(value,null)}
+                                        {gotoDetailProductPage(value, null)}
                                     });
 
                             break;
@@ -236,7 +240,7 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                                         context, ROUTER_QRCODE_SCANER)
                                     .then((value) => {
                                           if (value != null)
-                                            {gotoDetailProductPage(value,null)}
+                                            {gotoDetailProductPage(value, null)}
                                         });
                             }
                             break;
@@ -268,10 +272,11 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                       onPressed: () async {
                         clearFocus();
                         Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT,
-                        arguments:  SearchArgument(fromCreateQuotationPage: true))
+                                arguments: SearchArgument(
+                                    fromCreateQuotationPage: true))
                             .then((value) => {
                                   if (value != null)
-                                    {gotoDetailProductPage(null,value)}
+                                    {gotoDetailProductPage(null, value)}
                                 });
                       },
                     ),
@@ -700,8 +705,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Column(children: [
-        pahtModel.saledDate == null &&   pahtModel.isInvalid == false
-      ? Padding(
+        pahtModel.saledDate == null && pahtModel.isInvalid == false
+            ? Padding(
                 padding: EdgeInsets.only(bottom: 10.0),
                 child: InkWell(
                   onTap: () {
@@ -752,13 +757,15 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                 ),
               )
             : SizedBox(),
-    pahtModel.isInvalid == false ? InputDatetimeWidget(
-          scrollPadding: 200,
-          hintText: 'Ngày bán hàng',
-          controller: saledDateController,
-          validates: [EmptyValidate()],
-        ) : SizedBox(),
-        pahtModel.saledDate == null  && pahtModel.isInvalid == false
+        pahtModel.isInvalid == false
+            ? InputDatetimeWidget(
+                scrollPadding: 200,
+                hintText: 'Ngày bán hàng',
+                controller: saledDateController,
+                validates: [EmptyValidate()],
+              )
+            : SizedBox(),
+        pahtModel.saledDate == null && pahtModel.isInvalid == false
             ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 Expanded(
                   child: Container(
@@ -768,6 +775,16 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                         ctx: this,
                         id: 'update_saled_date_btn'),
                   ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Container(
+                    width: 142,
+                    child: PrimaryButton(
+                        label: 'Hủy báo giá', ctx: this, id: 'btn_invalid'),
+                  ),
                 )
               ])
             : SizedBox(),
@@ -775,20 +792,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
           height: 20,
         ),
         pahtModel.saledDate == null && pahtModel.isInvalid == false
-            ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom:20.0),
-                    child: Container(
-                      width: 142,
-                      child: PrimaryButton(
-                          label: 'Hủy báo giá',
-                          ctx: this,
-                          id: 'btn_invalid'),
-                    ),
-                  ),
-                )
-              ])
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround, children: [])
             : SizedBox(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -798,6 +803,16 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
                 width: 142,
                 child: PrimaryButton(
                     label: 'Xem báo giá', ctx: this, id: 'view_pdf_btn'),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: Container(
+                width: 142,
+                child: PrimaryButton(
+                    label: 'Tạo cam kết', ctx: this, id: 'create_ckbg'),
               ),
             )
           ],
@@ -986,15 +1001,31 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
             _showCupertinoDialog(context);
           });
     }
+
+    if (id == 'create_ckbg') {
+      List<CKBGDetailModel> listCKBGDetailModel = [];
+      for( var pathDetailModel in listQuotationDetailModel){
+        listCKBGDetailModel.add(CKBGDetailModel.fromJson(pathDetailModel.toJson()));
+      }
+      Navigator.pushNamed(
+          context, ROUTER_CREATE_CKBG_PAGE,
+          arguments: UpdateCKBGArgument(
+              pahtModel: CKBGModel(cusPhone: pahtModel.cusPhone,
+                cusName: pahtModel.cusName,
+                cusAddress: pahtModel.cusAddress
+              )));
+
+    }
   }
 
   void clearFocus() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  void gotoDetailProductPage(String cameraScanResult,int productId) {
+  void gotoDetailProductPage(String cameraScanResult, int productId) {
     Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
-            arguments: PahtDetailArgument(productCode: cameraScanResult,productId: productId))
+            arguments: PahtDetailArgument(
+                productCode: cameraScanResult, productId: productId))
         .then((value) => {
               if (value != null)
                 {

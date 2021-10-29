@@ -38,3 +38,4 @@ const String ROUTER_CUS_PRODUCT_CATEGORY = '$ROUTER_CUS/productCategoryPage';
 const String ROUTER_CUS_CHAT_PAGE = '$ROUTER_CUS/chatPage';
 const String ROUTER_CUS_PRODUCTS_PAGE = '$ROUTER_CUS/productsPage';
 const String ROUTER_PRODUCTS_TYPE_PAGE = '$ROUTER_CUS/productsTypePage';
+const String ROUTER_CREATE_CKBG_PAGE = '$ROUTER_PAHT/createCKBGPage';

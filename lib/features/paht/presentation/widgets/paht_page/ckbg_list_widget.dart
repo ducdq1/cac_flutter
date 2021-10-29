@@ -3,6 +3,7 @@ import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/business_hour_entity.dart';
@@ -21,28 +22,19 @@ import 'ckbg_item_widget.dart';
 class UpdateCKBGArgument {
   final String content;
   final String address;
-  final String latitude;
-  final String longitude;
-  final int poiType;
-  final List<dynamic> listMedia;
   final String pahtId;
-  final String hyperlink;
   final String phone;
   final CKBGModel pahtModel;
   final bool isUpdateAble;
-
+  final List<CKBGDetailModel> listCKGBDetailModel;
   UpdateCKBGArgument(
       {this.content,
       this.address,
-      this.listMedia,
-      this.latitude,
-      this.longitude,
       this.pahtId,
-      this.poiType,
-      this.hyperlink,
       this.phone,
       this.pahtModel,
-      this.isUpdateAble = true, });
+      this.isUpdateAble = true,
+      this.listCKGBDetailModel});
 }
 
 class CKGBDetailArgument {
