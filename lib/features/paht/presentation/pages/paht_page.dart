@@ -7,7 +7,6 @@ import 'package:citizen_app/features/common/blocs/blocs.dart';
 import 'package:citizen_app/features/common/dialogs/confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/status_paht_bloc/status_paht_bloc.dart';
@@ -61,9 +60,6 @@ class _PahtState extends State<Paht> {
               ..add(indexTab == 0
                   ? ListStatusPublicFetched()
                   : ListStatusPersonalFetched())),
-        BlocProvider<CategoryPahtBloc>(
-            create: (context) =>
-                singleton<CategoryPahtBloc>()..add(ListCategoriesFetched())),
         BlocProvider<PublicPahtBloc>(
             create: (context) => singleton<PublicPahtBloc>()
               ..add(ListPublicPahtFetchingEvent(offset: 0, limit: 10))),

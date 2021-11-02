@@ -174,7 +174,7 @@ class CKBGDetailItemWidget extends StatelessWidget {
                                       width: 5,
                                     ),
                                     Text(
-                                        ckbgDetailModel.amount.toString() +
+                                        ckbgDetailModel.amount.toString().replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "")  +
                                             ' ' +
                                             (ckbgDetailModel.unit != null
                                                 ? ckbgDetailModel.unit
@@ -187,8 +187,8 @@ class CKBGDetailItemWidget extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                        (ckbgDetailModel.value == null ||
-                                ckbgDetailModel.value == 0)
+                        (ckbgDetailModel.price == null ||
+                                ckbgDetailModel.amount == null)
                             ? SizedBox()
                             : Padding(
                                 padding: const EdgeInsets.only(bottom: 5),
@@ -207,7 +207,7 @@ class CKBGDetailItemWidget extends StatelessWidget {
                                     Text(
                                         NumberFormat.currency(locale: 'vi')
                                                 .format(
-                                                    ckbgDetailModel.value)
+                                            (ckbgDetailModel.price * ckbgDetailModel.amount))
                                             ,
                                         style: GoogleFonts.inter(
                                             color: DESCRIPTION_COLOR,

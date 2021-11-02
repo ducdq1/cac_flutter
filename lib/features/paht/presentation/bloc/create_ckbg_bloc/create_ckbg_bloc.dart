@@ -3,12 +3,15 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
+import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_ckbg.dart';
 import 'package:citizen_app/features/paht/domain/usecases/get_list_ckbg_detail.dart';
 import 'package:citizen_app/features/paht/domain/usecases/get_list_quotation_detail.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../../../../injection_container.dart';
 // import 'package:rxdart/rxdart.dart';
 
 part 'create_ckbg_event.dart';
@@ -17,8 +20,7 @@ part 'create_ckbg_state.dart';
 class CreateCKBGBloc extends Bloc<CreateCKBGEvent, CreateCKBGState> {
   final CreateCKBG createCKBG;
   final GetCKBGDetail getCKBGDetail;
-  final UpdatePaht updatePaht;
-  CreateCKBGBloc({@required this.createCKBG, @required this.updatePaht,@required this.getCKBGDetail})
+  CreateCKBGBloc({@required this.createCKBG,@required this.getCKBGDetail})
       : super(CreateCKBGInitial());
 
   @override
@@ -28,8 +30,10 @@ class CreateCKBGBloc extends Bloc<CreateCKBGEvent, CreateCKBGState> {
     if (event is CreateCKBGButtonPresseEvent) {
       yield CreateCKBGLoading();
       try {
-        // if (event.type == 0) {
-        String result = await createCKBG(event.createCKBGParams);
+        PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
+          networkInfo: singleton(),
+          remoteDataSource: singleton(),);
+        String result = await repo.createCKBG(event.createCKBGParams);
 
         yield CreateCKBGSuccess(fileName: result);
       } catch (error) {

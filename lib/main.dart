@@ -17,12 +17,12 @@ import 'package:citizen_app/features/customer/presentation/pages/products_page.d
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/home_page.dart';
 import 'package:citizen_app/features/paht/domain/usecases/get_detailed_paht.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/detailed_paht_bloc/detailed_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/pages/approve_quotation_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/business_hour_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/choose_product_page.dart';
+import 'package:citizen_app/features/paht/presentation/pages/ckbg_choose_product_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
@@ -51,6 +51,7 @@ import 'features/chat/page/chats_page.dart';
 import 'features/customer/presentation/bloc/notification/notification_bloc.dart';
 import 'features/customer/presentation/pages/index_page.dart';
 import 'features/customer/presentation/pages/cus_product_search.dart';
+import 'features/paht/presentation/bloc/create_ckbg_bloc/create_ckbg_bloc.dart';
 import 'features/profile/presentation/bloc/change_password_bloc.dart';
 import 'injection_container.dart' as di;
 import 'package:citizen_app/features/paht/presentation/pages/create_ckbg_page.dart';
@@ -140,9 +141,6 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<CreateIssueBloc>(
           create: (BuildContext context) => singleton<CreateIssueBloc>(),
         ),
-        BlocProvider<CategoryPahtBloc>(
-          create: (BuildContext context) => singleton<CategoryPahtBloc>(),
-        ),
         BlocProvider<SignInBloc>(
           create: (BuildContext context) =>
               SignInBloc(signInUseCase: SignInUseCase()),
@@ -175,6 +173,9 @@ class _MyAppState extends State<MyApp> {
             create: (BuildContext context) =>  singleton<NotificationBloc>()),
         BlocProvider<ChatBloc>(
           create: (BuildContext context) =>  ChatBloc(),
+        ),
+        BlocProvider<CreateCKBGBloc>(
+          create: (BuildContext context) => CreateCKBGBloc(),
         )
       ],
       child: MaterialApp(
@@ -244,6 +245,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_CUS_PRODUCTS_PAGE: (context) => ProductsPage(),
           ROUTER_PRODUCTS_TYPE_PAGE: (context) => ProductsTypePage(),
           ROUTER_CREATE_CKBG_PAGE: (context) => CreateCKBGPage(),
+          ROUTER_CKBG_CHOOSE_PRODUCT: (context) => CKBGChooseProductPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

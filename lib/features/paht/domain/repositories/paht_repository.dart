@@ -14,8 +14,6 @@ abstract class PahtRepository {
   Future<List<PahtEntity>> getListPersonalPaht(
       PahtParams parram);
 
-  Future<List<CategoryEntity>> getListCategoriesPaht();
-
   Future<List<StatusEntity>> getListStatusPublic();
 
   Future<List<StatusEntity>> getListStatusPersonal();
@@ -24,19 +22,17 @@ abstract class PahtRepository {
 
   Future<SearchProductModel> getDetailedPaht(SearchProductParam param);
 
-  Future<List<CommentEntity>> getCommentsDetailedPaht({String pahtId});
-
   Future<String> createIssuePaht(QuotationParams issueParams);
+
   Future<String> createCKBG(CreateCKBGParams issueParams);
+  Future<bool> deleteCKBG(int id);
   Future<List<CKBGDetailModel>> getListCKBGDetail(int id);
 
   Future<List<QuotationDetailModel>> getListQuotationDetail(int id);
+
   Future<bool> updatePaht(UpdatedParams updatedParams);
 
   Future<bool> deletePaht({String id});
-
-  Future<bool> createComment(Params commentParams);
-  Future<bool> replyComment(Params commentParams);
 
   Future<bool> updateProcessor(String workerId,String processor);
 

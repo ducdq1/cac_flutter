@@ -12,11 +12,13 @@ import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart'
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_widget.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/image_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/detailed_paht_bloc/detailed_paht_bloc.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/ckbg_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_item_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
@@ -35,9 +37,9 @@ import '../../../../injection_container.dart';
 const PADDING_CONTENT_HORIZONTAL = 16.0;
 const SIZE_ARROW_BACK_ICON = 24.0;
 
-class ChooseProductPage extends StatefulWidget {
+class CKBGChooseProductPage extends StatefulWidget {
   @override
-  _ChooseProductPageState createState() => _ChooseProductPageState();
+  _CKBGChooseProductPageState createState() => _CKBGChooseProductPageState();
 }
 
 class SearchProductParam extends Equatable {
@@ -65,13 +67,13 @@ class SearchProductParam extends Equatable {
   }
 }
 
-class _ChooseProductPageState extends State<ChooseProductPage>
+class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
     with TickerProviderStateMixin
     implements OnButtonClickListener {
   TabController _controller;
   final tabs = [trans(TITLE_INFORMATION_SCREEN), trans(LABEL_MEDIA_PAHT)];
   int _index;
-  PahtDetailArgument arg;
+  CKBGDetailArgument arg;
   String productCode;
   int productId;
   ProductModel productModel;
@@ -81,11 +83,12 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   TextEditingController _passController;
   TextEditingController _notController;
   TextEditingController _priceController;
+  TextEditingController _pickDateController;
   FocusNode _priceFocusNode;
   FocusNode _noteFocusNode;
   int selectedImageId = -1;
   ImageModel image;
-  QuotationDetailModel quotationDetailModel;
+  CKBGDetailModel quotationDetailModel;
   bool isApproveAble = false;
   TextEditingController expireDateController;
   int userType =0 ;
@@ -100,7 +103,7 @@ class _ChooseProductPageState extends State<ChooseProductPage>
     _passController = TextEditingController();
     _notController = TextEditingController();
     _priceController = TextEditingController();
-
+    _pickDateController = TextEditingController();
     expireDateController = TextEditingController();
     _noteFocusNode = FocusNode();
     _priceFocusNode = FocusNode();
@@ -118,22 +121,19 @@ class _ChooseProductPageState extends State<ChooseProductPage>
 
     if (firstLoad) {
       firstLoad = false;
-      arg = ModalRoute.of(context).settings.arguments as PahtDetailArgument;
+      arg = ModalRoute.of(context).settings.arguments as CKBGDetailArgument;
       productCode = arg.productCode;
       productId = arg.productId;
-      quotationDetailModel = arg.quotationDetailModel;
+      quotationDetailModel = arg.ckbgDetailModel;
       if (quotationDetailModel != null) {
         _passController.text = quotationDetailModel.amount.toString().replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");
         _notController.text = quotationDetailModel.note;
         selectedImageId = quotationDetailModel.attachId;
         isApproveAble = arg.isApproveAble;
-        if (isApproveAble) {
-          setState(() {
-            _priceController.text = quotationDetailModel.price != null
-                ? NumberFormat.decimalPattern()
-                    .format(quotationDetailModel.price)
-                : "";
-          });
+        if(quotationDetailModel.pickDate !=null){
+          String pickDate = DateFormat("dd/MM/yyyy")
+              .format(quotationDetailModel.pickDate);
+          _pickDateController.text =  pickDate;
         }
       }
       BlocProvider.of<DetailedPahtBloc>(context).add(
@@ -546,146 +546,13 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        isApproveAble
-                            ? Row(children: [
-                                Text('Số lượng:',
-                                    style: GoogleFonts.inter(
-                                        color: DESCRIPTION_COLOR,
-                                        fontSize: FONT_MIDDLE,
-                                        height: 1.5,
-                                        fontWeight: FontWeight.bold),
-                                    softWrap: true),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    quotationDetailModel.amount != null
-                                        ? quotationDetailModel.amount.toString().replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "")
-                                        : "",
-                                    style: GoogleFonts.inter(
-                                      color: DESCRIPTION_COLOR,
-                                      fontSize: FONT_MIDDLE,
-                                      height: 1.5,
-                                    ),
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                )
-                              ])
-                            : InputValidateWidget(
-                                isRequired: true,
-                                label: 'Số lượng',
-                                readOnly: isApproveAble,
-                                limitLength: 20,
-                                focusNode: _passFocusNode,
-                                textInputType: TextInputType.numberWithOptions(
-                                    decimal: true, signed: true),
-                                controller: _passController,
-                                focusAction: () => FormTools.requestFocus(
-                                  currentFocusNode: _passFocusNode,
-                                  nextFocusNode: _noteFocusNode,
-                                  context: context,
-                                ),
-                                validates: [
-                                  EmptyValidate(),
-                                ],
-                              ),
-                        isApproveAble
-                            ? Row(children: [
-                                Text('Ghi chú:',
-                                    style: GoogleFonts.inter(
-                                        color: DESCRIPTION_COLOR,
-                                        fontSize: FONT_MIDDLE,
-                                        height: 1.5,
-                                        fontWeight: FontWeight.bold),
-                                    softWrap: true),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    quotationDetailModel.note == null
-                                        ? ""
-                                        : quotationDetailModel.note,
-                                    style: GoogleFonts.inter(
-                                      color: DESCRIPTION_COLOR,
-                                      fontSize: FONT_MIDDLE,
-                                      height: 1.5,
-                                    ),
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                )
-                              ])
-                            : InputValidateWidget(
-                                isRequired: true,
-                                label: 'Ghi chú',
-                                readOnly: isApproveAble,
-                                limitLength: 2000,
-                                focusNode: _noteFocusNode,
-                                textInputType: TextInputType.text,
-                                controller: _notController,
-                                focusAction: () => FormTools.requestFocus(
-                                  currentFocusNode: _noteFocusNode,
-                                  nextFocusNode: null,
-                                  context: context,
-                                ),
-                                validates: [
-                                  EmptyValidate(),
-                                ],
-                              ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        !isApproveAble
-                            ? SizedBox()
-                            : Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: TextField(
-                                  controller: _priceController,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [ThousandsFormatter()],
-                                  decoration: new InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: BORDER_COLOR, width: 0.6),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: PRIMARY_COLOR, width: 0.6),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      //enabledBorder: InputBorder.none,
-                                      //errorBorder: InputBorder.none,
-                                      //disabledBorder: InputBorder.none,
-                                      contentPadding: EdgeInsets.only(
-                                          left: 15,
-                                          bottom: 11,
-                                          top: 11,
-                                          right: 15),
-                                      hintText: "Nhập giá bán"),
-                                ),
-                              )
-                        // InputValidateWidget(
-                        //         isRequired: true,
-                        //         label: 'Giá bán',
-                        //         limitLength: 2000,
-                        //         focusNode: _priceFocusNode,
-                        //         textInputType: TextInputType.number,
-                        //         controller: _priceController,
-                        //         focusAction: () => FormTools.requestFocus(
-                        //           currentFocusNode: _priceFocusNode,
-                        //           nextFocusNode: null,
-                        //           context: context,
-                        //         ),
-                        //         validates: [
-                        //           EmptyValidate(),
-                        //         ],
-                        //       ),
+
+                        InputDatetimeWidget(
+                          scrollPadding: 200,
+                          hintText: 'Ngày lấy hàng',
+                          controller: _pickDateController,
+                          validates: [EmptyValidate()],
+                        )
                       ]),
                 ),
                 Row(
@@ -786,52 +653,23 @@ class _ChooseProductPageState extends State<ChooseProductPage>
   @override
   onClick(String id) async {
     if (id == 'primary_btn') {
-      if (isApproveAble) {
-        String priceStr = _priceController.text.toString();
-        priceStr = priceStr.replaceAll(",", "");
-        int price;
+        DateTime pickDate = null;
         try {
-          price = int.parse(priceStr);
+          String datefm = _pickDateController.text;
+           pickDate = new DateFormat('dd/MM/yyyy').parse(datefm);
         } catch (error) {
-          FocusScope.of(context).requestFocus(_priceFocusNode);
-          return;
+
         }
-        quotationDetailModel.price = price;
-        if (quotationDetailModel.amount != null) {
-          quotationDetailModel.value = price * quotationDetailModel.amount;
-        }
-        Navigator.pop(context, quotationDetailModel);
-      } else {
-        String amountStr = _passController.text.toString();
-        double amount;
-        try {
-          amount = double.parse(amountStr);
-        } catch (error) {
-          FocusScope.of(context).requestFocus(_passFocusNode);
+
+        if (pickDate == null) {
+          Fluttertoast.showToast(msg: 'Bạn chưa nhập ngày lấy hàng');
           return;
         }
 
-        if (amountStr.isEmpty || amount == 0) {
-          FocusScope.of(context).requestFocus(_passFocusNode);
-        } else {
-          QuotationDetailModel model = QuotationDetailModel(
-              quotationDetailId: quotationDetailModel != null
-                  ? quotationDetailModel.quotationDetailId
-                  : null,
-              productCode: productModel.productCode,
-              productId: productModel.productId,
-              productName: (productModel.productType == 0 ||
-                      productModel.productType == 1)
-                  ? productModel.productName ?? '' + " " + productModel.productCode ?? ''
-                  : "(" + productModel.size ?? '' + ") " + productModel.productCode ?? '',
-              unit: productModel.unit,
-              amount: amount,
-              image: image,
-              note: _notController.text.trim(),
-              attachId: selectedImageId == -1 ? null : selectedImageId);
-          Navigator.pop(context, model);
-        }
-      }
+        quotationDetailModel.pickDate = pickDate;
+
+        Navigator.pop(context, quotationDetailModel);
+
     }
     if (id == 'cancel_btn') {
       Navigator.pop(context);

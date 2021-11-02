@@ -177,7 +177,7 @@ class QuotationDetailItemWidget extends StatelessWidget {
                                       width: 5,
                                     ),
                                     Text(
-                                        quotationDetailModel.amount.toString() +
+                                        quotationDetailModel.amount.toString().replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "") +
                                             ' ' +
                                             (quotationDetailModel.unit != null
                                                 ? quotationDetailModel.unit

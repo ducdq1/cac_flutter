@@ -7,11 +7,10 @@ import 'package:citizen_app/features/customer/presentation/bloc/promotion/promot
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
 import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
-import 'package:citizen_app/features/paht/domain/usecases/get_comments.dart';
 import 'package:citizen_app/features/paht/domain/usecases/get_list_quotation_detail.dart';
 import 'package:citizen_app/features/paht/domain/usecases/search_product.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/category_paht_bloc/category_paht_bloc.dart';
+import 'package:citizen_app/features/paht/presentation/bloc/create_ckbg_bloc/create_ckbg_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/detailed_paht_bloc/detailed_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/personal_paht_bloc/personal_paht_bloc.dart';
@@ -22,22 +21,21 @@ import 'package:citizen_app/features/customer/domain/usecases/usecases.dart';
 
 import 'package:get_it/get_it.dart';
 
+import 'domain/usecases/create_ckbg.dart';
+
 Future<void> dependencyInjectionsPaht(GetIt singleton) async {
 
   // Use cases
   singleton.registerLazySingleton(() => GetListPersonalPaht(singleton()));
   singleton.registerLazySingleton(() => GetListPublicPaht(singleton()));
-  singleton.registerLazySingleton(() => GetListCategoriesPaht(singleton()));
   singleton.registerLazySingleton(() => GetListStatusPublic(singleton()));
   singleton.registerLazySingleton(() => GetListStatusPersonal(singleton()));
   singleton.registerLazySingleton(() => GetDetailedPaht(singleton()));
-  singleton.registerLazySingleton(() => GetComments(singleton()));
   singleton.registerLazySingleton(() => CreateIssuePaht(singleton()));
+  singleton.registerLazySingleton(() => CreateCKBG(singleton()));
   singleton.registerLazySingleton(() => GetQuotationDetail(singleton()));
   singleton.registerLazySingleton(() => DeletePaht(singleton()));
   singleton.registerLazySingleton(() => UpdatePaht(singleton()));
-  singleton.registerLazySingleton(() => CreateComment(singleton()));
-  singleton.registerLazySingleton(() => ReplyComment(singleton()));
   singleton.registerLazySingleton(() => SearchProduct(singleton()));
   singleton.registerLazySingleton(() => GetListProductCategory(singleton()));
   singleton.registerLazySingleton(() => GetListPromotion(singleton()));
@@ -69,12 +67,15 @@ Future<void> dependencyInjectionsPaht(GetIt singleton) async {
     ),
   );
 
-  singleton.registerFactory(
-      () => CategoryPahtBloc(getListCategoriesPaht: singleton()));
   singleton.registerFactory(() =>
       CreateIssueBloc(createIssuePaht: singleton(), updatePaht: singleton(), getQuotationDetailPaht: singleton()));
+
   singleton.registerFactory(() => StatusPahtBloc(
       getListStatusPersonal: singleton(), getListStatusPublic: singleton()));
+
+  singleton.registerFactory(() =>
+      CreateCKBGBloc(createCKBG: singleton(), getCKBGDetail: singleton()));
+
 
   // Repository
   singleton.registerLazySingleton<PahtRepository>(

@@ -1013,7 +1013,8 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
               pahtModel: CKBGModel(cusPhone: pahtModel.cusPhone,
                 cusName: pahtModel.cusName,
                 cusAddress: pahtModel.cusAddress
-              )));
+              ),
+          listCKGBDetailModel: listCKBGDetailModel));
 
     }
   }

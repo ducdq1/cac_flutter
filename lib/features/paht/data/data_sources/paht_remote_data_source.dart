@@ -6,11 +6,13 @@ import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/network/network_request.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/common/models/models.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/comment_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
+import 'package:citizen_app/features/paht/domain/usecases/create_ckbg.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +27,6 @@ abstract class PahtRemoteDataSource {
 
   Future<List<PahtModel>> fetchListPublicPaht(PahtParams parram);
 
-  Future<List<CategoryModel>> fetchListCategoriesPaht();
-
   Future<List<StatusModel>> fetchListStatusPersonal();
 
   Future<List<StatusModel>> fetchListStatusPublic();
@@ -35,9 +35,11 @@ abstract class PahtRemoteDataSource {
 
   Future<SearchProductModel> fetchDetailedPaht(SearchProductParam param);
 
-  Future<List<CommentModel>> fetchComments({String pahtId});
-
   Future<String> createIssuePaht(QuotationParams issueParams);
+
+  Future<String> createCKBG(CreateCKBGParams issueParams);
+  Future<List<CKBGDetailModel>> getListCKBGDetail(int id);
+  Future<bool> deleteCKBG(int id);
 
   Future<List<QuotationDetailModel>> getListQuotationDetail(int id);
 
@@ -45,11 +47,8 @@ abstract class PahtRemoteDataSource {
 
   Future<bool> deletePaht({String id});
 
-  Future<bool> createComment(Params commentParams);
-
-  Future<bool> replyComment(Params commentParams);
-
   Future<bool> updateProcessor(String workerId, String processor);
+
   Future<bool> updateWorkerLastLogin(String workerId);
 }
 
@@ -131,55 +130,6 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<List<CategoryModel>> fetchListCategoriesPaht() async {
-    try {
-      final response = await networkRequest.getRequest(
-          url: '$vtmaps_baseUrl/place/v1/categories');
-      //print('$vtmaps_baseUrl/place/v1/categories');
-
-      var responseJson = json.decode(response.body);
-      if (response.statusCode == 200) {
-        final data = responseJson['data'];
-
-        final listCategories = data['categories'];
-        List<CategoryModel> result = listCategories.map<CategoryModel>((item) {
-          return CategoryModel.fromJson(item);
-        }).toList();
-
-        return result;
-      } else {
-        throw Exception(responseJson['message']);
-      }
-    } catch (error) {
-      print(error);
-      return handleException(error);
-    }
-  }
-
-  @override
-  Future<List<CommentModel>> fetchComments({String pahtId}) async {
-    try {
-      final response = await networkRequest.getRequest(
-          url: '$baseUrl/issue-report/comments/issue/$pahtId');
-      var data = json.decode(response.body);
-      print(data);
-      if (response.statusCode == 200) {
-        ResponseDataSuccessModel responseDataSuccess =
-            ResponseDataSuccessModel.fromJson(data);
-        final comments = responseDataSuccess.data;
-        List<CommentModel> result = comments.map((comment) {
-          return CommentModel.fromJson(comment);
-        }).toList();
-        return result;
-      } else {
-        throw Exception(data['message']);
-      }
-    } catch (error) {
-      return handleException(error);
-    }
-  }
-
-  @override
   Future<List<PahtModel>> fetchListPersonalPaht(PahtParams parram) async {
     return _fetchListPahtFromUrl(parram
         //'$vtmaps_baseUrl/place/v1/user/contributed/edits/place-only?page=${offset.toString()}&size=${limit.toString()}&categoryIds$categogyIds&approveStatus$statusIds&search$search&action=2'
@@ -235,7 +185,6 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   @override
   Future<SearchProductModel> fetchDetailedPaht(SearchProductParam param) async {
     try {
-
       final body = jsonEncode(param.toJson());
       print(body);
       String url = '$baseUrl_api/search';
@@ -323,29 +272,6 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<bool> createComment(Params commentParams) async {}
-
-  @override
-  Future<bool> replyComment(Params commentParams) async {
-    try {
-      final body = jsonEncode({"content": commentParams.content});
-      final response = await networkRequest.postRequest(
-          url:
-              '$baseUrl/issue-report/comments/issue/${commentParams.issueId}/reply/${commentParams.commentId}',
-          body: body);
-
-      var data = json.decode(response.body);
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        throw Exception(data['message']);
-      }
-    } catch (error) {
-      return handleException(error);
-    }
-  }
-
-  @override
   Future<List<QuotationDetailModel>> getListQuotationDetail(int id) async {
     try {
       String url = '$baseUrl_api/quotation/$id';
@@ -406,7 +332,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<bool> updateProcessor(String workerId, String processor) async{
+  Future<bool> updateProcessor(String workerId, String processor) async {
     try {
       var body;
       body = jsonEncode(
@@ -438,20 +364,17 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<bool> updateWorkerLastLogin(String workerId) async{
+  Future<bool> updateWorkerLastLogin(String workerId) async {
     try {
-      print('$base_cus_url_api/workers/updateLastLogin?workerId='+ (workerId ?? 'null'));
-      final response = await client
-          .get(
-        '$base_cus_url_api/workers/updateLastLogin?workerId='+ (workerId ?? 'null'),
-        headers: {
-          'Accept-Language': 'vi',
-          'Content-Type': 'application/json'
-        },
-      )
-          .timeout(Duration(seconds: 30),
-          onTimeout: () => throw Exception(
-              "Hết thời gian yêu cầu. Kiểm tra lại kết nối"));
+      print('$base_cus_url_api/workers/updateLastLogin?workerId=' +
+          (workerId ?? 'null'));
+      final response = await client.get(
+        '$base_cus_url_api/workers/updateLastLogin?workerId=' +
+            (workerId ?? 'null'),
+        headers: {'Accept-Language': 'vi', 'Content-Type': 'application/json'},
+      ).timeout(Duration(seconds: 30),
+          onTimeout: () =>
+              throw Exception("Hết thời gian yêu cầu. Kiểm tra lại kết nối"));
 
       if (response.statusCode == 200) {
         var data = jsonDecode(utf8.decode(response.bodyBytes));
@@ -460,6 +383,54 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
     } catch (error) {
       return false;
     }
+  }
 
+  @override
+  Future<String> createCKBG(CreateCKBGParams issueParams) async {
+    try {
+      final body = jsonEncode(issueParams.toJson());
+      print('create or update createCKBG ');
+
+      String url = 'http://192.168.1.20/ketoan/rest/ckbg/create';
+
+        //url = '$baseUrl_api/quotation';
+
+      print(url);
+      print(body);
+      final response = await networkRequest.postRequest(url: url, body: body);
+
+      var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      print('create or update createCKBG result: ' + responseJson.toString());
+      if (response.statusCode == 200) {
+        if (data['statusCode'] == 1001 && data['message'] == "UNAUTHORIZED") {
+          throw Exception(data['message'].toString());
+        }
+
+        if (data['statusCode'] != 200) {
+          throw Exception(data['message'].toString());
+        }
+
+        return data['message'];
+      } else {
+        throw Exception("Lỗi ${response.statusCode}: ${data['message']}");
+      }
+    } catch (error) {
+      //print(error);
+      throw error;
+    }
+  }
+
+  @override
+  Future<bool> deleteCKBG(int id) {
+    // TODO: implement deleteCKBG
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<CKBGDetailModel>> getListCKBGDetail(int id) {
+    // TODO: implement getListCKBGDetail
+    throw UnimplementedError();
   }
 }

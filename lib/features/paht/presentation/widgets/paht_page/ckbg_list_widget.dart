@@ -37,7 +37,7 @@ class UpdateCKBGArgument {
       this.listCKGBDetailModel});
 }
 
-class CKGBDetailArgument {
+class CKBGDetailArgument {
   final CKBGDetailModel ckbgDetailModel;
   final CKBGModel ckbgDetail;
   final String id;
@@ -48,7 +48,7 @@ class CKGBDetailArgument {
   final bool fromCategoryPage;
   final productId;
 
-  CKGBDetailArgument(
+  CKBGDetailArgument(
       {this.productId,
       this.id,
       this.title,

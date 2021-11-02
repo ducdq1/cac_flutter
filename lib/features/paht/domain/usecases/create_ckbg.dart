@@ -39,13 +39,10 @@ class CreateCKBGParams extends Equatable {
   toJson() {
     return {
       "isPreViewApprove" : isPreViewApprove,
-      "isApproveAble" : isApproveAble,
-      "expiredDate" : expiredDate,
-      "quotationDate" : quotationDate,
-      "ckbg": ckbg.toJson(),
-      "lstCKBGDetail": lstCKBGDetail == null ? null : this.lstCKBGDetail.map((e) => e.toJson()).toList(),
-      "isInvalid" : isInvalid,
-      "userName" : userName
+      "ckBaoGia": ckbg.toJson(),
+      "ckBaoGiaDetail": lstCKBGDetail == null ? null : this.lstCKBGDetail.map((e) => e.toJson()).toList(),
+      "userName" : userName,
+
     };
   }
 }

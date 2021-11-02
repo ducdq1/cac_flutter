@@ -61,42 +61,6 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<List<CategoryModel>> getListCategoriesPaht() async {
-    try {
-      final remoteCategoriesPaht =
-          await remoteDataSource.fetchListCategoriesPaht();
-      localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
-      return remoteCategoriesPaht;
-    } catch (error) {
-      throw Exception(error);
-    }
-
-    // if (await networkInfo.isConnected) {
-    //   print('network is connect');
-    //   try {
-    //     final remoteCategoriesPaht =
-    //         await remoteDataSource.getListCategoriesPaht();
-    //     localDataSource.cacheCategoriesPaht(remoteCategoriesPaht);
-    //     return remoteCategoriesPaht;
-    //   } catch (error) {
-    //     print('network ');
-
-    //     throw Exception(error.message);
-    //   }
-    // } else {
-    //   print('network is not connect');
-    //   try {
-    //     final localPaht = await localDataSource.getLastCategoriesPaht();
-    //     return localPaht;
-    //   } catch (error) {
-    //     print('network 2');
-
-    //     throw Exception(error.message);
-    //   }
-    // }
-  }
-
-  @override
   Future<List<StatusModel>> getListStatusPersonal() async {
     return await _getListStatus(() {
       return remoteDataSource.fetchListStatusPersonal();
@@ -135,15 +99,6 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<List<CommentEntity>> getCommentsDetailedPaht({String pahtId}) async {
-    try {
-      return await remoteDataSource.fetchComments(pahtId: pahtId);
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  @override
   Future<String> createIssuePaht(QuotationParams issueParams) async {
     try {
       final remoteCreateIssuePaht =
@@ -170,28 +125,6 @@ class PahtRepositoryImpl implements PahtRepository {
     try {
       final result = await remoteDataSource.updatePaht(updatedParams);
       return result;
-    } catch (error) {
-      throw Exception(error);
-    }
-  }
-
-  @override
-  Future<bool> createComment(Params commentParams) async {
-    try {
-      final remoteCreateIssuePaht =
-          await remoteDataSource.createComment(commentParams);
-      return remoteCreateIssuePaht;
-    } catch (error) {
-      throw Exception(error);
-    }
-  }
-
-  @override
-  Future<bool> replyComment(Params commentParams) async {
-    try {
-      final remoteCreateIssuePaht =
-          await remoteDataSource.replyComment(commentParams);
-      return remoteCreateIssuePaht;
     } catch (error) {
       throw Exception(error);
     }
@@ -230,22 +163,31 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<bool> updateLastLogin(String workerId) async{
+  Future<bool> updateLastLogin(String workerId) async {
     try {
-          return await remoteDataSource.updateWorkerLastLogin(workerId);
-    } catch (error) {
-    }
+      return await remoteDataSource.updateWorkerLastLogin(workerId);
+    } catch (error) {}
   }
 
   @override
-  Future<String> createCKBG(CreateCKBGParams issueParams) {
-    // TODO: implement createCKBG
-    throw UnimplementedError();
+  Future<String> createCKBG(CreateCKBGParams issueParams) async {
+    try {
+      return await remoteDataSource.createCKBG(issueParams);
+    } catch (error) {}
   }
 
   @override
-  Future<List<CKBGDetailModel>> getListCKBGDetail(int id) {
-    // TODO: implement getListCKBGDetail
-    throw UnimplementedError();
+  Future<List<CKBGDetailModel>> getListCKBGDetail(int id) async {
+    try {
+      return await remoteDataSource.getListCKBGDetail(id);
+    } catch (error) {}
+  }
+
+
+  @override
+  Future<bool> deleteCKBG(int id) async {
+    try {
+      return await remoteDataSource.deleteCKBG(id);
+    } catch (error) {}
   }
 }

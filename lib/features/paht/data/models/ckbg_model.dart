@@ -20,7 +20,7 @@ class CKBGModel extends CKBGEntity {
     String content,
     String ckbgDate,
     bool isInvalid,
-    String ckbgUserName
+    String ckbgUserName,
   })
       : super(
       ckbgId: ckbgId,
@@ -49,14 +49,14 @@ class CKBGModel extends CKBGEntity {
         cusAddress: json['cusAddress'],
         cusPhone: json['cusPhone'],
         createUserCode: json['createUserCode'],
-        type: json['type'],
+        type: json['productType'],
         status: json['status'],
         totalPrice: json['totalPrice'],
         modifyDate: json['modifyDate'],
         createUserFullName: json['createUserFullName'],
         fileName: json['fileName'],
         ckbgDate: json['ckbgDate'],
-        content : json['content'],
+        content : json['ckContent'],
         ckbgUserName: json['ckbgUserName']);
   }
 
@@ -68,9 +68,9 @@ class CKBGModel extends CKBGEntity {
       "cusPhone": cusPhone,
       "createUserCode": createUserCode,
       "createUserFullName": createUserFullName,
-      "type": type,
+      "productType": type,
       "ckbgDate": ckbgDate,
-      "content": content,
+      "ckContent": content,
       "ckbgUserName" : ckbgUserName
     };
   }

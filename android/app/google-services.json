@@ -29,6 +29,13 @@
             {
               "client_id": "825082183334-s4dncs7ehl3ck8b0lr51fv99unuqg8ru.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "825082183334-pfh9tqel2d1idcv748dc4dqnh9eje9ec.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.noithat.cac"
+              }
             }
           ]
         }

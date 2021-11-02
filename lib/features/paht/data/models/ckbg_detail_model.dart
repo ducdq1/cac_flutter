@@ -18,7 +18,8 @@ class CKBGDetailModel extends CKBGDetailEntity {
       String unit,
       int attachId,
       ImageModel image,
-      String note})
+      String note,
+      DateTime pickDate})
       : super(
             ckbgId: ckbgId,
             ckbgDetailId: ckbgDetailId,
@@ -31,7 +32,8 @@ class CKBGDetailModel extends CKBGDetailEntity {
             image: image,
             note: note,
             unit: unit,
-            productName: productName);
+            productName: productName,
+  pickDate: pickDate);
 
   factory CKBGDetailModel.fromJson(Map json) {
     //MediaModel mediaJson = MediaModel.fromJson(json['mediaUrls']);
@@ -49,6 +51,7 @@ class CKBGDetailModel extends CKBGDetailEntity {
         attachId: json['attachId'],
         unit: json['unit'],
         note: json['note'],
+       pickDate : json['pickDate'],
         image:
             json['image'] == null ? null : ImageModel.fromJson(json['image']));
   }
@@ -64,7 +67,8 @@ class CKBGDetailModel extends CKBGDetailEntity {
       "productName": productName,
       "productCode": productCode,
       "unit": unit,
-      "price": price
+      "price": price,
+      "pickDate": pickDate !=null ? pickDate.toIso8601String() : null,
     };
   }
 }

@@ -11,6 +11,7 @@ const String ROUTER_APPROVE_QUOTATION_PAGE = '$ROUTER_PAHT/approveQuotationPage'
 const String ROUTER_BUSINESS_HOUR_PAGE = '$ROUTER_PAHT/businessHour';
 const String ROUTER_DETAILED_PAHT = '$ROUTER_PAHT/detailed';
 const String ROUTER_CHOOSE_PRODUCT = '$ROUTER_PAHT/chooseProduct';
+const String ROUTER_CKBG_CHOOSE_PRODUCT = '$ROUTER_PAHT/ckbgChooseProduct';
 const String ROUTER_QRCODE_SCANER = '$ROUTER_PAHT/qrCodeScaner';
 const String ROUTER_SALED_QUOTATION = '$ROUTER_PAHT/saledQuotation';
 const String ROUTER_CAMERA = '/camera';

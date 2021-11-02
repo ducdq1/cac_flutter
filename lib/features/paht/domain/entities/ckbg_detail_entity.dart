@@ -18,6 +18,7 @@ class CKBGDetailEntity extends Equatable {
   ImageEntity image;
   String note;
   String unit;
+  DateTime pickDate;
   @override
   // TODO: implement props
   List<Object> get props => throw UnimplementedError();
@@ -34,5 +35,6 @@ class CKBGDetailEntity extends Equatable {
       this.attachId,
       this.image,
       this.note,
-      this.unit});
+      this.unit,
+      this.pickDate});
 }

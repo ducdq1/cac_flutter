@@ -10,12 +10,14 @@ import 'package:citizen_app/features/common/dialogs/delete_confirm_dialog.dart';
 import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom_widget.dart';
+import 'package:citizen_app/features/common/widgets/inputs/input_validate_widget.dart';
 import 'package:citizen_app/features/common/widgets/inputs/text_field_custom.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
 import 'package:citizen_app/features/home/presentation/pages/web_view_page.dart';
 import 'package:citizen_app/features/number_trivia/presentation/widgets/widgets.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
+import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_ckbg.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_ckbg_bloc/create_ckbg_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/create_issue_bloc/create_issue_bloc.dart';
@@ -41,6 +43,7 @@ const SIZE_PICKER_LOCATION_ICON = 36.0;
 const SIZE_CAMERA_ICON = 36.0;
 const Color ADDRESS_FIELD_COLOR = Color(0xffB9B9B9);
 const Color BACKGROUND_ADD_MEDIA_COLOR = Color(0xffEBEEF0);
+const double SIZE_PADDING_ICON = 180;
 
 class CreateCKBGPage extends StatefulWidget {
   @override
@@ -50,23 +53,23 @@ class CreateCKBGPage extends StatefulWidget {
 class _CreateCKBGPageState extends State<CreateCKBGPage>
     with SingleTickerProviderStateMixin
     implements OnButtonClickListener {
-
   int currentAlbumIndex;
   dynamic listMediaFromIOS;
   bool isAddedBusinessHour = false;
   TextEditingController _poiNameController;
   TextEditingController _phoneNumberController;
   TextEditingController _addressController;
-  TextEditingController saledDateController;
+  TextEditingController noteController;
   FocusNode _focusNodeError;
   GlobalKey<FormState> _formKey;
   ScrollController scrollController;
   FocusNode _poiNameFocusNode;
   FocusNode _addressFocusNode;
   FocusNode _phoneNumberFocusNode;
+  FocusNode _notFocusNode;
   ScrollController parentScrollController;
   CKBGModel pahtModel;
-
+  String NOTE_CONTENT = '4/ Hàng trả lại không được vượt quá 10% so với hàng đặt.';
   List<CKBGDetailModel> listQuotationDetailModel = [];
   final prefs = singleton<SharedPreferences>();
   int imageIdSelected;
@@ -74,15 +77,14 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
   AnimationController _controller;
   Animation<double> _animation;
 
-  bool _isKhachHangLe = true;
-  bool _isUpdateAble = true;
+  bool _isSPGach = true;
 
-  UpdatePahtArgument args;
+  UpdateCKBGArgument args;
 
-  initValue(args) async {
+  initValue(UpdateCKBGArgument args) async {
     if (args != null && args.pahtModel != null) {
       pahtModel = args.pahtModel;
-      _isUpdateAble = args.isUpdateAble;
+      listQuotationDetailModel = args.listCKGBDetailModel;
       if (pahtModel.cusName != null) {
         _poiNameController.text = pahtModel.cusName;
       }
@@ -94,11 +96,19 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
       if (pahtModel.cusPhone != null) {
         _phoneNumberController.text = pahtModel.cusPhone;
       }
+
       if (pahtModel.type != null) {
-        _isKhachHangLe = pahtModel.type == 0;
+        _isSPGach = pahtModel.type == 0 ;
+      }
+      if (pahtModel.content != null) {
+        noteController.text = pahtModel.content;
+      }else{
+        noteController.text =  NOTE_CONTENT;
       }
 
-      if(pahtModel.ckbgId !=null) {
+
+
+      if (pahtModel.ckbgId != null) {
         BlocProvider.of<CreateCKBGBloc>(context).add(
           GetListCKBGDetailEvent(id: pahtModel.ckbgId),
         );
@@ -120,17 +130,18 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
     _controller.repeat(reverse: true);
 
     _formKey = GlobalKey<FormState>();
-    saledDateController = TextEditingController();
+    noteController = TextEditingController();
     _addressController = TextEditingController();
     _poiNameController = TextEditingController();
     parentScrollController = new ScrollController();
     _phoneNumberController = TextEditingController();
     _addressFocusNode = FocusNode();
     _phoneNumberFocusNode = FocusNode();
+    _notFocusNode = FocusNode();
     scrollController = new ScrollController();
     Future.delayed(Duration.zero, () {
       setState(() {
-        args = ModalRoute.of(context).settings.arguments as UpdatePahtArgument;
+        args = ModalRoute.of(context).settings.arguments as UpdateCKBGArgument;
       });
       initValue(args);
     });
@@ -146,121 +157,10 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
   @override
   Widget build(BuildContext context) {
     return BaseLayoutWidget(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 80),
-          child: !_isUpdateAble
-              ? SizedBox()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FloatingActionButton(
-                      heroTag: "scan",
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            'assets/icons/icon_scan_qr_white.png',
-                            width: 29,
-                            height: 29,
-                            filterQuality: FilterQuality.high,
-                            fit: BoxFit.scaleDown,
-                          ),
-                          AnimatedBuilder(
-                            animation: _animation,
-                            child: Container(
-                              color: Colors.amber,
-                              height: 1,
-                              width: 29,
-                            ),
-                            builder: (_, widget) {
-                              return Transform.translate(
-                                offset: Offset(0.0, _animation.value),
-                                child: widget,
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                      // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
-                      backgroundColor: PRIMARY_COLOR,
-                      tooltip: 'Quét mã',
-                      elevation: 5,
-                      splashColor: Colors.grey,
-                      onPressed: () async {
-                        clearFocus();
-                        final PermissionHandler _permissionHandler =
-                            PermissionHandler();
-                        var permissionStatus = await _permissionHandler
-                            .checkPermissionStatus(PermissionGroup.camera);
 
-                        switch (permissionStatus) {
-                          case PermissionStatus.granted:
-                            Navigator.pushNamed(context, ROUTER_QRCODE_SCANER)
-                                .then((value) => {
-                                      if (value != null)
-                                        {gotoDetailProductPage(value,null)}
-                                    });
-
-                            break;
-                          case PermissionStatus.denied:
-                          case PermissionStatus.restricted:
-                          case PermissionStatus.unknown:
-                            await _permissionHandler
-                                .requestPermissions([PermissionGroup.camera]);
-                            var permissionStatus = await _permissionHandler
-                                .checkPermissionStatus(PermissionGroup.camera);
-                            switch (permissionStatus) {
-                              case PermissionStatus.granted:
-                                Navigator.pushNamed(
-                                        context, ROUTER_QRCODE_SCANER)
-                                    .then((value) => {
-                                          if (value != null)
-                                            {gotoDetailProductPage(value,null)}
-                                        });
-                            }
-                            break;
-                          default:
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    FloatingActionButton(
-                      heroTag: "search",
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            'assets/icons/ic_search_small.png',
-                            width: 23,
-                            height: 23,
-                            filterQuality: FilterQuality.high,
-                            fit: BoxFit.scaleDown,
-                          ),
-                        ],
-                      ),
-                      // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
-                      backgroundColor: PRIMARY_COLOR,
-                      tooltip: 'Tìm kiếm',
-                      elevation: 5,
-                      splashColor: Colors.grey,
-                      onPressed: () async {
-                        clearFocus();
-                        Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT,
-                        arguments:  SearchArgument(fromCreateQuotationPage: true))
-                            .then((value) => {
-                                  if (value != null)
-                                    {gotoDetailProductPage(null,value)}
-                                });
-                      },
-                    ),
-                  ],
-                ),
-        ),
         title: args == null
-            ? 'Tạo báo giá'
-            : _isUpdateAble
-                ? 'Cập nhật báo giá'
-                : 'Chi tiết báo giá',
+            ? 'Tạo cam kết'
+                : 'Cập nhật cam kết',
         centerTitle: true,
         body: BlocConsumer<CreateCKBGBloc, CreateCKBGState>(
           listener: (_, state) {
@@ -270,13 +170,13 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
               });
             }
 
-            if (state is CreateIssueSuccess) {
+            if (state is CreateCKBGSuccess) {
               //Navigator.pop(context);
               Navigator.of(context, rootNavigator: true).pop('dialog');
               Fluttertoast.showToast(
                   msg: args == null
-                      ? 'Tạo báo giá thành công'
-                      : 'Cập nhật báo giá thành công');
+                      ? 'Tạo Cam kết thành công'
+                      : 'Cập Cam kết thành công');
 
               Navigator.pop(context, true);
             }
@@ -296,8 +196,8 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                             ? trans(ERROR_CONNECTION_FAILED)
                             : state.error.message.toString())
                         : args == null
-                            ? 'Tạo báo giá thất bại'
-                            : 'Cập nhật báo giá thất bại');
+                            ? 'Tạo Cam kết thất bại'
+                            : 'Cập nhật cam kết thất bại');
               }
             }
           },
@@ -365,9 +265,22 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                         SizedBox(
                           height: 10,
                         ),
-                        _isUpdateAble
-                            ? createIssueAction()
-                            : viewBaoGiaFileAction()
+                       !_isSPGach ? SizedBox() : TextField(
+                         controller: noteController,
+                         maxLines: 3,
+                           decoration: InputDecoration(
+                             helperText: '',
+                             border: OutlineInputBorder(
+                               borderSide: BorderSide(color: BORDER_COLOR, width: 0.6),
+                               borderRadius: BorderRadius.circular(8),
+                             ),
+                             enabledBorder: OutlineInputBorder(
+                               borderSide: BorderSide(color: BORDER_COLOR, width: 0.6),
+                               borderRadius: BorderRadius.circular(8),
+                             ),
+                           )
+                       ),
+                        createIssueAction()
                       ])),
                 ],
               ),
@@ -618,12 +531,11 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                   );
                 },
                 onEdit: () {
-                  Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
-                          arguments: CKGBDetailArgument(
+                  Navigator.pushNamed(context, ROUTER_CKBG_CHOOSE_PRODUCT,
+                          arguments: CKBGDetailArgument(
                               productCode:
                                   listQuotationDetailModel[index].productCode,
-                              ckbgDetailModel:
-                                  listQuotationDetailModel[index]))
+                              ckbgDetailModel: listQuotationDetailModel[index]))
                       .then((value) {
                     if (value != null) {
                       setState(() {
@@ -632,7 +544,7 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                     }
                   });
                 },
-                isPersonal: _isUpdateAble ? false : true,
+                isPersonal:  false,
                 ckbgDetailModel: listQuotationDetailModel[index],
                 onTap: () {},
               );
@@ -674,32 +586,6 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
     );
   }
 
-  Widget viewBaoGiaFileAction() {
-    return Padding(
-      padding: const EdgeInsets.all(0),
-      child: Column(children: [
-    pahtModel.isInvalid == false ? InputDatetimeWidget(
-          scrollPadding: 200,
-          hintText: 'Ngày bán hàng',
-          controller: saledDateController,
-          validates: [EmptyValidate()],
-        ) : SizedBox(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Expanded(
-              child: Container(
-                width: 142,
-                child: PrimaryButton(
-                    label: 'Xem báo giá', ctx: this, id: 'view_pdf_btn'),
-              ),
-            )
-          ],
-        ),
-      ]),
-    );
-  }
-
   Widget quotationTypField() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -716,7 +602,7 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                     // here toggle the bool value so that when you click
                     // on the whole item, it will reflect changes in Checkbox
                     onPressed: () => setState(() {
-                          _isKhachHangLe = !_isKhachHangLe;
+                          _isSPGach = !_isSPGach;
                         }),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -726,16 +612,16 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                               width: 24.0,
                               child: Checkbox(
                                   activeColor: PRIMARY_COLOR,
-                                  value: _isKhachHangLe,
+                                  value: _isSPGach,
                                   onChanged: (value) {
                                     setState(() {
-                                      _isKhachHangLe = value;
+                                      _isSPGach = value;
                                     });
                                   })),
                           // You can play with the width to adjust your
                           // desired spacing
                           SizedBox(width: 10.0),
-                          Expanded(child: Text('Khách hàng lẽ'))
+                          Expanded(child: Text('Gạch men'))
                         ])),
               ),
             ),
@@ -745,7 +631,7 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                     // here toggle the bool value so that when you click
                     // on the whole item, it will reflect changes in Checkbox
                     onPressed: () => setState(() {
-                          _isKhachHangLe = !_isKhachHangLe;
+                          _isSPGach = !_isSPGach;
                         }),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -755,16 +641,16 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                               width: 24.0,
                               child: Checkbox(
                                   activeColor: PRIMARY_COLOR,
-                                  value: !_isKhachHangLe,
+                                  value: !_isSPGach,
                                   onChanged: (value) {
                                     setState(() {
-                                      _isKhachHangLe = !value;
+                                      _isSPGach = !value;
                                     });
                                   })),
                           // You can play with the width to adjust your
                           // desired spacing
                           SizedBox(width: 10.0),
-                          Expanded(child: Text('Công trình'))
+                          Expanded(child: Text('Thiết bị'))
                         ])),
               ),
             ),
@@ -805,15 +691,15 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
             CreateCKBGButtonPresseEvent(
                 createCKBGParams: CreateCKBGParams(
                     ckbg: CKBGModel(
-                        ckbgId:
-                            pahtModel == null ? null : pahtModel.ckbgId,
-                        type: _isKhachHangLe ? 0 : 1,
+                        ckbgId: pahtModel == null ? null : pahtModel.ckbgId,
+                        type: _isSPGach ? 0 : 1,
                         cusName: _poiNameController.text.trim(),
                         cusAddress: _addressController.text.trim(),
                         cusPhone: _phoneNumberController.text.trim(),
                         createUserCode: userName,
+                        content: noteController.text.trim(),
                         createUserFullName: userFullName),
-                    lstCKBGDetail:  listQuotationDetailModel)));
+                    lstCKBGDetail: listQuotationDetailModel)));
 
         _showCupertinoDialog(context);
       }
@@ -838,17 +724,16 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                 )),
       );
     }
-
-
   }
 
   void clearFocus() {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
-  void gotoDetailProductPage(String cameraScanResult,int productId) {
-    Navigator.pushNamed(context, ROUTER_CHOOSE_PRODUCT,
-            arguments: PahtDetailArgument(productCode: cameraScanResult,productId: productId))
+  void gotoDetailProductPage(String cameraScanResult, int productId) {
+    Navigator.pushNamed(context, ROUTER_CKBG_CHOOSE_PRODUCT,
+            arguments: CKBGDetailArgument(
+                productCode: cameraScanResult, productId: productId))
         .then((value) => {
               if (value != null)
                 {
