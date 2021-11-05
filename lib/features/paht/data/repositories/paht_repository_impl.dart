@@ -7,6 +7,7 @@ import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
+import 'package:citizen_app/features/paht/domain/entities/ckbg_entity.dart';
 import 'package:citizen_app/features/paht/domain/entities/comment_entity.dart';
 import 'package:citizen_app/features/paht/domain/repositories/repositories.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_ckbg.dart';
@@ -188,6 +189,13 @@ class PahtRepositoryImpl implements PahtRepository {
   Future<bool> deleteCKBG(int id) async {
     try {
       return await remoteDataSource.deleteCKBG(id);
+    } catch (error) {}
+  }
+
+  @override
+  Future<List<CKBGEntity>> getListCKBG(PahtParams parram) async{
+    try {
+      return await remoteDataSource.fetchListCKBG(parram);
     } catch (error) {}
   }
 }

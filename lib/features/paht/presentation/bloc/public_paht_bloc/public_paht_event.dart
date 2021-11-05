@@ -47,23 +47,42 @@ class ListProductFetchingEvent extends PublicPahtEvent {
   String toString() => 'ListProductFetchingEvent { offset: $offset}';
 }
 
+class ListCKBGFetchedEvent extends PublicPahtEvent {
+  final List<CKBGModel> paht;
+  final bool hasReachedMax;
+  final int offset;
+  final String error;
+
+  ListCKBGFetchedEvent(
+      {@required this.paht, this.hasReachedMax, this.offset, this.error});
+}
 
 class ListCKBGFetchingEvent extends PublicPahtEvent {
   final int offset;
   final int limit;
   final String search;
-  final List<String> categoryIds;
-  final List<String> statusIds;
   ListCKBGFetchingEvent(
-      {this.offset, this.search, this.categoryIds, this.statusIds, this.limit});
+      {this.offset, this.search,  this.limit});
 
   @override
-  List<Object> get props => [offset, search, categoryIds, statusIds];
+  List<Object> get props => [offset, search,];
 
   @override
   String toString() => 'ListPublicPahtFetched { offset: $offset}';
 }
 
+
+class CKBGRefreshRequestedEvent extends PublicPahtEvent {
+  final int type;
+  final String search;
+  CKBGRefreshRequestedEvent(
+      {this.search,  this.type});
+
+  @override
+  List<Object> get props => [search, ];
+  @override
+  String toString() => 'PublicPahtRefreshRequested';
+}
 
 class ListPublicPahtFetchingEvent extends PublicPahtEvent {
   final int offset;

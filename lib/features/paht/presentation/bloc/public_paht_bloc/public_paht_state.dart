@@ -68,6 +68,26 @@ class ListCKBGSuccess extends PublicPahtState {
   String toString() => 'PublicPahtSuccess';
 }
 
+
+class CKBGRefreshSuccess extends PublicPahtState {
+  final List<CKBGModel> paht;
+  final bool hasReachedMax;
+  final int offset;
+  final int limit;
+
+  const CKBGRefreshSuccess(
+      {this.paht, this.hasReachedMax, this.offset, this.limit});
+
+  CKBGRefreshSuccess copyWith(
+      {List<PahtModel> warnings, bool hasReachedMax, int offset}) {
+    return CKBGRefreshSuccess(
+        paht: warnings ?? this.paht,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+        offset: offset,
+        limit: limit);
+  }
+}
+
 class PublicPahtSuccess extends PublicPahtState {
   final List<PahtModel> paht;
   final bool hasReachedMax;

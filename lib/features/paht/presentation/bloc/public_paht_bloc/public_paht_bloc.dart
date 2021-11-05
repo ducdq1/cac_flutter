@@ -6,6 +6,7 @@ import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
 import 'package:citizen_app/features/paht/data/models/paht_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/search_product_model.dart';
+import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/domain/usecases/search_product.dart';
 import 'package:citizen_app/features/paht/domain/usecases/usecases.dart';
 import 'package:citizen_app/injection_container.dart';
@@ -33,6 +34,9 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
 
   bool _hasReachedMax(PublicPahtState state) =>
       state is PublicPahtSuccess && state.hasReachedMax;
+
+  bool _hasReachedMaxCKBG(PublicPahtState state) =>
+      state is ListCKBGSuccess && state.hasReachedMax;
 
   @override
   Stream<PublicPahtState> mapEventToState(
@@ -223,6 +227,7 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
       }
     }
 
+
     if (event is PublicPahtRefreshRequestedEvent) {
       if (event.type == 1) {
         yield PublicPahtLoading();
@@ -302,5 +307,145 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
         yield DeletePersonalPahtFailure(error: error);
       }
     }
+
+
+
+
+    if (event is ListCKBGFetchedEvent) {
+      if (event.error != null) {
+        yield PublicPahtFailure(error: event.error);
+        return;
+      }
+
+      yield ListCKBGSuccess(
+          paht: event.paht,
+          offset: event.offset,
+          hasReachedMax: event.paht.length < 100 ? true : false,
+          error: event.error);
+      return;
+    }
+
+    if (event is ListCKBGFetchingEvent) {
+      if (currentState is PublicPahtFailure ||
+          currentState is ListCKBGSuccess && (currentState.paht == null)) {
+        yield PublicPahtLoading();
+      }
+
+      try {
+        PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
+          networkInfo: singleton(),
+          remoteDataSource: singleton(),);
+        if (currentState is PublicPahtFailure ||
+            currentState is DeletePersonalPahtFailure ||
+            currentState is PublicPahtInitial &&
+                !_hasReachedMaxCKBG(currentState)) {
+          await Future.delayed(Duration(milliseconds: 200));
+
+          repo.getListCKBG(PahtParams(
+              limit: 100,
+              offset: 0,
+              status: 0,
+              userName: userName, ))
+              .then((value) {
+            add(ListCKBGFetchedEvent(offset: 0, paht: value));
+          }).catchError((err) {
+            add(ListCKBGFetchedEvent(
+                offset: 0, paht: [], error: err.message));
+          });
+        } else if (currentState is ListCKBGSuccess  &&
+            !_hasReachedMaxCKBG(currentState)) {
+          int nextOffset = currentState.offset + 1;
+          List<CKBGModel> listPublicPaht = await repo.getListCKBG(PahtParams(
+              limit: 100,
+              offset: nextOffset,
+              status: 0,
+              userName: userName));
+
+          yield listPublicPaht.isEmpty
+              ? currentState.copyWith(
+              hasReachedMax: true, offset: currentState.offset)
+              : ListCKBGSuccess(
+            paht: currentState.paht + listPublicPaht,
+            offset: nextOffset,
+            hasReachedMax:
+            listPublicPaht.isNotEmpty && listPublicPaht.length == 100
+                ? false
+                : true,
+          );
+        } else {
+          if (currentState is ListCKBGSuccess &&
+              _hasReachedMaxCKBG(currentState)) {
+            yield ListCKBGSuccess(
+              paht: currentState.paht,
+              offset: currentState.offset,
+              hasReachedMax: true,
+            );
+            return;
+          }
+        }
+      } catch (error) {
+        if (currentState is ListCKBGSuccess) {
+          yield ListCKBGSuccess(
+            paht: currentState.paht,
+            offset: currentState.offset,
+            hasReachedMax: true,
+          );
+        } else if (currentState is CKBGRefreshSuccess) {
+          yield ListCKBGSuccess(
+            paht: currentState.paht,
+            offset: currentState.offset,
+            hasReachedMax: true,
+          );
+        } else
+          yield PublicPahtFailure(error: error.message);
+      }
+    }
+
+    if (event is CKBGRefreshRequestedEvent) {
+      if (event.type == 1) {
+        yield PublicPahtLoading();
+      }
+
+      PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
+        networkInfo: singleton(),
+        remoteDataSource: singleton(),);
+
+      try {
+        List<CKBGModel> listPublicPaht = await repo.getListCKBG(PahtParams(
+            limit: 100,
+            offset: 0,
+            status: 0,
+            userName: userName));
+
+        yield CKBGRefreshSuccess(
+            paht: listPublicPaht,
+            offset: 0,
+            hasReachedMax: listPublicPaht.length < 100 ? true : false);
+
+        yield ListCKBGSuccess(
+            paht: listPublicPaht,
+            offset: 0,
+            hasReachedMax: listPublicPaht.length < 100 ? true : false);
+        return;
+      } catch (error) {
+        if (currentState is ListCKBGSuccess) {
+          yield ListCKBGSuccess(
+              paht: currentState.paht,
+              offset: currentState.offset,
+              hasReachedMax: true,
+              error: error.message);
+        } else if (currentState is CKBGRefreshSuccess) {
+          yield ListCKBGSuccess(
+              paht: currentState.paht,
+              offset: currentState.offset,
+              hasReachedMax: true,
+              error: error.message);
+        } else {
+          print(error);
+          yield PublicPahtFailure(error: error.message);
+        }
+      }
+    }
+
   }
 }

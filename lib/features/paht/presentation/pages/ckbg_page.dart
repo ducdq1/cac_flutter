@@ -3,22 +3,19 @@ import 'dart:async';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/core/resources/routers.dart';
-import 'package:citizen_app/features/common/blocs/bottom_navigation/bottom_navigation_bloc.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/no_network_failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
-import 'package:citizen_app/features/paht/presentation/bloc/status_paht_bloc/status_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_search.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/ckbg_list_widget.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../../injection_container.dart';
+import '../../../../injection_container.dart';
 
 class ApproveQuotation extends StatefulWidget {
   @override
@@ -48,16 +45,14 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
       isRefresh = !isRefresh;
     });
     BlocProvider.of<PublicPahtBloc>(context).add(
-      ListPublicPahtFetchingEvent(offset: 0, limit: 10, isApproveAble: true),
+      ListCKBGFetchingEvent(offset: 0, limit: 100),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [ BlocProvider<StatusPahtBloc>(
-          create: (context) => singleton<StatusPahtBloc>()
-            ..add(  ListStatusPublicFetched())),
+      providers: [
         BlocProvider<PublicPahtBloc>(
             create: (context) =>
             singleton<PublicPahtBloc>()
@@ -114,27 +109,25 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
                                   : state.error.toString(),
                               onPressed: () {
                                 BlocProvider.of<PublicPahtBloc>(context).add(
-                                  ListPublicPahtFetchingEvent(offset: 0,
-                                      limit: 10,
-                                      isApproveAble: true),
+                                  ListCKBGFetchingEvent(offset: 0,
+                                      limit: 100),
                                 );
                               });
                         }
-                        if (state is PublicPahtSuccess) {
-                          return ListViewPahtsWidget(
+                        if (state is ListCKBGSuccess) {
+                          return ListViewCKBGWidget(
                               hasReachedMax: state.hasReachedMax,
                               pahts: state.paht,
                               isPersonal: true,
                               scrollController: scrollController,
-                              loadmore: state.hasReachedMax ? false : true,
-                              isApproveAble: true
+                              loadmore: state.hasReachedMax ? false : true
                           );
                         }
 
                         if (state is DeletePersonalPahtFailure) {
                           BlocProvider.of<PublicPahtBloc>(context).add(
-                            ListPublicPahtFetchingEvent(
-                                offset: 0, limit: 10, isApproveAble: true),
+                            ListCKBGFetchingEvent(
+                                offset: 0, limit: 100),
                           );
                         }
                         return SkeletonPahtWidget();

@@ -7,6 +7,7 @@ import 'package:citizen_app/core/network/network_request.dart';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/common/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
 import 'package:citizen_app/features/paht/data/models/comment_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
@@ -27,6 +28,8 @@ abstract class PahtRemoteDataSource {
 
   Future<List<PahtModel>> fetchListPublicPaht(PahtParams parram);
 
+  Future<List<CKBGModel>> fetchListCKBG(PahtParams parram);
+
   Future<List<StatusModel>> fetchListStatusPersonal();
 
   Future<List<StatusModel>> fetchListStatusPublic();
@@ -38,7 +41,9 @@ abstract class PahtRemoteDataSource {
   Future<String> createIssuePaht(QuotationParams issueParams);
 
   Future<String> createCKBG(CreateCKBGParams issueParams);
+
   Future<List<CKBGDetailModel>> getListCKBGDetail(int id);
+
   Future<bool> deleteCKBG(int id);
 
   Future<List<QuotationDetailModel>> getListQuotationDetail(int id);
@@ -429,8 +434,72 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<List<CKBGDetailModel>> getListCKBGDetail(int id) {
-    // TODO: implement getListCKBGDetail
-    throw UnimplementedError();
+  Future<List<CKBGDetailModel>> getListCKBGDetail(int id) async{
+    try {
+      String url = '$baseUrl_api/ckbg/$id';
+      print(url);
+      final response =
+          await networkRequest.postRequest(url: url);
+      print('--> success');
+      var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      print(responseJson);
+      if (response.statusCode == 200) {
+        if (responseJson['statusCode'] == 1001 &&
+            responseJson['message'] == "UNAUTHORIZED") {
+          throw Exception(responseJson['message']);
+        } else {
+          final data = responseJson['listData'];
+          if (data != null) {
+            List<CKBGDetailModel> result =
+            data.map<CKBGDetailModel>((paht) {
+              return QuotationDetailModel.fromJson(paht);
+            }).toList();
+            return result;
+          }
+          return [];
+        }
+      } else {
+        throw Exception(responseJson['message']);
+      }
+    } catch (error) {
+      // return handleException(error);
+      throw error;
+    }
+  }
+
+  @override
+  Future<List<CKBGModel>> fetchListCKBG(PahtParams param) async {
+    try {
+      final body = jsonEncode(param.toJson());
+
+      String url = '$baseUrl_api/ckbg?time=' +
+          DateTime.now().millisecondsSinceEpoch.toString();
+      print(url);
+      print(body);
+
+      final response = await networkRequest.postRequest(url: url, body: body);
+
+      var responseJson = jsonDecode(utf8.decode(response.bodyBytes));
+      if (response.statusCode == 200) {
+        if (responseJson['statusCode'] == 1001 &&
+            responseJson['message'] == "UNAUTHORIZED") {
+          throw Exception(responseJson['message']);
+        } else {
+          final data = responseJson['listData'];
+          if (data != null) {
+            List<CKBGModel> result = data.map<CKBGModel>((paht) {
+              return PahtModel.fromJson(paht);
+            }).toList();
+            return result;
+          }
+          return [];
+        }
+      } else {
+        throw Exception(responseJson['message']);
+      }
+    } catch (error) {
+      // return handleException(error);
+      throw error;
+    }
   }
 }
