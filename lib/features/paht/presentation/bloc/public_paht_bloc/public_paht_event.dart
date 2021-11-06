@@ -131,6 +131,15 @@ class DeleteButtonEvent extends PublicPahtEvent {
   DeleteButtonEvent({@required this.id, this.filters});
 }
 
+class DeleteCKBGEvent extends PublicPahtEvent {
+  final int id;
+
+
+  DeleteCKBGEvent({@required this.id});
+}
+
+
+
 class FilterPublicButtonPressedEvent extends PublicPahtEvent {
   final String search;
   final List<String> categoryIds;

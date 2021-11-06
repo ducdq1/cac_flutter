@@ -167,21 +167,26 @@ class PahtRepositoryImpl implements PahtRepository {
   Future<bool> updateLastLogin(String workerId) async {
     try {
       return await remoteDataSource.updateWorkerLastLogin(workerId);
-    } catch (error) {}
+    } catch (error) {
+    }
   }
 
   @override
   Future<String> createCKBG(CreateCKBGParams issueParams) async {
     try {
       return await remoteDataSource.createCKBG(issueParams);
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 
   @override
   Future<List<CKBGDetailModel>> getListCKBGDetail(int id) async {
     try {
       return await remoteDataSource.getListCKBGDetail(id);
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 
 
@@ -189,13 +194,17 @@ class PahtRepositoryImpl implements PahtRepository {
   Future<bool> deleteCKBG(int id) async {
     try {
       return await remoteDataSource.deleteCKBG(id);
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 
   @override
   Future<List<CKBGEntity>> getListCKBG(PahtParams parram) async{
     try {
       return await remoteDataSource.fetchListCKBG(parram);
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 }

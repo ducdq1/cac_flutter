@@ -170,10 +170,9 @@ class _ListViewCKBGWidgetState extends State<ListViewCKBGWidget> {
                                               BlocProvider.of<PublicPahtBloc>(
                                                       context)
                                                   .add(
-                                                DeleteButtonEvent(
+                                                DeleteCKBGEvent(
                                                     id: widget.pahts[index]
-                                                        .ckbgId
-                                                        .toString()),
+                                                        .ckbgId),
                                               );
                                               Navigator.pop(context);
                                             },

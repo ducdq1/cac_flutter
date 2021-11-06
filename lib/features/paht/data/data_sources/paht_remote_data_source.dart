@@ -423,7 +423,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       }
     } catch (error) {
       //print(error);
-      throw error;
+     throw  error;
     }
   }
 
@@ -436,7 +436,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   @override
   Future<List<CKBGDetailModel>> getListCKBGDetail(int id) async{
     try {
-      String url = '$baseUrl_api/ckbg/$id';
+      String url = '$base_cus_url_api/ckbg/$id';
       print(url);
       final response =
           await networkRequest.postRequest(url: url);
@@ -472,7 +472,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
     try {
       final body = jsonEncode(param.toJson());
 
-      String url = '$baseUrl_api/ckbg?time=' +
+      String url = '$base_cus_url_api/ckbg?time=' +
           DateTime.now().millisecondsSinceEpoch.toString();
       print(url);
       print(body);

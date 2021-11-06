@@ -23,6 +23,7 @@ import 'package:citizen_app/features/paht/presentation/pages/approve_quotation_p
 import 'package:citizen_app/features/paht/presentation/pages/business_hour_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/choose_product_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/ckbg_choose_product_page.dart';
+import 'package:citizen_app/features/paht/presentation/pages/ckbg_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/pages.dart';
 import 'package:citizen_app/features/paht/presentation/pages/paht_detail_page.dart';
 import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
@@ -246,6 +247,7 @@ class _MyAppState extends State<MyApp> {
           ROUTER_PRODUCTS_TYPE_PAGE: (context) => ProductsTypePage(),
           ROUTER_CREATE_CKBG_PAGE: (context) => CreateCKBGPage(),
           ROUTER_CKBG_CHOOSE_PRODUCT: (context) => CKBGChooseProductPage(),
+          ROUTER_CKBG_PAGE: (context) => CKBGPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

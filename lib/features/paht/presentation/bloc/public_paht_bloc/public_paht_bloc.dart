@@ -309,8 +309,6 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
     }
 
 
-
-
     if (event is ListCKBGFetchedEvent) {
       if (event.error != null) {
         yield PublicPahtFailure(error: event.error);
@@ -444,6 +442,25 @@ class PublicPahtBloc extends Bloc<PublicPahtEvent, PublicPahtState> {
           print(error);
           yield PublicPahtFailure(error: error.message);
         }
+      }
+    }
+
+    if (event is DeleteCKBGEvent) {
+      try {
+        PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
+          networkInfo: singleton(),
+          remoteDataSource: singleton(),);
+        await repo.deleteCKBG(event.id);
+        yield DeletePersonalPahtSuccess();
+        List<CKBGModel> results = await repo.getListCKBG(
+            PahtParams(offset: 0, limit: 100, status: 0, userName: userName));
+
+        yield ListCKBGSuccess(
+            offset: 0,
+            paht: results,
+            hasReachedMax: results.length < 100 ? true : false);
+      } catch (error) {
+        yield DeletePersonalPahtFailure(error: error.message);
       }
     }
 

@@ -106,8 +106,6 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
         noteController.text =  NOTE_CONTENT;
       }
 
-
-
       if (pahtModel.ckbgId != null) {
         BlocProvider.of<CreateCKBGBloc>(context).add(
           GetListCKBGDetailEvent(id: pahtModel.ckbgId),
@@ -182,13 +180,6 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
             }
 
             if (state is CreateCKBGFailure) {
-              if (state.error != null &&
-                  state.error.message != null &&
-                  state.error.message.toString() == "UNAUTHORIZED") {
-                Fluttertoast.showToast(msg: trans(MESSAGE_SESSION_EXPIRED));
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    ROUTER_SIGNIN, (Route<dynamic> route) => false);
-              } else {
                 Navigator.of(context, rootNavigator: true).pop('dialog');
                 Fluttertoast.showToast(
                     msg: state.error.message.toString() != null
@@ -198,7 +189,6 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                         : args == null
                             ? 'Tạo Cam kết thất bại'
                             : 'Cập nhật cam kết thất bại');
-              }
             }
           },
           builder: (context, state) {

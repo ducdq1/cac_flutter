@@ -125,75 +125,14 @@ class _HomePageBuilderState extends State<HomePageBuilder>
                           Stack(
                             children: [
                               CitizensMenuItemWidget(
-                                label: 'Quét mã',
-                                icon: '/icons/icon_scan_qr.png',
+                                label: 'Cam kết ĐH',
+                                icon: '/icons/icon_saled.png',
                                 needRedirect: '',
                                 onPress: () async {
-                                  final PermissionHandler _permissionHandler =
-                                      PermissionHandler();
-                                  var permissionStatus =
-                                      await _permissionHandler
-                                          .checkPermissionStatus(
-                                              PermissionGroup.camera);
-
-                                  switch (permissionStatus) {
-                                    case PermissionStatus.granted:
-                                      var value = await Navigator.of(context)
-                                          .pushNamed(ROUTER_QRCODE_SCANER);
-                                      if (value != null) {
-                                        Navigator.pushNamed(
-                                            context, ROUTER_DETAILED_PAHT,
-                                            arguments: PahtDetailArgument(
-                                                productCode: value));
-                                      }
-
-                                      break;
-                                    case PermissionStatus.denied:
-                                    case PermissionStatus.restricted:
-                                    case PermissionStatus.unknown:
-                                      await _permissionHandler
-                                          .requestPermissions(
-                                              [PermissionGroup.camera]);
-                                      var permissionStatus =
-                                          await _permissionHandler
-                                              .checkPermissionStatus(
-                                                  PermissionGroup.camera);
-
-                                      switch (permissionStatus) {
-                                        case PermissionStatus.granted:
-                                          var value = await Navigator.of(
-                                                  context)
-                                              .pushNamed(ROUTER_QRCODE_SCANER);
-                                          if (value != null) {
-                                            Navigator.pushNamed(
-                                                context, ROUTER_DETAILED_PAHT,
-                                                arguments: PahtDetailArgument(
-                                                    productCode: value));
-                                          }
-                                      }
-                                      break;
-                                    default:
-                                  }
+                                  Navigator.pushNamed(
+                                      context, ROUTER_CKBG_PAGE);
                                 },
                               ),
-                              AnimatedBuilder(
-                                animation: _animation,
-                                child: Container(
-                                  width: 140,
-                                  child: Center(
-                                    child: Container(
-                                        color: Colors.amber,
-                                        height: 1,
-                                        width: 60),
-                                  ),
-                                ),
-                                builder: (_, widget) {
-                                  return Transform.translate(
-                                    offset: Offset(0.0, _animation.value),
-                                    child: widget,
-                                  );
-                                },
-                              )
                             ],
                           ),
                           CitizensMenuItemWidget(
@@ -377,6 +316,7 @@ class _HomePageBuilderState extends State<HomePageBuilder>
       ),
     );
   }
+
 
   @override
   onClick(String id) {

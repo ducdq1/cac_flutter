@@ -34,7 +34,6 @@ class CreateCKBGBloc extends Bloc<CreateCKBGEvent, CreateCKBGState> {
           networkInfo: singleton(),
           remoteDataSource: singleton(),);
         String result = await repo.createCKBG(event.createCKBGParams);
-
         yield CreateCKBGSuccess(fileName: result);
       } catch (error) {
         yield CreateCKBGFailure(error: error);

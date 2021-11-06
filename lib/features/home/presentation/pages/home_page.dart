@@ -10,12 +10,14 @@ import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.
 import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/home_page_builder.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/sos_button_widget.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../main.dart';
@@ -46,8 +48,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   //   });
   // }
 
+  AnimationController _controller;
+  Animation<double> _animation;
+
   @override
   void initState(){
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 700),
+      vsync: this,
+    );
+    final Animation curve = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    );
+    _animation = Tween(begin: 0.0, end: 29.0).animate(curve);
+    _controller.repeat(reverse: true);
+
     super.initState();
     final state = BlocProvider.of<AuthBloc>(context).state;
     if (state is AuthenticatedState) {
@@ -187,22 +203,53 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // print(
     //   'Đường chéo: ${sqrt(MediaQuery.of(context).size.width * MediaQuery.of(context).size.width + MediaQuery.of(context).size.height * MediaQuery.of(context).size.height)}');
     return
-        // BlocListener<AuthBloc, AuthState>(
-        //   listener: (_, state) {
-        //     if (state is AuthenticatedState) {
-        //       userId = state.auth.userId;
-        //       print('state.auth.userId: ${state.auth.userId}');
-        //       BlocProvider.of<HomePageBloc>(context)
-        //           .add(AppModulesFetched(provinceId: PROVINCE_ID, userId: userId));
-        //     } else {
-        //       userId = null;
-        //       BlocProvider.of<HomePageBloc>(context)
-        //           .add(AppModulesFetched(provinceId: PROVINCE_ID, userId: userId));
-        //     }
-        //   },
-        //   child:
+
         Scaffold(
       //resizeToAvoidBottomPadding: false,
+          floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                heroTag: "scan",
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      'assets/icons/icon_scan_qr_white.png',
+                      width: 29,
+                      height: 29,
+                      filterQuality: FilterQuality.high,
+                      fit: BoxFit.scaleDown,
+                    ),
+                    AnimatedBuilder(
+                      animation: _animation,
+                      child: Container(
+                        color: Colors.white,
+                        height: 1.5,
+                        width: 29,
+                      ),
+                      builder: (_, widget) {
+                        return Transform.translate(
+                          offset: Offset(0.0, _animation.value),
+                          child: widget,
+                        );
+                      },
+                    )
+                  ],
+                ),
+                // Icon( '/icons/icon_scan_qr.png', color: Colors.white, size: 29,),
+                backgroundColor: PRIMARY_COLOR,
+                tooltip: 'Quét mã',
+                elevation: 5,
+                splashColor: Colors.grey,
+                onPressed: () async {
+                  onScanClick(context);
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
       backgroundColor: PRIMARY_COLOR,
       appBar: AppBarHomeWidget(),
       //floatingActionButton: Container(
@@ -224,6 +271,53 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           )),
       // ),
     );
+  }
+}
+void onScanClick(BuildContext context) async{
+  final PermissionHandler _permissionHandler =
+  PermissionHandler();
+  var permissionStatus =
+  await _permissionHandler
+      .checkPermissionStatus(
+      PermissionGroup.camera);
+
+  switch (permissionStatus) {
+    case PermissionStatus.granted:
+      var value = await Navigator.of(context)
+          .pushNamed(ROUTER_QRCODE_SCANER);
+      if (value != null) {
+        Navigator.pushNamed(
+            context, ROUTER_DETAILED_PAHT,
+            arguments: PahtDetailArgument(
+                productCode: value));
+      }
+
+      break;
+    case PermissionStatus.denied:
+    case PermissionStatus.restricted:
+    case PermissionStatus.unknown:
+      await _permissionHandler
+          .requestPermissions(
+          [PermissionGroup.camera]);
+      var permissionStatus =
+      await _permissionHandler
+          .checkPermissionStatus(
+          PermissionGroup.camera);
+
+      switch (permissionStatus) {
+        case PermissionStatus.granted:
+          var value = await Navigator.of(
+              context)
+              .pushNamed(ROUTER_QRCODE_SCANER);
+          if (value != null) {
+            Navigator.pushNamed(
+                context, ROUTER_DETAILED_PAHT,
+                arguments: PahtDetailArgument(
+                    productCode: value));
+          }
+      }
+      break;
+    default:
   }
 }
 

@@ -17,12 +17,12 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../../injection_container.dart';
 
-class ApproveQuotation extends StatefulWidget {
+class CKBGPage extends StatefulWidget {
   @override
-  _ApproveQuotationState createState() => _ApproveQuotationState();
+  _CKBGPageState createState() => _CKBGPageState();
 }
 
-class _ApproveQuotationState extends State<ApproveQuotation> {
+class _CKBGPageState extends State<CKBGPage> {
   Completer<void> _refreshCompleter;
   bool isRefresh = false;
   final scrollController = ScrollController();
@@ -56,30 +56,13 @@ class _ApproveQuotationState extends State<ApproveQuotation> {
         BlocProvider<PublicPahtBloc>(
             create: (context) =>
             singleton<PublicPahtBloc>()
-              ..add(ListPublicPahtFetchingEvent(
-                  offset: 0, limit: 10, isApproveAble: true))),
+              ..add(ListCKBGFetchingEvent(
+                  offset: 0, limit: 100,))),
       ],
       child: BlocBuilder<PublicPahtBloc, PublicPahtState>(
         builder: (BuildContext context, PublicPahtState state) {
           return BaseLayoutWidget(
-              title: 'Danh sách Báo giá',
-              actions: [
-                InkWell(
-                  child: SvgPicture.asset(
-                    SVG_ASSETS_PATH + 'icon_search.svg',
-                    color: Colors.white,
-                    width: SIZE_ICON_ACTIONS,
-                    height: SIZE_ICON_ACTIONS,
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, ROUTER_SEARCH_PUBLIC_PAHT,
-                        arguments: SearchArgument(isApproveAble: true));
-                  },
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-              ],
+              title: 'Danh sách cam kết',
               body:  Stack(
                   children: [
                   // Visibility(
