@@ -1007,12 +1007,16 @@ class _PahtCreateIssueState extends State<PahtCreateIssue>
       for( var pathDetailModel in listQuotationDetailModel){
         listCKBGDetailModel.add(CKBGDetailModel.fromJson(pathDetailModel.toJson()));
       }
+      final userName = prefs.get('userName').toString();
+      final userFullName = prefs.get('fullName').toString();
       Navigator.pushNamed(
           context, ROUTER_CREATE_CKBG_PAGE,
           arguments: UpdateCKBGArgument(
               pahtModel: CKBGModel(cusPhone: pahtModel.cusPhone,
                 cusName: pahtModel.cusName,
-                cusAddress: pahtModel.cusAddress
+                cusAddress: pahtModel.cusAddress,
+                  createUserCode: userName,
+                  createUserFullName: userFullName
               ),
           listCKGBDetailModel: listCKBGDetailModel));
 

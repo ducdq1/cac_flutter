@@ -79,7 +79,7 @@ class CKBGDetailItemWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: ckbgDetailModel.price !=null ? Colors.green.shade100 : Colors.amber.shade100,
+                color: ckbgDetailModel.pickDate !=null ? Colors.green.shade100 : Colors.amber.shade100,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
