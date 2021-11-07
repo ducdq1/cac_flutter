@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:citizen_app/core/network/network_info.dart';
 import 'package:citizen_app/features/paht/data/data_sources/data_sources.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
 import 'package:citizen_app/features/paht/data/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
@@ -172,7 +173,7 @@ class PahtRepositoryImpl implements PahtRepository {
   }
 
   @override
-  Future<String> createCKBG(CreateCKBGParams issueParams) async {
+  Future<CKBGModel> createCKBG(CreateCKBGParams issueParams) async {
     try {
       return await remoteDataSource.createCKBG(issueParams);
     } catch (error) {

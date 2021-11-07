@@ -40,7 +40,7 @@ abstract class PahtRemoteDataSource {
 
   Future<String> createIssuePaht(QuotationParams issueParams);
 
-  Future<String> createCKBG(CreateCKBGParams issueParams);
+  Future<CKBGModel> createCKBG(CreateCKBGParams issueParams);
 
   Future<List<CKBGDetailModel>> getListCKBGDetail(int id);
 
@@ -391,12 +391,12 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<String> createCKBG(CreateCKBGParams issueParams) async {
+  Future<CKBGModel> createCKBG(CreateCKBGParams issueParams) async {
     try {
       final body = jsonEncode(issueParams.toJson());
       print('create or update createCKBG ');
 
-      String url = 'http://192.168.1.20/ketoan/rest/ckbg/create';
+      String url = '$base_cus_url_api/ckbg/create';
 
         //url = '$baseUrl_api/quotation';
 
@@ -417,7 +417,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
           throw Exception(data['message'].toString());
         }
 
-        return data['message'];
+        return CKBGModel(fileName: data['filePath']);
       } else {
         throw Exception("Lỗi ${response.statusCode}: ${data['message']}");
       }
@@ -428,9 +428,29 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
   }
 
   @override
-  Future<bool> deleteCKBG(int id) {
-    // TODO: implement deleteCKBG
-    throw UnimplementedError();
+  Future<bool> deleteCKBG(int id) async{
+    try {
+      print('$base_cus_url_api/ckbg/delete/$id');
+      final response = await networkRequest.postRequest(
+          url: '$base_cus_url_api/ckbg/delete/$id');
+      var data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+          msg: 'Xóa thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black87,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return true;
+      } else {
+        throw Exception(data['message']);
+      }
+    } catch (error) {
+      throw (error);
+    }
   }
 
   @override
@@ -452,7 +472,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
           if (data != null) {
             List<CKBGDetailModel> result =
             data.map<CKBGDetailModel>((paht) {
-              return QuotationDetailModel.fromJson(paht);
+              return CKBGDetailModel.fromJson(paht);
             }).toList();
             return result;
           }
@@ -472,7 +492,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
     try {
       final body = jsonEncode(param.toJson());
 
-      String url = '$base_cus_url_api/ckbg?time=' +
+      String url = '$base_cus_url_api/ckbg/list?time=' +
           DateTime.now().millisecondsSinceEpoch.toString();
       print(url);
       print(body);
@@ -488,7 +508,7 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
           final data = responseJson['listData'];
           if (data != null) {
             List<CKBGModel> result = data.map<CKBGModel>((paht) {
-              return PahtModel.fromJson(paht);
+              return CKBGModel.fromJson(paht);
             }).toList();
             return result;
           }

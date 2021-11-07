@@ -34,6 +34,7 @@ import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import '../../../../injection_container.dart';
+
 const PADDING_CONTENT_HORIZONTAL = 16.0;
 const SIZE_ARROW_BACK_ICON = 24.0;
 
@@ -82,7 +83,8 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
   FocusNode _passFocusNode;
   TextEditingController _passController;
   TextEditingController _notController;
-  TextEditingController _priceController;
+  TextEditingController _amountController;
+  TextEditingController _percentController;
   TextEditingController _pickDateController;
   FocusNode _priceFocusNode;
   FocusNode _noteFocusNode;
@@ -91,7 +93,8 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
   CKBGDetailModel quotationDetailModel;
   bool isApproveAble = false;
   TextEditingController expireDateController;
-  int userType =0 ;
+  int userType = 0;
+
   final pref = singleton<SharedPreferences>();
 
   @override
@@ -101,8 +104,9 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
     _index = _controller.index;
     _passFocusNode = FocusNode();
     _passController = TextEditingController();
+    _percentController = TextEditingController();
     _notController = TextEditingController();
-    _priceController = TextEditingController();
+    _amountController = TextEditingController();
     _pickDateController = TextEditingController();
     expireDateController = TextEditingController();
     _noteFocusNode = FocusNode();
@@ -126,18 +130,22 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
       productId = arg.productId;
       quotationDetailModel = arg.ckbgDetailModel;
       if (quotationDetailModel != null) {
-        _passController.text = quotationDetailModel.amount.toString().replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");
+        _passController.text = quotationDetailModel.amount
+            .toString()
+            .replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");
         _notController.text = quotationDetailModel.note;
         selectedImageId = quotationDetailModel.attachId;
         isApproveAble = arg.isApproveAble;
-        if(quotationDetailModel.pickDate !=null){
+        if (quotationDetailModel.pickDate != null) {
           String pickDate = DateFormat("dd/MM/yyyy")
               .format(quotationDetailModel.pickDate);
-          _pickDateController.text =  pickDate;
+          _pickDateController.text = pickDate;
         }
+        _amountController.text = quotationDetailModel.amount.toString().replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");;
+        _percentController.text = quotationDetailModel.percent == null ? '' : quotationDetailModel.percent.toString();
       }
       BlocProvider.of<DetailedPahtBloc>(context).add(
-        DetailedPahtFetching(pahtId: productCode,productId: productId),
+        DetailedPahtFetching(pahtId: productCode, productId: productId),
       );
     }
     return BaseLayoutWidget(
@@ -342,34 +350,63 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
                                                     ),
                                                   ])))
                                             ]),
-                                        userType != null && (userType == 3 || userType == 4)
+                                        userType != null &&
+                                                (userType == 3 || userType == 4)
                                             ? //cho xem gia
-                                        Center(
-                                          child: Container(
-                                              width: 200,
-                                              padding: const EdgeInsets.only(bottom: 0.0),
-                                              child: RaisedButton(
-                                                  color: PRIMARY_COLOR,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(36),
-                                                  ),
-                                                  onPressed: () {
-                                                    showViewPriceDialog(context: context, giaBan: productModel.salePrice!=null ? productModel.salePrice.toString(): "Chưa có giá",
-                                                        giaNhap: productModel.price!=null ? productModel.price.toString(): "Chưa có giá",
-                                                        ngayCapNhat: productModel.createDate,model: productModel);
-                                                  },
-                                                  child: AutoSizeText(
-                                                    'Xem giá',
-                                                    style: GoogleFonts.inter(
-                                                      fontSize: FONT_EX_SMALL,
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                                    minFontSize: FONT_EX_SMALL,
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ))),
-                                        )
+                                            Center(
+                                                child: Container(
+                                                    width: 200,
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 0.0),
+                                                    child: RaisedButton(
+                                                        color: PRIMARY_COLOR,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(36),
+                                                        ),
+                                                        onPressed: () {
+                                                          showViewPriceDialog(
+                                                              context: context,
+                                                              giaBan: productModel
+                                                                          .salePrice !=
+                                                                      null
+                                                                  ? productModel
+                                                                      .salePrice
+                                                                      .toString()
+                                                                  : "Chưa có giá",
+                                                              giaNhap: productModel
+                                                                          .price !=
+                                                                      null
+                                                                  ? productModel
+                                                                      .price
+                                                                      .toString()
+                                                                  : "Chưa có giá",
+                                                              ngayCapNhat:
+                                                                  productModel
+                                                                      .createDate,
+                                                              model:
+                                                                  productModel);
+                                                        },
+                                                        child: AutoSizeText(
+                                                          'Xem giá',
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                            fontSize:
+                                                                FONT_EX_SMALL,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          minFontSize:
+                                                              FONT_EX_SMALL,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ))),
+                                              )
                                             : SizedBox(),
                                         SizedBox(height: 10),
                                         Container(
@@ -471,8 +508,9 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
                       ? trans(MESSAGE_SESSION_EXPIRED)
                       : state.error.toString(),
                   onPressed: () {
-                    BlocProvider.of<DetailedPahtBloc>(context)
-                        .add(DetailedPahtFetching(pahtId: productCode,productId: productId));
+                    BlocProvider.of<DetailedPahtBloc>(context).add(
+                        DetailedPahtFetching(
+                            pahtId: productCode, productId: productId));
                   });
             }
             return Container(
@@ -546,7 +584,40 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-
+                        InputValidateWidget(
+                          isRequired: true,
+                          label: 'Số lượng',
+                          limitLength: 20,
+                          focusNode: _priceFocusNode,
+                          textInputType: TextInputType.numberWithOptions(
+                              decimal: true, signed: true),
+                          controller: _amountController,
+                          focusAction: () => FormTools.requestFocus(
+                            currentFocusNode: _priceFocusNode,
+                            nextFocusNode: _passFocusNode,
+                            context: context,
+                          ),
+                          validates: [
+                            EmptyValidate(),
+                          ],
+                        ),
+                        InputValidateWidget(
+                          isRequired: true,
+                          label: 'Đặt cọc(%)',
+                          limitLength: 20,
+                          focusNode: _passFocusNode,
+                          textInputType: TextInputType.numberWithOptions(
+                              decimal: true, signed: true),
+                          controller: _percentController,
+                          focusAction: () => FormTools.requestFocus(
+                            currentFocusNode: _passFocusNode,
+                            nextFocusNode: _noteFocusNode,
+                            context: context,
+                          ),
+                          validates: [
+                            EmptyValidate(),
+                          ],
+                        ),
                         InputDatetimeWidget(
                           scrollPadding: 200,
                           hintText: 'Ngày lấy hàng',
@@ -588,7 +659,9 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
       tiles.add(GridTile(
           child: Container(
         decoration: BoxDecoration(
-          color: selectedImageId == imageModel.attachId ? Colors.green: Color(0xfff1e3c0),
+          color: selectedImageId == imageModel.attachId
+              ? Colors.green
+              : Color(0xfff1e3c0),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Padding(
@@ -631,7 +704,7 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
                 child: selectedImageId == imageModel.attachId
                     ? Container(
                         decoration: BoxDecoration(
-                          color:  Colors.white,
+                          color: Colors.white,
                           shape: BoxShape.circle,
                         ),
                         child: Image.asset(
@@ -653,23 +726,51 @@ class _CKBGChooseProductPageState extends State<CKBGChooseProductPage>
   @override
   onClick(String id) async {
     if (id == 'primary_btn') {
-        DateTime pickDate = null;
-        try {
-          String datefm = _pickDateController.text;
-           pickDate = new DateFormat('dd/MM/yyyy').parse(datefm);
-        } catch (error) {
 
-        }
+      if (_amountController.text.trim().isEmpty) {
+        Fluttertoast.showToast(msg: 'Bạn chưa nhập số lượng');
+        return;
+      }
 
-        if (pickDate == null) {
-          Fluttertoast.showToast(msg: 'Bạn chưa nhập ngày lấy hàng');
-          return;
-        }
+      if (_percentController.text.trim().isEmpty) {
+        Fluttertoast.showToast(msg: 'Bạn chưa nhập % đặt cọc');
+        return;
+      }
 
-        quotationDetailModel.pickDate = pickDate;
+      String amountStr = _passController.text.toString();
+      double amount;
+      try {
+        amount = double.parse(amountStr);
+      } catch (error) {
+        FocusScope.of(context).requestFocus(_priceFocusNode);
+        return;
+      }
 
-        Navigator.pop(context, quotationDetailModel);
+      int percent;
+      try {
+        percent = int.parse(_percentController.text.trim());
+      } catch (error) {
+        FocusScope.of(context).requestFocus(_passFocusNode);
+        return;
+      }
 
+      DateTime pickDate = null;
+      try {
+        String datefm = _pickDateController.text;
+        pickDate = new DateFormat('dd/MM/yyyy').parse(datefm);
+      } catch (error) {}
+
+      if (pickDate == null) {
+        Fluttertoast.showToast(msg: 'Bạn chưa nhập ngày lấy hàng');
+        return;
+      }
+
+
+      quotationDetailModel.percent = percent;
+      quotationDetailModel.amount = amount;
+      quotationDetailModel.pickDate = pickDate;
+
+      Navigator.pop(context, quotationDetailModel);
     }
     if (id == 'cancel_btn') {
       Navigator.pop(context);

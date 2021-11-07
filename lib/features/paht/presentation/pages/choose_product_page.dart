@@ -790,12 +790,14 @@ class _ChooseProductPageState extends State<ChooseProductPage>
         String priceStr = _priceController.text.toString();
         priceStr = priceStr.replaceAll(",", "");
         int price;
+
         try {
           price = int.parse(priceStr);
         } catch (error) {
           FocusScope.of(context).requestFocus(_priceFocusNode);
           return;
         }
+
         quotationDetailModel.price = price;
         if (quotationDetailModel.amount != null) {
           quotationDetailModel.value = price * quotationDetailModel.amount;

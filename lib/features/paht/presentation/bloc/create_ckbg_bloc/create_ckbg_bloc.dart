@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
+import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
 import 'package:citizen_app/features/paht/data/models/quotation_detail_model.dart';
 import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/domain/usecases/create_ckbg.dart';
@@ -33,8 +34,8 @@ class CreateCKBGBloc extends Bloc<CreateCKBGEvent, CreateCKBGState> {
         PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
           networkInfo: singleton(),
           remoteDataSource: singleton(),);
-        String result = await repo.createCKBG(event.createCKBGParams);
-        yield CreateCKBGSuccess(fileName: result);
+        CKBGModel result = await repo.createCKBG(event.createCKBGParams);
+        yield CreateCKBGSuccess(fileName: result.fileName);
       } catch (error) {
         yield CreateCKBGFailure(error: error);
       }
@@ -43,7 +44,10 @@ class CreateCKBGBloc extends Bloc<CreateCKBGEvent, CreateCKBGState> {
     if(event is GetListCKBGDetailEvent){
       try {
         yield GetListCKBGDetailLoading();
-        List<CKBGDetailModel>  listCKBGDetailModel=   await getCKBGDetail(event.id);
+        PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
+          networkInfo: singleton(),
+          remoteDataSource: singleton(),);
+        List<CKBGDetailModel>  listCKBGDetailModel= await  repo.getListCKBGDetail(event.id);
         yield GetListCKBGDetailSuccess(listCKBGDetailModel :listCKBGDetailModel);
       } catch (error) {
         yield CreateCKBGFailure(error: error);

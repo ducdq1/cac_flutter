@@ -13,7 +13,7 @@ import 'package:citizen_app/features/common/widgets/inputs/input_validate_custom
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_widget.dart';
 import 'package:citizen_app/features/common/widgets/inputs/text_field_custom.dart';
 import 'package:citizen_app/features/common/widgets/widgets.dart';
-import 'package:citizen_app/features/home/presentation/pages/web_view_page.dart';
+import 'package:citizen_app/features/home/presentation/pages/web_view_ckbg_page.dart';
 import 'package:citizen_app/features/number_trivia/presentation/widgets/widgets.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
@@ -69,7 +69,8 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
   FocusNode _notFocusNode;
   ScrollController parentScrollController;
   CKBGModel pahtModel;
-  String NOTE_CONTENT = '4/ Hàng trả lại không được vượt quá 10% so với hàng đặt.';
+  String NOTE_CONTENT =
+      '4/ Hàng trả lại không được vượt quá 10% so với hàng đặt.';
   List<CKBGDetailModel> listQuotationDetailModel = [];
   final prefs = singleton<SharedPreferences>();
   int imageIdSelected;
@@ -85,6 +86,10 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
     if (args != null && args.pahtModel != null) {
       pahtModel = args.pahtModel;
       listQuotationDetailModel = args.listCKGBDetailModel;
+      if (listQuotationDetailModel == null) {
+        listQuotationDetailModel = [];
+      }
+
       if (pahtModel.cusName != null) {
         _poiNameController.text = pahtModel.cusName;
       }
@@ -98,12 +103,12 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
       }
 
       if (pahtModel.type != null) {
-        _isSPGach = pahtModel.type == 0 ;
+        _isSPGach = pahtModel.type == 0;
       }
       if (pahtModel.content != null) {
         noteController.text = pahtModel.content;
-      }else{
-        noteController.text =  NOTE_CONTENT;
+      } else {
+        noteController.text = NOTE_CONTENT;
       }
 
       if (pahtModel.ckbgId != null) {
@@ -155,10 +160,7 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
   @override
   Widget build(BuildContext context) {
     return BaseLayoutWidget(
-
-        title: args == null
-            ? 'Tạo cam kết'
-                : 'Cập nhật cam kết',
+        title: args == null ? 'Tạo cam kết' : 'Cập nhật cam kết',
         centerTitle: true,
         body: BlocConsumer<CreateCKBGBloc, CreateCKBGState>(
           listener: (_, state) {
@@ -169,26 +171,34 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
             }
 
             if (state is CreateCKBGSuccess) {
+              setState(() {
+                pahtModel.fileName = state.fileName;
+              });
+
               //Navigator.pop(context);
               Navigator.of(context, rootNavigator: true).pop('dialog');
-              Fluttertoast.showToast(
-                  msg: args == null
-                      ? 'Tạo Cam kết thành công'
-                      : 'Cập Cam kết thành công');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => WebViewPageCKBG(
+                          title: 'Chi tiết báo giá',
+                          link: '$baseUrl' + 'ck_bao_gia/' + state.fileName,
+                        )),
+              );
 
-              Navigator.pop(context, true);
+              //Navigator.pop(context, true);
             }
 
             if (state is CreateCKBGFailure) {
-                Navigator.of(context, rootNavigator: true).pop('dialog');
-                Fluttertoast.showToast(
-                    msg: state.error.message.toString() != null
-                        ? (state.error.message.toString() == "Connection failed"
-                            ? trans(ERROR_CONNECTION_FAILED)
-                            : state.error.message.toString())
-                        : args == null
-                            ? 'Tạo Cam kết thất bại'
-                            : 'Cập nhật cam kết thất bại');
+              Navigator.of(context, rootNavigator: true).pop('dialog');
+              Fluttertoast.showToast(
+                  msg: state.error.message.toString() != null
+                      ? (state.error.message.toString() == "Connection failed"
+                          ? trans(ERROR_CONNECTION_FAILED)
+                          : state.error.message.toString())
+                      : args == null
+                          ? 'Tạo Cam kết thất bại'
+                          : 'Cập nhật cam kết thất bại');
             }
           },
           builder: (context, state) {
@@ -255,21 +265,24 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                         SizedBox(
                           height: 10,
                         ),
-                       !_isSPGach ? SizedBox() : TextField(
-                         controller: noteController,
-                         maxLines: 3,
-                           decoration: InputDecoration(
-                             helperText: '',
-                             border: OutlineInputBorder(
-                               borderSide: BorderSide(color: BORDER_COLOR, width: 0.6),
-                               borderRadius: BorderRadius.circular(8),
-                             ),
-                             enabledBorder: OutlineInputBorder(
-                               borderSide: BorderSide(color: BORDER_COLOR, width: 0.6),
-                               borderRadius: BorderRadius.circular(8),
-                             ),
-                           )
-                       ),
+                        !_isSPGach
+                            ? SizedBox()
+                            : TextField(
+                                controller: noteController,
+                                maxLines: 3,
+                                decoration: InputDecoration(
+                                  helperText: '',
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: BORDER_COLOR, width: 0.6),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: BORDER_COLOR, width: 0.6),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                )),
                         createIssueAction()
                       ])),
                 ],
@@ -534,7 +547,7 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                     }
                   });
                 },
-                isPersonal:  false,
+                isPersonal: false,
                 ckbgDetailModel: listQuotationDetailModel[index],
                 onTap: () {},
               );
@@ -551,28 +564,43 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
   Widget createIssueAction() {
     return Padding(
       padding: const EdgeInsets.only(top: 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            width: 142,
-            child: OutlineCustomButton(
-              label: trans(TEXT_CANCEL_CREATE_BUTTON),
-              ctx: this,
-              id: 'cancel_btn',
-            ),
-          ),
-          Container(
-            width: 142,
-            child: PrimaryButton(
-                label: args == null
-                    ? trans(TEXT_CREATE_ISSUE_BUTTON)
-                    : trans(TEXT_UPDATE_ISSUE_BUTTON),
+      child: Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              width: 142,
+              child: OutlineCustomButton(
+                label: trans(TEXT_CANCEL_CREATE_BUTTON),
                 ctx: this,
-                id: 'primary_btn'),
-          )
-        ],
-      ),
+                id: 'cancel_btn',
+              ),
+            ),
+            Container(
+              width: 142,
+              child: PrimaryButton(
+                  label: args == null
+                      ? trans(TEXT_CREATE_ISSUE_BUTTON)
+                      : trans(TEXT_UPDATE_ISSUE_BUTTON),
+                  ctx: this,
+                  id: 'primary_btn'),
+            )
+          ],
+        ),
+        SizedBox(height: 20,),
+        pahtModel.fileName ==null ? SizedBox() :  Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: Container(
+                width: 142,
+                child: PrimaryButton(
+                    label: 'Xem cam kết', ctx: this, id: 'view_pdf_btn'),
+              ),
+            ),
+          ],
+        ),
+      ]),
     );
   }
 
@@ -673,6 +701,39 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
         return;
       }
 
+      for (int i = 0; i < listQuotationDetailModel.length; i++) {
+        if (listQuotationDetailModel[i].price == null) {
+          Fluttertoast.showToast(
+              msg: "Bạn chưa nhập giá cho sản phẩm: " +
+                  listQuotationDetailModel[i].productCode);
+          return;
+        }
+        if (listQuotationDetailModel[i].amount == null) {
+          Fluttertoast.showToast(
+              msg: "Bạn chưa nhập số lượng cho sản phẩm: " +
+                  listQuotationDetailModel[i].productCode);
+          return;
+        }
+
+        if (listQuotationDetailModel[i].percent == null) {
+          Fluttertoast.showToast(
+              msg: "Bạn chưa nhập đặt cọc (%) cho sản phẩm: " +
+                  listQuotationDetailModel[i].productCode);
+          return;
+        }
+
+        if (listQuotationDetailModel[i].pickDate == null) {
+          Fluttertoast.showToast(
+              msg: "Bạn chưa nhập ngày lấy hàng cho sản phẩm: " +
+                  listQuotationDetailModel[i].productCode);
+          return;
+        }
+
+
+      }
+
+
+
       if (_formKey.currentState.validate()) {
         final userName = prefs.get('userName').toString();
         final userFullName = prefs.get('fullName').toString();
@@ -698,6 +759,8 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
     if (id == 'cancel_btn') {
       Navigator.pop(context);
     }
+
+
     if (id == 'view_pdf_btn') {
       if (pahtModel.fileName == null || pahtModel.fileName.isEmpty) {
         Fluttertoast.showToast(msg: 'Không có file báo giá để xem');
@@ -707,9 +770,9 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => WebViewPage(
+            builder: (context) => WebViewPageCKBG(
                   title: 'Chi tiết báo giá',
-                  link: '$baseUrl' + 'bao_gia/' + pahtModel.fileName,
+                  link: '$baseUrl' + 'ck_bao_gia/' + pahtModel.fileName,
                   //model: pahtModel,
                 )),
       );

@@ -18,6 +18,7 @@ class CKBGDetailEntity extends Equatable {
   ImageEntity image;
   String note;
   String unit;
+  int percent;
   DateTime pickDate;
   @override
   // TODO: implement props
@@ -36,5 +37,6 @@ class CKBGDetailEntity extends Equatable {
       this.image,
       this.note,
       this.unit,
-      this.pickDate});
+      this.pickDate,
+  this.percent});
 }

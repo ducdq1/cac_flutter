@@ -121,16 +121,9 @@ class _ListViewCKBGWidgetState extends State<ListViewCKBGWidget> {
   }
 
   handleRefresh(context) {
-    if (!widget.isApproveAble && widget.isPersonal) {
-      BlocProvider.of<PersonalPahtBloc>(context).add(
-        PersonalPahtRefreshRequestedEvent(),
-      );
-    } else {
-      BlocProvider.of<PublicPahtBloc>(context).add(
-        PublicPahtRefreshRequestedEvent(
-            isApproveAble: widget.isApproveAble, isSaled: widget.isSaled),
-      );
-    }
+    BlocProvider.of<PublicPahtBloc>(context).add(
+      CKBGRefreshRequestedEvent(),
+    );
   }
 
   @override
@@ -181,8 +174,9 @@ class _ListViewCKBGWidgetState extends State<ListViewCKBGWidget> {
                                                     context));
                                       },
                                       onEdit: () {
+
                                         Navigator.pushNamed(
-                                                context, ROUTER_CREATE_PAHT,
+                                                context, ROUTER_CREATE_CKBG_PAGE,
                                                 arguments: UpdateCKBGArgument(
                                                     pahtModel:
                                                         widget.pahts[index]))
@@ -200,31 +194,13 @@ class _ListViewCKBGWidgetState extends State<ListViewCKBGWidget> {
                                       onTap: () {
 
                                           Navigator.pushNamed(
-                                                  context, ROUTER_CREATE_PAHT,
+                                                  context, ROUTER_CREATE_CKBG_PAGE,
                                                   arguments: UpdateCKBGArgument(
                                                       pahtModel:
                                                           widget.pahts[index],
-                                                      isUpdateAble: widget
-                                                              .pahts[index]
-                                                              .status ==
-                                                          0 //moi tao moi duoc phep cap nhat
                                                       ))
                                               .then((value) {
                                             if (value != null) {
-                                              if (widget.isPersonal) {
-                                                BlocProvider.of<
-                                                            PersonalPahtBloc>(
-                                                        context)
-                                                    .add(
-                                                  PersonalPahtRefreshRequestedEvent(), //ListPublicPahtFetchingEvent(isReload: true),
-                                                );
-                                              } else {
-                                                BlocProvider.of<PublicPahtBloc>(
-                                                        context)
-                                                    .add(
-                                                  ReloadListEvent(), //ListPublicPahtFetchingEvent(isReload: true),
-                                                );
-                                              }
                                             }
                                           });
 

@@ -16,7 +16,7 @@ class CreateCKBG implements UseCase<StatusEntity, CreateCKBGParams> {
   CreateCKBG(this.repository);
 
   @override
-  Future<String> call(CreateCKBGParams issueParams) async {
+  Future<CKBGModel> call(CreateCKBGParams issueParams) async {
     return await repository.createCKBG(issueParams);
   }
 }
@@ -42,7 +42,6 @@ class CreateCKBGParams extends Equatable {
       "ckBaoGia": ckbg.toJson(),
       "ckBaoGiaDetail": lstCKBGDetail == null ? null : this.lstCKBGDetail.map((e) => e.toJson()).toList(),
       "userName" : userName,
-
     };
   }
 }

@@ -43,13 +43,13 @@ class CKBGModel extends CKBGEntity {
   factory CKBGModel.fromJson(Map json) {
     //MediaModel mediaJson = MediaModel.fromJson(json['mediaUrls']);
     return CKBGModel(
-        ckbgId: json['ckbgId'],
-        ckbgNumber: json['ckbgNumber'],
+        ckbgId: json['ckId'],
+        ckbgNumber: json['ckNumber'],
         cusName: json['cusName'],
         cusAddress: json['cusAddress'],
         cusPhone: json['cusPhone'],
         createUserCode: json['createUserCode'],
-        type: json['productType'],
+        type: json['type'],
         status: json['status'],
         totalPrice: json['totalPrice'],
         modifyDate: json['modifyDate'],
@@ -57,21 +57,21 @@ class CKBGModel extends CKBGEntity {
         fileName: json['fileName'],
         ckbgDate: json['ckbgDate'],
         content : json['ckContent'],
-        ckbgUserName: json['ckbgUserName']);
+        ckbgUserName: json['ckUserName']);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "ckbgId": ckbgId,
+      "ckId": ckbgId,
       "cusName": cusName,
       "cusAddress": cusAddress,
       "cusPhone": cusPhone,
       "createUserCode": createUserCode,
       "createUserFullName": createUserFullName,
-      "productType": type,
+      "type": type,
       "ckbgDate": ckbgDate,
       "ckContent": content,
-      "ckbgUserName" : ckbgUserName
+      "ckUserName" : ckbgUserName
     };
   }
 

@@ -78,14 +78,6 @@ class CKBGItemWidget extends StatelessWidget {
                     ? Colors.amber.shade100
                     : Colors.green.shade100,
                 borderRadius: BorderRadius.all(Radius.circular(6)),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.grey.withOpacity(0.1),
-                //     spreadRadius: 1,
-                //     blurRadius: 1,
-                //     offset: Offset(3, 3), // changes position of shadow
-                //   ),
-                // ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -245,51 +237,11 @@ class CKBGItemWidget extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                pahtModel.isInvalid != null &&
-                                        pahtModel.isInvalid
-                                    ? SvgPicture.asset(
-                                        SVG_ASSETS_PATH + 'icon_denied.svg')
-                                    : SvgPicture.asset(
-                                        getIcon(pahtModel.status)),
                                 SizedBox(width: 5),
-                                Text(
-                                  pahtModel.isInvalid != null &&
-                                          pahtModel.isInvalid
-                                      ? 'Hủy báo giá'
-                                      : getStatus(pahtModel.status),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.inter(
-                                      fontSize: FONT_SMALL,
-                                      color: pahtModel.isInvalid != null &&
-                                              pahtModel.isInvalid
-                                          ? Colors.red
-                                          : getColor(pahtModel.status)),
-                                )
                               ],
                             )
                           ],
                         ),
-                        (pahtModel.status == 1 && pahtModel.ckbgNumber != null) ? Padding(
-                          padding:
-                          const EdgeInsets.only(bottom: 10, top: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment:  CrossAxisAlignment.end,
-                            children: [
-                              Text('NV BG: ',
-                                  style: GoogleFonts.inter(
-                                      color:  getColor(pahtModel.status),
-                                      fontSize: FONT_SMALL,
-                                      fontWeight: FontWeight.bold)),
-                                Text(
-                                    pahtModel.ckbgUserName != null ? pahtModel.ckbgUserName.toUpperCase() : "" ,
-                                    style: GoogleFonts.inter(
-                                      color:  getColor(pahtModel.status),
-                                      fontSize: FONT_SMALL,
-                                    )),
-                            ],
-                          ),
-                        ) : SizedBox() ,
                         SizedBox(
                           height: 5,
                         ),

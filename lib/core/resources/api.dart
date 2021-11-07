@@ -21,7 +21,7 @@ final String appName = pref.getString('APPLICATION_NAME')  == null || pref.getSt
 // const String baseUrl = 'http://192.168.1.20/';
 // final String baseUrl_api = baseUrl+'ketoan/rest/product';
 final String baseUrl_api = baseUrl +  appName  + '/rest/product';
-final String base_cus_url_api = baseUrl +  appName  + '/rest';
+final String base_cus_url_api = baseUrl +  'test'  + '/rest';
 
 bool isCustomerUser(){
  return pref.getBool('isCustomer') ?? true;
