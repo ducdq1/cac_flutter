@@ -211,7 +211,7 @@ class _ListViewCKBGWidgetState extends State<ListViewCKBGWidget> {
                 ),
               )
             : NoDataFailureWidget(
-                text: 'Bạn không có báo giá nào ',
+                text: 'Bạn không có cam kết đặt hàng nào',
               ),
       ),
     );
