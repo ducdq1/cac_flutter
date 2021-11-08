@@ -70,7 +70,7 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
   ScrollController parentScrollController;
   CKBGModel pahtModel;
   String NOTE_CONTENT =
-      '4/ Hàng trả lại không được vượt quá 10% so với hàng đặt.';
+      '- Ghi chú: Hàng trả lại không được vượt quá 10% so với hàng đặt.';
   List<CKBGDetailModel> listQuotationDetailModel = [];
   final prefs = singleton<SharedPreferences>();
   int imageIdSelected;
@@ -265,9 +265,7 @@ class _CreateCKBGPageState extends State<CreateCKBGPage>
                         SizedBox(
                           height: 10,
                         ),
-                        !_isSPGach
-                            ? SizedBox()
-                            : TextField(
+                            TextField(
                                 controller: noteController,
                                 maxLines: 3,
                                 decoration: InputDecoration(
