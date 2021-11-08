@@ -74,9 +74,7 @@ class CKBGItemWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: pahtModel.status == 0
-                    ? Colors.amber.shade100
-                    : Colors.green.shade100,
+                color: Colors.green.shade100,
                 borderRadius: BorderRadius.all(Radius.circular(6)),
               ),
               child: Row(

@@ -50,7 +50,7 @@ class _ProductsTypePageState extends State<ProductsTypePage> {
                 children: [
                   Padding(
                       padding: EdgeInsets.only(
-                          top: 80, right: 30, left: 30, bottom: 60),
+                          top: 60, right: 30, left: 30, bottom: 40),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -91,22 +91,48 @@ class _ProductsTypePageState extends State<ProductsTypePage> {
                           label: 'THIẾT BỊ',
                           icon: '/images/tb_noi_that.jpg',
                           onPress: () {
-                            Navigator.pushNamed(
-                                context, ROUTER_SEARCH_PRODUCT,
-                                arguments:     SearchArgument(type: 0));
+                            Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT,
+                                arguments: SearchArgument(type: 0));
                           },
                         ),
                         getItem(
                           label: 'GẠCH MEN',
                           icon: '/images/gach_men.jpg',
                           onPress: () {
-                            Navigator.pushNamed(
-                                    context, ROUTER_SEARCH_PRODUCT,
-                                arguments:  SearchArgument(type: 1))
+                            Navigator.pushNamed(context, ROUTER_SEARCH_PRODUCT,
+                                    arguments: SearchArgument(type: 1))
                                 .then((value) => {});
                           },
                         ),
                       ]),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Stack(
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            getItem(
+                              label: 'KHUYẾN MÃI',
+                              icon: '/images/tb_kmx.jpg',
+                              onPress: () {
+                                Navigator.pushNamed(
+                                    context, ROUTER_SEARCH_PRODUCT,
+                                    arguments: SearchArgument(type: 2));
+                              },
+                            ),
+                            Container(height: 200, width: 150),
+                          ]),
+                      Positioned(
+                        left: 150,
+                        child: Image.asset('assets/icons/hot_deal1.png',
+                            width: 35, height: 35),
+                      )
+                    ],
+                  ),
                 ])));
   }
 
@@ -152,7 +178,7 @@ class _ProductsTypePageState extends State<ProductsTypePage> {
                     child: Text(
                       label.replaceAll("\n", "\n").replaceAll("/n", "\n"),
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 19,
                         color: Colors.indigo,
                         fontWeight: FontWeight.bold,
                       ),

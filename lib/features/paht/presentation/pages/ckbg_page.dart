@@ -65,9 +65,6 @@ class _CKBGPageState extends State<CKBGPage> {
               title: 'Danh sách cam kết',
               body:  Stack(
                   children: [
-                  // Visibility(
-                  // visible: isFilter,
-                  // child: FilterCategoryContainer(indexTab: 1)),
               Padding(
                   padding: EdgeInsets.only(
                       top: isFilter ? 130 :0 ),

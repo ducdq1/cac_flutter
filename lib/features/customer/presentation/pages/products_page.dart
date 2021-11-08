@@ -18,7 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'cus_product_search.dart';
-
+import 'package:citizen_app/features/customer/presentation/pages/cus_product_search.dart' as productSearch;
 class ProductsPage extends StatefulWidget {
   @override
   _ProductsPageState createState() => _ProductsPageState();
@@ -46,7 +46,7 @@ class _ProductsPageState extends State<ProductsPage> {
             children: [
               Padding(
                   padding: EdgeInsets.only(
-                      top: 80, right: 30, left: 30, bottom: 50),
+                      top: 30, right: 30, left: 30, bottom: 20),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +106,37 @@ class _ProductsPageState extends State<ProductsPage> {
                         .then((value) => {});
                   },
                 ),
-              ])
+              ]),
+              SizedBox(
+                height: 10,
+              ),
+              Stack(
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        getItem(
+                          label: 'KHUYẾN MÃI',
+                          icon: '/images/tb_kmx.jpg',
+                          onPress: () {
+                            Navigator.pushNamed(
+                                context, ROUTER_CUS_SEARCH_PRODUCT,
+                                arguments: productSearch.SearchArgument(
+                                    fromCategoryPage: true,
+                                    type: 2 ));
+                          },
+                        ),
+                        Container(height: 200, width: 150),
+                      ]),
+                  Positioned(
+                    left: 140,
+                    child: Image.asset('assets/icons/hot_deal1.png',
+                        width: 35, height: 35),
+                  )
+                ],
+              ),
       ]),
       ),
     );
@@ -128,8 +158,8 @@ class _ProductsPageState extends State<ProductsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 200,
-              width: 150,
+              height: 180,
+              width: 140,
               decoration: BoxDecoration(
                 color: Color(0xffE6EFF3).withOpacity(0.6),
                 borderRadius: BorderRadius.circular(17),

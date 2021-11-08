@@ -104,16 +104,9 @@ class _ListViewCKBGWidgetState extends State<ListViewCKBGWidget> {
     // Add in an artificial delay
     await new Future.delayed(const Duration(seconds: 1));
     print("Loadmore...");
-    if (!widget.isApproveAble && widget.isPersonal) {
-      BlocProvider.of<PersonalPahtBloc>(context).add(
-        ListPersonalPahtFetchingEvent(),
-      );
-    } else {
       BlocProvider.of<PublicPahtBloc>(context).add(
-        ListPublicPahtFetchingEvent(
-            isApproveAble: widget.isApproveAble, isSaled: widget.isSaled),
+        ListCKBGFetchingEvent(),
       );
-    }
 
     setState(() {
       isLoadingVertical = false;

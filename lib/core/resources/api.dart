@@ -20,8 +20,8 @@ final String baseUrl = pref.getString('IP_SERVER') == null || pref.getString('IP
 final String appName = pref.getString('APPLICATION_NAME')  == null || pref.getString('APPLICATION_NAME').isEmpty ? 'ketoan' : pref.getString('APPLICATION_NAME');
 // const String baseUrl = 'http://192.168.1.20/';
 // final String baseUrl_api = baseUrl+'ketoan/rest/product';
-final String baseUrl_api = baseUrl +  appName  + '/rest/product';
-final String base_cus_url_api = baseUrl +  'test'  + '/rest';
+final String baseUrl_api = 'http://192.168.1.20/' +  'ketoan'  + '/rest/product';
+final String base_cus_url_api = 'http://192.168.1.20/' +  'ketoan'  + '/rest';
 
 bool isCustomerUser(){
  return pref.getBool('isCustomer') ?? true;

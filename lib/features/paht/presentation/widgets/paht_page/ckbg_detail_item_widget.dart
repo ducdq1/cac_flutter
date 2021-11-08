@@ -212,10 +212,53 @@ class CKBGDetailItemWidget extends StatelessWidget {
                                         style: GoogleFonts.inter(
                                             color: DESCRIPTION_COLOR,
                                             fontSize: FONT_SMALL,
+                                            height: 1.5)),
+                                    SizedBox(
+                                      width: 10,
+                                    ), Text('-   Đặt cọc: ',
+                                        style: GoogleFonts.inter(
+                                            color: DESCRIPTION_COLOR,
+                                            fontSize: FONT_SMALL,
+                                            height: 1.5,
+                                            fontWeight: FontWeight.bold),
+                                        softWrap: true),
+                                    Text(
+                                       ckbgDetailModel.percent == null ? '' : ckbgDetailModel.percent.toString() + '% '
+                                        ,
+                                        style: GoogleFonts.inter(
+                                            color: DESCRIPTION_COLOR,
+                                            fontSize: FONT_SMALL,
                                             height: 1.5))
                                   ],
                                 ),
                               ),
+                        (ckbgDetailModel.pickDate == null)
+                            ? SizedBox()
+                            : Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Row(
+                            children: [
+                              Text('Ngày lấy hàng:',
+                                  style: GoogleFonts.inter(
+                                      color: DESCRIPTION_COLOR,
+                                      fontSize: FONT_SMALL,
+                                      height: 1.5,
+                                      fontWeight: FontWeight.bold),
+                                  softWrap: true),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                 DateFormat("dd/MM/yyyy")
+                                  .format(ckbgDetailModel.pickDate)
+                                  ,
+                                  style: GoogleFonts.inter(
+                                      color: DESCRIPTION_COLOR,
+                                      fontSize: FONT_SMALL,
+                                      height: 1.5)),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
