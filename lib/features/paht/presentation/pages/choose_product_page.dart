@@ -824,8 +824,8 @@ class _ChooseProductPageState extends State<ChooseProductPage>
               productId: productModel.productId,
               productName: (productModel.productType == 0 ||
                       productModel.productType == 1)
-                  ? productModel.productName ?? '' + " " + productModel.productCode ?? ''
-                  : "(" + productModel.size ?? '' + ") " + productModel.productCode ?? '',
+                  ? (productModel.productName ?? '') + " " + (productModel.productCode ?? '')
+                  : "(" + (productModel.size ?? '') + ") " + (productModel.productCode ?? ''),
               unit: productModel.unit,
               amount: amount,
               image: image,
