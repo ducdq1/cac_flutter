@@ -66,7 +66,7 @@ class _InputMultipleLineWidgetState extends State<InputMultipleLineWidget> {
       } else {
         _isFocus = false;
       }
-      setState(() {});
+      //setState(() {});
     });
     super.initState();
   }

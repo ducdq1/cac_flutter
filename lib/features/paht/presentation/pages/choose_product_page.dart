@@ -10,6 +10,7 @@ import 'package:citizen_app/features/authentication/signup/presentation/widgets/
 import 'package:citizen_app/features/common/widgets/buttons/outline_custom_button.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/failure_widget.dart';
+import 'package:citizen_app/features/common/widgets/inputs/input_multiple_line_widget.dart';
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_widget.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
 import 'package:citizen_app/features/paht/data/models/image_model.dart';
@@ -615,16 +616,17 @@ class _ChooseProductPageState extends State<ChooseProductPage>
                                       height: 1.5,
                                     ),
                                     softWrap: true,
-                                    maxLines: 2,
+                                    //maxLines: ,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 )
                               ])
-                            : InputValidateWidget(
+                            : InputMultipleLineWidget(
+                                maxLines: 10,
                                 isRequired: true,
                                 label: 'Ghi chú',
                                 readOnly: isApproveAble,
-                                limitLength: 2000,
+                               // limitLength: 2000,
                                 focusNode: _noteFocusNode,
                                 textInputType: TextInputType.text,
                                 controller: _notController,
