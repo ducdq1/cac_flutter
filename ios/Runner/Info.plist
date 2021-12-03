@@ -85,6 +85,8 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>Phát nhạc khi đi bộ</string>
 </dict>
