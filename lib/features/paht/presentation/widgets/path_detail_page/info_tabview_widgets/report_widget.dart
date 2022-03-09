@@ -1,12 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:citizen_app/app_localizations.dart';
 import 'package:citizen_app/features/common/widgets/buttons/primary_button.dart';
 import 'package:citizen_app/features/paht/data/models/image_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/image_entity.dart';
+import 'package:citizen_app/features/paht/presentation/widgets/path_detail_page/info_tabview_widgets/video_player_widget.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:citizen_app/core/functions/trans.dart';
@@ -32,6 +35,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/services.dart';
+import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
+import 'dart:io' as io;
 
 import '../../../../../../injection_container.dart';
 
@@ -154,12 +160,13 @@ class ReportWidget extends StatelessWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                    Text("Giá bán",
-                        style: GoogleFonts.inter(
-                          fontSize: FONT_MIDDLE,
-                          color: PRIMARY_TEXT_COLOR,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    Text(
+                      "Giá bán",
+                      style: GoogleFonts.inter(
+                        fontSize: FONT_MIDDLE,
+                        color: PRIMARY_TEXT_COLOR,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     SizedBox(height: 10),
                     productModel.salePrice != null &&
@@ -255,8 +262,7 @@ class ReportWidget extends StatelessWidget {
                         ),
                         onPressed: () {
                           showViewFeatureProductDialog(
-                              context: context,
-                              model: productModel);
+                              context: context, model: productModel);
                         },
                         child: AutoSizeText(
                           'Xem thông tin',
@@ -275,7 +281,7 @@ class ReportWidget extends StatelessWidget {
                   Center(
                       child: Container(
                           width: 150,
-                          padding: const EdgeInsets.only(bottom: 5.0,left: 7),
+                          padding: const EdgeInsets.only(bottom: 5.0, left: 7),
                           child: RaisedButton(
                               color: PRIMARY_COLOR,
                               shape: RoundedRectangleBorder(
@@ -344,7 +350,7 @@ class ReportWidget extends StatelessWidget {
                     ? GridView.count(
                         // shrinkWrap: true,
                         // physics: NeverScrollableScrollPhysics(),
-                        crossAxisCount: 3,
+                        crossAxisCount: 2,
                         childAspectRatio: 1.0,
                         padding: const EdgeInsets.all(4.0),
                         mainAxisSpacing: 4.0,
@@ -375,39 +381,110 @@ class ReportWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(1),
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            child:
-                //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
-                InkWell(
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => MediaPresenterPage(
-                      urls: productModel.images,
-                      initialIndex: i,
-                    ),
-                  ),
-                );
-                SystemChrome.setSystemUIOverlayStyle(
-                    SystemUiOverlayStyle.light);
-                SystemChrome.setSystemUIOverlayStyle(
-                  SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
-                );
-              },
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl: '$baseUrl' + imageModel.path + imageModel.name,
-                height: 15,
-                width: 15,
-                errorWidget: (context, url, error) => new Icon(Icons.error),
-              ),
-            ),
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              child:
+                  //FadeInImage.memoryNetwork(placeholder: AssetImage('sdsadas'), image: '$baseUrl' + url),
+                  InkWell(
+                onTap: () async {
+                  if (isVideoFile(imageModel.name)) {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => VideoPlayerWidget(
+                          url: '$baseUrl' + imageModel.path + imageModel.name,
+                          fileName: imageModel.name,
+                        ),
+                      ),
+                    );
+                  } else {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MediaPresenterPage(
+                          urls: productModel.images,
+                          initialIndex: i,
+                        ),
+                      ),
+                    );
+                    SystemChrome.setSystemUIOverlayStyle(
+                        SystemUiOverlayStyle.light);
+                    SystemChrome.setSystemUIOverlayStyle(
+                      SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
+                    );
+                  }
+                },
+                child: isVideoFile(imageModel.name)
+                    ? FutureBuilder<io.File>(
+                        future: getThumnail(imageModel),
+                        // a previously-obtained Future<String> or null
+                        builder: (BuildContext context,
+                            AsyncSnapshot<io.File> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: Text('Loading...'));
+                          } else {
+                            if (snapshot.hasError)
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            else
+                              return Stack(children: [
+                                Center(
+                                 child: Image.file(
+                                  snapshot.data,
+                                  fit: BoxFit.cover,
+                                )),
+                                Center(
+                                  child: Image.asset(
+                                    ICONS_ASSETS + 'icon_play.png',
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                )
+                              ]);
+                          }
+                        })
+                    : CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl:
+                            '$baseUrl' + imageModel.path + imageModel.name,
+                        height: 15,
+                        width: 15,
+                        errorWidget: (context, url, error) =>
+                            new Icon(Icons.error),
+                      ),
+              )),
         ),
       )));
     }
     return tiles;
+  }
+
+  Future<io.File> getThumnail(ImageModel imageModel) async {
+    final thumbnail = await VideoThumbnail.thumbnailFile(
+      video: '$baseUrl' + imageModel.path + imageModel.name,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.WEBP,
+      //maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+      quality: 100,
+    );
+    final file = io.File(thumbnail);
+    String filePath = file.path;
+
+    return file;
+  }
+
+  bool isVideoFile(String fileName) {
+    fileName = fileName.toLowerCase();
+    if (fileName.endsWith(".mp4") ||
+        fileName.endsWith(".3gp") ||
+        fileName.endsWith(".amv") ||
+        fileName.endsWith(".avi") ||
+        fileName.endsWith(".mov") ||
+        fileName.endsWith(".fmp4") ||
+        fileName.endsWith(".wav")) {
+      return true;
+    }
+    return false;
   }
 
   @override

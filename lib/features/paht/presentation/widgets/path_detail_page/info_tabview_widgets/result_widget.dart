@@ -18,6 +18,7 @@ class ResultWidget extends StatefulWidget {
 }
 
 class _ResultWidgetState extends State<ResultWidget> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
