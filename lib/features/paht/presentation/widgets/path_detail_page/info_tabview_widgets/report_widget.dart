@@ -7,7 +7,7 @@ import 'package:citizen_app/features/paht/data/models/image_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/image_entity.dart';
-import 'package:citizen_app/features/paht/presentation/widgets/path_detail_page/info_tabview_widgets/video_player_widget.dart';
+import 'package:citizen_app/features/paht/presentation/pages/video_player_page.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -390,9 +390,8 @@ class ReportWidget extends StatelessWidget {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => VideoPlayerWidget(
+                        builder: (_) => VideoPlayerPage(
                           url: '$baseUrl' + imageModel.path + imageModel.name,
-                          fileName: imageModel.name,
                         ),
                       ),
                     );

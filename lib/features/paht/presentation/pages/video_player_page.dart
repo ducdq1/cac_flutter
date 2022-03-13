@@ -53,12 +53,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
     _initPlayer();
     super.initState();
   }
@@ -70,7 +64,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       child: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: PRIMARY_COLOR,
           centerTitle: true,
           leading: IconButton(
             icon: SvgPicture.asset(
