@@ -416,12 +416,25 @@ class ReportWidget extends StatelessWidget {
                   }
                 },
                 child: isVideoFile(imageModel.name)
-                    ? Stack(children: [
-                            // Center(
-                            //     child: Image.file(
-                            //       snapshot.data,
-                            //       fit: BoxFit.cover,
-                            //     )),
+                    ? FutureBuilder<io.File>(
+                    future: getThumnail(imageModel),
+                    // a previously-obtained Future<String> or null
+                    builder: (BuildContext context,
+                        AsyncSnapshot<io.File> snapshot) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(child: Text('Loading...'));
+                      } else {
+                        if (snapshot.hasError)
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        else
+                          return Stack(children: [
+                            Center(
+                                child: Image.file(
+                                  snapshot.data,
+                                  fit: BoxFit.cover,
+                                )),
                             Center(
                               child: Image.asset(
                                 ICONS_ASSETS + 'icon_play.png',
@@ -429,7 +442,9 @@ class ReportWidget extends StatelessWidget {
                                 height: 100,
                               ),
                             )
-                          ]) 
+                          ]);
+                      }
+                    })
                     : CachedNetworkImage(
                   fit: BoxFit.cover,
                   imageUrl:
