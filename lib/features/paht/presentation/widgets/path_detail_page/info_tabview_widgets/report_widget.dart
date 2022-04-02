@@ -465,13 +465,13 @@ class ReportWidget extends StatelessWidget {
     final thumbnail = await VideoThumbnail.thumbnailFile(
       video: Uri.encodeFull('$baseUrl' + imageModel.path + imageModel.name),
       thumbnailPath: (await getTemporaryDirectory()).path,
-      imageFormat: ImageFormat.PNG,
+      imageFormat: ImageFormat.WEBP,
       //maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
       quality: 100,
     );
-    final file = io.File(thumbnail);
+    final file = io.File(Uri.encodeFull(thumbnail));
     String filePath = file.path;
-
+    print('---------------------- thumn path: ' + filePath);
     return file;
   }
  
