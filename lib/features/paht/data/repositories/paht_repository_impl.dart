@@ -208,4 +208,13 @@ class PahtRepositoryImpl implements PahtRepository {
       throw error;
     }
   }
+
+  @override
+  Future<bool> checkUser(String userName, String pw) async{
+    try {
+      return await remoteDataSource.checkUser(userName,pw);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

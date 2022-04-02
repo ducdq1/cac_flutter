@@ -25,9 +25,9 @@ const SIGNIN_VIETTEL_BTN = 'signin_viettel_btn';
 const SIZE_ARROW_BACK_ICON = 20.0;
 
 class SignInPage extends StatefulWidget {
-  final bool isViettelSignin;
+  final bool isCustomer;
 
-  SignInPage({this.isViettelSignin = false});
+  SignInPage({this.isCustomer = true});
 
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -169,7 +169,7 @@ class _SignInPageState extends State<SignInPage> {
                           SizedBox(
                             height: 30,
                           ),
-                          FormSignInWidget(formKey: _formKey),
+                          FormSignInWidget(formKey: _formKey,isCustomerLogin: widget.isCustomer),
                         ],
                       ),
                     ),

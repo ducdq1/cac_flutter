@@ -5,11 +5,13 @@ import 'dart:math';
 import 'package:citizen_app/core/resources/resources.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_bloc.dart';
 import 'package:citizen_app/features/authentication/auth/bloc/auth_state.dart';
+import 'package:citizen_app/features/authentication/signin/presentation/signin_page.dart';
 import 'package:citizen_app/features/chat/model/user.dart';
 import 'package:citizen_app/features/home/presentation/bloc/bloc/home_page_bloc.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/appbar_home_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/home_page_builder.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/sos_button_widget.dart';
+import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/paht_list_widget.dart';
 import 'package:citizen_app/injection_container.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:route_transitions/route_transitions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../main.dart';
@@ -78,12 +81,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           .add(AppModulesFetched(provinceId: PROVINCE_ID, userId: userId));
     }
 
+    String userName = pref.get('userName');
+    updateLastLogin();
+
     _firebaseMessaging = FirebaseMessaging();
 
     initFlutterLocalNotificationsPlugin();
     String token = _firebaseMessaging.getToken().toString();
     print('Firebase Device Token:  '  + token);
-    String userName = pref.get('userName');
     print(userName);
       int userType = pref.getInt('userType');
       String userRole = pref.get('userRole');
@@ -130,6 +135,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           Navigator.pushNamed(context, ROUTER_HOME);
       },
     );
+  }
+
+  void updateLastLogin() async{
+    String userName = pref.get('userName');
+    String pw = pref.get('pw');
+    PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
+      networkInfo: singleton(),
+      remoteDataSource: singleton(),);
+    print('Checking user........');
+
+    bool isValidUser = await repo.checkUser(userName,pw);
+    if (userName == null || isValidUser == false) {
+      Future.delayed(Duration.zero, () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteTransition(
+            animationType: AnimationType.slide_right,
+            builder: (context) => SignInPage(isCustomer: false),
+          ),
+              (route) => false,
+        );
+      });
+    }
   }
 
   void initFlutterLocalNotificationsPlugin() async {

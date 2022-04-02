@@ -26,7 +26,8 @@ import 'group_button_widget.dart';
 
 class FormSignInWidget extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-  FormSignInWidget({this.formKey});
+  final bool isCustomerLogin;
+  FormSignInWidget({this.formKey,this.isCustomerLogin = true});
   @override
   _FormSignInWidgetState createState() => _FormSignInWidgetState();
 }
@@ -46,6 +47,7 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
   int cusGroup = -1;
   @override
   void initState() {
+     isCustomer = widget.isCustomerLogin;
     _passFocusNode = FocusNode();
     _phoneFocusNode = FocusNode();
     _inviterFocusNode = FocusNode();

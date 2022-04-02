@@ -17,7 +17,7 @@ const String baseSSOUrl = 'https://sso.viettelmaps.com.vn:8080/auth/realms/vts-m
 final pref = singleton<SharedPreferences>();
 
 final String baseUrl = pref.getString('IP_SERVER') == null || pref.getString('IP_SERVER').isEmpty ? 'http://117.2.164.156/' : pref.getString('IP_SERVER');
-final String appName = pref.getString('APPLICATION_NAME')  == null || pref.getString('APPLICATION_NAME').isEmpty ? 'ketoan' : pref.getString('APPLICATION_NAME');
+final String appName = pref.getString('APPLICATION_NAME')  == null || pref.getString('APPLICATION_NAME').isEmpty ? 'kt' : pref.getString('APPLICATION_NAME');
 // const String baseUrl = 'http://192.168.1.20/';
 // final String baseUrl_api = baseUrl+'ketoan/rest/product';
 final String baseUrl_api = baseUrl +  appName  + '/rest/product';
