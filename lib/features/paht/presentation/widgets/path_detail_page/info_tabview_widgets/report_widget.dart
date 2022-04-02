@@ -7,6 +7,7 @@ import 'package:citizen_app/features/paht/data/models/image_model.dart';
 import 'package:citizen_app/features/paht/data/models/product_model.dart';
 import 'package:citizen_app/features/paht/data/models/tonkho_model.dart';
 import 'package:citizen_app/features/paht/domain/entities/image_entity.dart';
+import 'package:citizen_app/features/paht/presentation/pages/video_player_page.dart';
 //import 'package:citizen_app/features/paht/presentation/pages/video_player_page.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
@@ -35,8 +36,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter/services.dart';
-//import 'package:video_player/video_player.dart';
-//import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'dart:io' as io;
 
 import '../../../../../../injection_container.dart';
@@ -387,14 +388,14 @@ class ReportWidget extends StatelessWidget {
                   InkWell(
                 onTap: () async {
                   if (isVideoFile(imageModel.name)) {
-                    // await Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => VideoPlayerPage(
-                    //       url: '$baseUrl' + imageModel.path + imageModel.name,
-                    //     ),
-                    //   ),
-                    // );
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => VideoPlayerPage(
+                          url: '$baseUrl' + imageModel.path + imageModel.name,
+                        ),
+                      ),
+                    );
                   } else {
                     await Navigator.push(
                       context,
@@ -413,22 +414,44 @@ class ReportWidget extends StatelessWidget {
                   }
                 },
                 child: isVideoFile(imageModel.name)
-                    ? Center(
-                                  child: Image.asset(
-                                    ICONS_ASSETS + 'icon_play.png',
-                                    width: 100,
-                                    height: 100,
-                                  ),
-                                )
+                    ? FutureBuilder<io.File>(
+                    future: getThumnail(imageModel),
+                    // a previously-obtained Future<String> or null
+                    builder: (BuildContext context,
+                        AsyncSnapshot<io.File> snapshot) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(child: Text('Loading...'));
+                      } else {
+                        if (snapshot.hasError)
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        else
+                          return Stack(children: [
+                            Center(
+                                child: Image.file(
+                                  snapshot.data,
+                                  fit: BoxFit.cover,
+                                )),
+                            Center(
+                              child: Image.asset(
+                                ICONS_ASSETS + 'icon_play.png',
+                                width: 100,
+                                height: 100,
+                              ),
+                            )
+                          ]);
+                      }
+                    })
                     : CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl:
-                            '$baseUrl' + imageModel.path + imageModel.name,
-                        height: 15,
-                        width: 15,
-                        errorWidget: (context, url, error) =>
-                            new Icon(Icons.error),
-                      ),
+                  fit: BoxFit.cover,
+                  imageUrl:
+                  '$baseUrl' + imageModel.path + imageModel.name,
+                  height: 15,
+                  width: 15,
+                  errorWidget: (context, url, error) =>
+                  new Icon(Icons.error),
+                ),
               )),
         ),
       )));
@@ -436,6 +459,19 @@ class ReportWidget extends StatelessWidget {
     return tiles;
   }
 
+  Future<io.File> getThumnail(ImageModel imageModel) async {
+    final thumbnail = await VideoThumbnail.thumbnailFile(
+      video: '$baseUrl' + imageModel.path + imageModel.name,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.WEBP,
+      //maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+      quality: 100,
+    );
+    final file = io.File(thumbnail);
+    String filePath = file.path;
+
+    return file;
+  }
  
 
   bool isVideoFile(String fileName) {
