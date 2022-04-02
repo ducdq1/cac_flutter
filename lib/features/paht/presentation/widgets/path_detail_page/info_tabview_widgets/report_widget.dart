@@ -392,7 +392,10 @@ class ReportWidget extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (_) => VideoPlayerPage(
-                          url: '$baseUrl' + imageModel.path + imageModel.name,
+                          url: Uri.encodeFull('$baseUrl' + imageModel.path + imageModel.name)
+                          
+                          //'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'
+                          //'$baseUrl' + imageModel.path + imageModel.name,
                         ),
                       ),
                     );
@@ -414,25 +417,12 @@ class ReportWidget extends StatelessWidget {
                   }
                 },
                 child: isVideoFile(imageModel.name)
-                    ? FutureBuilder<io.File>(
-                    future: getThumnail(imageModel),
-                    // a previously-obtained Future<String> or null
-                    builder: (BuildContext context,
-                        AsyncSnapshot<io.File> snapshot) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Center(child: Text('Loading...'));
-                      } else {
-                        if (snapshot.hasError)
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        else
-                          return Stack(children: [
-                            Center(
-                                child: Image.file(
-                                  snapshot.data,
-                                  fit: BoxFit.cover,
-                                )),
+                    ? Stack(children: [
+                            // Center(
+                            //     child: Image.file(
+                            //       snapshot.data,
+                            //       fit: BoxFit.cover,
+                            //     )),
                             Center(
                               child: Image.asset(
                                 ICONS_ASSETS + 'icon_play.png',
@@ -440,9 +430,7 @@ class ReportWidget extends StatelessWidget {
                                 height: 100,
                               ),
                             )
-                          ]);
-                      }
-                    })
+                          ]) 
                     : CachedNetworkImage(
                   fit: BoxFit.cover,
                   imageUrl:
@@ -463,7 +451,7 @@ class ReportWidget extends StatelessWidget {
     final thumbnail = await VideoThumbnail.thumbnailFile(
       video: '$baseUrl' + imageModel.path + imageModel.name,
       thumbnailPath: (await getTemporaryDirectory()).path,
-      imageFormat: ImageFormat.WEBP,
+      imageFormat: ImageFormat.PNG,
       //maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
       quality: 100,
     );
