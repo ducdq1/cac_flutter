@@ -392,7 +392,7 @@ class ReportWidget extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (_) => VideoPlayerPage(
-                          url: '$baseUrl' + imageModel.path + imageModel.name,
+                          url: Uri.encodeFull('$baseUrl' + imageModel.path + imageModel.name),
                         ),
                       ),
                     );
@@ -461,7 +461,7 @@ class ReportWidget extends StatelessWidget {
 
   Future<io.File> getThumnail(ImageModel imageModel) async {
     final thumbnail = await VideoThumbnail.thumbnailFile(
-      video: '$baseUrl' + imageModel.path + imageModel.name,
+      video: Uri.encodeFull('$baseUrl' + imageModel.path + imageModel.name),
       thumbnailPath: (await getTemporaryDirectory()).path,
       imageFormat: ImageFormat.WEBP,
       //maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
