@@ -89,6 +89,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
        // final user = await accountRepository.getUserInfo();
         await prefs.setString('userName', auth.userName);
+        await prefs.setString('pw', event.password);
         await prefs.setString('fullName', auth.fullName);
         await prefs.setString('avartarPath', auth.avartarPath);
         await prefs.setString('userId', auth.userId == null ? null : auth.userId.toString());

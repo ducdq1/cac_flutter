@@ -58,13 +58,13 @@ class _GroupButtonWidgetState extends State<GroupButtonWidget>
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (_) => SignInPage(isViettelSignin: true)));
+                  builder: (_) => SignInPage(isCustomer: true)));
           break;
         case 'signin_account_navigate_btn':
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (_) => SignInPage(isViettelSignin: false)));
+                  builder: (_) => SignInPage(isCustomer: false)));
           break;
         default:
       }

@@ -43,4 +43,7 @@ abstract class PahtRepository {
   Future<bool> updateProcessor(String workerId,String processor);
 
   Future<void> updateLastLogin(String workerId);
+
+  Future<bool> checkUser(String userName,String pw);
+
 }

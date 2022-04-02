@@ -5,6 +5,7 @@ import 'package:citizen_app/core/error/exceptions.dart';
 import 'package:citizen_app/core/functions/trans.dart';
 import 'package:citizen_app/core/network/network_request.dart';
 import 'package:citizen_app/core/resources/resources.dart';
+import 'package:citizen_app/features/authentication/signin/data/models/auth_model.dart';
 import 'package:citizen_app/features/common/models/models.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_detail_model.dart';
 import 'package:citizen_app/features/paht/data/models/ckbg_model.dart';
@@ -55,6 +56,7 @@ abstract class PahtRemoteDataSource {
   Future<bool> updateProcessor(String workerId, String processor);
 
   Future<bool> updateWorkerLastLogin(String workerId);
+  Future<bool> checkUser(String userName,String pw);
 }
 
 class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
@@ -519,6 +521,47 @@ class PahtRemoteDataSourceImpl implements PahtRemoteDataSource {
       }
     } catch (error) {
       // return handleException(error);
+      throw error;
+    }
+  }
+
+  @override
+  Future<bool> checkUser(String userName, String pw)async {
+    try {
+      var body = jsonEncode(
+          <String, String>{
+            "userName": userName,
+            "pw": pw
+          },
+        );
+
+      print(body);
+      final response = await client
+          .post('$baseUrl_api/login',
+        headers: {
+          'Accept-Language': 'vi',
+          'Content-Type': 'application/json'
+        },
+        body: body,
+      )
+          .timeout(Duration(seconds: 30),
+          onTimeout: () => throw Exception(
+              "Hết thời gian yêu cầu. Kiểm tra lại kết nối"));
+
+      var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      if (response.statusCode == 200 ) {
+        if( data['user'] !=null) {
+          return true;
+        }else{
+          return false;
+        }
+      } else if (response.statusCode == 401) {
+        return false;
+      } else {
+        throw Exception('Không thể kết nối đến máy chủ');
+      }
+    } catch (error) {
       throw error;
     }
   }
