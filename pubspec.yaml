@@ -131,7 +131,7 @@ dependencies:
   #firebase_crashlytics: ^0.2.4
   #http_proxy: ^1.1.0
   #video_player: ^1.0.1
-  video_thumbnail: ^0.2.4
+  #video_thumbnail: ^0.2.4
   
 dev_dependencies:
   flutter_test:
