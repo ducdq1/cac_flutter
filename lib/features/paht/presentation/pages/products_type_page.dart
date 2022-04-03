@@ -4,12 +4,14 @@ import 'package:citizen_app/core/resources/colors.dart';
 import 'package:citizen_app/core/resources/font_sizes.dart';
 import 'package:citizen_app/core/resources/routers.dart';
 import 'package:citizen_app/core/resources/strings.dart';
+import 'package:citizen_app/features/authentication/signin/presentation/signin_page.dart';
 import 'package:citizen_app/features/common/widgets/failure_widget/no_network_failure_widget.dart';
 import 'package:citizen_app/features/common/widgets/layouts/base_layout_widget.dart';
 import 'package:citizen_app/features/customer/presentation/bloc/productCategory/product_category_bloc.dart';
 import 'package:citizen_app/features/customer/presentation/pages/product_category_page.dart';
 import 'package:citizen_app/features/customer/presentation/widgets/product_category_list_widget.dart';
 import 'package:citizen_app/features/home/presentation/pages/widgets/citizens_menu_item_widget.dart';
+import 'package:citizen_app/features/paht/data/repositories/paht_repository_impl.dart';
 import 'package:citizen_app/features/paht/presentation/bloc/public_paht_bloc/public_paht_bloc.dart';
 import 'package:citizen_app/features/paht/presentation/widgets/paht_page/skeleton_paht_list_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +20,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:citizen_app/features/paht/presentation/pages/product_search.dart';
+import 'package:route_transitions/route_transitions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../injection_container.dart';
 
 class ProductsTypePage extends StatefulWidget {
   @override
@@ -29,11 +35,36 @@ class _ProductsTypePageState extends State<ProductsTypePage> {
   bool isRefresh = false;
   final scrollController = ScrollController();
   final scrollThreshold = 200.0;
+  final pref = singleton<SharedPreferences>();
 
   @override
   void initState() {
     _refreshCompleter = Completer<void>();
     super.initState();
+    checkUser();
+  }
+
+  void checkUser() async{
+    String userName = pref.get('userName');
+    String pw = pref.get('pw');
+    PahtRepositoryImpl repo = PahtRepositoryImpl(localDataSource: singleton(),
+      networkInfo: singleton(),
+      remoteDataSource: singleton(),);
+    print('Checking user........');
+
+    bool isValidUser = await repo.checkUser(userName,pw);
+    if (userName == null || isValidUser == false) {
+      Future.delayed(Duration.zero, () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteTransition(
+            animationType: AnimationType.slide_right,
+            builder: (context) => SignInPage(isCustomer: false),
+          ),
+              (route) => false,
+        );
+      });
+    }
   }
 
   @override
