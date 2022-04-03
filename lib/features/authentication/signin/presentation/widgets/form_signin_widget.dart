@@ -14,6 +14,7 @@ import 'package:citizen_app/features/authentication/signin/presentation/bloc/sig
 import 'package:citizen_app/features/authentication/signin/presentation/dialogs/otp_dialog.dart';
 import 'package:citizen_app/features/common/dialogs/loading_dialog.dart';
 import 'package:citizen_app/features/common/widgets/inputs/input_validate_widget.dart';
+import 'package:citizen_app/features/profile/presentation/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -164,6 +165,29 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                   }
                 },
               ),
+
+              SizedBox(
+                height: isCustomer ? 0: 30,
+              ),
+
+              isCustomer ? SizedBox(height: 0,) : Center(
+                child: InkWell(
+                  onTap:(){
+                    Navigator.of(context).push(PageRouteTransition(
+                        animationType: AnimationType.slide_up,
+                        builder: (context) => SettingsPage()));
+                  },
+                  child: Text(
+                    'Cài đặt',
+                    style: GoogleFonts.inter(
+                      fontSize: FONT_MIDDLE,
+                      color:  Colors.red ,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
               SizedBox(
                 height: 20,
               ),
@@ -184,7 +208,9 @@ class _FormSignInWidgetState extends State<FormSignInWidget>
                     ),
                   ),
                 ),
-              )
+              ),
+
+
 
             ],
           ),

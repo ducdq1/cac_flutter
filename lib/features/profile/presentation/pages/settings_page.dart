@@ -49,8 +49,11 @@ class _SettingsPageState extends State<SettingsPage>   implements OnButtonClickL
 
   @override
   onClick(String id) {
-    saveConfig();
-    Navigator.of(context).pop();
+    showConfirmDialog(context:context ,title: "Bạn muốn lưu thông tin cài đặt?",label: "Đồng ý",onSubmit: (){
+      saveConfig();
+      exit(0);
+    });
+    //Navigator.of(context).pop();
   }
 
   @override
